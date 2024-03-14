@@ -31,8 +31,15 @@ export class ClientService {
   }
    
 
-  update(updateClientDto: UpdateClientDto) {
-    return `This action updates client`;
+  //lanjutin besok pagi ngab
+  async update(data: UpdateClientDto) {
+    await this.findOne();
+    return this.prisma.client.update({
+      where: {
+        id: "a5e14d27-b86c-46c5-a7c7-6a451aabd308"
+      },
+      data 
+    })
   }
   
  

@@ -16,8 +16,8 @@ export class ClientController {
   }
  
   @Patch()
-  update(@Body() updateClientDto: UpdateClientDto) {
-    return this.clientService.update(updateClientDto);
+  update(@Body() data: UpdateClientDto) {
+    return this.clientService.update(data);
   }
 
  
