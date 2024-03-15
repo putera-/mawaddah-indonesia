@@ -271,15 +271,15 @@ components:
                 id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
                 clientId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
                 title: "Slider 1"
-                photo: "/slider/image1.jpg"
+                path: "/slider/image1.jpg"
         sliders:
             summary: Sliders
             value:
               - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
                 clientId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
                 title: "Slider 1"
-                photo: "/slider/image1.jpg"
+                path: "/slider/image1.jpg"
               - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
                 clientId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
                 title: "Slider 2"
-                photo: "/slider/image2.jpg"
+                path: "/slider/image2.jpg"
