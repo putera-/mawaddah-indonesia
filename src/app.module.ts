@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { BlogsModule } from './blogs/blogs.module';
 import { ClientModule } from './client/client.module';
+import { SliderModule } from './slider/slider.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), BlogsModule, ClientModule],
+  imports: [ConfigModule.forRoot(), BlogsModule, ClientModule, SliderModule],
   controllers: [AppController],
   providers: [AppService],
 })
