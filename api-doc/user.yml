@@ -83,33 +83,27 @@ paths:
                                     summary: Example 1
                                     value:
                                       - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
-                                        email: "joh@example.com"
-                                        firstname: "John"
-                                        lastname: "Doe"
+                                        email: "jo..."
+                                        firstname: "Jo..."
+                                        lastname: "Do..."
                                         active: true
                                         verified: false
-                                        avatar: "/avatar/john.jpg"
-                                        avatar_md: "/avatar/john_md.jpg"
                                         role: "MEMBER"
                                         taaruf_status: "OPEN"
                                       - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
-                                        email: "joh@example.com"
-                                        firstname: "John"
-                                        lastname: "Doe"
+                                        email: "jo..."
+                                        firstname: "Jo..."
+                                        lastname: "Do..."
                                         active: true
                                         verified: false
-                                        avatar: null
-                                        avatar_md: null
                                         role: "MEMBER"
                                         taaruf_status: "CLOSE"
                                       - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
-                                        email: "joh@example.com"
-                                        firstname: "John"
-                                        lastname: "Doe"
+                                        email: "jo..."
+                                        firstname: "Jo..."
+                                        lastname: "Do..."
                                         active: false
                                         verified: true
-                                        avatar: null
-                                        avatar_md: null
                                         role: "MEMBER"
                                         taaruf_status: "OPEN"
         patch:
@@ -412,38 +406,32 @@ components:
             summary: complete-data
             value:
                 id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
-                email: "joh@example.com"
-                firstname: "John"
-                lastname: "Doe"
+                email: "jo..."
+                firstname: "Jo..."
+                lastname: "Do..."
                 active: true
                 verified: true
-                avatar: "/avatar/john.jpg"
-                avatar_md: "/avatar/john_md.jpg"
                 role: "MEMBER"
-                taaruf_status: "OPEN"
+                taaruf_status: "BLOCKED"
         no-avatar:
             summary: no-avatar
             value:
                 id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
-                email: "joh@example.com"
-                firstname: "John"
+                email: "jo..."
+                firstname: "Jo..."
                 lastname: "Doe"
                 active: true
                 verified: true
-                avatar: null
-                avatar_md: null
                 role: "MEMBER"
-                taaruf_status: "OPEN"
+                taaruf_status: "BLOCKED"
         user:
             summary: user
             value:
                 id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
-                email: "joh@example.com"
-                firstname: "John"
-                lastname: "Doe"
+                email: "jo..."
+                firstname: "Jo..."
+                lastname: "Do..."
                 active: true
                 verified: false
-                avatar: null
-                avatar_md: null
                 role: "MEMBER"
-                taaruf_status: "OPEN"
+                taaruf_status: "BLOCKED"
