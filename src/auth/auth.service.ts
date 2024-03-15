@@ -1,0 +1,78 @@
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { UsersService } from 'src/users/user.service';
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import * as dayjs from 'dayjs';
+import { Prisma } from '@prisma/client';
+import { PrismaService } from 'src/prisma.service';
+
+@Injectable()
+export class AuthService {
+    constructor(
+        private usersService: UsersService,
+        private jwtService: JwtService,
+        private prisma: PrismaService,
+    ) {}
+
+    async signIn(email: string, pass: string): Promise<any> {
+        const user = await this.usersService.findByEmail(email);
+        const match = await bcrypt.compare(pass, user.password);
+
+        if (!match) {
+            throw new UnauthorizedException('Invalid Credentials!');
+        }
+        if (!user.active) throw new UnauthorizedException('User is deleted!');
+
+        const { access_token, exp } = await this.createToken(
+            user.id,
+            user.email,
+            user.role,
+        );
+        // instead of the user object
+        return { access_token, exp };
+    }
+
+    async createToken(
+        userId: string,
+        email: string,
+        role: string,
+    ): Promise<Record<string, any>> {
+        const payload = {
+            sub: userId,
+            username: email,
+            role: role,
+        };
+
+        const access_token = (await this.jwtService.signAsync(
+            payload,
+        )) as string;
+        const date = new Date();
+        console.log(dayjs(date).format('DD/MM/YYYY'));
+        const exp: number = Math.round(dayjs(date).add(1, 'day').valueOf());
+
+        // save to db
+        await this.createAuth(userId, access_token, exp);
+
+        return { access_token, exp };
+    }
+    async createAuth(
+        userId: string,
+        access_token: string,
+        expiredAt?: number,
+    ): Promise<void> {
+        if (!expiredAt) {
+            // expired date, add 1 day
+            expiredAt = Math.round(dayjs().add(1, 'd').valueOf());
+        }
+
+        const data: Prisma.AuthCreateInput = {
+            user: {
+                connect: { id: userId },
+            },
+            access_token,
+            expiredAt,
+        };
+
+        await this.prisma.auth.create({ data });
+    }
+}
