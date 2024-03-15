@@ -1,0 +1,285 @@
+openapi: "3.0.2"
+info:
+    title: Slider API
+    version: "1.0"
+    contact:
+        name: "Rizjami Putera"
+        email: "rizjamiputera@gmail.com"
+        url: "https://udaputera.com"
+servers:
+  - description: Slider API
+    url: "{url}:5000/v1"
+    variables:
+        url:
+            default: "http://localhost:5000"
+paths:
+    "/sliders":
+        post:
+            tags:
+            - Sliders
+            description: Create Image Slider, Hanya role Admin yg bisa melakukan
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            properties:
+                                title:
+                                    type: string
+                                photo:
+                                    type: string
+                                    format: binary
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            examples:
+                                sliders:
+                                    $ref: "#/components/examples/slider"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
+        get:
+            tags:
+            - Sliders
+            description: Get All Sliders
+            responses:
+                200:
+                    description: "OK"
+                    content:
+                        application/json:
+                            examples:
+                                sliders:
+                                    $ref: "#/components/examples/sliders"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+    "/sliders/:id":
+        get:
+            tags:
+            - Sliders
+            description: Get Slider by id
+            responses:
+                200:
+                    description: "OK"
+                    content:
+                        application/json:
+                            examples:
+                                slider:
+                                    $ref: "#/components/examples/slider"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+        patch:
+            tags:
+            - Sliders
+            description: Update Image Slider, Hanya role Admin yg bisa melakukan. Jika ubah foto, pastikan foto lama terhapus
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            properties:
+                                title:
+                                    type: string
+                                photo:
+                                    type: string
+                                    format: binary
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            examples:
+                                sliders:
+                                    $ref: "#/components/examples/slider"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
+        delete:
+            tags:
+            - Sliders
+            description: Delete Image Slider, Hanya role Admin yg bisa melakukan. Pastikan foto terhapus
+            responses:
+                204:
+                    description: OK. No Content
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
+components:
+    examples:
+        slider:
+            summary: Sliders
+            value:
+                id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                clientId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
+                title: "Slider 1"
+                path: "/slider/image1.jpg"
+        sliders:
+            summary: Sliders
+            value:
+              - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                clientId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
+                title: "Slider 1"
+                path: "/slider/image1.jpg"
+              - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                clientId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
+                title: "Slider 2"
+                path: "/slider/image2.jpg"

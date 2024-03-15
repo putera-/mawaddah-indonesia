@@ -1,23 +1,23 @@
 openapi: "3.0.2"
 info:
-    title: User API
+    title: User Admin API
     version: "1.0"
     contact:
         name: "Rizjami Putera"
         email: "rizjamiputera@gmail.com"
         url: "https://udaputera.com"
 servers:
-  - description: User API
+  - description: User Admin API
     url: "{url}:5000/v1"
     variables:
         url:
             default: "http://localhost:5000"
 paths:
-    "/users":
+    "/user-admin":
         post:
             tags:
-            - User
-            description: Create user role as MEMBER
+            - Admin User
+            description: Create admin user, Only Role SuperAdmin or Admin can do this
             requestBody:
                 required: true
                 content:
@@ -48,7 +48,7 @@ paths:
                                 $ref: "#/components/schemas/user"
                             examples:
                                 user:
-                                    $ref: "#/components/examples/user"
+                                    $ref: "#/components/examples/new-user"
                 400:
                     description: Bad Request
                     content:
@@ -65,10 +65,36 @@ paths:
                                     statusCode:
                                         type: number
                                         example: 400
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
         get:
             tags:
-            - User
-            description: Get all user role as MEMBER
+            - Admin User
+            description: Get all admin user, Only Role SuperAdmin or Admin can do this
             responses:
                 200:
                     description: "OK"
@@ -87,21 +113,19 @@ paths:
                                         firstname: "John"
                                         lastname: "Doe"
                                         active: true
-                                        verified: false
+                                        verified: true
                                         avatar: "/avatar/john.jpg"
                                         avatar_md: "/avatar/john_md.jpg"
-                                        role: "MEMBER"
-                                        taaruf_status: "OPEN"
+                                        role: "ADMIN"
                                       - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
                                         email: "joh@example.com"
                                         firstname: "John"
                                         lastname: "Doe"
                                         active: true
-                                        verified: false
+                                        verified: true
                                         avatar: null
                                         avatar_md: null
-                                        role: "MEMBER"
-                                        taaruf_status: "CLOSE"
+                                        role: "ADMIN"
                                       - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
                                         email: "joh@example.com"
                                         firstname: "John"
@@ -110,12 +134,55 @@ paths:
                                         verified: true
                                         avatar: null
                                         avatar_md: null
-                                        role: "MEMBER"
-                                        taaruf_status: "OPEN"
-        patch:
+                                        role: "ADMIN"
+    "/user-admin/:id":
+        get:
             tags:
-            - User
-            description: User can only update himself, for all roles
+            - Admin User
+            description: Get by id - Only Role SuperAdmin or Admin can do this
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: "#/components/schemas/user"
+                            examples:
+                                complete-data:
+                                    $ref: "#/components/examples/complete-data"
+                                no-avatar:
+                                    $ref: "#/components/examples/no-avatar"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+        delete:
+            tags:
+            - Admin User
+            description: Only Role SuperAdmin or Admin can do this. Only set active to false
             requestBody:
                 required: true
                 content:
@@ -182,192 +249,6 @@ paths:
                                     statusCode:
                                         type: number
                                         example: 404
-    "/users/:id":
-        get:
-            tags:
-            - User
-            description: Get by id - user role as MEMBER
-            responses:
-                200:
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                $ref: "#/components/schemas/user"
-                            examples:
-                                complete-data:
-                                    $ref: "#/components/examples/complete-data"
-                                no-avatar:
-                                    $ref: "#/components/examples/no-avatar"
-                401:
-                    description: Unauthorized
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    error:
-                                        type: string
-                                        example: Unauthorized
-                                    statusCode:
-                                        type: number
-                                        example: 401
-                403:
-                    description: Forbidden
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    error:
-                                        type: string
-                                        example: Forbidden
-                                    statusCode:
-                                        type: number
-                                        example: 403
-    "/users/activate/:id":
-        patch:
-            tags:
-            - User
-            responses:
-                204:
-                    description: OK. No Content
-                401:
-                    description: Unauthorized
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    error:
-                                        type: string
-                                        example: Unauthorized
-                                    statusCode:
-                                        type: number
-                                        example: 401
-                403:
-                    description: Forbidden
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    error:
-                                        type: string
-                                        example: Forbidden
-                                    statusCode:
-                                        type: number
-                                        example: 403
-                404:
-                    description: Not Found
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    error:
-                                        type: string
-                                        example: Not Found
-                                    statusCode:
-                                        type: number
-                                        example: 404
-    "/users/deactivate/:id":
-        patch:
-            tags:
-            - User
-            responses:
-                204:
-                    description: OK. No Content
-                401:
-                    description: Unauthorized
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    error:
-                                        type: string
-                                        example: Unauthorized
-                                    statusCode:
-                                        type: number
-                                        example: 401
-                403:
-                    description: Forbidden
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    error:
-                                        type: string
-                                        example: Forbidden
-                                    statusCode:
-                                        type: number
-                                        example: 403
-                404:
-                    description: Not Found
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    error:
-                                        type: string
-                                        example: Not Found
-                                    statusCode:
-                                        type: number
-                                        example: 404
-    "/users/change_password":
-        patch:
-            tags:
-            - User
-            description: Change password for all user role
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                password:
-                                    type: string
-                                    format: password
-                                confirm_password:
-                                    type: string
-                                    format: password
-            responses:
-                204:
-                    description: OK. No Content
-                400:
-                    description: Bad Request
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: Password confirm is not match
-                                    error:
-                                        type: string
-                                        example: Bad Request
-                                    statusCode:
-                                        type: number
-                                        example: 400
-                401:
-                    description: Unauthorized
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    error:
-                                        type: string
-                                        example: Unauthorized
-                                    statusCode:
-                                        type: number
-                                        example: 401
 components:
     schemas:
         user:
@@ -400,13 +281,6 @@ components:
                 role:
                     type: string
                     example: MEMBER
-                taaruf_status:
-                    type: string
-                    example: OPEN
-                taaruf_open_at:
-                    type: string
-                    format: date-time
-                    example: 2024-03-12T10:30:00Z
     examples:
         complete-data:
             summary: complete-data
@@ -419,8 +293,7 @@ components:
                 verified: true
                 avatar: "/avatar/john.jpg"
                 avatar_md: "/avatar/john_md.jpg"
-                role: "MEMBER"
-                taaruf_status: "OPEN"
+                role: "ADMIN"
         no-avatar:
             summary: no-avatar
             value:
@@ -432,10 +305,9 @@ components:
                 verified: true
                 avatar: null
                 avatar_md: null
-                role: "MEMBER"
-                taaruf_status: "OPEN"
-        user:
-            summary: user
+                role: "ADMIN"
+        new-user:
+            summary: new-user
             value:
                 id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
                 email: "joh@example.com"
@@ -445,5 +317,4 @@ components:
                 verified: false
                 avatar: null
                 avatar_md: null
-                role: "MEMBER"
-                taaruf_status: "OPEN"
+                role: "ADMIN"

@@ -1,0 +1,193 @@
+openapi: "3.0.2"
+info:
+    title: Auth API
+    version: "1.0"
+    contact:
+        name: "Rizjami Putera"
+        email: "rizjamiputera@gmail.com"
+        url: "https://udaputera.com"
+servers:
+  - description: Auth API
+    url: "{url}:5000/v1"
+    variables:
+        url:
+            default: "http://localhost:5000"
+paths:
+    "/auth/login":
+        post:
+            tags:
+            - Auth
+            description: Login, expired berlaku 7 hari
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                password:
+                                    type: string
+                                    format: password
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    access_token:
+                                        type: string
+                                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZjI3OGQ4NS1kNDg2LTQ3NGYtOWIyZi03ZDNkNGQ5NDhjYzEiLCJ1c2VybmFtZSI6InVkYV9zdXBlckBnbWFpbC5jb20iLCJyb2xlIjoiU1VQRVJVU0VSIiwiaWF0IjoxNzEwMjk5MTc5LCJleHAiOjE3MTAzODU1Nzl9.BqMYxl56GW7rBi1fYn-NLf7EIVMB7ACtKnB2K-M2fGg
+                                    exp:
+                                        type: number
+                                        example: 1710385579608
+
+
+                400:
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Email is invalid
+                                    error:
+                                        type: string
+                                        example: Bad Request
+                                    statusCode:
+                                        type: number
+                                        example: 400
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Invalid Credentials!
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+    "/auth/extend-access-token":
+        get:
+            tags:
+            - Auth
+            description: Get new access token. Panggil api ini jika expired sisa 1 hari / 24 jam
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    access_token:
+                                        type: string
+                                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZjI3OGQ4NS1kNDg2LTQ3NGYtOWIyZi03ZDNkNGQ5NDhjYzEiLCJ1c2VybmFtZSI6InVkYV9zdXBlckBnbWFpbC5jb20iLCJyb2xlIjoiU1VQRVJVU0VSIiwiaWF0IjoxNzEwMjk5MTc5LCJleHAiOjE3MTAzODU1Nzl9.BqMYxl56GW7rBi1fYn-NLf7EIVMB7ACtKnB2K-M2fGg
+                                    exp:
+                                        type: number
+                                        example: 1710385579608
+
+
+                400:
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Email is invalid
+                                    error:
+                                        type: string
+                                        example: Bad Request
+                                    statusCode:
+                                        type: number
+                                        example: 400
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Invalid Credentials!
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+    "/auth/logout":
+        delete:
+            tags:
+            - Auth
+            description: Logout
+            responses:
+                204:
+                    description: OK. No Content
+                400:
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Email is invalid
+                                    error:
+                                        type: string
+                                        example: Bad Request
+                                    statusCode:
+                                        type: number
+                                        example: 400
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Invalid Credentials!
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+
+components:
+    examples:
+        login:
+            summary: dummy
+            value:
+                name: "-"
+                email: null
+                role: "-"
+                address: true
+                taaruf_muqoddimah: null
+                login_muqoddimah: null
+                signup_muqoddimah: null
+                youtube: null
+                facebook: null
+                twitter: null
+                instagram: null
+                tiktok: null
+                linkedin: null
+
