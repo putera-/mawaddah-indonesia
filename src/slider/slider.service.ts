@@ -1,27 +1,38 @@
-import { Injectable } from '@nestjs/common';
-import { CreateSliderDto } from './dto/create-slider.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateSliderDto } from './dto/update-slider.dto';
 import { Prisma } from '@prisma/client';
+import { Slider } from './slider.interface';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class SliderService {
-  create(createSliderDto: CreateSliderDto) {
-    return 'This action adds a new slider';
+  constructor(private prisma: PrismaService) { }
+  create(data: Prisma.SliderCreateInput) {
+    console.log(data)
+    return
+    // return this.prisma.slider.create({
+    //   data
+    // });
+
   }
 
   findAll() {
-    return 'This action returns all slider';
+    return this.prisma.slider.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} slider`;
+  async findOne(id: string): Promise<Slider> {
+    const slider = await this.prisma.slider.findFirst({ where: { id } });
+    if (!slider) throw new NotFoundException('slider not found')
+    return slider;
   }
 
-  update(id: number, updateSliderDto: UpdateSliderDto) {
+  update(id: string, updateSliderDto: UpdateSliderDto) {
     return `This action updates a #${id} slider`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} slider`;
   }
+
+
 }

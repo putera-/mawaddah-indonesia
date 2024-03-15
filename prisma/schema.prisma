@@ -91,7 +91,6 @@ model Slider {
   clientId  String
   title     String?  @db.Text
   photo     String?  @db.Text
-  deleted   Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 

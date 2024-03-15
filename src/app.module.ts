@@ -5,9 +5,10 @@ import { ConfigModule } from '@nestjs/config';
 import { BlogsModule } from './blogs/blogs.module';
 import { ClientModule } from './client/client.module';
 import { SliderModule } from './slider/slider.module';
+import { PhotosModule } from './photos/photos.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), BlogsModule, ClientModule, SliderModule],
+  imports: [ConfigModule.forRoot(), BlogsModule, ClientModule, SliderModule, PhotosModule],
   controllers: [AppController],
   providers: [AppService],
 })
