@@ -9,15 +9,15 @@ import {
     HttpCode,
     ValidationPipe,
 } from '@nestjs/common';
-import { UserService } from './user.service';
+import { UsersService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Prisma } from '@prisma/client';
 import { User } from './user.interface';
 
 @Controller('users')
-export class UserController {
-    constructor(private readonly userService: UserService) {}
+export class UsersController {
+    constructor(private readonly userService: UsersService) {}
 
     @Post()
     async create(@Body(new ValidationPipe()) data: CreateUserDto) {
