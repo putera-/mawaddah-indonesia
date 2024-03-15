@@ -13,8 +13,9 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Prisma } from '@prisma/client';
+import { User } from './user.interface';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
@@ -22,7 +23,13 @@ export class UserController {
     async create(@Body(new ValidationPipe()) data: CreateUserDto) {
         try {
             await this.userService.validateNewUser(data);
-            return this.userService.create(data);
+
+            const user: User = await this.userService.create(data);
+
+            // FORMAT/HIDE USER DATA
+            this.userService.formatGray(user);
+
+            return user;
         } catch (error) {
             throw error;
         }
@@ -50,6 +57,25 @@ export class UserController {
     update(@Param('id') id: string, @Body() data: UpdateUserDto) {
         try {
             return this.userService.update(id, data as Prisma.UserUpdateInput);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    @Patch('activate/:id')
+    @HttpCode(204)
+    async activateUser(@Param('id') id: string): Promise<void> {
+        try {
+            await this.userService.activateUser(id);
+        } catch (error) {
+            throw error;
+        }
+    }
+    @Patch('deactivate/:id')
+    @HttpCode(204)
+    async deactivateUser(@Param('id') id: string): Promise<void> {
+        try {
+            await this.userService.deactivateUser(id);
         } catch (error) {
             throw error;
         }
