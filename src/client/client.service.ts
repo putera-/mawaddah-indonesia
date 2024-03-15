@@ -3,8 +3,6 @@ import { UpdateClientDto } from './dto/update-client.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Client } from './client.interface';
 import { Prisma } from '@prisma/client';
-import { CreateClientDto } from './dto/create-client.dto';
-import { CreateBlogDto } from 'src/blogs/dto/create-blog.dto';
 
 @Injectable()
 export class ClientService {
@@ -32,13 +30,11 @@ export class ClientService {
    
 
   //lanjutin besok pagi ngab
-  async update(data: UpdateClientDto) {
-    await this.findOne();
+  async update(data: UpdateClientDto): Promise<Client> {
+    const current_client = await this.findOne();
     return this.prisma.client.update({
-      where: {
-        id: "a5e14d27-b86c-46c5-a7c7-6a451aabd308"
-      },
-      data 
+      where: { id: current_client.id },
+      data
     })
   }
   
