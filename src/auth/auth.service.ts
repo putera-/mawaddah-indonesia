@@ -13,6 +13,7 @@ export class AuthService {
         private jwtService: JwtService,
         private prisma: PrismaService,
     ) {}
+    private blacklistedTokens: Set<string> = new Set();
 
     async signIn(email: string, pass: string): Promise<any> {
         const user = await this.usersService.findByEmail(email);
@@ -46,9 +47,7 @@ export class AuthService {
         const access_token = (await this.jwtService.signAsync(
             payload,
         )) as string;
-        const date = new Date();
-        console.log(dayjs(date).format('DD/MM/YYYY'));
-        const exp: number = Math.round(dayjs(date).add(1, 'day').valueOf());
+        const exp: number = Math.round(dayjs().add(1, 'd').valueOf());
 
         // save to db
         await this.createAuth(userId, access_token, exp);
@@ -74,5 +73,12 @@ export class AuthService {
         };
 
         await this.prisma.auth.create({ data });
+    }
+    addBlackListToken(token: string) {
+        this.blacklistedTokens.add(token);
+    }
+
+    isTokenBlacklisted(token: string): boolean {
+        return this.blacklistedTokens.has(token);
     }
 }
