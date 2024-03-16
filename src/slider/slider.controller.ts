@@ -40,7 +40,7 @@ export class SliderController {
           })
         );
         data.photo = `/public/photos/${uniqueSuffix}_lg.${ext}`;
-      }
+      };
 
       return this.sliderService.create(data as Prisma.SliderCreateInput);
     } catch (error) {
@@ -51,8 +51,8 @@ export class SliderController {
       }
 
       throw error;
-    }
-  }
+    };
+  };
 
   @Get()
   findAll() {
@@ -62,8 +62,8 @@ export class SliderController {
     } catch (error) {
       throw error;
 
-    }
-  }
+    };
+  };
 
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -73,8 +73,8 @@ export class SliderController {
     } catch (error) {
       throw error;
 
-    }
-  }
+    };
+  };
 
   @Patch(':id')
   @UseInterceptors(FileInterceptor('photo'))
@@ -99,9 +99,8 @@ export class SliderController {
           })
         );
 
-
         data.photo = `/public/photos/${uniqueSuffix}_lg.${ext}`;
-      }
+      };
 
       return this.sliderService.update(id, data);
 
@@ -113,8 +112,8 @@ export class SliderController {
       }
 
       throw error;
-    }
-  }
+    };
+  };
 
   @Delete(':id')
   @HttpCode(204)
@@ -126,5 +125,5 @@ export class SliderController {
       throw error;
 
     }
-  }
-}
+  };
+};
