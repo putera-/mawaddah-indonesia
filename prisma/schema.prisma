@@ -54,21 +54,8 @@ model Client {
   id                String    @id @default(uuid())
   name              String    @db.VarChar(100)
   about             String?   @db.Text
-  about             String?   @db.Text
   phone             String    @db.VarChar(20)
   address           String    @db.Text
-  taaruf_muqoddimah String?   @db.Text
-  login_muqoddimah  String?   @db.Text
-  signup_muqoddimah String?   @db.Text
-  youtube           String?   @db.VarChar(100)
-  facebook          String?   @db.VarChar(100)
-  twitter           String?   @db.VarChar(100)
-  tiktok            String?   @db.VarChar(100)
-  instagram         String?   @db.VarChar(100)
-  linkedin          String?   @db.VarChar(100)
-  galleries         Gallery[]
-  sliders           Slider[]
-  faqs              FAQ[]
   taaruf_muqoddimah String?   @db.Text
   login_muqoddimah  String?   @db.Text
   signup_muqoddimah String?   @db.Text
