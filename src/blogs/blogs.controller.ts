@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, ValidationPipe } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
@@ -9,7 +9,7 @@ export class BlogsController {
   constructor(private readonly blogsService: BlogsService) { }
 
   @Post()
-    create(@Body()  data: CreateBlogDto) {
+    create(@Body(new ValidationPipe())  data: CreateBlogDto) {
     console.log(data)
     return this.blogsService.create(data as Prisma.blogCreateInput);
   }
@@ -35,7 +35,7 @@ export class BlogsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBlogDto: UpdateBlogDto) {
+  update(@Param('id') id: string, @Body(new ValidationPipe()) updateBlogDto: UpdateBlogDto) {
     try {
       return this.blogsService.update(id, updateBlogDto);
       
