@@ -5,8 +5,9 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { Prisma, User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { User } from './user.interface';
 
 const select = {
     id: true,
@@ -31,6 +32,13 @@ export class UserService {
         });
     }
 
+    formatGray(data: User) {
+        data.email = data.email.slice(0, 2) + '...';
+        data.firstname = data.firstname.slice(0, 2) + '...';
+        data.lastname = data.lastname.slice(0, 2) + '...';
+        delete data.avatar;
+        delete data.avatar_md;
+    }
     async findAll() {
         return this.Prisma.user.findMany({
             where: { active: true, role: 'MEMBER' },
@@ -41,7 +49,7 @@ export class UserService {
         const user = await this.Prisma.user.findFirst({
             where: { id, active: true },
         });
-        if (!user) throw new NotFoundException(`User not found`);
+        if (!user) throw new NotFoundException(`User tidak ditemukan`);
         return user;
     }
 
@@ -65,7 +73,7 @@ export class UserService {
     }
     async checkPassword(data: any) {
         if (data.password != data.password_confirm)
-            throw new BadRequestException('Confirm password is not match');
+            throw new BadRequestException('Confirm password tidak sesuai');
 
         delete data.password_confirm;
         data.password = await bcrypt.hash(data.password, 10);
@@ -79,6 +87,23 @@ export class UserService {
 
         // check is email taken?
         const checkUser = await this.findByEmail(data.email);
-        if (checkUser) throw new BadRequestException('Email is invalid');
+        if (checkUser) throw new ConflictException('Email sudah terpakai');
+    }
+    async activateUser(id: string): Promise<User> {
+        const user = await this.Prisma.user.findFirst({
+            where: { id },
+        });
+        if (!user) throw new NotFoundException(`User tidak ditemukan`);
+        return this.Prisma.user.update({
+            where: { id },
+            data: { active: true },
+        });
+    }
+    async deactivateUser(id: string): Promise<User> {
+        await this.findOne(id);
+        return this.Prisma.user.update({
+            where: { id },
+            data: { active: false },
+        });
     }
 }
