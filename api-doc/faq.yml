@@ -1,0 +1,233 @@
+openapi: "3.0.2"
+info:
+    title: FAQ API
+    version: "1.0"
+    contact:
+        name: "Rizjami Putera"
+        email: "rizjamiputera@gmail.com"
+        url: "https://udaputera.com"
+servers:
+  - description: FAQ API
+    url: "{url}:5000/v1"
+    variables:
+        url:
+            default: "http://localhost:5000"
+paths:
+    "/faqs":
+        post:
+            tags:
+            - FAQS
+            description: Hanya role Admin yg bisa melakukan
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            properties:
+                                question:
+                                    type: string
+                                answer:
+                                    type: string
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            examples:
+                                sliders:
+                                    $ref: "#/components/examples/faq"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+        get:
+            tags:
+            - FAQS
+            description: Get All Faqs, no Role
+            responses:
+                200:
+                    description: "OK"
+                    content:
+                        application/json:
+                            examples:
+                                sliders:
+                                    $ref: "#/components/examples/faqs"
+    "/faqs/:id":
+        get:
+            tags:
+            - FAQS
+            description: Get FAQ by id, no role
+            responses:
+                200:
+                    description: "OK"
+                    content:
+                        application/json:
+                            examples:
+                                slider:
+                                    $ref: "#/components/examples/faq"
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
+        patch:
+            tags:
+            - FAQS
+            description: Update Faqs, Hanya role Admin yg bisa melakukan
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            properties:
+                                question:
+                                    type: string
+                                answer:
+                                    type: string
+                                    format: binary
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            examples:
+                                sliders:
+                                    $ref: "#/components/examples/faq"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
+        delete:
+            tags:
+            - FAQS
+            description: Delete FAQS, Hanya role Admin yg bisa melakukan
+            responses:
+                204:
+                    description: OK. No Content
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
+
+components:
+    examples:
+        faq:
+            summary: FAQ
+            value:
+                id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                clientId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
+                question: "Jodoh Saya dimana?"
+                answer: "Cari sendiri"
+        faqs:
+            summary: FAQs
+            value:
+              - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                clientId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
+                question: "Jodoh Saya dimana?"
+                answer: "/Cari sendiri"
+              - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                clientId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
+                question: "Kira2 kandidat yang saya pilih cantik ga?"
+                answer: "Sabar woe, nanti juga ada proses nadhor. Ngebet banget apa?"
