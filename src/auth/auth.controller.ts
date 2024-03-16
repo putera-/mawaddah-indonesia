@@ -13,7 +13,6 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in.dto';
-import { AuthGuard } from './auth.guard';
 import { Public } from './auth.metadata';
 
 @Controller('auth')
@@ -61,7 +60,6 @@ export class AuthController {
 
     @Get('profile')
     getProfile(@Request() req) {
-        console.log('masuk profile');
         return req.user;
     }
 }

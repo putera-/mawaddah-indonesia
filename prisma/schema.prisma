@@ -83,7 +83,6 @@ model Client {
 
   @@map("client")
 }
-
 model Gallery {
   id        String   @id @default(uuid())
   Client    Client?  @relation(fields: [clientId], references: [id])
