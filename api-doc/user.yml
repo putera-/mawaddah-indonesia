@@ -362,6 +362,48 @@ paths:
                                     statusCode:
                                         type: number
                                         example: 401
+    "/users/profile":
+        get:
+            tags:
+            - User
+            description: Get by login user
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                $ref: "#/components/schemas/user"
+                            examples:
+                                profile-data:
+                                    $ref: "#/components/examples/profile-data"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
 components:
     schemas:
         user:
@@ -402,6 +444,19 @@ components:
                     format: date-time
                     example: 2024-03-12T10:30:00Z
     examples:
+        profile-data:
+            summary: profile-data
+            value:
+                id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                email: "john_doe@gmail.com"
+                firstname: "John"
+                lastname: "Doe"
+                active: true
+                verified: true
+                avatar: "/public/profile/avatar.jpg"
+                avatar_md: "/public/profile/avatar_md.jpg"
+                role: "MEMBER"
+                taaruf_status: "BLOCKED"
         complete-data:
             summary: complete-data
             value:
