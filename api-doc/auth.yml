@@ -35,15 +35,9 @@ paths:
                     description: OK
                     content:
                         application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    access_token:
-                                        type: string
-                                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZjI3OGQ4NS1kNDg2LTQ3NGYtOWIyZi03ZDNkNGQ5NDhjYzEiLCJ1c2VybmFtZSI6InVkYV9zdXBlckBnbWFpbC5jb20iLCJyb2xlIjoiU1VQRVJVU0VSIiwiaWF0IjoxNzEwMjk5MTc5LCJleHAiOjE3MTAzODU1Nzl9.BqMYxl56GW7rBi1fYn-NLf7EIVMB7ACtKnB2K-M2fGg
-                                    exp:
-                                        type: number
-                                        example: 1710385579608
+                            examples:
+                                profile-data:
+                                    $ref: "#/components/examples/auth"
 
 
                 400:
@@ -174,20 +168,20 @@ paths:
 
 components:
     examples:
-        login:
-            summary: dummy
+        auth:
+            summary: auth
             value:
-                name: "-"
-                email: null
-                role: "-"
-                address: true
-                taaruf_muqoddimah: null
-                login_muqoddimah: null
-                signup_muqoddimah: null
-                youtube: null
-                facebook: null
-                twitter: null
-                instagram: null
-                tiktok: null
-                linkedin: null
+                access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZjI3OGQ4NS1kNDg2LTQ3NGYtOWIyZi03ZDNkNGQ5NDhjYzEiLCJ1c2VybmFtZSI6InVkYV9zdXBlckBnbWFpbC5jb20iLCJyb2xlIjoiU1VQRVJVU0VSIiwiaWF0IjoxNzEwMjk5MTc5LCJleHAiOjE3MTAzODU1Nzl9.BqMYxl56GW7rBi1fYn-NLf7EIVMB7ACtKnB2K-M2fGg
+                exp: 1710385579608
+                user:
+                    id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                    email: "john_doe@gmail.com"
+                    firstname: "John"
+                    lastname: "Doe"
+                    active: true
+                    verified: true
+                    avatar: "/public/profile/avatar.jpg"
+                    avatar_md: "/public/profile/avatar_md.jpg"
+                    role: "MEMBER"
+                    taaruf_status: "BLOCKED"
 
