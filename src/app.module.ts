@@ -7,9 +7,10 @@ import { ClientModule } from './client/client.module';
 import { SliderModule } from './slider/slider.module';
 import { PhotosModule } from './photos/photos.module';
 import { GalleriesModule } from './galleries/galleries.module';
+import { FaqsModule } from './faqs/faqs.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), BlogsModule, ClientModule, SliderModule, PhotosModule, GalleriesModule],
+  imports: [ConfigModule.forRoot(), BlogsModule, ClientModule, SliderModule, PhotosModule, GalleriesModule, FaqsModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -37,8 +37,8 @@ export class BlogsService {
     return this.prisma.blog.update({
       where: { id },
       data
-    })
-  }
+    });
+  };
 
   async remove(id: string): Promise<void> {
     await this.findOne(id);
@@ -46,7 +46,7 @@ export class BlogsService {
     await this.prisma.blog.update({
       where: { id },
       data: { deleted: true }
-    })
-  }
-}
+    });
+  };
+};
 
