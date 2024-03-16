@@ -13,6 +13,7 @@ export class CreateUserDto {
     lastname: string;
 
     @IsString()
+    @IsStrongPassword({ minSymbols: 0 })
     @Length(1, 100)
     password: string;
 
