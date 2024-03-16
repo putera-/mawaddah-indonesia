@@ -77,7 +77,8 @@ model Auth {
     user         User?    @relation(fields: [userId], references: [id])
     userId       String?
     access_token String   @db.VarChar(300)
-    last_used    DateTime @default(now())
+    path         String   @default("-") @db.VarChar(100)
+    method       String   @default("-") @db.VarChar(100)
     expiredAt    BigInt   @db.BigInt
     deleted      Boolean  @default(false)
     createdAt    DateTime @default(now())

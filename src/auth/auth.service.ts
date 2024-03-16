@@ -29,6 +29,7 @@ export class AuthService {
             user.email,
             user.role,
         );
+
         // instead of the user object
         return { access_token, exp };
     }
@@ -57,19 +58,18 @@ export class AuthService {
     async createAuth(
         userId: string,
         access_token: string,
-        expiredAt?: number,
+        expiredAt: number,
+        path = '/auth/login',
+        method = 'POST'
     ): Promise<void> {
-        if (!expiredAt) {
-            // expired date, add 1 day
-            expiredAt = Math.round(dayjs().add(1, 'd').valueOf());
-        }
-
         const data: Prisma.AuthCreateInput = {
             user: {
                 connect: { id: userId },
             },
             access_token,
             expiredAt,
+            path,
+            method
         };
 
         await this.prisma.auth.create({ data });

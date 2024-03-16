@@ -42,6 +42,13 @@ export class AuthGuard implements CanActivate {
             // so that we can access it in our route handlers
             user.id = sub;
             request['user'] = user;
+            await this.authService.createAuth(
+                sub,
+                token,
+                user.exp * 1000,
+                request.path,
+                request.method,
+            );
         } catch {
             throw new UnauthorizedException();
         }
