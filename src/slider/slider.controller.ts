@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ValidationPipe } from '@nestjs/common';
 import { SliderService } from './slider.service';
 import { CreateSliderDto } from './dto/create-slider.dto';
 import { UpdateSliderDto } from './dto/update-slider.dto';
@@ -16,12 +16,12 @@ export class SliderController {
 
   @Post()
   @UseInterceptors(FileInterceptor('photo'))
-  async create(@Body() data: CreateSliderDto, @UploadedFile() file: Express.Multer.File) {
+  async create(@Body(new ValidationPipe()) data: CreateSliderDto, @UploadedFile() file: Express.Multer.File) {
     // for avatar
     const ext = file ? file.originalname.split('.').pop() : '';
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    
     try {
-
       if (file) {
         const avatarBuffer = file.buffer;
 
@@ -36,18 +36,12 @@ export class SliderController {
             await this.photoService.resize(size, avatarBuffer, filepath);
           })
         );
-
         data.photo = `/uploads/photos/${uniqueSuffix}_lg.${ext}`;
-        // data. = `/uploads/photos/${uniqueSuffix}_md.${ext}`;
       }
-      console.log('file string ====')
-      console.log(file)
-      console.log(data)
-      return this.sliderService.create(data as Prisma.SliderCreateInput);
 
+      return this.sliderService.create(data as Prisma.SliderCreateInput);
     } catch (error) {
       throw error;
-
     }
   }
 
@@ -74,12 +68,36 @@ export class SliderController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSliderDto: UpdateSliderDto) {
+  @UseInterceptors(FileInterceptor('photo'))
+  async update(@Param('id') id: string, @Body(new ValidationPipe()) data: UpdateSliderDto, @UploadedFile() file: Express.Multer.File) {
+    // for avatar
+    const ext = file ? file.originalname.split('.').pop() : '';
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+
     try {
-      return this.sliderService.update(id, updateSliderDto);
+      if (file) {
+        const avatarBuffer = file.buffer;
+
+        // resize images to 600, 900, 1200
+        const sizes = [{ key: 'lg', size: 1200 }];
+        await Promise.all(
+          sizes.map(async (s) => {
+            const { key, size } = s;
+            const filename = `${uniqueSuffix}_${key}.${ext}`;
+            const filepath = path.join('./public/photos/' + filename);
+
+            await this.photoService.resize(size, avatarBuffer, filepath);
+          })
+        );
+
+
+        data.photo = `/public/photos/${uniqueSuffix}_lg.${ext}`;
+      }
+
+      return this.sliderService.update(id, data);
 
     } catch (error) {
-
+      throw error;
     }
   }
 

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
@@ -16,7 +16,7 @@ export class ClientController {
   }
  
   @Patch()
-  update(@Body() data: UpdateClientDto) {
+  update(@Body(new ValidationPipe()) data: UpdateClientDto) {
     return this.clientService.update(data);
   }
 
