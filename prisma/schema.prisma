@@ -26,6 +26,7 @@ model User {
   role          RoleStatus   @default(MEMBER)
   taaruf_status TaarufStatus @default(BLOCKED)
   auth          Auth[]
+  activations   Activation[]
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @default(now()) @updatedAt
 }
@@ -47,9 +48,9 @@ model Auth {
   user         User?    @relation(fields: [userId], references: [id])
   userId       String?
   access_token String   @db.VarChar(300)
-  last_used    DateTime @default(now())
   expiredAt    BigInt   @db.BigInt
-  deleted      Boolean  @default(false)
+  path         String   @db.VarChar(100)
+  method       String   @db.VarChar(100)
   createdAt    DateTime @default(now())
 }
 
@@ -83,6 +84,7 @@ model Client {
 
   @@map("client")
 }
+
 model Gallery {
   id        String   @id @default(uuid())
   Client    Client?  @relation(fields: [clientId], references: [id])
@@ -118,4 +120,14 @@ model FAQ {
   updatedAt DateTime @default(now())
 
   @@map("faq")
+}
+
+model Activation {
+  id             String   @id @default(uuid())
+  User           User?    @relation(fields: [userId], references: [id])
+  userId         String?
+  activation_key String   @db.VarChar(200)
+  used           Boolean  @default(false)
+  expiredAt      BigInt   @db.BigInt
+  createdAt      DateTime @default(now())
 }

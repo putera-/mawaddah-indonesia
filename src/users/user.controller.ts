@@ -14,11 +14,12 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Prisma } from '@prisma/client';
 import { User } from './user.interface';
+import { Public } from 'src/auth/auth.metadata';
 
 @Controller('users')
 export class UsersController {
     constructor(private readonly userService: UsersService) {}
-
+    @Public()
     @Post()
     async create(@Body(new ValidationPipe()) data: CreateUserDto) {
         try {
