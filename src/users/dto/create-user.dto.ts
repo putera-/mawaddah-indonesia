@@ -1,23 +1,9 @@
-import { IsEmail, IsString, IsStrongPassword, Length } from 'class-validator';
+import { IntersectionType } from '@nestjs/mapped-types';
+import { IsOptional, IsString } from 'class-validator';
+import { GlobalUserDto } from './global-user.dto';
 
-export class CreateUserDto {
-    @IsEmail()
-    email: string;
-
+export class CreateUserDto extends IntersectionType(GlobalUserDto) {
     @IsString()
-    @Length(1, 100)
-    firstname: string;
-
-    @IsString()
-    @Length(1, 100)
-    lastname: string;
-
-    @IsString()
-    @IsStrongPassword({ minSymbols: 0 })
-    @Length(1, 100)
-    password: string;
-
-    @IsString()
-    @Length(1, 100)
-    password_confirm: string;
+    @IsOptional()
+    role: 'MEMBER' | 'ADMIN' | 'SUPERADMIN';
 }
