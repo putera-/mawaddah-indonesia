@@ -39,15 +39,18 @@ export class UsersService {
         delete data.avatar;
         delete data.avatar_md;
     }
+
     async findAll() {
         return this.Prisma.user.findMany({
             where: { active: true, role: 'MEMBER' },
+            select: { ...select },
         });
     }
 
     async findOne(id: string): Promise<User> {
         const user = await this.Prisma.user.findFirst({
             where: { id, active: true },
+            select: { ...select },
         });
         if (!user) throw new NotFoundException(`User tidak ditemukan`);
         return user;
@@ -66,6 +69,7 @@ export class UsersService {
         });
     }
     async findByEmail(email: string): Promise<User> {
+        email = email.trim().toLowerCase();
         const user = await this.Prisma.user.findUnique({
             where: { email },
         });
