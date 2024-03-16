@@ -3,10 +3,11 @@ import { UpdateSliderDto } from './dto/update-slider.dto';
 import { Prisma } from '@prisma/client';
 import { Slider } from './slider.interface';
 import { PrismaService } from 'src/prisma.service';
+import { AppService } from 'src/app.service';
 
 @Injectable()
 export class SliderService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService, private appService: AppService) { }
   async create(data: Prisma.SliderCreateInput) {
     const client = await this.prisma.client.findFirst()
     //connection slider to client
@@ -14,7 +15,6 @@ export class SliderService {
       connect: { id: client.id }
     }
     return this.prisma.slider.create({ data });
-
   }
 
   findAll() {
@@ -27,8 +27,22 @@ export class SliderService {
     return slider;
   }
 
-  update(id: string, updateSliderDto: UpdateSliderDto) {
-    return `This action updates a #${id} slider`;
+  async update(id: string, data: UpdateSliderDto): Promise<Slider> {
+    //simpan dalam variable path photo lama
+    const { photo : oldPhoto } = await this.findOne(id);
+    
+    const slider = await this.prisma.slider.update({
+      where: { id },
+      data
+    });
+    //jika ada data.photo > photo dirubah, photo yang lama harus diapus setalah berasil update
+    if (data.photo) {
+      //hapus photo lama disini
+      this.appService.removeFile(oldPhoto);
+    }
+
+    return slider;
+
   }
 
   remove(id: string) {
