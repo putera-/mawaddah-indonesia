@@ -5,21 +5,21 @@ import { UpdateSliderDto } from './dto/update-slider.dto';
 import { Prisma } from '@prisma/client';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PhotosService } from 'src/photos/photos.service';
-import path from 'path';
+import * as path from 'path';
 
 @Controller('slider')
 export class SliderController {
   constructor(
     private readonly sliderService: SliderService,
     private readonly photoService: PhotosService
-    ) {}
+  ) { }
 
   @Post()
   @UseInterceptors(FileInterceptor('photo'))
- async create(@Body() data: CreateSliderDto, @UploadedFile() file: Express.Multer.File) {
-     // for avatar
-     const ext = file ? file.originalname.split('.').pop() : '';
-     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+  async create(@Body() data: CreateSliderDto, @UploadedFile() file: Express.Multer.File) {
+    // for avatar
+    const ext = file ? file.originalname.split('.').pop() : '';
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     try {
 
       if (file) {
@@ -31,7 +31,7 @@ export class SliderController {
           sizes.map(async (s) => {
             const { key, size } = s;
             const filename = `${uniqueSuffix}_${key}.${ext}`;
-            const filepath = path.join('./uploads/photos/' + filename);
+            const filepath = path.join('./public/photos/' + filename);
 
             await this.photoService.resize(size, avatarBuffer, filepath);
           })
@@ -42,11 +42,12 @@ export class SliderController {
       }
       console.log('file string ====')
       console.log(file)
+      console.log(data)
       return this.sliderService.create(data as Prisma.SliderCreateInput);
-      
+
     } catch (error) {
       throw error;
-      
+
     }
   }
 
@@ -54,10 +55,10 @@ export class SliderController {
   findAll() {
     try {
       return this.sliderService.findAll();
-      
+
     } catch (error) {
       throw error;
-      
+
     }
   }
 
@@ -65,10 +66,10 @@ export class SliderController {
   findOne(@Param('id') id: string) {
     try {
       return this.sliderService.findOne(id);
-      
+
     } catch (error) {
       throw error;
-      
+
     }
   }
 
@@ -76,9 +77,9 @@ export class SliderController {
   update(@Param('id') id: string, @Body() updateSliderDto: UpdateSliderDto) {
     try {
       return this.sliderService.update(id, updateSliderDto);
-      
+
     } catch (error) {
-      
+
     }
   }
 
@@ -86,10 +87,10 @@ export class SliderController {
   remove(@Param('id') id: string) {
     try {
       return this.sliderService.remove(id);
-      
+
     } catch (error) {
       throw error;
-      
+
     }
   }
 }

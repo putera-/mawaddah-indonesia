@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import fs from 'fs/promises';
+import { promises as fs } from 'fs';
 
 @Injectable()
 export class AppService {
