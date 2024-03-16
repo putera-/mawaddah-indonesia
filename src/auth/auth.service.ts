@@ -16,14 +16,14 @@ export class AuthService {
     private blacklistedTokens: Set<string> = new Set();
 
     async signIn(email: string, pass: string): Promise<any> {
-        const data = await this.usersService.findByEmail(email);
-        const match = await bcrypt.compare(pass, data.password);
+        const user = await this.usersService.findByEmail(email);
+        const match = await bcrypt.compare(pass, user.password);
 
         if (!match) {
             throw new UnauthorizedException('Invalid Credentials!');
         }
-        if (!data.active) throw new UnauthorizedException('User is deleted!');
-        const { password, ...user } = data;
+        if (!user.active) throw new UnauthorizedException('User is deleted!');
+
         const { access_token, exp } = await this.createToken(
             user.id,
             user.email,
@@ -31,7 +31,7 @@ export class AuthService {
         );
 
         // instead of the user object
-        return { access_token, exp, user };
+        return { access_token, exp };
     }
 
     async createToken(
