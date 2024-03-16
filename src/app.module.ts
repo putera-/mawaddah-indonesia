@@ -2,8 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/user.module';
 import { ClientModule } from './client/client.module';
 import { SliderModule } from './slider/slider.module';
 import { PhotosModule } from './photos/photos.module';
@@ -13,9 +12,8 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 
-
 @Module({
-    imports: [ConfigModule.forRoot(), UserModule, AuthModule, ClientModule],
+    imports: [ConfigModule.forRoot(), UsersModule, ClientModule, AuthModule],
 
     controllers: [AppController],
     providers: [
@@ -26,5 +24,4 @@ import { AuthGuard } from './auth/auth.guard';
         },
     ],
 })
-export class AppModule {}
 export class AppModule {}
