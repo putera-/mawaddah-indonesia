@@ -1,25 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ValidationPipe, HttpCode } from '@nestjs/common';
-import { SliderService } from './slider.service';
-import { CreateSliderDto } from './dto/create-slider.dto';
-import { UpdateSliderDto } from './dto/update-slider.dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, ValidationPipe, UploadedFile, HttpCode } from '@nestjs/common';
+import { GalleriesService } from './galleries.service';
+import { CreateGalleryDto } from './dto/create-gallery.dto';
+import { UpdateGalleryDto } from './dto/update-gallery.dto';
 import { Prisma } from '@prisma/client';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PhotosService } from 'src/photos/photos.service';
 import * as path from 'path';
 import { AppService } from 'src/app.service';
 
-@Controller('slider')
-export class SliderController {
+@Controller('galleries')
+export class GalleriesController {
   constructor(
-    private readonly sliderService: SliderService,
+    private readonly galleriesService: GalleriesService,
     private readonly photoService: PhotosService,
-    private readonly appService: AppService,
-
+    private readonly appService: AppService
   ) { }
 
   @Post()
   @UseInterceptors(FileInterceptor('photo'))
-  async create(@Body(new ValidationPipe()) data: CreateSliderDto, @UploadedFile() file: Express.Multer.File) {
+  async create(@Body(new ValidationPipe()) data: CreateGalleryDto, @UploadedFile() file: Express.Multer.File) {
     // for avatar
     const ext = file ? file.originalname.split('.').pop() : '';
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -41,8 +40,10 @@ export class SliderController {
         );
         data.photo = `/public/photos/${uniqueSuffix}_lg.${ext}`;
       };
+      console.log(file)
+      console.log(data)
 
-      return this.sliderService.create(data as Prisma.SliderCreateInput);
+      return this.galleriesService.create(data as Prisma.GalleryCreateInput);
     } catch (error) {
       //jika terjadi error, hapus photo yang tersimpan
       if (file) {
@@ -53,32 +54,19 @@ export class SliderController {
       throw error;
     };
   };
-
   @Get()
   findAll() {
-    try {
-      return this.sliderService.findAll();
-
-    } catch (error) {
-      throw error;
-
-    };
+    return this.galleriesService.findAll();
   };
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    try {
-      return this.sliderService.findOne(id);
-
-    } catch (error) {
-      throw error;
-
-    };
+    return this.galleriesService.findOne(id);
   };
 
   @Patch(':id')
   @UseInterceptors(FileInterceptor('photo'))
-  async update(@Param('id') id: string, @Body(new ValidationPipe()) data: UpdateSliderDto, @UploadedFile() file: Express.Multer.File) {
+  async update(@Param('id') id: string, @Body(new ValidationPipe()) data: UpdateGalleryDto, @UploadedFile() file: Express.Multer.File) {
     // for photo
     const ext = file ? file.originalname.split('.').pop() : '';
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -102,14 +90,14 @@ export class SliderController {
         data.photo = `/public/photos/${uniqueSuffix}_lg.${ext}`;
       };
 
-      return this.sliderService.update(id, data);
+      return this.galleriesService.update(id, data);
 
     } catch (error) {
       //jika terjadi error, hapus photo yang tersimpan
       if (file) {
         //hapus photo jika ada file
         this.appService.removeFile(`/public/photos/${uniqueSuffix}_lg.${ext}`);
-      }
+      };
 
       throw error;
     };
@@ -119,7 +107,7 @@ export class SliderController {
   @HttpCode(204)
   remove(@Param('id') id: string) {
     try {
-      return this.sliderService.remove(id);
+      return this.galleriesService.remove(id);
 
     } catch (error) {
       throw error;

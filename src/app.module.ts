@@ -6,9 +6,10 @@ import { BlogsModule } from './blogs/blogs.module';
 import { ClientModule } from './client/client.module';
 import { SliderModule } from './slider/slider.module';
 import { PhotosModule } from './photos/photos.module';
+import { GalleriesModule } from './galleries/galleries.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), BlogsModule, ClientModule, SliderModule, PhotosModule],
+  imports: [ConfigModule.forRoot(), BlogsModule, ClientModule, SliderModule, PhotosModule, GalleriesModule],
   controllers: [AppController],
   providers: [AppService],
 })
