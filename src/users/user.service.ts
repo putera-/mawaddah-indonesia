@@ -22,7 +22,7 @@ const select = {
     taaruf_status: true,
 };
 @Injectable()
-export class UserService {
+export class UsersService {
     constructor(private Prisma: PrismaService) {}
 
     create(data: Prisma.UserCreateInput) {
