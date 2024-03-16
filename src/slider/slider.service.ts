@@ -7,12 +7,13 @@ import { PrismaService } from 'src/prisma.service';
 @Injectable()
 export class SliderService {
   constructor(private prisma: PrismaService) { }
-  create(data: Prisma.SliderCreateInput) {
-    console.log(data)
-    return
-    // return this.prisma.slider.create({
-    //   data
-    // });
+  async create(data: Prisma.SliderCreateInput) {
+    const client = await this.prisma.client.findFirst()
+    //connection slider to client
+    data.Client = {
+      connect: { id: client.id }
+    }
+    return this.prisma.slider.create({ data });
 
   }
 

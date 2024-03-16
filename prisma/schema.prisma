@@ -46,8 +46,8 @@ model Client {
 
 model Gallery {
   id        String   @id @default(uuid())
-  Client    Client   @relation(fields: [clientId], references: [id])
-  clientId  String
+  Client    Client?   @relation(fields: [clientId], references: [id])
+  clientId  String?
   title     String?  @db.VarChar(100)
   photo     String?  @db.Text
   deleted   Int      @default(0)
@@ -59,8 +59,8 @@ model Gallery {
 
 model Slider {
   id        String   @id @default(uuid())
-  Client    Client   @relation(fields: [clientId], references: [id])
-  clientId  String
+  Client    Client?   @relation(fields: [clientId], references: [id])
+  clientId  String?
   title     String?  @db.Text
   photo     String?  @db.Text
   createdAt DateTime @default(now())
@@ -71,8 +71,8 @@ model Slider {
 
 model FAQ {
   id        String   @id @default(uuid())
-  Client    Client   @relation(fields: [clientId], references: [id])
-  clientId  String
+  Client    Client?   @relation(fields: [clientId], references: [id])
+  clientId  String?
   question  String   @db.VarChar(255)
   answer    String   @db.VarChar(255)
   deleted   Int      @default(0)
