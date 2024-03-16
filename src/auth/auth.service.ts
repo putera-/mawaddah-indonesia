@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/user.service';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 

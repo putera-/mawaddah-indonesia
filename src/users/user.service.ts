@@ -8,6 +8,7 @@ import { PrismaService } from 'src/prisma.service';
 import { Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { User } from './user.interface';
+import { AppService } from 'src/app.service';
 
 const select = {
     id: true,
@@ -23,7 +24,10 @@ const select = {
 };
 @Injectable()
 export class UsersService {
-    constructor(private Prisma: PrismaService) {}
+    constructor(
+        private Prisma: PrismaService,
+        private appService: AppService,
+    ) {}
 
     create(data: Prisma.UserCreateInput) {
         return this.Prisma.user.create({
@@ -57,8 +61,34 @@ export class UsersService {
     }
 
     async update(id: string, data: Prisma.UserUpdateInput): Promise<User> {
-        await this.findOne(id);
-        return this.Prisma.user.update({ where: { id }, data });
+        const currentData = await this.Prisma.user.findUnique({
+            where: { id },
+        });
+        if (!currentData) throw new NotFoundException();
+
+        const updatedData = await this.Prisma.user.update({
+            where: { id, active: true },
+            data,
+            select: { ...select },
+        });
+
+        if (currentData.avatar) {
+            if (currentData.avatar != updatedData.avatar) {
+                // photo has been change
+                // remove old photo
+                this.appService.removeFile(currentData.avatar);
+                this.appService.removeFile(currentData.avatar_md);
+            }
+        }
+
+        return updatedData;
+    }
+
+    async updatePassword(id: string, password: string): Promise<void> {
+        await this.Prisma.user.update({
+            where: { id },
+            data: { password },
+        });
     }
 
     async remove(id: string): Promise<void> {
