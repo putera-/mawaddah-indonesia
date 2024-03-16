@@ -9,23 +9,23 @@ import { AppService } from 'src/app.service';
 export class SliderService {
   constructor(private prisma: PrismaService, private appService: AppService) { }
   async create(data: Prisma.SliderCreateInput) {
-    const client = await this.prisma.client.findFirst()
+    const client = await this.prisma.client.findFirst();
     //connection slider to client
     data.Client = {
       connect: { id: client.id }
-    }
+    };
     return this.prisma.slider.create({ data });
-  }
+  };
 
   findAll() {
     return this.prisma.slider.findMany();
-  }
+  };
 
   async findOne(id: string): Promise<Slider> {
     const slider = await this.prisma.slider.findFirst({ where: { id } });
     if (!slider) throw new NotFoundException('slider not found')
     return slider;
-  }
+  };
 
   async update(id: string, data: UpdateSliderDto): Promise<Slider> {
     //simpan dalam variable path photo lama
@@ -42,7 +42,7 @@ export class SliderService {
     }
     return slider;
 
-  }
+  };
 
   async remove(id: string): Promise<void> {
     const { photo } = await this.findOne(id);
@@ -52,7 +52,6 @@ export class SliderService {
 
     //hapus file
     if (photo) this.appService.removeFile(photo);
-  }
 
-
-}
+  };
+};
