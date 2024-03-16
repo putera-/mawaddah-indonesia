@@ -36,7 +36,7 @@ export class UsersController {
     }
 
     @Get()
-    findAll() {
+    async findAll() {
         try {
             return this.userService.findAll();
         } catch (error) {
