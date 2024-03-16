@@ -29,8 +29,8 @@ export class SliderService {
 
   async update(id: string, data: UpdateSliderDto): Promise<Slider> {
     //simpan dalam variable path photo lama
-    const { photo : oldPhoto } = await this.findOne(id);
-    
+    const { photo: oldPhoto } = await this.findOne(id);
+
     const slider = await this.prisma.slider.update({
       where: { id },
       data
@@ -40,13 +40,18 @@ export class SliderService {
       //hapus photo lama disini
       this.appService.removeFile(oldPhoto);
     }
-
     return slider;
 
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} slider`;
+  async remove(id: string): Promise<void> {
+    const { photo } = await this.findOne(id);
+
+    //hapus data slider
+    await this.prisma.slider.delete({ where: { id } })
+
+    //hapus file
+    if (photo) this.appService.removeFile(photo);
   }
 
 
