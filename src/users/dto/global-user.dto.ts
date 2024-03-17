@@ -1,6 +1,12 @@
-import { IsEmail, IsString, IsStrongPassword, Length } from 'class-validator';
+import {
+    IsEmail,
+    IsNotEmpty,
+    IsString,
+    IsStrongPassword,
+    Length,
+} from 'class-validator';
 
-export class CreateUserDto {
+export class GlobalUserDto {
     @IsEmail()
     email: string;
 
@@ -13,10 +19,11 @@ export class CreateUserDto {
     lastname: string;
 
     @IsString()
-    @Length(1, 100)
+    @IsStrongPassword()
+    @Length(6, 100)
     password: string;
 
     @IsString()
-    @Length(1, 100)
+    @IsNotEmpty()
     password_confirm: string;
 }
