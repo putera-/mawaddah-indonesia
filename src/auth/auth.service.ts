@@ -17,12 +17,15 @@ export class AuthService {
 
     async signIn(email: string, pass: string): Promise<any> {
         const user = await this.usersService.findByEmail(email);
-        const match = await bcrypt.compare(pass, user.password);
+        if (!user)
+            throw new UnauthorizedException('Email atau password salah.');
 
+        const match = await bcrypt.compare(pass, user.password);
         if (!match) {
-            throw new UnauthorizedException('Invalid Credentials!');
+            throw new UnauthorizedException('Email atau password salah.');
         }
-        if (!user.active) throw new UnauthorizedException('User is deleted!');
+        
+        if (!user.active) throw new UnauthorizedException('User telah dihapus');
 
         const { access_token, exp } = await this.createToken(
             user.id,

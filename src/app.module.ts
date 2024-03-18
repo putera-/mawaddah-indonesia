@@ -11,6 +11,8 @@ import { FaqsModule } from './faqs/faqs.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
+import { RolesGuard } from './roles/roles.guard';
+
 
 @Module({
     imports: [
@@ -22,6 +24,7 @@ import { AuthGuard } from './auth/auth.guard';
         PhotosModule,
         GalleriesModule,
         FaqsModule,
+       
     ],
 
     controllers: [AppController],
@@ -30,6 +33,10 @@ import { AuthGuard } from './auth/auth.guard';
         {
             provide: APP_GUARD,
             useClass: AuthGuard,
+        },
+        {
+            provide: APP_GUARD,
+            useClass: RolesGuard,
         },
     ],
 })
