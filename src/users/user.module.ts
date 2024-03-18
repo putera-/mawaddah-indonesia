@@ -8,7 +8,12 @@ import { PhotosService } from 'src/photos/photos.service';
 
 @Module({
     controllers: [UsersController],
-    providers: [UsersService, PrismaService, AppService, PhotosService],
+    providers: [
+        UsersService,
+        PrismaService,
+        AppService,
+        PhotosService,
+    ],
     exports: [UsersService],
     imports: [PhotosModule],
 })
