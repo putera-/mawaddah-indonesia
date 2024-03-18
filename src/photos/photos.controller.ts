@@ -2,7 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PhotosService } from './photos.service';
 import { CreatePhotoDto } from './dto/create-photo.dto';
 import { UpdatePhotoDto } from './dto/update-photo.dto';
+import { Roles } from 'src/roles/roles.decorator';
+import { Role } from 'src/roles/role.enums';
 
+@Roles(Role.Superadmin, Role.Admin)
 @Controller('photos')
 export class PhotosController {
   constructor(private readonly photosService: PhotosService) {}
