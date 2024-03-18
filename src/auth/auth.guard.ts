@@ -10,6 +10,7 @@ import { Request } from 'express';
 import { IS_PUBLIC_KEY } from './auth.metadata';
 import { Reflector } from '@nestjs/core';
 import { AuthService } from './auth.service';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -45,7 +46,7 @@ export class AuthGuard implements CanActivate {
             await this.authService.createAuth(
                 sub,
                 token,
-                user.exp * 1000,
+                dayjs(user.exp * 1000).toDate(),
                 request.path,
                 request.method,
             );

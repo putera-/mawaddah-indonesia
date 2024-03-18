@@ -57,7 +57,15 @@ export class UsersController {
             throw error;
         }
     }
-
+    @Roles(Role.Member)
+    @Get('profile')
+    async getProfile(@Request() req) {
+        try {
+            return await this.userService.findOne(req.id);
+        } catch (error) {
+            throw error;
+        }
+    }
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Get(':id')
     async findOne(@Param('id') id: string) {
@@ -69,6 +77,7 @@ export class UsersController {
             throw error;
         }
     }
+
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Patch('change_password')
     @HttpCode(204)
@@ -173,7 +182,7 @@ export class UsersController {
             throw error;
         }
     }
-    @Roles(Role.Admin)
+    @Roles(Role.Admin, Role.Superadmin)
     @Delete(':id')
     @HttpCode(204)
     remove(@Param('id') id: string) {
