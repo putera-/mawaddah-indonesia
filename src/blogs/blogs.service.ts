@@ -24,7 +24,6 @@ export class BlogsService {
     const blog = await this.prisma.blog.findFirst({ where: { id, deleted: false } });
     if (!blog) throw new NotFoundException('blog not found')
     return blog
-
   }
 
   async update(id: string, data: Prisma.blogUpdateInput): Promise<Blog> {
