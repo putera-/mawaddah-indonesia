@@ -15,5 +15,5 @@ export class PasswordUserDto extends PartialType(CreateUserDto) {
 
     @IsString()
     @IsNotEmpty()
-    password_confirm: string;
+    confirm_password: string;
 }

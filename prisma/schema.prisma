@@ -44,14 +44,14 @@ enum TaarufStatus {
 }
 
 model Auth {
-    id           String   @id @default(uuid())
-    user         User?    @relation(fields: [userId], references: [id])
-    userId       String?
-    access_token String   @db.VarChar(300)
-    expiredAt    BigInt   @db.BigInt
-    path         String   @db.VarChar(100)
-    method       String   @db.VarChar(100)
-    createdAt    DateTime @default(now())
+  id           String   @id @default(uuid())
+  user         User?    @relation(fields: [userId], references: [id])
+  userId       String?
+  access_token String   @db.VarChar(300)
+  expiredAt    DateTime @db.DateTime()
+  path         String   @db.VarChar(100)
+  method       String   @db.VarChar(100)
+  createdAt    DateTime @default(now())
 }
 
 model blog {
@@ -123,11 +123,11 @@ model FAQ {
 }
 
 model Activation {
-    id             String   @id @default(uuid())
-    User           User?    @relation(fields: [userId], references: [id])
-    userId         String?
-    activation_key String   @db.VarChar(200)
-    used           Boolean  @default(false)
-    expiredAt      BigInt   @db.BigInt
-    createdAt      DateTime @default(now())
+  id             String   @id @default(uuid())
+  User           User?    @relation(fields: [userId], references: [id])
+  userId         String?
+  activation_key String   @db.VarChar(200)
+  used           Boolean  @default(false)
+  expiredAt      DateTime @db.DateTime()
+  createdAt      DateTime @default(now())
 }

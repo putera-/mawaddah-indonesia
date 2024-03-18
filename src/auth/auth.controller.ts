@@ -59,11 +59,4 @@ export class AuthController {
             throw error;
         }
     }
-
-    @Get('profile')
-    async getProfile(@Request() req) {
-        const id = req.user.id;
-        return await this.userService.findOne(id);
-        // return req.user;
-    }
 }

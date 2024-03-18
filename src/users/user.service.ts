@@ -112,10 +112,10 @@ export class UsersService {
         return user;
     }
     async checkPassword(data: any) {
-        if (data.password != data.password_confirm)
+        if (data.password != data.confirm_password)
             throw new BadRequestException('Confirm password tidak sesuai');
 
-        delete data.password_confirm;
+        delete data.confirm_password;
         data.password = await bcrypt.hash(data.password, 10);
     }
     async validateNewUser(data: any) {

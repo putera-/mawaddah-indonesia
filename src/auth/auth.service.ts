@@ -24,7 +24,7 @@ export class AuthService {
         if (!match) {
             throw new UnauthorizedException('Email atau password salah.');
         }
-        
+
         if (!user.active) throw new UnauthorizedException('User telah dihapus');
 
         const { access_token, exp } = await this.createToken(
@@ -51,17 +51,18 @@ export class AuthService {
         const access_token = (await this.jwtService.signAsync(
             payload,
         )) as string;
-        const exp: number = Math.round(dayjs().add(7, 'd').valueOf());
+        const exp = Math.round(dayjs().add(7, 'd').valueOf()) as number;
+        const expDate = new Date(exp);
 
         // save to db
-        await this.createAuth(userId, access_token, exp);
+        await this.createAuth(userId, access_token, expDate);
 
         return { access_token, exp };
     }
     async createAuth(
         userId: string,
         access_token: string,
-        expiredAt: number,
+        expiredAt: Date,
         path = '/auth/login',
         method = 'POST',
     ): Promise<void> {

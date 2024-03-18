@@ -25,5 +25,5 @@ export class GlobalUserDto {
 
     @IsString()
     @IsNotEmpty()
-    password_confirm: string;
+    confirm_password: string;
 }
