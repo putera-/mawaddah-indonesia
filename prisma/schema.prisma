@@ -14,21 +14,49 @@ datasource db {
 }
 
 model User {
-  id            String       @id @default(uuid())
-  email         String       @unique @db.VarChar(100)
-  firstname     String       @db.VarChar(100)
-  lastname      String       @db.VarChar(100)
-  password      String       @db.VarChar(100)
-  active        Boolean      @default(true)
-  verified      Boolean      @default(false)
-  avatar        String?      @db.VarChar(255)
-  avatar_md     String?      @db.VarChar(255)
-  role          RoleStatus   @default(MEMBER)
-  taaruf_status TaarufStatus @default(BLOCKED)
-  auth          Auth[]
-  activations   Activation[]
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @default(now()) @updatedAt
+  id               String             @id @default(uuid())
+  email            String             @unique @db.VarChar(100)
+  firstname        String             @db.VarChar(100)
+  lastname         String             @db.VarChar(100)
+  password         String             @db.VarChar(100)
+  Education        Education[]
+  Hobby            Hobby[]
+  Skill            Skill[]
+  Married_goal     Married_goal[]
+  Life_goal        Life_goal[]
+  Physic_character Physic_character[]
+  active           Boolean            @default(true)
+  verified         Boolean            @default(false)
+  avatar           String?            @db.VarChar(255)
+  avatar_md        String?            @db.VarChar(255)
+  role             RoleStatus         @default(MEMBER)
+  taaruf_status    TaarufStatus       @default(BLOCKED)
+  auth             Auth[]
+  activations      Activation[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now()) @updatedAt
+}
+
+model Client {
+  id                String    @id @default(uuid())
+  name              String    @db.VarChar(100)
+  about             String?   @db.Text
+  phone             String    @db.VarChar(20)
+  address           String    @db.Text
+  taaruf_muqoddimah String?   @db.Text
+  login_muqoddimah  String?   @db.Text
+  signup_muqoddimah String?   @db.Text
+  youtube           String?   @db.VarChar(100)
+  facebook          String?   @db.VarChar(100)
+  twitter           String?   @db.VarChar(100)
+  tiktok            String?   @db.VarChar(100)
+  instagram         String?   @db.VarChar(100)
+  linkedin          String?   @db.VarChar(100)
+  galleries         Gallery[]
+  sliders           Slider[]
+  faqs              FAQ[]
+
+  @@map("client")
 }
 
 enum RoleStatus {
@@ -61,28 +89,6 @@ model blog {
   deleted   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-}
-
-model Client {
-  id                String    @id @default(uuid())
-  name              String    @db.VarChar(100)
-  about             String?   @db.Text
-  phone             String    @db.VarChar(20)
-  address           String    @db.Text
-  taaruf_muqoddimah String?   @db.Text
-  login_muqoddimah  String?   @db.Text
-  signup_muqoddimah String?   @db.Text
-  youtube           String?   @db.VarChar(100)
-  facebook          String?   @db.VarChar(100)
-  twitter           String?   @db.VarChar(100)
-  tiktok            String?   @db.VarChar(100)
-  instagram         String?   @db.VarChar(100)
-  linkedin          String?   @db.VarChar(100)
-  galleries         Gallery[]
-  sliders           Slider[]
-  faqs              FAQ[]
-
-  @@map("client")
 }
 
 model Gallery {
@@ -130,4 +136,80 @@ model Activation {
   used           Boolean  @default(false)
   expiredAt      BigInt   @db.BigInt
   createdAt      DateTime @default(now())
+}
+
+model Education {
+  id               String   @id @default(uuid())
+  User             User?    @relation(fields: [userId], references: [id])
+  userId           String?
+  institution_name String   @db.VarChar(100)
+  major            String?  @db.VarChar(100)
+  degree           String?  @db.VarChar(100)
+  startYear        Int      @db.Year
+  endYear          Int?     @db.Year
+  deleted          Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now())
+
+  @@map("education")
+}
+
+model Hobby {
+  id        String   @id @default(uuid())
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  title     String   @db.VarChar(100)
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map("hobby")
+}
+
+model Skill {
+  id        String   @id @default(uuid())
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  title     String   @db.VarChar(100)
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map("skill")
+}
+
+model Married_goal {
+  id        String   @id @default(uuid())
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  title     String   @db.VarChar(100)
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map("married_goal")
+}
+
+model Life_goal {
+  id        String   @id @default(uuid())
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  title     String   @db.VarChar(100)
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map("life_goal")
+}
+
+model Physic_character {
+  id        String   @id @default(uuid())
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  title     String   @db.VarChar(100)
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map("physic_character")
 }
