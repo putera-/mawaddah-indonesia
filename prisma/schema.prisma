@@ -5,129 +5,129 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+    provider = "mysql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id            String       @id @default(uuid())
-  email         String       @unique @db.VarChar(100)
-  firstname     String       @db.VarChar(100)
-  lastname      String       @db.VarChar(100)
-  password      String       @db.VarChar(100)
-  active        Boolean      @default(true)
-  verified      Boolean      @default(false)
-  avatar        String?      @db.VarChar(255)
-  avatar_md     String?      @db.VarChar(255)
-  role          RoleStatus   @default(MEMBER)
-  taaruf_status TaarufStatus @default(BLOCKED)
-  auth          Auth[]
-  activations   Activation[]
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @default(now()) @updatedAt
+    id            String       @id @default(uuid())
+    email         String       @unique @db.VarChar(100)
+    firstname     String       @db.VarChar(100)
+    lastname      String       @db.VarChar(100)
+    password      String       @db.VarChar(100)
+    active        Boolean      @default(true)
+    verified      Boolean      @default(false)
+    avatar        String?      @db.VarChar(255)
+    avatar_md     String?      @db.VarChar(255)
+    role          RoleStatus   @default(MEMBER)
+    taaruf_status TaarufStatus @default(BLOCKED)
+    auth          Auth[]
+    activations   Activation[]
+    createdAt     DateTime     @default(now())
+    updatedAt     DateTime     @default(now()) @updatedAt
 }
 
 enum RoleStatus {
-  MEMBER
-  ADMIN
-  SUPERADMIN
+    MEMBER
+    ADMIN
+    SUPERADMIN
 }
 
 enum TaarufStatus {
-  OPEN
-  PENDING
-  BLOCKED
+    OPEN
+    PENDING
+    BLOCKED
 }
 
 model Auth {
-  id           String   @id @default(uuid())
-  user         User?    @relation(fields: [userId], references: [id])
-  userId       String?
-  access_token String   @db.VarChar(300)
-  expiredAt    BigInt   @db.BigInt
-  path         String   @db.VarChar(100)
-  method       String   @db.VarChar(100)
-  createdAt    DateTime @default(now())
+    id           String   @id @default(uuid())
+    user         User?    @relation(fields: [userId], references: [id])
+    userId       String?
+    access_token String   @db.VarChar(300)
+    expiredAt    BigInt   @db.BigInt
+    path         String   @db.VarChar(100)
+    method       String   @db.VarChar(100)
+    createdAt    DateTime @default(now())
 }
 
 model blog {
-  id        String   @id @default(uuid())
-  title     String   @db.VarChar(100)
-  content   String   @db.Text
-  deleted   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+    id        String   @id @default(uuid())
+    title     String   @db.VarChar(100)
+    content   String   @db.Text
+    deleted   Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Client {
-  id                String    @id @default(uuid())
-  name              String    @db.VarChar(100)
-  about             String?   @db.Text
-  phone             String    @db.VarChar(20)
-  address           String    @db.Text
-  taaruf_muqoddimah String?   @db.Text
-  login_muqoddimah  String?   @db.Text
-  signup_muqoddimah String?   @db.Text
-  youtube           String?   @db.VarChar(100)
-  facebook          String?   @db.VarChar(100)
-  twitter           String?   @db.VarChar(100)
-  tiktok            String?   @db.VarChar(100)
-  instagram         String?   @db.VarChar(100)
-  linkedin          String?   @db.VarChar(100)
-  galleries         Gallery[]
-  sliders           Slider[]
-  faqs              FAQ[]
+    id                String    @id @default(uuid())
+    name              String    @db.VarChar(100)
+    about             String?   @db.Text
+    phone             String    @db.VarChar(20)
+    address           String    @db.Text
+    taaruf_muqoddimah String?   @db.Text
+    login_muqoddimah  String?   @db.Text
+    signup_muqoddimah String?   @db.Text
+    youtube           String?   @db.VarChar(100)
+    facebook          String?   @db.VarChar(100)
+    twitter           String?   @db.VarChar(100)
+    tiktok            String?   @db.VarChar(100)
+    instagram         String?   @db.VarChar(100)
+    linkedin          String?   @db.VarChar(100)
+    galleries         Gallery[]
+    sliders           Slider[]
+    faqs              FAQ[]
 
-  @@map("client")
+    @@map("client")
 }
 
 model Gallery {
-  id        String   @id @default(uuid())
-  Client    Client?  @relation(fields: [clientId], references: [id])
-  clientId  String?
-  title     String?  @db.VarChar(100)
-  photo     String?  @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+    id        String   @id @default(uuid())
+    Client    Client?  @relation(fields: [clientId], references: [id])
+    clientId  String?
+    title     String?  @db.VarChar(100)
+    photo     String?  @db.Text
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
 
-  @@map("gallery")
+    @@map("gallery")
 }
 
 model Slider {
-  id        String   @id @default(uuid())
-  Client    Client?  @relation(fields: [clientId], references: [id])
-  clientId  String?
-  title     String?  @db.Text
-  photo     String?  @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+    id        String   @id @default(uuid())
+    Client    Client?  @relation(fields: [clientId], references: [id])
+    clientId  String?
+    title     String?  @db.Text
+    photo     String?  @db.Text
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
 
-  @@map("slider")
+    @@map("slider")
 }
 
 model FAQ {
-  id        String   @id @default(uuid())
-  Client    Client?  @relation(fields: [clientId], references: [id])
-  clientId  String?
-  question  String   @db.VarChar(255)
-  answer    String   @db.VarChar(255)
-  deleted   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+    id        String   @id @default(uuid())
+    Client    Client?  @relation(fields: [clientId], references: [id])
+    clientId  String?
+    question  String   @db.VarChar(255)
+    answer    String   @db.VarChar(255)
+    deleted   Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
 
-  @@map("faq")
+    @@map("faq")
 }
 
 model Activation {
-  id             String   @id @default(uuid())
-  User           User?    @relation(fields: [userId], references: [id])
-  userId         String?
-  activation_key String   @db.VarChar(200)
-  used           Boolean  @default(false)
-  expiredAt      BigInt   @db.BigInt
-  createdAt      DateTime @default(now())
+    id             String   @id @default(uuid())
+    User           User?    @relation(fields: [userId], references: [id])
+    userId         String?
+    activation_key String   @db.VarChar(200)
+    used           Boolean  @default(false)
+    expiredAt      BigInt   @db.BigInt
+    createdAt      DateTime @default(now())
 }
