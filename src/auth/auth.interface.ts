@@ -5,7 +5,7 @@ export interface Auth {
     user: User;
     userId: string;
     access_token: string;
-    expiredAt?: string;
+    expiredAt?: number ;
     path: string;
     method: string;
     createdAt?: Date;

@@ -15,7 +15,8 @@ export async function userSeed(prisma: PrismaClient) {
         activations: {
             create: {
                 activation_key: 'lkjhafklhj@#$@#$@#dsfa',
-                expiredAt: 1710734269703
+                //TODO kalo salah ubah aja, tadi cuman biar error ga muncul, pusing paa aing
+                expiredAt: new Date(1710734269703).toISOString()
             }
         }
     };
@@ -31,7 +32,7 @@ export async function userSeed(prisma: PrismaClient) {
         activations: {
             create: {
                 activation_key: 'lkjhafklhj@#$@#$@#dsfa',
-                expiredAt: 1710734269703
+                expiredAt: new Date(1710734269703).toISOString()
             }
         }
     };
@@ -45,7 +46,7 @@ export async function userSeed(prisma: PrismaClient) {
         activations: {
             create: {
                 activation_key: 'lkjhafklhj@#$@#$@#dsfa',
-                expiredAt: 1710734269703
+                expiredAt: new Date(1710734269703).toISOString()
             }
         }
     };
