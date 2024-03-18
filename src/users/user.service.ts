@@ -5,7 +5,7 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, RoleStatus } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { User } from './user.interface';
 import { AppService } from 'src/app.service';
@@ -44,26 +44,27 @@ export class UsersService {
         delete data.avatar_md;
     }
 
-    async findAll() {
-        const user = await this.Prisma.user.findMany({
-            where: { active: true, role: 'MEMBER' },
+    async findAll(role: RoleStatus) {
+        return await this.Prisma.user.findMany({
+            where: { role, active: true },
             select: { ...select },
         });
-        let allUsers = [];
-        for (const u of user as any) {
-            this.formatGray(u);
-            allUsers.push(u);
-        }
-        return allUsers;
     }
 
-    async findOne(id: string): Promise<User> {
+    async findOne(id: string, role: RoleStatus): Promise<User> {
         const user = await this.Prisma.user.findFirst({
-            where: { id, active: true },
+            where: { id, role, active: true },
             select: { ...select },
         });
         if (!user) throw new NotFoundException(`User tidak ditemukan`);
         return user;
+    }
+    async findSuperUser(): Promise<User[]> {
+        const users = await this.Prisma.user.findMany({
+            where: { role: 'SUPERADMIN' },
+        });
+
+        return users;
     }
 
     async update(id: string, data: Prisma.UserUpdateInput): Promise<User> {
@@ -97,8 +98,8 @@ export class UsersService {
         });
     }
 
-    async remove(id: string): Promise<void> {
-        await this.findOne(id);
+    async remove(id: string, role: RoleStatus): Promise<void> {
+        await this.findOne(id, role);
         await this.Prisma.user.update({
             where: { id },
             data: { active: false },
@@ -140,7 +141,6 @@ export class UsersService {
         });
     }
     async deactivateUser(id: string): Promise<User> {
-        await this.findOne(id);
         return this.Prisma.user.update({
             where: { id },
             data: { active: false },

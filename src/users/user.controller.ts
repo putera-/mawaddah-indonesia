@@ -15,7 +15,7 @@ import {
 import { UsersService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Prisma } from '@prisma/client';
+import { Prisma, RoleStatus } from '@prisma/client';
 import { User } from './user.interface';
 import { Public } from 'src/auth/auth.metadata';
 import { PasswordUserDto } from './dto/password-user.dto';
@@ -52,7 +52,7 @@ export class UsersController {
     @Get()
     async findAll() {
         try {
-            return await this.userService.findAll();
+            return await this.userService.findAll('MEMBER');
         } catch (error) {
             throw error;
         }
@@ -61,7 +61,7 @@ export class UsersController {
     @Get('profile')
     async getProfile(@Request() req) {
         try {
-            return await this.userService.findOne(req.id);
+            return await this.userService.findOne(req.id, 'MEMBER');
         } catch (error) {
             throw error;
         }
@@ -70,7 +70,7 @@ export class UsersController {
     @Get(':id')
     async findOne(@Param('id') id: string) {
         try {
-            const user = await this.userService.findOne(id);
+            const user = await this.userService.findOne(id, 'MEMBER');
             this.userService.formatGray(user);
             return user;
         } catch (error) {
@@ -83,7 +83,7 @@ export class UsersController {
     @HttpCode(204)
     async updatePassword(@Request() req: any, @Body() data: PasswordUserDto) {
         try {
-            const user = await this.userService.findOne(req.id);
+            const user = await this.userService.findOne(req.id, 'MEMBER');
             this.userService.checkPassword(data);
             await this.userService.updatePassword(user.id, data.password);
         } catch (error) {
@@ -185,9 +185,9 @@ export class UsersController {
     @Roles(Role.Admin, Role.Superadmin)
     @Delete(':id')
     @HttpCode(204)
-    remove(@Param('id') id: string) {
+    remove(@Param('id') id: string, role: RoleStatus) {
         try {
-            return this.userService.remove(id);
+            return this.userService.remove(id, role);
         } catch (error) {
             throw error;
         }
