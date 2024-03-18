@@ -41,3 +41,28 @@ git push [nama_remote] [nama_branch]
 # git pull branch
 git pull [nama_remote] [nama_branch]
 ```
+
+## COMMIT
+```sh
+# Add all file to stage
+git add .
+
+# Add file to stage
+git add [file_name]
+
+# Add folder to stage
+git add [folder]
+
+
+# Commit
+git commit -m "[message]"
+
+# Add + Commit
+git commit -am "[message]"
+
+# Edit message of the last commit
+git commit --amend -m "[New Message]"
+
+# Update previeous commit with new change, without edit message
+git commit --amend --no-edit
+```
