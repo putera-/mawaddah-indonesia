@@ -13,10 +13,14 @@ import {
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { Public } from './auth.metadata';
+import { UsersService } from 'src/users/user.service';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private authService: AuthService) {}
+    constructor(
+        private authService: AuthService,
+        private userService: UsersService,
+    ) {}
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('login')
@@ -57,7 +61,9 @@ export class AuthController {
     }
 
     @Get('profile')
-    getProfile(@Request() req) {
-        return req.user;
+    async getProfile(@Request() req) {
+        const id = req.user.id;
+        return await this.userService.findOne(id);
+        // return req.user;
     }
 }

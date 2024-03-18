@@ -22,6 +22,8 @@ import { PasswordUserDto } from './dto/password-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import path from 'path';
 import { PhotosService } from 'src/photos/photos.service';
+import { Roles } from 'src/roles/roles.decorator';
+import { Role } from 'src/roles/role.enums';
 
 @Controller('users')
 export class UsersController {
@@ -46,23 +48,28 @@ export class UsersController {
         }
     }
 
+    @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Get()
     async findAll() {
         try {
-            return this.userService.findAll();
+            return await this.userService.findAll();
         } catch (error) {
             throw error;
         }
     }
 
+    @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Get(':id')
-    findOne(@Param('id') id: string) {
+    async findOne(@Param('id') id: string) {
         try {
-            return this.userService.findOne(id);
+            const user = await this.userService.findOne(id);
+            this.userService.formatGray(user);
+            return user;
         } catch (error) {
             throw error;
         }
     }
+    @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Patch('change_password')
     @HttpCode(204)
     async updatePassword(@Request() req: any, @Body() data: PasswordUserDto) {
@@ -74,6 +81,7 @@ export class UsersController {
             throw error;
         }
     }
+    @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Patch()
     @UseInterceptors(FileInterceptor('avatar'))
     async updateUser(
@@ -136,7 +144,7 @@ export class UsersController {
             throw error;
         }
     }
-
+    @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Patch(':id')
     update(@Param('id') id: string, @Body() data: UpdateUserDto) {
         try {
@@ -145,7 +153,7 @@ export class UsersController {
             throw error;
         }
     }
-
+    @Roles(Role.Admin, Role.Superadmin)
     @Patch('activate/:id')
     @HttpCode(204)
     async activateUser(@Param('id') id: string): Promise<void> {
@@ -155,6 +163,7 @@ export class UsersController {
             throw error;
         }
     }
+    @Roles(Role.Admin, Role.Superadmin)
     @Patch('deactivate/:id')
     @HttpCode(204)
     async deactivateUser(@Param('id') id: string): Promise<void> {
@@ -164,7 +173,7 @@ export class UsersController {
             throw error;
         }
     }
-
+    @Roles(Role.Admin)
     @Delete(':id')
     @HttpCode(204)
     remove(@Param('id') id: string) {

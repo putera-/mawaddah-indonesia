@@ -45,10 +45,16 @@ export class UsersService {
     }
 
     async findAll() {
-        return this.Prisma.user.findMany({
+        const user = await this.Prisma.user.findMany({
             where: { active: true, role: 'MEMBER' },
             select: { ...select },
         });
+        let allUsers = [];
+        for (const u of user as any) {
+            this.formatGray(u);
+            allUsers.push(u);
+        }
+        return allUsers;
     }
 
     async findOne(id: string): Promise<User> {
