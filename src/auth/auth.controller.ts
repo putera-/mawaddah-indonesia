@@ -13,10 +13,14 @@ import {
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { Public } from './auth.metadata';
+import { UsersService } from 'src/users/user.service';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private authService: AuthService) {}
+    constructor(
+        private authService: AuthService,
+        private userService: UsersService,
+    ) {}
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('login')
@@ -54,10 +58,5 @@ export class AuthController {
         } catch (error) {
             throw error;
         }
-    }
-
-    @Get('profile')
-    getProfile(@Request() req) {
-        return req.user;
     }
 }

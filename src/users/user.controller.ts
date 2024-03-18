@@ -15,13 +15,15 @@ import {
 import { UsersService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Prisma } from '@prisma/client';
+import { Prisma, RoleStatus } from '@prisma/client';
 import { User } from './user.interface';
 import { Public } from 'src/auth/auth.metadata';
 import { PasswordUserDto } from './dto/password-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import path from 'path';
 import { PhotosService } from 'src/photos/photos.service';
+import { Roles } from 'src/roles/roles.decorator';
+import { Role } from 'src/roles/role.enums';
 
 @Controller('users')
 export class UsersController {
@@ -46,34 +48,49 @@ export class UsersController {
         }
     }
 
+    @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Get()
     async findAll() {
         try {
-            return this.userService.findAll();
+            return await this.userService.findAll('MEMBER');
+        } catch (error) {
+            throw error;
+        }
+    }
+    @Roles(Role.Member)
+    @Get('profile')
+    async getProfile(@Request() req) {
+        try {
+            return await this.userService.findOne(req.id, 'MEMBER');
+        } catch (error) {
+            throw error;
+        }
+    }
+    @Roles(Role.Superadmin, Role.Admin, Role.Member)
+    @Get(':id')
+    async findOne(@Param('id') id: string) {
+        try {
+            const user = await this.userService.findOne(id, 'MEMBER');
+            this.userService.formatGray(user);
+            return user;
         } catch (error) {
             throw error;
         }
     }
 
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        try {
-            return this.userService.findOne(id);
-        } catch (error) {
-            throw error;
-        }
-    }
+    @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Patch('change_password')
     @HttpCode(204)
     async updatePassword(@Request() req: any, @Body() data: PasswordUserDto) {
         try {
-            const user = await this.userService.findOne(req.id);
+            const user = await this.userService.findOne(req.id, 'MEMBER');
             this.userService.checkPassword(data);
             await this.userService.updatePassword(user.id, data.password);
         } catch (error) {
             throw error;
         }
     }
+    @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Patch()
     @UseInterceptors(FileInterceptor('avatar'))
     async updateUser(
@@ -135,7 +152,7 @@ export class UsersController {
             throw error;
         }
     }
-
+    @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Patch(':id')
     update(@Param('id') id: string, @Body() data: UpdateUserDto) {
         try {
@@ -144,7 +161,7 @@ export class UsersController {
             throw error;
         }
     }
-
+    @Roles(Role.Admin, Role.Superadmin)
     @Patch('activate/:id')
     @HttpCode(204)
     async activateUser(@Param('id') id: string): Promise<void> {
@@ -154,6 +171,7 @@ export class UsersController {
             throw error;
         }
     }
+    @Roles(Role.Admin, Role.Superadmin)
     @Patch('deactivate/:id')
     @HttpCode(204)
     async deactivateUser(@Param('id') id: string): Promise<void> {
@@ -163,12 +181,12 @@ export class UsersController {
             throw error;
         }
     }
-
+    @Roles(Role.Admin, Role.Superadmin)
     @Delete(':id')
     @HttpCode(204)
-    remove(@Param('id') id: string) {
+    remove(@Param('id') id: string, role: RoleStatus) {
         try {
-            return this.userService.remove(id);
+            return this.userService.remove(id, role);
         } catch (error) {
             throw error;
         }
