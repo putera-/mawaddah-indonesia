@@ -8,7 +8,6 @@ import {
     Post,
     Req,
     Request,
-    UseGuards,
     ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -29,7 +28,6 @@ export class AuthController {
         }
     }
 
-    // TODO continue developing
     @Get('extend-access-token')
     async extendAccessToken(@Req() req) {
         const user = req.user;
