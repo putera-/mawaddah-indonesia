@@ -13,6 +13,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 import { RolesGuard } from './roles/roles.guard';
 import { UserSuperadminModule } from './user-superadmin/user-superadmin.module';
+import { UserAdminModule } from './user-admin/user-admin.module';
 
 
 @Module({
@@ -26,6 +27,7 @@ import { UserSuperadminModule } from './user-superadmin/user-superadmin.module';
         GalleriesModule,
         FaqsModule,
         UserSuperadminModule,
+        UserAdminModule,
        
     ],
 
