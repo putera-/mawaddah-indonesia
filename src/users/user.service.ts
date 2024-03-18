@@ -34,6 +34,7 @@ export class UsersService {
             data,
             select: { ...select },
         });
+        // TODO generate activation code and send to user's email address
     }
 
     formatGray(data: User) {
