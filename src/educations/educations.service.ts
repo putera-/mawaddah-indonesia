@@ -10,13 +10,14 @@ const select = {
   institution_name: true,
   major: true,
   degree: true,
-  start_year: true,
-  end_year: true,
+  city: true,
+  startYear: true,
+  endYear: true,
 }
 @Injectable()
 export class EducationsService {
   constructor(private prisma: PrismaService, private userService: UsersService) { }
-  async create(id: string, data: Prisma.EducationCreateInput): Promise<Education> {
+  async create(id: string, data: Prisma.EducationCreateInput) {
     if (!id) throw new Error('ID must be a valid ID');
     
     const user = await this.prisma.user.findUnique({ where: { id } });
@@ -29,18 +30,7 @@ export class EducationsService {
         ...data,
         User: { connect: { id } }
       },
-      select: {
-        // Add the properties you want to select here
-        id: true,
-        institution_name: true,
-        major: true,
-        degree: true,
-        deleted: true,
-        startYear: true,
-        endYear: true,
-        createdAt: true,
-        updatedAt: true
-      }
+      select
     });
   }
 
@@ -52,14 +42,23 @@ export class EducationsService {
   }
 
   findOne(id: string) {
-    return this.prisma.education.findFirst()
+    return this.prisma.education.findFirst({
+      where: { id, deleted: false }
+    })
   }
 
   update(id: string, updateEducationDto: UpdateEducationDto) {
-    return `This action updates a #${id} education`;
+    return this.prisma.education.update({
+      where: { id },
+      data: { ...updateEducationDto },
+      select
+    })
   }
 
   remove(id: string) {
-    return `This action removes a #${id} education`;
+    return this.prisma.education.update({
+      where: { id },
+      data: { deleted: true },
+    })
   }
 }
