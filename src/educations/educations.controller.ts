@@ -3,16 +3,16 @@ import { EducationsService } from './educations.service';
 import { CreateEducationDto } from './dto/create-education.dto';
 import { UpdateEducationDto } from './dto/update-education.dto';
 import { Public } from 'src/auth/auth.metadata';
-import { Role } from 'src/roles/role.enums';
+import { Education } from './educations.interface';
 
 @Controller('educations')
 export class EducationsController {
   constructor(private readonly educationsService: EducationsService) {}
 
   @Public()
-  @Post()
-  create(@Request() req, @Body() data: CreateEducationDto) {
-    return this.educationsService.create(req.id, data);
+  @Post(':id')
+  create(@Param('id') user: string, @Body() data: CreateEducationDto) {
+    return this.educationsService.create(user, data);
   }
 
   //TODO ntar ganti2in pake yang bener
