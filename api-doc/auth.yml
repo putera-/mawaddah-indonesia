@@ -65,7 +65,7 @@ paths:
                                 properties:
                                     message:
                                         type: string
-                                        example: Invalid Credentials!
+                                        example: Email atau Password salah!
                                     error:
                                         type: string
                                         example: Unauthorized
@@ -165,7 +165,32 @@ paths:
                                     statusCode:
                                         type: number
                                         example: 401
-
+    "/auth/profile":
+        get:
+            tags:
+            - Auth
+            description: Get User login profile
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            examples:
+                                profile-data:
+                                    $ref: "#/components/examples/profile-data"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
 components:
     examples:
         auth:
@@ -184,4 +209,17 @@ components:
                     avatar_md: "/public/profile/avatar_md.jpg"
                     role: "MEMBER"
                     taaruf_status: "BLOCKED"
+        profile-data:
+            summary: profile-data
+            value:
+                id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                email: "john_doe@gmail.com"
+                firstname: "John"
+                lastname: "Doe"
+                active: true
+                verified: true
+                avatar: "/public/profile/avatar.jpg"
+                avatar_md: "/public/profile/avatar_md.jpg"
+                role: "MEMBER"
+                taaruf_status: "BLOCKED"
 
