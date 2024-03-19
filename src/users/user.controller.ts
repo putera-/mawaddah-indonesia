@@ -30,7 +30,7 @@ export class UsersController {
     constructor(
         private readonly userService: UsersService,
         private photoService: PhotosService,
-    ) {}
+    ) { }
     @Public()
     @Post()
     async create(@Body(new ValidationPipe()) data: CreateUserDto) {
