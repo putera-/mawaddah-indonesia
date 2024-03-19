@@ -16,7 +16,14 @@ const select = {
 @Injectable()
 export class EducationsService {
   constructor(private prisma: PrismaService, private userService: UsersService) { }
-  async create(id: string, data: Prisma.EducationCreateInput) {
+  async create(id: string, data: Prisma.EducationCreateInput): Promise<Education> {
+    if (!id) throw new Error('ID must be a valid ID');
+    
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    
+    if (!user.id) throw new Error('User doesnt exist');
+    // const user = await this.userService.findOne(id);
+    
     return this.prisma.education.create({
       data: {
         ...data,
@@ -24,11 +31,15 @@ export class EducationsService {
       },
       select: {
         // Add the properties you want to select here
+        id: true,
         institution_name: true,
         major: true,
         degree: true,
+        deleted: true,
         startYear: true,
-        endYear: true
+        endYear: true,
+        createdAt: true,
+        updatedAt: true
       }
     });
   }

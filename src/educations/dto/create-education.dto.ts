@@ -18,7 +18,6 @@ export class CreateEducationDto {
     @IsOptional()
     city: string
     
-    @IsString()
     @IsNumber()
     startYear: number
     
