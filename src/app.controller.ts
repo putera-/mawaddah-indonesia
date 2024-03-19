@@ -28,4 +28,15 @@ export class AppController {
             throw new NotFoundException('File not found');
         }
     }
+
+    @Public()
+    @Get('avatar/:file')
+    async getAvatar(@Param('file') file: string, @Res() res) {
+        try {
+            await fs.access(`./public/avatar/${file}`);
+            res.sendFile(file, { root: './public/avatar' })
+        } catch (error) {
+            throw new NotFoundException('File not found');
+        }
+    }
 }

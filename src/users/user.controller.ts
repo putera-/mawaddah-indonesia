@@ -61,7 +61,7 @@ export class UsersController {
     @Get('profile')
     async getProfile(@Request() req) {
         try {
-            return await this.userService.findOne(req.id, 'MEMBER');
+            return await this.userService.findOne(req.user.id, 'MEMBER');
         } catch (error) {
             throw error;
         }
@@ -120,7 +120,7 @@ export class UsersController {
                         const { key, size } = s;
                         const filename = `${uniqueSuffix}_${key}.${ext}`;
                         const filepath = path.join(
-                            './uploads/photos/' + filename,
+                            './public/avatar/' + filename,
                         );
 
                         await this.photoService.resize(
@@ -131,8 +131,8 @@ export class UsersController {
                     }),
                 );
 
-                data.avatar = `/uploads/photos/${uniqueSuffix}_lg.${ext}`;
-                data.avatar_md = `/uploads/photos/${uniqueSuffix}_md.${ext}`;
+                data.avatar = `/avatar/${uniqueSuffix}_lg.${ext}`;
+                data.avatar_md = `/avatar/${uniqueSuffix}_md.${ext}`;
             } else {
                 data.avatar = '';
                 data.avatar_md = '';
