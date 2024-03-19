@@ -40,20 +40,24 @@ export class EducationsService {
   }
 
   findOne(id: string) {
+    if (!id) throw new Error('ID not found');
+    
     return this.prisma.education.findFirst({
       where: { id, deleted: false }
     })
   }
-
+  
   update(id: string, data: UpdateEducationDto) {
+    if (!id) throw new Error('ID not found');
     return this.prisma.education.update({
       where: { id },
       data: { ...data },
       select
     })
   }
-
+  
   remove(id: string) {
+    if (!id) throw new Error('ID  not found');
     return this.prisma.education.update({
       where: { id },
       data: { deleted: true },
