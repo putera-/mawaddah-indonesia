@@ -4,75 +4,115 @@ import * as bcrypt from 'bcrypt';
 export async function userSeed(prisma: PrismaClient) {
     const password = await bcrypt.hash('rahasia', 10);
 
-    const alice: Prisma.UserCreateInput = {
-        email: 'alice@prisma.io',
-        firstname: 'Alice',
-        lastname: 'In Wonderland',
-        password,
-        verified: true,
-        avatar: 'photo/nissa.png',
-        avatar_md: 'photo/nissa.png',
-        activations: {
-            create: {
-                activation_key: 'lkjhafklhj@#$@#$@#dsfa',
-                expiredAt: new Date(),
+    // SUPERADMIN
+    {
+        const superadmin = {
+            lastname: 'So Super',
+            password,
+            verified: true,
+            avatar: 'dummy/abang.png',
+            avatar_md: 'dummy/abang.png',
+            activations: {
+                create: {
+                    activation_key: 'lkjhafklhj@#$@#$@#dsfa',
+                    expiredAt: new Date(),
+                },
             },
-        },
-    };
+        };
 
-    const bob: Prisma.UserCreateInput = {
-        email: 'bob@prisma.io',
-        firstname: 'Bob',
-        lastname: 'Is My Name',
-        password,
-        verified: true,
-        avatar: 'photo/abang.png',
-        avatar_md: 'photo/abang.png',
-        activations: {
-            create: {
-                activation_key: 'lkjhafklhj@#$@#$@#dsfa',
-                expiredAt: new Date(),
+        // create 10 SUPERADMIN
+        for (let i = 0; i < 10; i++) {
+            const email = `superadmin_${i}@prisma.io`;
+            const firstname = "Bob" + i;
+            await prisma.user.upsert({
+                where: { email },
+                update: {
+                    email,
+                    firstname,
+                    role: 'SUPERADMIN',
+                    ...superadmin,
+                },
+                create: {
+                    email,
+                    firstname,
+                    role: 'SUPERADMIN',
+                    ...superadmin,
+                }
+            });
+        }
+    }
+
+    // BOB
+    {
+        const bob = {
+            lastname: 'Is My Name',
+            password,
+            verified: true,
+            avatar: 'dummy/abang.png',
+            avatar_md: 'dummy/abang.png',
+            activations: {
+                create: {
+                    activation_key: 'lkjhafklhj@#$@#$@#dsfa',
+                    expiredAt: new Date(),
+                },
             },
-        },
-    };
+        };
 
-    const superadmin: Prisma.UserCreateInput = {
-        email: 'superadmin@prisma.io',
-        firstname: 'Bob',
-        lastname: 'Is My Name',
-        password,
-        verified: true,
-        activations: {
-            create: {
-                activation_key: 'lkjhafklhj@#$@#$@#dsfa',
-                expiredAt: new Date(),
+        // create 100 Bob MEMBER
+        for (let i = 0; i < 100; i++) {
+            const email = `bob_${i}@prisma.io`;
+            const firstname = "Bob " + i;
+            await prisma.user.upsert({
+                where: { email },
+                update: {
+                    email,
+                    firstname,
+                    ...bob,
+                },
+                create: {
+                    email,
+                    firstname,
+                    ...bob,
+                }
+            });
+        }
+    }
+
+    // ALICE
+    {
+        const alice = {
+            lastname: 'In Wonderland',
+            password,
+            verified: true,
+            avatar: 'dummy/nissa.png',
+            avatar_md: 'dummy/nissa.png',
+            activations: {
+                create: {
+                    activation_key: 'lkjhafklhj@#$@#$@#dsfa',
+                    expiredAt: new Date(),
+                },
             },
-        },
-    };
+        };
 
-    await prisma.user.upsert({
-        where: { email: 'alice@prisma.io' },
-        update: alice,
-        create: alice,
-    });
-
-    await prisma.user.upsert({
-        where: { email: 'bob@prisma.io' },
-        update: bob,
-        create: bob,
-    });
-
-    await prisma.user.upsert({
-        where: { email: 'superadmin@prisma.io' },
-        update: {
-            ...superadmin,
-            role: 'SUPERADMIN',
-        },
-        create: {
-            ...superadmin,
-            role: 'SUPERADMIN',
-        },
-    });
+        // create 100 Alice MEMBER
+        for (let i = 0; i < 100; i++) {
+            const email = `alice_${i}@prisma.io`;
+            const firstname = "Alice" + i;
+            await prisma.user.upsert({
+                where: { email },
+                update: {
+                    email,
+                    firstname,
+                    ...alice,
+                },
+                create: {
+                    email,
+                    firstname,
+                    ...alice,
+                }
+            });
+        }
+    }
 
     console.log('Seed: User');
 }
