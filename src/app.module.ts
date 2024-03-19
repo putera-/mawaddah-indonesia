@@ -16,6 +16,7 @@ import { EducationsModule } from './educations/educations.module';
 import { UserSuperadminModule } from './user-superadmin/user-superadmin.module';
 import { UserAdminModule } from './user-admin/user-admin.module';
 import { SkillsModule } from './skills/skills.module';
+import { HobbiesModule } from './hobbies/hobbies.module';
 
 
 @Module({
@@ -32,6 +33,7 @@ import { SkillsModule } from './skills/skills.module';
         UserSuperadminModule,
         UserAdminModule,
         SkillsModule,
+        HobbiesModule,
        
     ],
 
