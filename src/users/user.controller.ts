@@ -61,7 +61,7 @@ export class UsersController {
     @Get('profile')
     async getProfile(@Request() req) {
         try {
-            return await this.userService.findOne(req.id, 'MEMBER');
+            return await this.userService.findOne(req.user.id, 'MEMBER');
         } catch (error) {
             throw error;
         }
