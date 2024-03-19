@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-export async function gallerytSeed(prisma: PrismaClient, clientId: string) {
+export async function gallerySeed(prisma: PrismaClient, clientId: string) {
     await prisma.gallery.createMany({
         data: [
             {
