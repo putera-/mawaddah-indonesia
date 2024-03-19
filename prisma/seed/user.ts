@@ -18,10 +18,6 @@ export async function userSeed(prisma: PrismaClient) {
                 expiredAt: new Date(),
             },
         },
-                //TODO kalo salah ubah aja, tadi cuman biar error ga muncul, pusing paa aing
-                expiredAt: new Date(1710734269703).toISOString()
-            }
-        }
     };
 
     const bob: Prisma.UserCreateInput = {
@@ -38,9 +34,6 @@ export async function userSeed(prisma: PrismaClient) {
                 expiredAt: new Date(),
             },
         },
-                expiredAt: new Date(1710734269703).toISOString()
-            }
-        }
     };
 
     const superadmin: Prisma.UserCreateInput = {
@@ -55,9 +48,6 @@ export async function userSeed(prisma: PrismaClient) {
                 expiredAt: new Date(),
             },
         },
-                expiredAt: new Date(1710734269703).toISOString()
-            }
-        }
     };
 
     await prisma.user.upsert({
