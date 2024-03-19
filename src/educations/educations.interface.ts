@@ -1,6 +1,6 @@
 export interface Education {
     id: string
-    client_id?: string
+    User_id?: string
     institution_name: string
     major?: string
     degree?: string
