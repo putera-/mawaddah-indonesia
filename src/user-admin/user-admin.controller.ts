@@ -19,7 +19,7 @@ export class UserAdminController {
     constructor(private readonly usersService: UsersService) {}
 
     // create admin by superuser
-    @Roles(Role.Superadmin)
+    @Roles(Role.Superadmin, Role.Admin)
     @Post()
     async create(@Body(new ValidationPipe()) data: CreateUserAdminDto) {
         try {
@@ -35,7 +35,7 @@ export class UserAdminController {
     }
 
     // get all admin by super user
-    @Roles(Role.Superadmin)
+    @Roles(Role.Superadmin, Role.Admin)
     @Get()
     findAll() {
         try {
@@ -44,7 +44,7 @@ export class UserAdminController {
             throw error;
         }
     }
-    @Roles(Role.Superadmin)
+    @Roles(Role.Superadmin, Role.Admin)
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.usersService.findOne(id, 'ADMIN');
@@ -58,7 +58,7 @@ export class UserAdminController {
     //     return this.userAdminService.update(+id, updateUserAdminDto);
     // }
 
-    @Roles(Role.Superadmin)
+    @Roles(Role.Superadmin, Role.Admin)
     @Delete(':id')
     @HttpCode(204)
     remove(@Param('id') id: string) {
