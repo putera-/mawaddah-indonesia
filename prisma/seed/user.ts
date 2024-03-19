@@ -15,10 +15,9 @@ export async function userSeed(prisma: PrismaClient) {
         activations: {
             create: {
                 activation_key: 'lkjhafklhj@#$@#$@#dsfa',
-                //TODO kalo salah ubah aja, tadi cuman biar error ga muncul, pusing paa aing
-                expiredAt: new Date(1710734269703).toISOString()
-            }
-        }
+                expiredAt: new Date(),
+            },
+        },
     };
 
     const bob: Prisma.UserCreateInput = {
@@ -32,9 +31,9 @@ export async function userSeed(prisma: PrismaClient) {
         activations: {
             create: {
                 activation_key: 'lkjhafklhj@#$@#$@#dsfa',
-                expiredAt: new Date(1710734269703).toISOString()
-            }
-        }
+                expiredAt: new Date(),
+            },
+        },
     };
 
     const superadmin: Prisma.UserCreateInput = {
@@ -46,9 +45,9 @@ export async function userSeed(prisma: PrismaClient) {
         activations: {
             create: {
                 activation_key: 'lkjhafklhj@#$@#$@#dsfa',
-                expiredAt: new Date(1710734269703).toISOString()
-            }
-        }
+                expiredAt: new Date(),
+            },
+        },
     };
 
     await prisma.user.upsert({
