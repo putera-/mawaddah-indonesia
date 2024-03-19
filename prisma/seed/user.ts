@@ -15,6 +15,9 @@ export async function userSeed(prisma: PrismaClient) {
         activations: {
             create: {
                 activation_key: 'lkjhafklhj@#$@#$@#dsfa',
+                expiredAt: new Date(),
+            },
+        },
                 //TODO kalo salah ubah aja, tadi cuman biar error ga muncul, pusing paa aing
                 expiredAt: new Date(1710734269703).toISOString()
             }
@@ -32,6 +35,9 @@ export async function userSeed(prisma: PrismaClient) {
         activations: {
             create: {
                 activation_key: 'lkjhafklhj@#$@#$@#dsfa',
+                expiredAt: new Date(),
+            },
+        },
                 expiredAt: new Date(1710734269703).toISOString()
             }
         }
@@ -46,6 +52,9 @@ export async function userSeed(prisma: PrismaClient) {
         activations: {
             create: {
                 activation_key: 'lkjhafklhj@#$@#$@#dsfa',
+                expiredAt: new Date(),
+            },
+        },
                 expiredAt: new Date(1710734269703).toISOString()
             }
         }
@@ -54,27 +63,26 @@ export async function userSeed(prisma: PrismaClient) {
     await prisma.user.upsert({
         where: { email: 'alice@prisma.io' },
         update: alice,
-        create: alice
+        create: alice,
     });
 
     await prisma.user.upsert({
         where: { email: 'bob@prisma.io' },
         update: bob,
-        create: bob
+        create: bob,
     });
 
     await prisma.user.upsert({
         where: { email: 'superadmin@prisma.io' },
         update: {
             ...superadmin,
-            role: 'SUPERADMIN'
+            role: 'SUPERADMIN',
         },
         create: {
             ...superadmin,
-            role: 'SUPERADMIN'
-        }
+            role: 'SUPERADMIN',
+        },
     });
 
-
     console.log('Seed: User');
-};
+}

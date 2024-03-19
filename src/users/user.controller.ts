@@ -30,7 +30,7 @@ export class UsersController {
     constructor(
         private readonly userService: UsersService,
         private photoService: PhotosService,
-    ) {}
+    ) { }
     @Public()
     @Post()
     async create(@Body(new ValidationPipe()) data: CreateUserDto) {
@@ -120,7 +120,7 @@ export class UsersController {
                         const { key, size } = s;
                         const filename = `${uniqueSuffix}_${key}.${ext}`;
                         const filepath = path.join(
-                            './uploads/photos/' + filename,
+                            './public/avatar/' + filename,
                         );
 
                         await this.photoService.resize(
@@ -131,8 +131,8 @@ export class UsersController {
                     }),
                 );
 
-                data.avatar = `/uploads/photos/${uniqueSuffix}_lg.${ext}`;
-                data.avatar_md = `/uploads/photos/${uniqueSuffix}_md.${ext}`;
+                data.avatar = `/avatar/${uniqueSuffix}_lg.${ext}`;
+                data.avatar_md = `/avatar/${uniqueSuffix}_md.${ext}`;
             } else {
                 data.avatar = '';
                 data.avatar_md = '';
