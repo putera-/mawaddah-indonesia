@@ -15,6 +15,7 @@ import { RolesGuard } from './roles/roles.guard';
 import { EducationsModule } from './educations/educations.module';
 import { UserSuperadminModule } from './user-superadmin/user-superadmin.module';
 import { UserAdminModule } from './user-admin/user-admin.module';
+import { SkillsModule } from './skills/skills.module';
 
 
 @Module({
@@ -30,6 +31,7 @@ import { UserAdminModule } from './user-admin/user-admin.module';
         EducationsModule,
         UserSuperadminModule,
         UserAdminModule,
+        SkillsModule,
        
     ],
 
