@@ -25,6 +25,10 @@ export class AuthService {
             throw new UnauthorizedException('Email atau password salah.');
         }
 
+        delete user.password;
+        delete user.createdAt;
+        delete user.updatedAt;
+
         if (!user.active) throw new UnauthorizedException('User telah dihapus');
 
         const { access_token, exp } = await this.createToken(
@@ -33,8 +37,7 @@ export class AuthService {
             user.role,
         );
 
-        // instead of the user object
-        return { access_token, exp };
+        return { access_token, exp, user };
     }
 
     async createToken(
