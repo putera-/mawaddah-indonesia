@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
 import { UsersService } from 'src/users/user.service';
 import { PrismaService } from 'src/prisma.service';
@@ -9,6 +8,7 @@ import { Prisma } from '@prisma/client';
 @Injectable()
 export class SkillsService {
   constructor(private prisma: PrismaService, private userService: UsersService) { }
+  
   async create(id: string, data: Prisma.SkillCreateInput) {
     if (!id) throw new Error('ID must be a valid ID');
 
