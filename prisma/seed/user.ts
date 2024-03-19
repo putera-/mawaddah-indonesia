@@ -15,9 +15,9 @@ export async function userSeed(prisma: PrismaClient) {
         activations: {
             create: {
                 activation_key: 'lkjhafklhj@#$@#$@#dsfa',
-                expiredAt: 1710734269703
-            }
-        }
+                expiredAt: new Date(),
+            },
+        },
     };
 
     const bob: Prisma.UserCreateInput = {
@@ -31,9 +31,9 @@ export async function userSeed(prisma: PrismaClient) {
         activations: {
             create: {
                 activation_key: 'lkjhafklhj@#$@#$@#dsfa',
-                expiredAt: 1710734269703
-            }
-        }
+                expiredAt: new Date(),
+            },
+        },
     };
 
     const superadmin: Prisma.UserCreateInput = {
@@ -45,35 +45,34 @@ export async function userSeed(prisma: PrismaClient) {
         activations: {
             create: {
                 activation_key: 'lkjhafklhj@#$@#$@#dsfa',
-                expiredAt: 1710734269703
-            }
-        }
+                expiredAt: new Date(),
+            },
+        },
     };
 
     await prisma.user.upsert({
         where: { email: 'alice@prisma.io' },
         update: alice,
-        create: alice
+        create: alice,
     });
 
     await prisma.user.upsert({
         where: { email: 'bob@prisma.io' },
         update: bob,
-        create: bob
+        create: bob,
     });
 
     await prisma.user.upsert({
         where: { email: 'superadmin@prisma.io' },
         update: {
             ...superadmin,
-            role: 'SUPERADMIN'
+            role: 'SUPERADMIN',
         },
         create: {
             ...superadmin,
-            role: 'SUPERADMIN'
-        }
+            role: 'SUPERADMIN',
+        },
     });
 
-
     console.log('Seed: User');
-};
+}
