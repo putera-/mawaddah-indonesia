@@ -28,7 +28,7 @@ export class UserSuperadminController {
         try {
             // check is super user already exist
             const supers = await this.usersService.findSuperUser();
-            if (supers.length) throw new ForbiddenException();
+            if (supers.length) throw new ForbiddenException('Cannot access');
 
             // validate new user
             await this.usersService.validateNewUser(data);

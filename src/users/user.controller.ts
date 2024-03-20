@@ -30,7 +30,7 @@ export class UsersController {
     constructor(
         private readonly userService: UsersService,
         private photoService: PhotosService,
-    ) { }
+    ) {}
     @Public()
     @Post()
     async create(@Body(new ValidationPipe()) data: CreateUserDto) {
@@ -57,15 +57,7 @@ export class UsersController {
             throw error;
         }
     }
-    @Roles(Role.Member)
-    @Get('profile')
-    async getProfile(@Request() req) {
-        try {
-            return await this.userService.findOne(req.id, 'MEMBER');
-        } catch (error) {
-            throw error;
-        }
-    }
+    
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Get(':id')
     async findOne(@Param('id') id: string) {

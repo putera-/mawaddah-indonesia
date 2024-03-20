@@ -1,0 +1,316 @@
+openapi: "3.0.2"
+info:
+    title: Married Goal API
+    version: "1.0"
+    contact:
+        name: "Rizjami Putera"
+        email: "rizjamiputera@gmail.com"
+        url: "https://udaputera.com"
+servers:
+  - description: Married Goal API
+    url: "{url}:5000/v1"
+    variables:
+        url:
+            default: "http://localhost:5000"
+paths:
+    "/married_goals":
+        post:
+            tags:
+            - Married Goal
+            description: \- Only for MEMBER role <br> \- Auth user create married_goal, make sure have biodata <br> \- Prevent create married goal if no biodata (forbidden)
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                title:
+                                    type: string
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            examples:
+                                sliders:
+                                    $ref: "#/components/examples/married_goal"
+                400:
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Bad Request
+                                    statusCode:
+                                        type: number
+                                        example: 400
+                                    message:
+                                        type: string
+                                        example: title must be length min 1 character
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+        get:
+            tags:
+            - Married Goal
+            description: \- Only for MEMBER role <br> \- Get All Auth user Married Goals <br> \- Prevent create married goal if no biodata (forbidden)
+            responses:
+                200:
+                    description: "OK"
+                    content:
+                        application/json:
+                            examples:
+                                sliders:
+                                    $ref: "#/components/examples/married_goals"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+    "/married_goals/:id":
+        get:
+            tags:
+            - Married Goal
+            description: \- Only for MEMBER role <br>  \- Get by id by auth user <br> \- Use user policy, user tidak boleh membaca data bukan miliknya. (Forbidden)
+            responses:
+                200:
+                    description: "OK"
+                    content:
+                        application/json:
+                            examples:
+                                slider:
+                                    $ref: "#/components/examples/married_goal"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
+        patch:
+            tags:
+            - Married Goal
+            description: \- Only for MEMBER role <br>  \- Patch by id by auth user <br> \- Use user policy, user tidak boleh membaca data bukan miliknya.(Forbidden)
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            properties:
+                                title:
+                                    type: string
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            examples:
+                                sliders:
+                                    $ref: "#/components/examples/married_goal"
+                400:
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Bad Request
+                                    statusCode:
+                                        type: number
+                                        example: 400
+                                    message:
+                                        type: string
+                                        example: title must be length min 1 character
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
+        delete:
+            tags:
+            - Married Goal
+            description: \- Only for MEMBER role <br>  \- Delete by id by auth user <br> \- Use user policy, user tidak boleh membaca data bukan miliknya.(Forbidden)
+            responses:
+                204:
+                    description: OK. No Content
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
+
+components:
+    examples:
+        married_goal:
+            summary: FAQ
+            value:
+                id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                userId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
+                title: "Saya ingin mempunyai rumah 4 lantai"
+                deleted: false
+        married_goals:
+            summary: FAQs
+            value:
+              - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                userId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
+                title: "Saya ingin mempunyai rumah 4 lantai"
+                deleted: false
+              - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                userId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
+                title: "Punya mobil mewah"
+                deleted: false
+              - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                userId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
+                title: "Anak 10"
+                deleted: false

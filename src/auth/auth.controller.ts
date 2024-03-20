@@ -14,6 +14,8 @@ import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { Public } from './auth.metadata';
 import { UsersService } from 'src/users/user.service';
+import { Roles } from 'src/roles/roles.decorator';
+import { Role } from 'src/roles/role.enums';
 
 @Controller('auth')
 export class AuthController {
@@ -27,6 +29,17 @@ export class AuthController {
     signIn(@Body(new ValidationPipe()) signInDto: SignInDto) {
         try {
             return this.authService.signIn(signInDto.email, signInDto.password);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    @Roles(Role.Member, Role.Superadmin, Role.Admin)
+    @Get('profile')
+    async getProfile(@Request() req) {
+        try {
+            const user = req.user;
+            return await this.userService.findOne(user.id, user.role);
         } catch (error) {
             throw error;
         }
