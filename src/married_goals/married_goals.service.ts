@@ -71,8 +71,12 @@ export class MarriedGoalsService {
 
   }
 
-  async remove(id: string) {
-    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Married_goal: true } });
+  async remove(userId: string, id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { id: true, Married_goal: true } });
+
+    if (!user) throw new NotFoundException(`user with id ${id} not found`);
+
+    if (!user.Married_goal.length === null) throw new NotFoundException(`No Hobby found for user with id ${id}`);
 
     const goalId = user.Married_goal[0].id;
 
