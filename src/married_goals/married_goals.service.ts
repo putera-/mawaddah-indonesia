@@ -13,7 +13,7 @@ export class MarriedGoalsService {
     const user = await this.prisma.user.findUnique({ where: { id } });
 
     if (!user) throw new NotFoundException(`Id not found`);
-    
+
     return this.prisma.married_goal.create({
       data: {
         ...data,
@@ -28,14 +28,17 @@ export class MarriedGoalsService {
   }
   
   async findAll(userId: string) {
-     
-    return this.prisma.married_goal.findMany({
-      where: { userId , deleted: false }
-    });
-  }
-  
-  async findOne(userId : string ,id: string) {
     
+    const data = this.prisma.married_goal.findMany({
+      where: { userId, deleted: false }
+    });
+    if (!data) throw new NotFoundException(`Data not found`);
+    return data;
+
+  }
+
+  async findOne(userId: string, id: string) {
+
     const data = await this.prisma.married_goal.findFirst({
       where: { id, userId, deleted: false }
     });
@@ -44,12 +47,12 @@ export class MarriedGoalsService {
     return data;
   }
 
-  async update(userId : string ,id: string, data: UpdateMarriedGoalDto) {
+  async update(userId: string, id: string, data: UpdateMarriedGoalDto) {
     const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { id: true, Married_goal: true } });
 
     if (!user) throw new NotFoundException(`user with id ${id} not found`);
 
-    if (!user.Married_goal.length === null ) throw new NotFoundException(`No Married Goals found for user with id ${id}`);
+    if (!user.Married_goal.length === null) throw new NotFoundException(`No Married Goals found for user with id ${id}`);
 
     const goalId = user.Married_goal[0].id;
 
@@ -65,14 +68,13 @@ export class MarriedGoalsService {
         title: true
       }
     });
-    
+
   }
 
   async remove(id: string) {
     const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Married_goal: true } });
 
     const goalId = user.Married_goal[0].id;
-
 
     return this.prisma.married_goal.update({
       where: { id: goalId },
