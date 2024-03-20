@@ -13,8 +13,7 @@ export class MarriedGoalsController {
   @Post()
   async create(@Request() req: any, @Body(new ValidationPipe()) data: CreateMarriedGoalDto) {
     try {
-      console.log(req.user.id)
-      // return this.marriedGoalsService.create(req.user.id, data);
+      return this.marriedGoalsService.create(req.user.id, data);
 
     } catch (error) {
       throw error;
@@ -24,9 +23,9 @@ export class MarriedGoalsController {
 
   @Roles(Role.Member)
   @Get()
-  findAll() {
+  findAll(@Request() req : any) {
     try {
-      return this.marriedGoalsService.findAll();
+      return this.marriedGoalsService.findAll(req.user.id);
 
     } catch (error) {
       throw error;
@@ -34,10 +33,10 @@ export class MarriedGoalsController {
   }
 
   @Roles(Role.Member)
-  @Get()
-  findOne(@Request() req : any) {
+  @Get(':id')
+  findOne(@Request() req : any, @Param('id') id: string) {
     try {
-      return this.marriedGoalsService.findOne(req.user.id);
+      return this.marriedGoalsService.findOne(req.user.id, id);
 
     } catch (error) {
       throw error;
