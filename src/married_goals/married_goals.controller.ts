@@ -58,9 +58,10 @@ export class MarriedGoalsController {
   @Roles(Role.Member)
   @HttpCode(204)
   @Delete()
-  remove(@Request() req: any) {
+  //TODO NTAR UPDATE INI, SAMA DI SKILLS JUGA
+  remove(@Request() req: any, @Param('id') id: string) {
     try {
-      return this.marriedGoalsService.remove(req.user.id);
+      return this.marriedGoalsService.remove(req.user.id, id);
 
     } catch (error) {
       throw error;
