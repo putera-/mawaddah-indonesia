@@ -55,10 +55,10 @@ export class SkillsController {
 
   @Roles(Role.Member)
   @HttpCode(204)
-  @Delete()
-  remove(@Request() req: any) {
+  @Delete(':id')
+  remove(@Request() req: any, @Param('id') id: string) {
     try {
-      return this.skillsService.remove(req.user.id);
+      return this.skillsService.remove(req.user.id, id);
 
     } catch (error) {
       throw error;
