@@ -11,7 +11,7 @@ export class HobbiesController {
 
   @Roles(Role.Member)
   @Post()
-  create(@Request() req : any, @Body(new ValidationPipe()) data: CreateHobbyDto) {
+  create(@Request() req: any, @Body(new ValidationPipe()) data: CreateHobbyDto) {
     try {
       return this.hobbiesService.create(req.user.id, data);
 
@@ -33,7 +33,7 @@ export class HobbiesController {
 
   @Roles(Role.Member)
   @Get()
-  findOne(@Request() req : any) {
+  findOne(@Request() req: any) {
     try {
       return this.hobbiesService.findOne(req.user.id);
 
@@ -44,8 +44,8 @@ export class HobbiesController {
 
   @Roles(Role.Member)
   @Patch()
-  update(@Request() req : any, @Body(new ValidationPipe()) data: UpdateHobbyDto) {
-  try {
+  update(@Request() req: any, @Body(new ValidationPipe()) data: UpdateHobbyDto) {
+    try {
       return this.hobbiesService.update(req.user.id, data);
 
     } catch (error) {
@@ -55,7 +55,7 @@ export class HobbiesController {
 
   @Roles(Role.Member)
   @Delete()
-  remove(@Request() req : any) {
+  remove(@Request() req: any) {
     try {
       return this.hobbiesService.remove(req.user.id);
 
