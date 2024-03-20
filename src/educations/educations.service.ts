@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateEducationDto } from './dto/update-education.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Prisma, RoleStatus } from '@prisma/client';
@@ -16,13 +16,11 @@ const select = {
 export class EducationsService {
   constructor(private prisma: PrismaService, private userService: UsersService) { }
   async create(id: string, data: Prisma.EducationCreateInput) {
-    if (!id) throw new Error('ID must be a valid ID');
-    
+
     const user = await this.prisma.user.findUnique({ where: { id } });
-    
-    if (!user.id) throw new Error('User doesnt exist');
-    // const user = await this.userService.findOne(id);
-    
+
+    if (!user.id) throw new NotFoundException(`Id not found`);
+
     return this.prisma.education.create({
       data: {
         ...data,
@@ -39,27 +37,44 @@ export class EducationsService {
     })
   }
 
-  findOne(id: string) {
-    if (!id) throw new Error('ID not found');
-    
+  async findOne(id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Education: true } });
+
+    if (!user.id) throw new NotFoundException(`Id not found`);
+
+    const educationId = user.Education[0].id;
+
     return this.prisma.education.findFirst({
-      where: { id, deleted: false }
+      where: { id: educationId, deleted: false }
     })
   }
-  
-  update(id: string, data: UpdateEducationDto) {
-    if (!id) throw new Error('ID not found');
+
+  async update(id: string, data: UpdateEducationDto) {
+    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Education: true } });
+
+    if (!user.id) throw new NotFoundException(`Id not found`);
+
+    const educationId = user.Education[0].id;
+
     return this.prisma.education.update({
-      where: { id },
-      data: { ...data },
+      where: { id: educationId },
+      data: {
+        ...data,
+        User: { connect: { id } }
+      },
       select
     })
   }
-  
-  remove(id: string) {
-    if (!id) throw new Error('ID  not found');
+
+  async remove(id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Education: true } });
+
+    if (!user.id) throw new NotFoundException(`Id not found`);
+
+    const educationId = user.Education[0].id;
+
     return this.prisma.education.update({
-      where: { id },
+      where: { id: educationId },
       data: { deleted: true },
     })
   }
