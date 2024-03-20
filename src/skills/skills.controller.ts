@@ -32,7 +32,7 @@ export class SkillsController {
   }
 
   @Roles(Role.Member)
-  @Get()
+  @Get(':id')
   findOne(@Request() req: any, @Param('id') id: string) {
     try {
       return this.skillsService.findOne(req.user.id, id);

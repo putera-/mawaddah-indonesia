@@ -1,10 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateEducationDto } from './dto/update-education.dto';
 import { PrismaService } from 'src/prisma.service';
-import { Prisma, RoleStatus } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { UsersService } from 'src/users/user.service';
 
 const select = {
+  id: true,
   institution_name: true,
   major: true,
   degree: true,
@@ -19,7 +20,7 @@ export class EducationsService {
 
     const user = await this.prisma.user.findUnique({ where: { id } });
 
-    if (!user.id) throw new NotFoundException(`Id not found`);
+    if (!user) throw new NotFoundException(`Id not found`);
 
     return this.prisma.education.create({
       data: {
@@ -31,45 +32,51 @@ export class EducationsService {
   }
 
 
-  findAll() {
-    return this.prisma.education.findMany({
-      where: { deleted: false }
-    })
+  findAll(userId: string) {
+    const data = this.prisma.education.findMany({
+      where: { userId, deleted: false }
+    });
+    if (!data) throw new NotFoundException(`Data not found`);
+    return data;
   }
 
-  async findOne(id: string) {
-    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Education: true } });
+  async findOne(userId: string, id: string) {
 
-    if (!user.id) throw new NotFoundException(`Id not found`);
+    const data = this.prisma.education.findFirst({
+      where: { id, userId, deleted: false }
+    });
+    if (!data) throw new NotFoundException(`Data not found`);
 
-    const educationId = user.Education[0].id;
-
-    return this.prisma.education.findFirst({
-      where: { id: educationId, deleted: false }
-    })
+    return data;
   }
 
-  async update(id: string, data: UpdateEducationDto) {
-    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Education: true } });
+  async update(userId: string, id: string, data: UpdateEducationDto) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { id: true, Education: true } });
 
-    if (!user.id) throw new NotFoundException(`Id not found`);
+    if (!user) throw new NotFoundException(`user with id ${id} not found`);
 
-    const educationId = user.Education[0].id;
+    if (!user.Education.length === null) throw new NotFoundException(`No Education found for user with id ${id}`);
+
+    // const educationId = user.Education[0].id;
+    //TODO BESOK LAKUIN KAYAK BEGINI KESEMUA USER RELATION YANG UDAH DIBUAT
+    const educationId = await this.findOne( userId, id);
 
     return this.prisma.education.update({
-      where: { id: educationId },
+      where: { id: educationId.id },
       data: {
         ...data,
-        User: { connect: { id } }
+        User: { connect: { id: userId } }
       },
       select
     })
   }
 
-  async remove(id: string) {
-    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Education: true } });
+  async remove(userId: string, id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { id: true, Education: true } });
 
-    if (!user.id) throw new NotFoundException(`Id not found`);
+    if (!user) throw new NotFoundException(`user with id ${id} not found`);
+
+    if (!user.Education.length === null) throw new NotFoundException(`No Education found for user with id ${id}`);
 
     const educationId = user.Education[0].id;
 
