@@ -14,6 +14,8 @@ import { AuthGuard } from './auth/auth.guard';
 import { RolesGuard } from './roles/roles.guard';
 import { UserSuperadminModule } from './user-superadmin/user-superadmin.module';
 import { UserAdminModule } from './user-admin/user-admin.module';
+import { BiodataModule } from './biodata/biodata.module';
+import { ProvinceModule } from './province/province.module';
 
 
 @Module({
@@ -28,6 +30,8 @@ import { UserAdminModule } from './user-admin/user-admin.module';
         FaqsModule,
         UserSuperadminModule,
         UserAdminModule,
+        BiodataModule,
+        ProvinceModule,
        
     ],
 
