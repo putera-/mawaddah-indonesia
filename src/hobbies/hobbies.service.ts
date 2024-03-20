@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateHobbyDto } from './dto/create-hobby.dto';
 import { UpdateHobbyDto } from './dto/update-hobby.dto';
 import { Prisma } from '@prisma/client';
@@ -10,11 +10,11 @@ export class HobbiesService {
   constructor(private prisma: PrismaService, private userService: UsersService) { }
 
   async create(id: string, data: Prisma.HobbyCreateInput) {
-    if (!id) throw new Error('ID must be a valid ID');
 
     const user = await this.prisma.user.findUnique({ where: { id } });
 
-    if (!user.id) throw new Error('User doesnt exist');
+    if (!user.id) throw new NotFoundException(`Id not found`);
+
     return this.prisma.hobby.create({
       data: {
         ...data,
@@ -35,16 +35,28 @@ export class HobbiesService {
     });
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Hobby: true } });
+
+    if (!user.id) throw new NotFoundException(`Id not found`);
+
+    const HobbyId = user.Hobby[0].id;
+
     return this.prisma.hobby.findFirst({
-      where: { id, deleted: false }
+      where: { id: HobbyId, deleted: false }
     });
   }
 
-  update(id: string, data: UpdateHobbyDto) {
+  async update(id: string, data: UpdateHobbyDto) {
+    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Hobby: true } });
+
+    if (!user.id) throw new NotFoundException(`Id not found`);
+
+    const HobbyId = user.Hobby[0].id;
+
     return this.prisma.hobby.update({
-      where: { id },
-      data: { ...data },
+      where: { id: HobbyId },
+      data: { ...data, User: { connect: { id } } },
       select: {
         id: true,
         userId: true,
@@ -53,9 +65,15 @@ export class HobbiesService {
     });
   }
 
-  remove(id: string) {
+  async remove(id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Hobby: true } });
+
+    if (!user.id) throw new NotFoundException(`Id not found`);
+
+    const HobbyId = user.Hobby[0].id;
+
     return this.prisma.hobby.update({
-      where: { id },
+      where: { id: HobbyId },
       data: { deleted: true }
     });
   }
