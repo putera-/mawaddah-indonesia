@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Request } from '@nestjs/common';
 import { HobbiesService } from './hobbies.service';
 import { CreateHobbyDto } from './dto/create-hobby.dto';
 import { UpdateHobbyDto } from './dto/update-hobby.dto';
@@ -9,18 +9,18 @@ import { Role } from 'src/roles/role.enums';
 export class HobbiesController {
   constructor(private readonly hobbiesService: HobbiesService) { }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
+  @Roles(Role.Member)
   @Post()
-  create(@Param('id') user: string, @Body(new ValidationPipe()) data: CreateHobbyDto) {
+  create(@Request() req : any, @Body(new ValidationPipe()) data: CreateHobbyDto) {
     try {
-      return this.hobbiesService.create(user, data);
+      return this.hobbiesService.create(req.user.id, data);
 
     } catch (error) {
       throw error;
     }
   }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
+  @Roles(Role.Member)
   @Get()
   findAll() {
     try {
@@ -31,33 +31,33 @@ export class HobbiesController {
     }
   }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Roles(Role.Member)
+  @Get()
+  findOne(@Request() req : any) {
     try {
-      return this.hobbiesService.findOne(id);
+      return this.hobbiesService.findOne(req.user.id);
 
     } catch (error) {
       throw error;
     }
   }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
-  @Patch(':id')
-  update(@Param('id') id: string, @Body(new ValidationPipe()) data: UpdateHobbyDto) {
-    try {
-      return this.hobbiesService.update(id, data);
+  @Roles(Role.Member)
+  @Patch()
+  update(@Request() req : any, @Body(new ValidationPipe()) data: UpdateHobbyDto) {
+  try {
+      return this.hobbiesService.update(req.user.id, data);
 
     } catch (error) {
       throw error;
     }
   }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Roles(Role.Member)
+  @Delete()
+  remove(@Request() req : any) {
     try {
-      return this.hobbiesService.remove(id);
+      return this.hobbiesService.remove(req.user.id);
 
     } catch (error) {
       throw error;
