@@ -44,16 +44,20 @@ export class MarriedGoalsService {
     return data;
   }
 
-  async update(id: string, updateMarriedGoalDto: UpdateMarriedGoalDto) {
-    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Married_goal: true } });
+  async update(userId : string ,id: string, data: UpdateMarriedGoalDto) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { id: true, Married_goal: true } });
+
+    if (!user) throw new NotFoundException(`user with id ${id} not found`);
+
+    if (!user.Married_goal.length === null ) throw new NotFoundException(`No Married Goals found for user with id ${id}`);
 
     const goalId = user.Married_goal[0].id;
 
     return this.prisma.married_goal.update({
       where: { id: goalId },
       data: {
-        ...updateMarriedGoalDto,
-        User: { connect: { id } }
+        ...data,
+        User: { connect: { id: userId } }
       },
       select: {
         id: true,
@@ -61,7 +65,7 @@ export class MarriedGoalsService {
         title: true
       }
     });
-
+    
   }
 
   async remove(id: string) {

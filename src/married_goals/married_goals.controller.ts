@@ -44,11 +44,11 @@ export class MarriedGoalsController {
   }
 
   @Roles(Role.Member)
-  @Patch()
-  update(@Request() req: any, @Body(new ValidationPipe()) data: UpdateMarriedGoalDto) {
+  @Patch(':id')
+  update(@Request() req: any, @Param('id') id: string, @Body(new ValidationPipe()) data: UpdateMarriedGoalDto) {
     try {
       // console.log(req.user.id)
-      return this.marriedGoalsService.update(req.user.id, data);
+      return this.marriedGoalsService.update(req.user.id, id, data);
 
     } catch (error) {
       throw error;
