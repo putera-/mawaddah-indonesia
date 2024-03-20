@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Request, HttpCode, V
 import { EducationsService } from './educations.service';
 import { CreateEducationDto } from './dto/create-education.dto';
 import { UpdateEducationDto } from './dto/update-education.dto';
-import { Public } from 'src/auth/auth.metadata';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 
@@ -10,13 +9,14 @@ import { Role } from 'src/roles/role.enums';
 export class EducationsController {
   constructor(private readonly educationsService: EducationsService) { }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
-  create(@Param('id') user: string, @Body(new ValidationPipe()) data: CreateEducationDto) {
-    return this.educationsService.create(user, data);
+  @Roles(Role.Member)
+  @Post()
+  create(@Request() req: any, @Body(new ValidationPipe()) data: CreateEducationDto) {
+    return this.educationsService.create(req.user.id, data);
   }
 
   //TODO ntar ganti2in pake yang bener
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
+  @Roles(Role.Member)
   @Get()
   findAll() {
     try {
@@ -27,11 +27,11 @@ export class EducationsController {
     }
   }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Roles(Role.Member)
+  @Get()
+  findOne(@Request() req: any) {
     try {
-      return this.educationsService.findOne(id);
+      return this.educationsService.findOne(req.user.id);
 
     } catch (error) {
       throw error;
@@ -39,11 +39,11 @@ export class EducationsController {
     }
   }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
-  @Patch(':id')
-  update(@Param('id') id: string, @Body(new ValidationPipe()) updateEducationDto: UpdateEducationDto) {
+  @Roles(Role.Member)
+  @Patch()
+  update(@Request() req: any, @Body(new ValidationPipe()) data: UpdateEducationDto) {
     try {
-      return this.educationsService.update(id, updateEducationDto);
+      return this.educationsService.update(req.user.id, data);
 
     } catch (error) {
       throw error;
@@ -51,12 +51,12 @@ export class EducationsController {
     }
   }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
+  @Roles(Role.Member)
   @HttpCode(204)
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete()
+  remove(@Request() req: any) {
     try {
-      return this.educationsService.remove(id);
+      return this.educationsService.remove(req.user.id);
 
     } catch (error) {
       throw error;
