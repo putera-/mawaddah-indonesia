@@ -27,6 +27,7 @@ model User {
     taaruf_status TaarufStatus @default(BLOCKED)
     auth          Auth[]
     activations   Activation[]
+    biodata       Biodata?
     createdAt     DateTime     @default(now())
     updatedAt     DateTime     @default(now()) @updatedAt
 }
@@ -130,4 +131,64 @@ model Activation {
     used           Boolean  @default(false)
     expiredAt      DateTime @db.DateTime()
     createdAt      DateTime @default(now())
+}
+
+model Biodata {
+    id                  String             @id @default(uuid())
+    user                User               @relation(fields: [userId], references: [id])
+    userId              String             @unique
+    bio                 String             @db.Text
+    phone               String             @db.VarChar(20)
+    education           Education[]
+    manhaj              ManhajStatus
+    gender              Gender
+    marriage_status     MarriageStatus
+    marriage_permission MarriagePermission
+    dob                 DateTime           @db.Date
+    birth_place         String             @db.VarChar(100)
+    birth_order         Int                @db.TinyInt
+    domicile_town       String             @db.VarChar(100)
+    domicile_province   String             @db.VarChar(100)
+    hometown_province   String             @db.VarChar(100)
+    ethnic              String             @db.VarChar(100)
+    createdAt           DateTime           @db.Date
+    updatedAt           DateTime           @default(now()) @updatedAt
+}
+
+enum ManhajStatus {
+    SALAF
+    BARU_BELAJAR
+    NON_SALAF
+}
+
+enum Gender {
+    PRIA
+    WANITA
+}
+
+enum MarriageStatus {
+    LAJANG
+    MENIKAH
+    DUDA
+    JANDA
+}
+
+enum MarriagePermission {
+    POLIGAMI
+    NON_POLIGAMI
+}
+
+model Education {
+    id              String   @id @default(uuid())
+    Biodata         Biodata? @relation(fields: [biodataId], references: [userId])
+    biodataId       String?
+    institutionName String   @db.VarChar(100)
+    major           String?  @db.VarChar(50)
+    degree          String?  @db.VarChar(50)
+    city            String?  @db.VarChar(50)
+    startYear       Int      @db.Int
+    endYear         Int      @db.Int
+    deleted         Boolean  @default(false)
+    createdAt       DateTime @db.Date
+    updatedAt       DateTime @default(now()) @updatedAt
 }
