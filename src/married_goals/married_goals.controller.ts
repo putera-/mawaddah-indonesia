@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Request, HttpCode } from '@nestjs/common';
 import { MarriedGoalsService } from './married_goals.service';
 import { CreateMarriedGoalDto } from './dto/create-married_goal.dto';
 import { UpdateMarriedGoalDto } from './dto/update-married_goal.dto';
@@ -57,10 +57,11 @@ export class MarriedGoalsController {
   }
 
   @Roles(Role.Member, Role.Superadmin, Role.Admin)
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @HttpCode(204)
+  @Delete()
+  remove(@Request() req: any) {
     try {
-      return this.marriedGoalsService.remove(id);
+      return this.marriedGoalsService.remove(req.user.id);
 
     } catch (error) {
       throw error;

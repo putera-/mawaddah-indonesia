@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { CreateMarriedGoalDto } from './dto/create-married_goal.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateMarriedGoalDto } from './dto/update-married_goal.dto';
 import { Prisma } from '@prisma/client';
 import { UsersService } from 'src/users/user.service';
@@ -13,8 +12,7 @@ export class MarriedGoalsService {
 
     const user = await this.prisma.user.findUnique({ where: { id } });
 
-    if (!user.id) throw new Error('User doesnt exist');
-    // const user = await this.userService.findOne(id);
+    if (!user) throw new NotFoundException(`Id not found`);
 
     return this.prisma.married_goal.create({
       data: {
@@ -43,7 +41,7 @@ export class MarriedGoalsService {
 
   async update(id: string, updateMarriedGoalDto: UpdateMarriedGoalDto) {
     const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Married_goal: true } });
-    
+
     const goalId = user.Married_goal[0].id;
 
     return this.prisma.married_goal.update({
@@ -61,10 +59,15 @@ export class MarriedGoalsService {
 
   }
 
-  remove(id: string) {
+  async remove(id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Married_goal: true } });
+
+    const goalId = user.Married_goal[0].id;
+
+
     return this.prisma.married_goal.update({
-      where: { id },
-      data: { deleted: true }
+      where: { id: goalId },
+      data: { deleted: false }
     });
   }
 }
