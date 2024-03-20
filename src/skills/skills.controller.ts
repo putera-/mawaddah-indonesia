@@ -8,9 +8,10 @@ import { Role } from 'src/roles/role.enums';
 @Controller('skills')
 export class SkillsController {
   constructor(private readonly skillsService: SkillsService) { }
-  
+
   @Roles(Role.Member)
-  create(@Request() req : any, @Body(new ValidationPipe()) data: CreateSkillDto) {
+  @Post()
+  create(@Request() req: any, @Body(new ValidationPipe()) data: CreateSkillDto) {
     try {
       return this.skillsService.create(req.user.id, data);
 
@@ -21,9 +22,9 @@ export class SkillsController {
 
   @Roles(Role.Member)
   @Get()
-  findAll() {
+  findAll(@Request() req : any) {
     try {
-      return this.skillsService.findAll();
+      return this.skillsService.findAll(req.user.id);
 
     } catch (error) {
       throw error;
@@ -32,9 +33,9 @@ export class SkillsController {
 
   @Roles(Role.Member)
   @Get()
-  findOne(@Request() req : any) {
+  findOne(@Request() req: any, @Param('id') id: string) {
     try {
-      return this.skillsService.findOne(req.user.id);
+      return this.skillsService.findOne(req.user.id, id);
 
     } catch (error) {
       throw error;
@@ -42,10 +43,10 @@ export class SkillsController {
   }
 
   @Roles(Role.Member)
-  @Patch()
-  update(@Request() req : any, @Body(new ValidationPipe()) data: UpdateSkillDto) {
+  @Patch(':id')
+  update(@Request() req: any, @Param('id') id: string, @Body(new ValidationPipe()) data: UpdateSkillDto) {
     try {
-      return this.skillsService.update(req.user.id, data);
+      return this.skillsService.update(req.user.id, id, data);
 
     } catch (error) {
       throw error;
@@ -55,7 +56,7 @@ export class SkillsController {
   @Roles(Role.Member)
   @HttpCode(204)
   @Delete()
-  remove(@Request() req : any) {
+  remove(@Request() req: any) {
     try {
       return this.skillsService.remove(req.user.id);
 
