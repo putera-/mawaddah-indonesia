@@ -24,7 +24,7 @@ export class EducationsService {
 
     const user = await this.prisma.user.findUnique({ where: { id } });
 
-    if (!user.id) throw new NotFoundException(`Id not found`);
+    if (!user) throw new NotFoundException(`Id not found`);
 
     return this.prisma.education.create({
       data: { ...data, User: { connect: { id } } },
