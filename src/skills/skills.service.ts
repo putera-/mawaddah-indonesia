@@ -8,9 +8,8 @@ import { Prisma } from '@prisma/client';
 @Injectable()
 export class SkillsService {
   constructor(private prisma: PrismaService, private userService: UsersService) { }
-  
+
   async create(id: string, data: Prisma.SkillCreateInput) {
-    if (!id) throw new Error('ID must be a valid ID');
 
     const user = await this.prisma.user.findUnique({ where: { id } });
 
@@ -43,9 +42,16 @@ export class SkillsService {
   }
 
   update(id: string, updateSkillDto: UpdateSkillDto) {
+    const user = this.prisma.user.findUnique({ where: { id }, select: { id: true, Skill: true } });
+
+    const skillId = user.Skill[0].id;
+
     return this.prisma.skill.update({
-      where: { id },
-      data: { ...updateSkillDto },
+      where: { id: skillId },
+      data: { 
+        ...updateSkillDto,
+        User: { connect: { id } }
+      },
       select: {
         id: true,
         userId: true,
