@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Request, HttpCode } from '@nestjs/common';
 import { SkillsService } from './skills.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
@@ -31,10 +31,10 @@ export class SkillsController {
   }
 
   @Roles(Role.Member, Role.Superadmin, Role.Admin)
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get()
+  findOne(@Request() req : any) {
     try {
-      return this.skillsService.findOne(id);
+      return this.skillsService.findOne(req.user.id);
 
     } catch (error) {
       throw error;
@@ -42,10 +42,10 @@ export class SkillsController {
   }
 
   @Roles(Role.Member, Role.Superadmin, Role.Admin)
-  @Patch(':id')
-  update(@Param('id') id: string, @Body(new ValidationPipe()) updateSkillDto: UpdateSkillDto) {
+  @Patch()
+  update(@Request() req : any, @Body(new ValidationPipe()) data: UpdateSkillDto) {
     try {
-      return this.skillsService.update(id, updateSkillDto);
+      return this.skillsService.update(req.user.id, data);
 
     } catch (error) {
       throw error;
@@ -53,10 +53,11 @@ export class SkillsController {
   }
 
   @Roles(Role.Member, Role.Superadmin, Role.Admin)
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @HttpCode(204)
+  @Delete()
+  remove(@Request() req : any) {
     try {
-      return this.skillsService.remove(id);
+      return this.skillsService.remove(req.user.id);
 
     } catch (error) {
       throw error;

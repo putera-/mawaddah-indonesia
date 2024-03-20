@@ -34,10 +34,10 @@ export class MarriedGoalsController {
   }
 
   @Roles(Role.Member, Role.Superadmin, Role.Admin)
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get()
+  findOne(@Request() req : any) {
     try {
-      return this.marriedGoalsService.findOne(id);
+      return this.marriedGoalsService.findOne(req.user.id);
 
     } catch (error) {
       throw error;

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateSkillDto } from './dto/update-skill.dto';
 import { UsersService } from 'src/users/user.service';
 import { PrismaService } from 'src/prisma.service';
@@ -13,8 +13,7 @@ export class SkillsService {
 
     const user = await this.prisma.user.findUnique({ where: { id } });
 
-    if (!user.id) throw new Error('User doesnt exist');
-    // const user = await this.userService.findOne(id);
+    if (!user.id) throw new NotFoundException(`Id not found`);
 
     return this.prisma.skill.create({
       data: {
@@ -35,20 +34,28 @@ export class SkillsService {
     });
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Skill: true } });
+
+    if (!user.id) throw new NotFoundException(`Id not found`);
+
+    const skillId = user.Skill[0].id;
+
     return this.prisma.skill.findFirst({
-      where: { id, deleted: false }
+      where: { id: skillId, deleted: false }
     });
   }
 
-  update(id: string, updateSkillDto: UpdateSkillDto) {
-    const user = this.prisma.user.findUnique({ where: { id }, select: { id: true, Skill: true } });
+  async update(id: string, updateSkillDto: UpdateSkillDto) {
+    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Skill: true } });
+
+    if (!user.id) throw new NotFoundException(`Id not found`);
 
     const skillId = user.Skill[0].id;
 
     return this.prisma.skill.update({
       where: { id: skillId },
-      data: { 
+      data: {
         ...updateSkillDto,
         User: { connect: { id } }
       },
@@ -61,9 +68,15 @@ export class SkillsService {
 
   }
 
-  remove(id: string) {
+  async remove(id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Skill: true } });
+
+    if (!user.id) throw new NotFoundException(`Id not found`);
+
+    const skillId = user.Skill[0].id;
+
     return this.prisma.skill.update({
-      where: { id },
+      where: { id: skillId },
       data: { deleted: true },
     });
   }
