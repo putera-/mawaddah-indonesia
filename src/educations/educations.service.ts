@@ -21,13 +21,11 @@ const select = {
 export class EducationsService {
   constructor(private prisma: PrismaService, private userService: UsersService) { }
   async create(id: string, data: Prisma.EducationCreateInput) {
-    if (!id) throw new Error('ID must be a valid ID');
-    
+
     const user = await this.prisma.user.findUnique({ where: { id } });
-    
-    if (!user.id) throw new Error('User doesnt exist');
-    // const user = await this.userService.findOne(id);
-    
+
+    if (!user.id) throw new NotFoundException(`Id not found`);
+
     return this.prisma.education.create({
       data: { ...data, User: { connect: { id } } },
       select
