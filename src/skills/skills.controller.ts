@@ -9,7 +9,7 @@ import { Role } from 'src/roles/role.enums';
 export class SkillsController {
   constructor(private readonly skillsService: SkillsService) { }
   
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
+  @Roles(Role.Member)
   create(@Request() req : any, @Body(new ValidationPipe()) data: CreateSkillDto) {
     try {
       return this.skillsService.create(req.user.id, data);
@@ -19,7 +19,7 @@ export class SkillsController {
     }
   }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
+  @Roles(Role.Member)
   @Get()
   findAll() {
     try {
@@ -30,7 +30,7 @@ export class SkillsController {
     }
   }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
+  @Roles(Role.Member)
   @Get()
   findOne(@Request() req : any) {
     try {
@@ -41,7 +41,7 @@ export class SkillsController {
     }
   }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
+  @Roles(Role.Member)
   @Patch()
   update(@Request() req : any, @Body(new ValidationPipe()) data: UpdateSkillDto) {
     try {
@@ -52,7 +52,7 @@ export class SkillsController {
     }
   }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
+  @Roles(Role.Member)
   @HttpCode(204)
   @Delete()
   remove(@Request() req : any) {
