@@ -48,14 +48,14 @@ export class UsersService {
     async findAll(role: RoleStatus) {
         return await this.Prisma.user.findMany({
             where: { role, active: true },
-            select: { ...select, Education: true, Skill: true, Hobby: true, Married_goal:true },
+            select: { ...select, Education: true, Skill: true, Hobby: true, Married_goal:true, Life_goal:true },
         });
     }
 
     async findOne(id: string, role: RoleStatus): Promise<User> {
         const user = await this.Prisma.user.findFirst({
             where: { id, role, active: true },
-            select: { ...select, Education: true, Skill: true, Hobby: true, Married_goal:true },
+            select: { ...select, Education: true, Skill: true, Hobby: true, Married_goal:true, Life_goal:true },
         });
         if (!user) throw new NotFoundException(`User tidak ditemukan`);
         return user;
