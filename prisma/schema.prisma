@@ -139,7 +139,6 @@ model Biodata {
     userId              String             @unique
     bio                 String             @db.Text
     phone               String             @db.VarChar(20)
-    education           Education[]
     manhaj              ManhajStatus
     gender              Gender
     marriage_status     MarriageStatus
@@ -148,8 +147,8 @@ model Biodata {
     birth_place         String             @db.VarChar(100)
     birth_order         Int                @db.TinyInt
     domicile_town       String             @db.VarChar(100)
-    domicile_province   String             @db.VarChar(100)
-    hometown_province   String             @db.VarChar(100)
+    domicile_province   Province[]         @relation("domiliceProvince")
+    hometown_province   Province[]         @relation("hometownProvince")
     ethnic              String             @db.VarChar(100)
     createdAt           DateTime           @db.Date
     updatedAt           DateTime           @default(now()) @updatedAt
@@ -178,17 +177,12 @@ enum MarriagePermission {
     NON_POLIGAMI
 }
 
-model Education {
-    id              String   @id @default(uuid())
-    Biodata         Biodata? @relation(fields: [biodataId], references: [userId])
-    biodataId       String?
-    institutionName String   @db.VarChar(100)
-    major           String?  @db.VarChar(50)
-    degree          String?  @db.VarChar(50)
-    city            String?  @db.VarChar(50)
-    startYear       Int      @db.Int
-    endYear         Int      @db.Int
-    deleted         Boolean  @default(false)
-    createdAt       DateTime @db.Date
-    updatedAt       DateTime @default(now()) @updatedAt
+model Province {
+    id         String  @id @default(uuid())
+    name       String  @db.VarChar(100)
+    domicile   Biodata @relation("domiliceProvince", fields: [domicileId], references: [id])
+    domicileId String
+    hometown   Biodata @relation("hometownProvince", fields: [hometownId], references: [id])
+    hometownId String
+    deleted    Boolean
 }
