@@ -147,8 +147,8 @@ model Biodata {
     birth_place         String             @db.VarChar(100)
     birth_order         Int                @db.TinyInt
     domicile_town       String             @db.VarChar(100)
-    domicile_province   Province[]         @relation("domiliceProvince")
-    hometown_province   Province[]         @relation("hometownProvince")
+    domicile_province   String
+    hometown_province   String
     ethnic              String             @db.VarChar(100)
     createdAt           DateTime           @db.Date
     updatedAt           DateTime           @default(now()) @updatedAt
@@ -178,11 +178,7 @@ enum MarriagePermission {
 }
 
 model Province {
-    id         String  @id @default(uuid())
-    name       String  @db.VarChar(100)
-    domicile   Biodata @relation("domiliceProvince", fields: [domicileId], references: [id])
-    domicileId String
-    hometown   Biodata @relation("hometownProvince", fields: [hometownId], references: [id])
-    hometownId String
-    deleted    Boolean
+    id      String  @id @default(uuid())
+    name    String  @unique() @db.VarChar(100)
+    deleted Boolean @default(false)
 }
