@@ -67,7 +67,35 @@ export class UsersService {
 
         return users;
     }
+    // async findCouple(id: string): Promise<{ user: any; partner: any }> {
+    //     // Find the user with the given ID
+    //     const user = await this.Prisma.user.findFirst({
+    //         where: { id },
+    //         select: { preference: true },
+    //     });
+        
+    //     // Find a user with a compatible interest
+    //     const partner = await this.Prisma.user.findFirst({
+    //         where: {
+    //             preference: {
+    //                 some: {
+    //                     title: {
+    //                         equals: user.preference.title, // assuming interest is an object with a 'name' field
+    //                     },
+    //                 },
+    //             },
+    //             AND: {
+    //                 id: {
+    //                     notIn: userId,
+    //                 },
+    //             },
+    //         },
+    //         include: { preference: true },
+    //     });
 
+    //     // Return an object with the user and their partner
+    //     return { user, partner };
+    // }
     async update(id: string, data: Prisma.UserUpdateInput): Promise<User> {
         const currentData = await this.Prisma.user.findUnique({
             where: { id },

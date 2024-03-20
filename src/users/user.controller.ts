@@ -57,16 +57,7 @@ export class UsersController {
             throw error;
         }
     }
-    @Roles(Role.Member, Role.Superadmin, Role.Admin)
-    @Get('profile')
-    async getProfile(@Request() req) {
-        try {
-            const user = req.user;
-            return await this.userService.findOne(user.id, user.role);
-        } catch (error) {
-            throw error;
-        }
-    }
+    
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Get(':id')
     async findOne(@Param('id') id: string) {
