@@ -34,7 +34,7 @@ paths:
                         application/json:
                             examples:
                                 sliders:
-                                    $ref: "#/components/examples/married_goal"
+                                    $ref: "#/components/examples/hobbies"
                 400:
                     description: Bad Request
                     content:
