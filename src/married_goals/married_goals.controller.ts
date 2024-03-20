@@ -9,7 +9,7 @@ import { Role } from 'src/roles/role.enums';
 export class MarriedGoalsController {
   constructor(private readonly marriedGoalsService: MarriedGoalsService) { }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
+  @Roles(Role.Member)
   @Post()
   async create(@Request() req: any, @Body(new ValidationPipe()) data: CreateMarriedGoalDto) {
     try {
@@ -22,7 +22,7 @@ export class MarriedGoalsController {
     }
   }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
+  @Roles(Role.Member)
   @Get()
   findAll() {
     try {
@@ -33,7 +33,7 @@ export class MarriedGoalsController {
     }
   }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
+  @Roles(Role.Member)
   @Get()
   findOne(@Request() req : any) {
     try {
@@ -44,7 +44,7 @@ export class MarriedGoalsController {
     }
   }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
+  @Roles(Role.Member)
   @Patch()
   update(@Request() req: any, @Body(new ValidationPipe()) data: UpdateMarriedGoalDto) {
     try {
@@ -56,7 +56,7 @@ export class MarriedGoalsController {
     }
   }
 
-  @Roles(Role.Member, Role.Superadmin, Role.Admin)
+  @Roles(Role.Member)
   @HttpCode(204)
   @Delete()
   remove(@Request() req: any) {
