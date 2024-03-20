@@ -29,9 +29,12 @@ export class SkillsService {
   }
 
   findAll(userId: string) {
-    return this.prisma.skill.findMany({
+    const data = this.prisma.skill.findMany({
       where: {userId, deleted: false }
     });
+    if (!data) throw new NotFoundException(`Data not found`);
+    return data;
+
   }
 
   async findOne(userId: string, id: string) {
@@ -65,7 +68,7 @@ export class SkillsService {
         title: true
       }
     });
-    
+
   }
 
   async remove(id: string) {
