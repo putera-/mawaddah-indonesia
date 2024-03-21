@@ -28,36 +28,36 @@ export class SkillsService {
     });
   }
 
-  findAll() {
+  findAll(userId: string) {
     return this.prisma.skill.findMany({
-      where: { deleted: false }
+      where: {userId, deleted: false }
     });
   }
 
-  async findOne(id: string) {
-    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Skill: true } });
+  async findOne(userId: string, id: string) {
 
-    if (!user.id) throw new NotFoundException(`Id not found`);
-
-    const skillId = user.Skill[0].id;
-
-    return this.prisma.skill.findFirst({
-      where: { id: skillId, deleted: false }
+    const data =  this.prisma.skill.findFirst({
+      where: { id, userId , deleted: false }
     });
+    if (!data) throw new NotFoundException(`Data not found`);
+
+
+    return data
   }
 
-  async update(id: string, updateSkillDto: UpdateSkillDto) {
-    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Skill: true } });
+  async update(userId: string, id : string, data: UpdateSkillDto) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { id: true, Skill: true } });
 
-    if (!user.id) throw new NotFoundException(`Id not found`);
+    if (!user) throw new NotFoundException(`user with id ${id} not found`);
+
+    if (!user.Skill.length === null ) throw new NotFoundException(`No skills found for user with id ${id}`);
 
     const skillId = user.Skill[0].id;
-
     return this.prisma.skill.update({
       where: { id: skillId },
       data: {
-        ...updateSkillDto,
-        User: { connect: { id } }
+        ...data,
+        User: { connect: { id: userId } }
       },
       select: {
         id: true,
@@ -65,7 +65,7 @@ export class SkillsService {
         title: true
       }
     });
-
+    
   }
 
   async remove(id: string) {
