@@ -24,10 +24,28 @@ export class LifeGoalsService {
     });
   }
 
-  async findAll(userId: string) {
-    const data = await this.prisma.life_goal.findMany({ where: { userId, deleted: false }, select });
+  async findAll(userId: string, page: number = 1, limit: number = 10) {
+    const skip = (page - 1) * limit;
+    const [total, data] = await Promise.all([
+      this.prisma.life_goal.count({
+        where: { userId, deleted: false },
+      }),
+      this.prisma.life_goal.findMany({
+        where: { userId, deleted: false },
+        orderBy: { createdAt: 'desc' },
+        select,
+        skip,
+        take: Number(limit),
+      }),
+    ]);
     if (data.length == 0) throw new NotFoundException(`No Data Found`);
-    return data;
+    return {
+      data,
+      total,
+      page: +page,
+      maxPages: Math.ceil(total / limit),
+      limit: +limit
+    }
   }
 
   async findOne(userId: string, id: string) {
@@ -45,7 +63,7 @@ export class LifeGoalsService {
     return data;
   }
 
-  async update(userId: string ,id: string, data: UpdateLifeGoalDto) {
+  async update(userId: string, id: string, data: UpdateLifeGoalDto) {
     const goalId = await this.findOne(userId, id);
 
     return this.prisma.life_goal.update({
