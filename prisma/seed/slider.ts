@@ -1,8 +1,13 @@
 import { PrismaClient } from '@prisma/client';
 import {faker } from '@faker-js/faker';
 export async function sliderSeed(prisma: PrismaClient, id: string) {
+  for (let i = 0; i < 100; i++) {
     const data = {
-      title: `Slider `,
+      title: faker.lorem.sentence(),
+      photo: faker.image.urlPicsumPhotos(),
+      clientId: id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }
 
     await prisma.slider.upsert({
@@ -11,5 +16,7 @@ export async function sliderSeed(prisma: PrismaClient, id: string) {
         create: data,
     });
 
-    console.log('Seed: Client');
+  }
+
+    console.log('Seed: Slider');
 }
