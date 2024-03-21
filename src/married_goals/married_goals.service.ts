@@ -7,7 +7,9 @@ import { PrismaService } from 'src/prisma.service';
 const select = {
   id: true,
   userId: true,
-  title: true
+  title: true,
+  createdAt: true,
+  updatedAt: true
 }
 
 @Injectable()
@@ -23,14 +25,14 @@ export class MarriedGoalsService {
 
   async findAll(userId: string) {
 
-    const data = this.prisma.married_goal.findMany({ where: { userId, deleted: false } });
+    const data = this.prisma.married_goal.findMany({ where: { userId, deleted: false }, select });
     if (!data) throw new NotFoundException(`No Data Found`);
     return data;
   }
 
   async findOne(userId: string, id: string) {
 
-    const data = await this.prisma.married_goal.findFirst({ where: { id, userId, deleted: false } });
+    const data = await this.prisma.married_goal.findFirst({ where: { id, userId, deleted: false }, select });
     if (!data) {
       // Check if the education record exists for any user
       const goalExist = await this.prisma.married_goal.findUnique({ where: { id, deleted: false } });
@@ -46,8 +48,6 @@ export class MarriedGoalsService {
   }
 
   async update(userId: string, id: string, data: UpdateMarriedGoalDto) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { id: true, Married_goal: true } });
-
     const goalId = await this.findOne(userId, id);
 
     return this.prisma.married_goal.update({

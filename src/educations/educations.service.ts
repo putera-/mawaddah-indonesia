@@ -35,7 +35,7 @@ export class EducationsService {
 
 
   async findOne(userId: string, id: string) {
-    const data = await this.prisma.education.findFirst({ where: { id, userId, deleted: false } });
+    const data = await this.prisma.education.findFirst({ where: { id, userId, deleted: false }, select });
     if (!data) {
       // Check if the education record exists for any user
       const eduExists = await this.prisma.education.findUnique({ where: { id, deleted: false } });
@@ -51,9 +51,6 @@ export class EducationsService {
   }
 
   async update(userId: string, id: string, data: UpdateEducationDto) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { id: true, Education: true } });
-
-    //TODO BESOK LAKUIN KAYAK BEGINI KESEMUA USER RELATION YANG UDAH DIBUAT
     const educationId = await this.findOne(userId, id);
 
     return this.prisma.education.update({
