@@ -22,6 +22,7 @@ import { CandidateModule } from './candidate/candidate.module';
 import { SkillsModule } from './skills/skills.module';
 import { HobbiesModule } from './hobbies/hobbies.module';
 import { MarriedGoalsModule } from './married_goals/married_goals.module';
+import { LifeGoalsModule } from './life_goals/life_goals.module';
 
 
 @Module({
@@ -44,6 +45,7 @@ import { MarriedGoalsModule } from './married_goals/married_goals.module';
         SkillsModule,
         HobbiesModule,
         MarriedGoalsModule,
+        LifeGoalsModule,
        
     ],
 
