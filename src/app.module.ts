@@ -19,6 +19,7 @@ import { BiodataModule } from './biodata/biodata.module';
 import { ProvinceModule } from './province/province.module';
 import { BookmarkModule } from './bookmark/bookmark.module';
 import { CandidateModule } from './candidate/candidate.module';
+import { SkillsModule } from './skills/skills.module';
 
 
 @Module({
@@ -38,6 +39,7 @@ import { CandidateModule } from './candidate/candidate.module';
         ProvinceModule,
         BookmarkModule,
         CandidateModule,
+        SkillsModule,
        
     ],
 

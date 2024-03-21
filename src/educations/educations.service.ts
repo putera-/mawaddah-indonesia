@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CreateEducationDto } from './dto/create-education.dto';
 import { UpdateEducationDto } from './dto/update-education.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Prisma, RoleStatus } from '@prisma/client';
-import { Education } from './educations.interface';
 import { UsersService } from 'src/users/user.service';
 
 const select = {
@@ -47,10 +45,10 @@ export class EducationsService {
     })
   }
 
-  update(id: string, updateEducationDto: UpdateEducationDto) {
+  update(id: string, data: UpdateEducationDto) {
     return this.prisma.education.update({
       where: { id },
-      data: { ...updateEducationDto },
+      data: { ...data },
       select
     })
   }
