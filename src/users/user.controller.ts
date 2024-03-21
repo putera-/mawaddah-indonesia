@@ -11,6 +11,7 @@ import {
     Request,
     UseInterceptors,
     UploadedFile,
+    Query,
 } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -50,15 +51,15 @@ export class UsersController {
 
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Get()
-    async findAll(@Request() req: any) {
+    async findAll(@Request() req: any, @Query() query: Record<string, any>) {
         try {
             const role = req.user.role;
-            return await this.userService.findAll(role);
+            return await this.userService.findAll(role, query);
         } catch (error) {
             throw error;
         }
     }
-    
+
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Get(':id')
     async findOne(@Param('id') id: string) {
@@ -70,7 +71,6 @@ export class UsersController {
             throw error;
         }
     }
-
 
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Patch()

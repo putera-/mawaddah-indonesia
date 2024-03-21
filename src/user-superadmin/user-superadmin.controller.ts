@@ -9,6 +9,8 @@ import {
     ValidationPipe,
     ForbiddenException,
     HttpCode,
+    Request,
+    Query,
 } from '@nestjs/common';
 import { CreateUserSuperadminDto } from './dto/create-user-superadmin.dto';
 import { Public } from 'src/auth/auth.metadata';
@@ -59,9 +61,10 @@ export class UserSuperadminController {
     // get superuser by super user
     @Roles(Role.Superadmin)
     @Get()
-    findAll() {
+    findAll(@Request() req: any, @Query() query: Record<string, any>) {
         try {
-            return this.usersService.findAll('SUPERADMIN');
+            const role = req.user.role;
+            return this.usersService.findAll(role, query);
         } catch (error) {
             throw error;
         }

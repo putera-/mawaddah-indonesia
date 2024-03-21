@@ -8,6 +8,8 @@ import {
     Delete,
     ValidationPipe,
     HttpCode,
+    Request,
+    Query,
 } from '@nestjs/common';
 import { CreateUserAdminDto } from './dto/create-user-admin.dto';
 import { UsersService } from 'src/users/user.service';
@@ -37,9 +39,10 @@ export class UserAdminController {
     // get all admin by super user
     @Roles(Role.Superadmin, Role.Admin)
     @Get()
-    findAll() {
+    findAll(@Request() req: any, @Query() query: Record<string, any>) {
         try {
-            return this.usersService.findAll('ADMIN');
+            const role = req.user.role;
+            return this.usersService.findAll(role, query);
         } catch (error) {
             throw error;
         }
