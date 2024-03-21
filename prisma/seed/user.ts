@@ -1,4 +1,6 @@
 import { Prisma, PrismaClient } from '@prisma/client';
+import { faker } from '@faker-js/faker';
+
 import * as bcrypt from 'bcrypt';
 
 export async function userSeed(prisma: PrismaClient) {
@@ -14,7 +16,7 @@ export async function userSeed(prisma: PrismaClient) {
             avatar_md: '/dummy/abang.png',
             activations: {
                 create: {
-                    activation_key: 'lkjhafklhj@#$@#$@#dsfa',
+                    activation_key: faker.string.alphanumeric(),
                     expiredAt: new Date(),
                 },
             },
@@ -45,14 +47,14 @@ export async function userSeed(prisma: PrismaClient) {
     // BOB
     {
         const bob = {
-            lastname: 'Is My Name',
+            lastname: faker.person.lastName(),
             password,
             verified: true,
-            avatar: '/dummy/abang.png',
-            avatar_md: '/dummy/abang.png',
+            avatar: faker.image.avatar(),
+            avatar_md: faker.image.avatar(),
             activations: {
                 create: {
-                    activation_key: 'lkjhafklhj@#$@#$@#dsfa',
+                    activation_key: faker.string.alphanumeric(10),
                     expiredAt: new Date(),
                 },
             },
@@ -60,8 +62,8 @@ export async function userSeed(prisma: PrismaClient) {
 
         // create 100 Bob MEMBER
         for (let i = 0; i < 100; i++) {
-            const email = `bob_${i}@prisma.io`;
-            const firstname = "Bob " + i;
+            const email = faker.internet.email();
+            const firstname = faker.person.firstName();
             await prisma.user.upsert({
                 where: { email },
                 update: {
@@ -73,6 +75,22 @@ export async function userSeed(prisma: PrismaClient) {
                     email,
                     firstname,
                     ...bob,
+                    Education: {
+                        create: {
+                            institution_name: faker.lorem.word(),
+                            startYear: faker.date.birthdate().getFullYear(),
+                        }
+                    },
+                    Hobby: {
+                        create: {
+                            title: faker.lorem.word(),
+                        }
+                    },
+                    Skill: {
+                        create: {
+                            title: faker.lorem.word(),
+                        }
+                    },
                 }
             });
         }
@@ -81,14 +99,14 @@ export async function userSeed(prisma: PrismaClient) {
     // ALICE
     {
         const alice = {
-            lastname: 'In Wonderland',
+            lastname: faker.person.lastName('female'),
             password,
             verified: true,
-            avatar: '/dummy/nissa.png',
-            avatar_md: '/dummy/nissa.png',
+            avatar: faker.image.avatar(),
+            avatar_md: faker.image.avatar(),
             activations: {
                 create: {
-                    activation_key: 'lkjhafklhj@#$@#$@#dsfa',
+                    activation_key: faker.string.alphanumeric(10),
                     expiredAt: new Date(),
                 },
             },
@@ -96,8 +114,8 @@ export async function userSeed(prisma: PrismaClient) {
 
         // create 100 Alice MEMBER
         for (let i = 0; i < 100; i++) {
-            const email = `alice_${i}@prisma.io`;
-            const firstname = "Alice" + i;
+            const email = faker.internet.email();
+            const firstname = faker.person.firstName('female');
             await prisma.user.upsert({
                 where: { email },
                 update: {
