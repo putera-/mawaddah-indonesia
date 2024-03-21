@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Request, NotFoundException, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Request, NotFoundException, HttpCode, Query } from '@nestjs/common';
 import { HobbiesService } from './hobbies.service';
 import { CreateHobbyDto } from './dto/create-hobby.dto';
 import { UpdateHobbyDto } from './dto/update-hobby.dto';
@@ -22,9 +22,10 @@ export class HobbiesController {
 
   @Roles(Role.Member)
   @Get()
-  findAll(@Request() req: any) {
+  findAll(@Request() req: any, @Query('page') page: number, @Query('limit') limit: number) {
+    const userId = req.user.id
     try {
-      return this.hobbiesService.findAll(req.user.id);
+      return this.hobbiesService.findAll(userId, page, limit);
 
     } catch (error) {
       throw error;
