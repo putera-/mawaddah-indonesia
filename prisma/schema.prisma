@@ -5,12 +5,12 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -63,15 +63,15 @@ model Client {
 }
 
 enum RoleStatus {
-    MEMBER
-    ADMIN
-    SUPERADMIN
+  MEMBER
+  ADMIN
+  SUPERADMIN
 }
 
 enum TaarufStatus {
-    OPEN
-    PENDING
-    BLOCKED
+  OPEN
+  PENDING
+  BLOCKED
 }
 
 model Auth {
@@ -86,49 +86,49 @@ model Auth {
 }
 
 model blog {
-    id        String   @id @default(uuid())
-    title     String   @db.VarChar(100)
-    content   String   @db.Text
-    deleted   Boolean  @default(false)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now()) @updatedAt
+  id        String   @id @default(uuid())
+  title     String   @db.VarChar(100)
+  content   String   @db.Text
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Gallery {
-    id        String   @id @default(uuid())
-    Client    Client?  @relation(fields: [clientId], references: [id])
-    clientId  String?
-    title     String?  @db.VarChar(100)
-    photo     String?  @db.Text
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
+  id        String   @id @default(uuid())
+  Client    Client?  @relation(fields: [clientId], references: [id])
+  clientId  String?
+  title     String?  @db.VarChar(100)
+  photo     String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
-    @@map("gallery")
+  @@map("gallery")
 }
 
 model Slider {
-    id        String   @id @default(uuid())
-    Client    Client?  @relation(fields: [clientId], references: [id])
-    clientId  String?
-    title     String?  @db.Text
-    photo     String?  @db.Text
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
+  id        String   @id @default(uuid())
+  Client    Client?  @relation(fields: [clientId], references: [id])
+  clientId  String?
+  title     String?  @db.Text
+  photo     String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
-    @@map("slider")
+  @@map("slider")
 }
 
 model FAQ {
-    id        String   @id @default(uuid())
-    Client    Client?  @relation(fields: [clientId], references: [id])
-    clientId  String?
-    question  String   @db.VarChar(255)
-    answer    String   @db.VarChar(255)
-    deleted   Boolean  @default(false)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
+  id        String   @id @default(uuid())
+  Client    Client?  @relation(fields: [clientId], references: [id])
+  clientId  String?
+  question  String   @db.VarChar(255)
+  answer    String   @db.VarChar(255)
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
-    @@map("faq")
+  @@map("faq")
 }
 
 model Activation {
@@ -209,6 +209,7 @@ model Education {
   institution_name String   @db.VarChar(100)
   major            String?  @db.VarChar(100)
   degree           String?  @db.VarChar(100)
+  city             String?  @db.VarChar(100)
   startYear        Int      @db.Year
   endYear          Int?     @db.Year
   deleted          Boolean  @default(false)
