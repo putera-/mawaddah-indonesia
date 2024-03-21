@@ -71,10 +71,12 @@ export class SkillsService {
 
   }
 
-  async remove(id: string) {
-    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Skill: true } });
+  async remove(userId : string, id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { id: true, Skill: true } });
 
-    if (!user.id) throw new NotFoundException(`Id not found`);
+    if (!user) throw new NotFoundException(`user with id ${id} not found`);
+
+    if (!user.Skill.length === null) throw new NotFoundException(`No Married Goals found for user with id ${id}`);
 
     const skillId = user.Skill[0].id;
 
