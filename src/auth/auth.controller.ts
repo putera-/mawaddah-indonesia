@@ -5,6 +5,7 @@ import {
     Get,
     HttpCode,
     HttpStatus,
+    Patch,
     Post,
     Req,
     Request,
@@ -16,6 +17,7 @@ import { Public } from './auth.metadata';
 import { UsersService } from 'src/users/user.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -61,6 +63,20 @@ export class AuthController {
         return { access_token, exp };
     }
 
+    @Roles(Role.Superadmin, Role.Admin, Role.Member)
+    @Patch('change_password')
+    @HttpCode(204)
+    async updatePassword(@Request() req: any, @Body() data: ChangePasswordDto) {
+        try {
+            const role = req.user.role;
+            const id = req.user.id;
+            const user = await this.userService.findOne(id, role);
+            this.userService.checkPassword(data);
+            await this.userService.updatePassword(user.id, data.password);
+        } catch (error) {
+            throw error;
+        }
+    }
     @Delete('logout')
     @HttpCode(204)
     logOut(@Req() req) {
