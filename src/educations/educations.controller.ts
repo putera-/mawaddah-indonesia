@@ -18,9 +18,9 @@ export class EducationsController {
   //TODO ntar ganti2in pake yang bener
   @Roles(Role.Member)
   @Get()
-  findAll() {
+  findAll(@Request() req: any) {
     try {
-      return this.educationsService.findAll();
+      return this.educationsService.findAll(req.user.id);
 
     } catch (error) {
       throw error;
@@ -28,10 +28,10 @@ export class EducationsController {
   }
 
   @Roles(Role.Member)
-  @Get()
-  findOne(@Request() req: any) {
+  @Get(':id')
+  findOne(@Request() req: any, @Param('id') id: string) {
     try {
-      return this.educationsService.findOne(req.user.id);
+      return this.educationsService.findOne(req.user.id, id);
 
     } catch (error) {
       throw error;
@@ -40,10 +40,10 @@ export class EducationsController {
   }
 
   @Roles(Role.Member)
-  @Patch()
-  update(@Request() req: any, @Body(new ValidationPipe()) data: UpdateEducationDto) {
+  @Patch(':id')
+  update(@Request() req: any, @Param('id') id: string, @Body(new ValidationPipe()) data: UpdateEducationDto) {
     try {
-      return this.educationsService.update(req.user.id, data);
+      return this.educationsService.update(req.user.id, id, data);
 
     } catch (error) {
       throw error;
@@ -54,9 +54,9 @@ export class EducationsController {
   @Roles(Role.Member)
   @HttpCode(204)
   @Delete()
-  remove(@Request() req: any) {
+  remove(@Request() req: any, @Param('id') id: string) {
     try {
-      return this.educationsService.remove(req.user.id);
+      return this.educationsService.remove(req.user.id, id);
 
     } catch (error) {
       throw error;
