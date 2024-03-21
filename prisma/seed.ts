@@ -5,6 +5,7 @@ import { gallerySeed } from './seed/gallery';
 import { provinceSeed } from './seed/province';
 import { memberSeed } from './seed/member';
 import { sliderSeed } from './seed/slider';
+import { faqSeed } from './seed/faq';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -15,6 +16,7 @@ async function main() {
     await provinceSeed(prisma);
     await memberSeed(prisma);
     await sliderSeed(prisma, clientid);
+    await faqSeed(prisma, clientid);
 }
 
 main()
