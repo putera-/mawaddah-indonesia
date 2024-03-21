@@ -18,7 +18,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Prisma, RoleStatus } from '@prisma/client';
 import { User } from './user.interface';
 import { Public } from 'src/auth/auth.metadata';
-import { PasswordUserDto } from './dto/password-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import path from 'path';
 import { PhotosService } from 'src/photos/photos.service';
@@ -30,6 +29,7 @@ export class UsersController {
     constructor(
         private readonly userService: UsersService,
         private photoService: PhotosService,
+    ) {}
     ) {}
     @Public()
     @Post()
@@ -50,9 +50,10 @@ export class UsersController {
 
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Get()
-    async findAll() {
+    async findAll(@Request() req: any) {
         try {
-            return await this.userService.findAll('MEMBER');
+            const role = req.user.role;
+            return await this.userService.findAll(role);
         } catch (error) {
             throw error;
         }
@@ -70,18 +71,7 @@ export class UsersController {
         }
     }
 
-    @Roles(Role.Superadmin, Role.Admin, Role.Member)
-    @Patch('change_password')
-    @HttpCode(204)
-    async updatePassword(@Request() req: any, @Body() data: PasswordUserDto) {
-        try {
-            const user = await this.userService.findOne(req.id, 'MEMBER');
-            this.userService.checkPassword(data);
-            await this.userService.updatePassword(user.id, data.password);
-        } catch (error) {
-            throw error;
-        }
-    }
+
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Patch()
     @UseInterceptors(FileInterceptor('avatar'))

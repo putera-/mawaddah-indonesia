@@ -10,8 +10,8 @@ export async function userSeed(prisma: PrismaClient) {
             lastname: 'So Super',
             password,
             verified: true,
-            avatar: 'dummy/abang.png',
-            avatar_md: 'dummy/abang.png',
+            avatar: '/dummy/abang.png',
+            avatar_md: '/dummy/abang.png',
             activations: {
                 create: {
                     activation_key: 'lkjhafklhj@#$@#$@#dsfa',
@@ -48,8 +48,8 @@ export async function userSeed(prisma: PrismaClient) {
             lastname: 'Is My Name',
             password,
             verified: true,
-            avatar: 'dummy/abang.png',
-            avatar_md: 'dummy/abang.png',
+            avatar: '/dummy/abang.png',
+            avatar_md: '/dummy/abang.png',
             activations: {
                 create: {
                     activation_key: 'lkjhafklhj@#$@#$@#dsfa',
@@ -84,8 +84,8 @@ export async function userSeed(prisma: PrismaClient) {
             lastname: 'In Wonderland',
             password,
             verified: true,
-            avatar: 'dummy/nissa.png',
-            avatar_md: 'dummy/nissa.png',
+            avatar: '/dummy/nissa.png',
+            avatar_md: '/dummy/nissa.png',
             activations: {
                 create: {
                     activation_key: 'lkjhafklhj@#$@#$@#dsfa',
