@@ -130,7 +130,6 @@ export class UsersController {
                     `/uploads/photos/${uniqueSuffix}_md.${ext}`,
                 );
             }
-
             throw error;
         }
     }
