@@ -12,8 +12,9 @@ export class LifeGoalsController {
   @Roles(Role.Member)
   @Post()
   create(@Request() req: any, @Body(new ValidationPipe()) data: CreateLifeGoalDto) {
+    const userId = req.user.id
     try {
-      return this.lifeGoalsService.create(req.user.id, data);
+      return this.lifeGoalsService.create(userId, data);
 
     } catch (error) {
       throw error;
@@ -35,8 +36,9 @@ export class LifeGoalsController {
   @Roles(Role.Member)
   @Get(':id')
   findOne(@Request() req: any, @Param('id') id: string) {
+    const userId = req.user.id
     try {
-      return this.lifeGoalsService.findOne(req.user.id, id);
+      return this.lifeGoalsService.findOne(userId, id);
 
     } catch (error) {
       throw error;
@@ -46,8 +48,9 @@ export class LifeGoalsController {
   @Roles(Role.Member)
   @Patch(':id')
   update(@Request() req: any, @Param('id') id: string, @Body(new ValidationPipe()) data: UpdateLifeGoalDto) {
+    const userId = req.user.id
     try {
-      return this.lifeGoalsService.update(req.user.id, id, data);
+      return this.lifeGoalsService.update(userId, id, data);
 
     } catch (error) {
       throw error;
@@ -59,8 +62,9 @@ export class LifeGoalsController {
   @HttpCode(204)
   remove(@Request() req: any, @Param('id') id: string) {
     try {
+      const userId = req.user.id
       if (!id) throw new NotFoundException('Id not found');
-      return this.lifeGoalsService.remove(req.user.id, id);
+      return this.lifeGoalsService.remove(userId, id);
 
     } catch (error) {
       throw error;
