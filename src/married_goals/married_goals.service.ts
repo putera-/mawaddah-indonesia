@@ -13,7 +13,7 @@ export class MarriedGoalsService {
     const user = await this.prisma.user.findUnique({ where: { id } });
 
     if (!user) throw new NotFoundException(`Id not found`);
-
+    
     return this.prisma.married_goal.create({
       data: {
         ...data,
@@ -26,17 +26,22 @@ export class MarriedGoalsService {
       }
     });
   }
-
-  findAll() {
+  
+  async findAll(userId: string) {
+     
     return this.prisma.married_goal.findMany({
-      where: { deleted: false }
+      where: { userId , deleted: false }
     });
   }
-
-  findOne(id: string) {
-    return this.prisma.married_goal.findFirst({
-      where: { id, deleted: false }
+  
+  async findOne(userId : string ,id: string) {
+    
+    const data = await this.prisma.married_goal.findFirst({
+      where: { id, userId, deleted: false }
     });
+    if (!data) throw new NotFoundException(`Data not found`);
+
+    return data;
   }
 
   async update(id: string, updateMarriedGoalDto: UpdateMarriedGoalDto) {
