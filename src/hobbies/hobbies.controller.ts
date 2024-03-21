@@ -22,9 +22,9 @@ export class HobbiesController {
 
   @Roles(Role.Member)
   @Get()
-  findAll() {
+  findAll(@Request() req: any) {
     try {
-      return this.hobbiesService.findAll();
+      return this.hobbiesService.findAll(req.user.id);
 
     } catch (error) {
       throw error;
@@ -32,10 +32,10 @@ export class HobbiesController {
   }
 
   @Roles(Role.Member)
-  @Get()
-  findOne(@Request() req: any) {
+  @Get(':id')
+  findOne(@Request() req: any, @Param('id') id: string) {
     try {
-      return this.hobbiesService.findOne(req.user.id);
+      return this.hobbiesService.findOne(req.user.id, id);
 
     } catch (error) {
       throw error;
@@ -43,10 +43,10 @@ export class HobbiesController {
   }
 
   @Roles(Role.Member)
-  @Patch()
-  update(@Request() req: any, @Body(new ValidationPipe()) data: UpdateHobbyDto) {
+  @Patch(':id')
+  update(@Request() req: any, @Param('id') id: string, @Body(new ValidationPipe()) data: UpdateHobbyDto) {
     try {
-      return this.hobbiesService.update(req.user.id, data);
+      return this.hobbiesService.update(req.user.id, id, data);
 
     } catch (error) {
       throw error;
@@ -54,10 +54,10 @@ export class HobbiesController {
   }
 
   @Roles(Role.Member)
-  @Delete()
-  remove(@Request() req: any) {
+  @Delete(':id')
+  remove(@Request() req: any, @Param('id') id: string) {
     try {
-      return this.hobbiesService.remove(req.user.id);
+      return this.hobbiesService.remove(req.user.id, id);
 
     } catch (error) {
       throw error;
