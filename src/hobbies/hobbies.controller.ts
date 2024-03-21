@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Request, NotFoundException, HttpCode } from '@nestjs/common';
 import { HobbiesService } from './hobbies.service';
 import { CreateHobbyDto } from './dto/create-hobby.dto';
 import { UpdateHobbyDto } from './dto/update-hobby.dto';
@@ -54,9 +54,11 @@ export class HobbiesController {
   }
 
   @Roles(Role.Member)
+  @HttpCode(204)
   @Delete(':id')
   remove(@Request() req: any, @Param('id') id: string) {
     try {
+      if (!id) throw new NotFoundException('Id not found');
       return this.hobbiesService.remove(req.user.id, id);
 
     } catch (error) {
