@@ -23,10 +23,28 @@ export class SkillsService {
     });
   }
 
-  async findAll(userId: string) {
-    const data = await this.prisma.skill.findMany({ where: { userId, deleted: false }, select });
+  async findAll(userId: string, page: number = 1, limit: number = 10) {
+    const skip = (page - 1) * limit;
+    const [total, data] = await Promise.all([
+      this.prisma.skill.count({
+        where: { userId, deleted: false },
+      }),
+      this.prisma.skill.findMany({
+        where: { userId, deleted: false },
+        orderBy: { createdAt: 'desc' },
+        select,
+        skip,
+        take: Number(limit),
+      }),
+    ]);
     if (data.length == 0) throw new NotFoundException(`No Data Found`);
-    return data;
+    return {
+      data,
+      total,
+      page: +page,
+      maxPages: Math.ceil(total / limit),
+      limit: +limit
+    }
   }
 
   async findOne(userId: string, id: string) {

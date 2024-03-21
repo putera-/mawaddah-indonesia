@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Request, NotFoundException, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Request, NotFoundException, HttpCode, Query } from '@nestjs/common';
 import { PhysicalCharsService } from './physical_chars.service';
 import { CreatePhysicalCharDto } from './dto/create-physical_char.dto';
 import { UpdatePhysicalCharDto } from './dto/update-physical_char.dto';
@@ -22,9 +22,10 @@ export class PhysicalCharsController {
 
   @Roles(Role.Member)
   @Get()
-  findAll(@Request() req : any) {
+  findAll(@Request() req: any, @Query('page') page: number, @Query('limit') limit: number) {
+    const userId = req.user.id
     try {
-      return this.physicalCharsService.findAll(req.user.id);
+      return this.physicalCharsService.findAll(userId, page, limit);
 
     } catch (error) {
       throw error;
