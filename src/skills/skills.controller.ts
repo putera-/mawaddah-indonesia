@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Request } from '@nestjs/common';
 import { SkillsService } from './skills.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
@@ -10,9 +10,9 @@ export class SkillsController {
   constructor(private readonly skillsService: SkillsService) { }
   
   @Roles(Role.Member, Role.Superadmin, Role.Admin)
-  create(@Param('id') user: string, @Body(new ValidationPipe()) data: CreateSkillDto) {
+  create(@Request() req : any, @Body(new ValidationPipe()) data: CreateSkillDto) {
     try {
-      return this.skillsService.create(user, data);
+      return this.skillsService.create(req.user.id, data);
 
     } catch (error) {
       throw error;
