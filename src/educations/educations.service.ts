@@ -21,11 +21,6 @@ const select = {
 export class EducationsService {
   constructor(private prisma: PrismaService, private userService: UsersService) { }
   async create(id: string, data: Prisma.EducationCreateInput) {
-
-    const user = await this.prisma.user.findUnique({ where: { id } });
-
-    if (!user) throw new NotFoundException(`Id not found`);
-
     return this.prisma.education.create({
       data: { ...data, User: { connect: { id } } },
       select
