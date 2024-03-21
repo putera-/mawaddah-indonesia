@@ -55,7 +55,7 @@ export class UsersService {
     async findOne(id: string, role: RoleStatus): Promise<User> {
         const user = await this.Prisma.user.findFirst({
             where: { id, role, active: true },
-            select: { ...select },
+            select: { ...select, Education: true},
         });
         if (!user) throw new NotFoundException(`User tidak ditemukan`);
         return user;
