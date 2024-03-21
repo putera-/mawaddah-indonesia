@@ -23,6 +23,7 @@ import { SkillsModule } from './skills/skills.module';
 import { HobbiesModule } from './hobbies/hobbies.module';
 import { MarriedGoalsModule } from './married_goals/married_goals.module';
 import { LifeGoalsModule } from './life_goals/life_goals.module';
+import { PhysicalCharsModule } from './physical_chars/physical_chars.module';
 
 
 @Module({
@@ -46,6 +47,7 @@ import { LifeGoalsModule } from './life_goals/life_goals.module';
         HobbiesModule,
         MarriedGoalsModule,
         LifeGoalsModule,
+        PhysicalCharsModule,
        
     ],
 
