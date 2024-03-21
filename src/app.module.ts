@@ -13,6 +13,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 import { RolesGuard } from './roles/roles.guard';
 import { EducationsModule } from './educations/educations.module';
+import { EducationsModule } from './educations/educations.module';
 import { UserSuperadminModule } from './user-superadmin/user-superadmin.module';
 import { UserAdminModule } from './user-admin/user-admin.module';
 import { SkillsModule } from './skills/skills.module';
@@ -35,6 +36,7 @@ import { CandidateModule } from './candidate/candidate.module';
         PhotosModule,
         GalleriesModule,
         FaqsModule,
+        EducationsModule,
         EducationsModule,
         UserSuperadminModule,
         UserAdminModule,

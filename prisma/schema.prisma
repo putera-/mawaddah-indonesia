@@ -1,4 +1,4 @@
-// This is your Prisma schema file,
+ // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
@@ -6,9 +6,12 @@
 
 generator client {
   provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
@@ -66,9 +69,15 @@ enum RoleStatus {
   MEMBER
   ADMIN
   SUPERADMIN
+  MEMBER
+  ADMIN
+  SUPERADMIN
 }
 
 enum TaarufStatus {
+  OPEN
+  PENDING
+  BLOCKED
   OPEN
   PENDING
   BLOCKED
@@ -93,7 +102,15 @@ model Gallery {
   photo     String?  @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+  id        String   @id @default(uuid())
+  Client    Client?  @relation(fields: [clientId], references: [id])
+  clientId  String?
+  title     String?  @db.VarChar(100)
+  photo     String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
+  @@map("gallery")
   @@map("gallery")
 }
 
@@ -105,7 +122,15 @@ model Slider {
   photo     String?  @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+  id        String   @id @default(uuid())
+  Client    Client?  @relation(fields: [clientId], references: [id])
+  clientId  String?
+  title     String?  @db.Text
+  photo     String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
+  @@map("slider")
   @@map("slider")
 }
 
@@ -118,7 +143,16 @@ model FAQ {
   deleted   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+  id        String   @id @default(uuid())
+  Client    Client?  @relation(fields: [clientId], references: [id])
+  clientId  String?
+  question  String   @db.VarChar(255)
+  answer    String   @db.VarChar(255)
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
+  @@map("faq")
   @@map("faq")
 }
 

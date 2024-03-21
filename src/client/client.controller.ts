@@ -12,11 +12,13 @@ export class ClientController {
   
 
   @Public()
+  @Public()
   @Get()
   findOne() {
     return this.clientService.findOne();
   }
  
+  @Roles(Role.Superadmin, Role.Admin)
   @Roles(Role.Superadmin, Role.Admin)
   @Patch()
   update(@Body(new ValidationPipe()) data: UpdateClientDto) {
