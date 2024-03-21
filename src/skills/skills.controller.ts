@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Request, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Request, HttpCode, NotFoundException } from '@nestjs/common';
 import { SkillsService } from './skills.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
@@ -58,6 +58,7 @@ export class SkillsController {
   @Delete(':id')
   remove(@Request() req: any, @Param('id') id: string) {
     try {
+      if (!id) throw new NotFoundException('Id not found');
       return this.skillsService.remove(req.user.id, id);
 
     } catch (error) {
