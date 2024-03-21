@@ -38,6 +38,7 @@ export class ProvinceController {
         return await this.provinceService.findOne(id);
     }
 
+    @Roles(Role.Superadmin, Role.Admin)
     @Patch(':id')
     update(@Param('id') id: string, @Body() data: CreateProvinceDto) {
         return this.provinceService.update(id, data);
