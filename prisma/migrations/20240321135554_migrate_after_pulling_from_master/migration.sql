@@ -115,7 +115,7 @@ CREATE TABLE `Bookmark` (
 -- CreateTable
 CREATE TABLE `Biodata` (
     `id` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NULL,
     `bio` TEXT NOT NULL,
     `phone` VARCHAR(20) NOT NULL,
     `manhaj` ENUM('SALAF', 'BARU_BELAJAR', 'NON_SALAF') NOT NULL,
@@ -129,7 +129,7 @@ CREATE TABLE `Biodata` (
     `domicile_province` VARCHAR(100) NOT NULL,
     `hometown_province` VARCHAR(100) NOT NULL,
     `ethnic` VARCHAR(100) NOT NULL,
-    `createdAt` DATE NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     UNIQUE INDEX `Biodata_userId_key`(`userId`),
@@ -246,7 +246,7 @@ ALTER TABLE `Bookmark` ADD CONSTRAINT `Bookmark_userId_fkey` FOREIGN KEY (`userI
 ALTER TABLE `Bookmark` ADD CONSTRAINT `Bookmark_candidateId_fkey` FOREIGN KEY (`candidateId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Biodata` ADD CONSTRAINT `Biodata_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Biodata` ADD CONSTRAINT `Biodata_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `education` ADD CONSTRAINT `education_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
