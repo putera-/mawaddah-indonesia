@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 import { RolesGuard } from './roles/roles.guard';
+import { EducationsModule } from './educations/educations.module';
 import { UserSuperadminModule } from './user-superadmin/user-superadmin.module';
 import { UserAdminModule } from './user-admin/user-admin.module';
 import { BiodataModule } from './biodata/biodata.module';
@@ -30,6 +31,7 @@ import { CandidateModule } from './candidate/candidate.module';
         PhotosModule,
         GalleriesModule,
         FaqsModule,
+        EducationsModule,
         UserSuperadminModule,
         UserAdminModule,
         BiodataModule,
