@@ -48,7 +48,7 @@ export class UsersService {
     async findAll(role: RoleStatus) {
         return await this.Prisma.user.findMany({
             where: { role, active: true },
-            select: { ...select },
+            select: { ...select, Education: true},
         });
     }
 
