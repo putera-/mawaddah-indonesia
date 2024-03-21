@@ -13,7 +13,7 @@ export class ProvinceService {
     }
 
     findAll() {
-        return this.Prisma.province.findMany();
+        return this.Prisma.province.findMany({ orderBy: { name: 'asc' } });
     }
 
     findOne(id: string) {
@@ -26,8 +26,8 @@ export class ProvinceService {
         return this.Prisma.province.update({ where: { id }, data });
     }
 
-    remove(id: string) {
-        return this.Prisma.province.update({
+    async remove(id: string): Promise<void> {
+        await this.Prisma.province.update({
             where: { id },
             data: { deleted: true },
         });

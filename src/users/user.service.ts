@@ -73,7 +73,7 @@ export class UsersService {
     //         where: { id },
     //         select: { preference: true },
     //     });
-        
+
     //     // Find a user with a compatible interest
     //     const partner = await this.Prisma.user.findFirst({
     //         where: {

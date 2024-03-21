@@ -50,14 +50,15 @@ export class UsersController {
 
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Get()
-    async findAll() {
+    async findAll(@Request() req: any) {
         try {
-            return await this.userService.findAll('MEMBER');
+            const role = req.user.role;
+            return await this.userService.findAll(role);
         } catch (error) {
             throw error;
         }
     }
-    
+
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Get(':id')
     async findOne(@Param('id') id: string) {

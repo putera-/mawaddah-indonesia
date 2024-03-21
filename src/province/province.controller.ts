@@ -7,6 +7,7 @@ import {
     Param,
     Delete,
     ValidationPipe,
+    HttpCode,
 } from '@nestjs/common';
 import { ProvinceService } from './province.service';
 import { CreateProvinceDto } from './dto/create-province.dto';
@@ -42,8 +43,13 @@ export class ProvinceController {
         return this.provinceService.update(id, data);
     }
     @Roles(Role.Superadmin, Role.Admin)
+    @HttpCode(204)
     @Delete(':id')
-    async remove(@Param('id') id: string) {
-        return await this.provinceService.remove(id);
+    remove(@Param('id') id: string) {
+        try {
+            return this.provinceService.remove(id);
+        } catch (error) {
+            throw error;
+        }
     }
 }
