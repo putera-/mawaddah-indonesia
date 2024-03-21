@@ -24,12 +24,6 @@ import { BiodataModule } from './biodata/biodata.module';
 import { ProvinceModule } from './province/province.module';
 import { BookmarkModule } from './bookmark/bookmark.module';
 import { CandidateModule } from './candidate/candidate.module';
-import { SkillsModule } from './skills/skills.module';
-import { HobbiesModule } from './hobbies/hobbies.module';
-import { MarriedGoalsModule } from './married_goals/married_goals.module';
-import { LifeGoalsModule } from './life_goals/life_goals.module';
-import { PhysicalCharsModule } from './physical_chars/physical_chars.module';
-
 
 @Module({
     imports: [
@@ -58,7 +52,6 @@ import { PhysicalCharsModule } from './physical_chars/physical_chars.module';
         MarriedGoalsModule,
         LifeGoalsModule,
         PhysicalCharsModule,
-       
     ],
 
     controllers: [AppController],
