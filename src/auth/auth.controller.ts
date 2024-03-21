@@ -18,7 +18,6 @@ import { UsersService } from 'src/users/user.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { ChangePasswordDto } from './dto/change-password.dto';
-
 @Controller('auth')
 export class AuthController {
     constructor(

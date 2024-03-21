@@ -30,6 +30,7 @@ export class UsersController {
         private readonly userService: UsersService,
         private photoService: PhotosService,
     ) {}
+
     @Public()
     @Post()
     async create(@Body(new ValidationPipe()) data: CreateUserDto) {
@@ -57,7 +58,7 @@ export class UsersController {
             throw error;
         }
     }
-
+    
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Get(':id')
     async findOne(@Param('id') id: string) {
