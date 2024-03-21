@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-// import { CreateBiodatumDto } from './dto/create-biodatum.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Prisma } from '@prisma/client';
 
