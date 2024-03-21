@@ -13,7 +13,8 @@ export class HobbiesController {
   @Post()
   create(@Request() req: any, @Body(new ValidationPipe()) data: CreateHobbyDto) {
     try {
-      return this.hobbiesService.create(req.user.id, data);
+      const userId = req.user.id
+      return this.hobbiesService.create(userId, data);
 
     } catch (error) {
       throw error;
@@ -23,8 +24,8 @@ export class HobbiesController {
   @Roles(Role.Member)
   @Get()
   findAll(@Request() req: any, @Query('page') page: number, @Query('limit') limit: number) {
-    const userId = req.user.id
     try {
+      const userId = req.user.id
       return this.hobbiesService.findAll(userId, page, limit);
 
     } catch (error) {
@@ -36,7 +37,8 @@ export class HobbiesController {
   @Get(':id')
   findOne(@Request() req: any, @Param('id') id: string) {
     try {
-      return this.hobbiesService.findOne(req.user.id, id);
+      const userId = req.user.id
+      return this.hobbiesService.findOne(userId, id);
 
     } catch (error) {
       throw error;
@@ -47,7 +49,8 @@ export class HobbiesController {
   @Patch(':id')
   update(@Request() req: any, @Param('id') id: string, @Body(new ValidationPipe()) data: UpdateHobbyDto) {
     try {
-      return this.hobbiesService.update(req.user.id, id, data);
+      const userId = req.user.id
+      return this.hobbiesService.update(userId, id, data);
 
     } catch (error) {
       throw error;
@@ -60,7 +63,8 @@ export class HobbiesController {
   remove(@Request() req: any, @Param('id') id: string) {
     try {
       if (!id) throw new NotFoundException('Id not found');
-      return this.hobbiesService.remove(req.user.id, id);
+      const userId = req.user.id
+      return this.hobbiesService.remove(userId, id);
 
     } catch (error) {
       throw error;
