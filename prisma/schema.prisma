@@ -99,7 +99,7 @@ model Gallery {
   title     String?  @db.VarChar(100)
   photo     String?  @db.Text
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map("gallery")
 }
@@ -111,7 +111,7 @@ model Slider {
   title     String?  @db.Text
   photo     String?  @db.Text
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map("slider")
 }
@@ -124,7 +124,7 @@ model FAQ {
   answer    String   @db.VarChar(255)
   deleted   Boolean  @default(false)
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map("faq")
 }
@@ -205,7 +205,7 @@ model Education {
   endYear          Int?     @db.Year
   deleted          Boolean  @default(false)
   createdAt        DateTime @default(now())
-  updatedAt        DateTime @default(now())
+  updatedAt        DateTime @default(now()) @updatedAt
 
   @@map("education")
 }
@@ -217,7 +217,7 @@ model Hobby {
   title     String   @db.VarChar(100)
   deleted   Boolean  @default(false)
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map("hobby")
 }
@@ -229,7 +229,7 @@ model Skill {
   title     String   @db.VarChar(100)
   deleted   Boolean  @default(false)
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map("skill")
 }
@@ -241,7 +241,7 @@ model Married_goal {
   title     String   @db.VarChar(255)
   deleted   Boolean  @default(false)
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map("married_goal")
 }
@@ -253,7 +253,7 @@ model Life_goal {
   title     String   @db.VarChar(255)
   deleted   Boolean  @default(false)
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map("life_goal")
 }
@@ -266,7 +266,7 @@ model Physic_character {
   description String   @db.VarChar(255)
   deleted     Boolean  @default(false)
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
 
   @@map("physic_character")
 }
