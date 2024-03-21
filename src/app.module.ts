@@ -20,6 +20,7 @@ import { ProvinceModule } from './province/province.module';
 import { BookmarkModule } from './bookmark/bookmark.module';
 import { CandidateModule } from './candidate/candidate.module';
 import { SkillsModule } from './skills/skills.module';
+import { HobbiesModule } from './hobbies/hobbies.module';
 
 
 @Module({
@@ -40,6 +41,7 @@ import { SkillsModule } from './skills/skills.module';
         BookmarkModule,
         CandidateModule,
         SkillsModule,
+        HobbiesModule,
        
     ],
 

@@ -1,19 +1,19 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe } from '@nestjs/common';
-import { SkillsService } from './skills.service';
-import { CreateSkillDto } from './dto/create-skill.dto';
-import { UpdateSkillDto } from './dto/update-skill.dto';
-import { Public } from 'src/auth/auth.metadata';
+import { HobbiesService } from './hobbies.service';
+import { CreateHobbyDto } from './dto/create-hobby.dto';
+import { UpdateHobbyDto } from './dto/update-hobby.dto';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 
-@Controller('skills')
-export class SkillsController {
-  constructor(private readonly skillsService: SkillsService) { }
-  
+@Controller('hobbies')
+export class HobbiesController {
+  constructor(private readonly hobbiesService: HobbiesService) { }
+
   @Roles(Role.Member, Role.Superadmin, Role.Admin)
-  create(@Param('id') user: string, @Body(new ValidationPipe()) data: CreateSkillDto) {
+  @Post()
+  create(@Param('id') user: string, @Body(new ValidationPipe()) data: CreateHobbyDto) {
     try {
-      return this.skillsService.create(user, data);
+      return this.hobbiesService.create(user, data);
 
     } catch (error) {
       throw error;
@@ -24,7 +24,7 @@ export class SkillsController {
   @Get()
   findAll() {
     try {
-      return this.skillsService.findAll();
+      return this.hobbiesService.findAll();
 
     } catch (error) {
       throw error;
@@ -35,7 +35,7 @@ export class SkillsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     try {
-      return this.skillsService.findOne(id);
+      return this.hobbiesService.findOne(id);
 
     } catch (error) {
       throw error;
@@ -44,9 +44,9 @@ export class SkillsController {
 
   @Roles(Role.Member, Role.Superadmin, Role.Admin)
   @Patch(':id')
-  update(@Param('id') id: string, @Body(new ValidationPipe()) updateSkillDto: UpdateSkillDto) {
+  update(@Param('id') id: string, @Body(new ValidationPipe()) data: UpdateHobbyDto) {
     try {
-      return this.skillsService.update(id, updateSkillDto);
+      return this.hobbiesService.update(id, data);
 
     } catch (error) {
       throw error;
@@ -57,7 +57,7 @@ export class SkillsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     try {
-      return this.skillsService.remove(id);
+      return this.hobbiesService.remove(id);
 
     } catch (error) {
       throw error;
