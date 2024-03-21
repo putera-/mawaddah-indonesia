@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, HttpCode, ValidationPipe, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, HttpCode, ValidationPipe, NotFoundException, Query } from '@nestjs/common';
 import { LifeGoalsService } from './life_goals.service';
 import { CreateLifeGoalDto } from './dto/create-life_goal.dto';
 import { UpdateLifeGoalDto } from './dto/update-life_goal.dto';
@@ -22,9 +22,10 @@ export class LifeGoalsController {
 
   @Roles(Role.Member)
   @Get()
-  findAll(@Request() req: any) {
+  findAll(@Request() req: any, @Query('page') page: number, @Query('limit') limit: number) {
+    const userId = req.user.id
     try {
-      return this.lifeGoalsService.findAll(req.user.id);
+      return this.lifeGoalsService.findAll(userId, page, limit);
 
     } catch (error) {
       throw error;
