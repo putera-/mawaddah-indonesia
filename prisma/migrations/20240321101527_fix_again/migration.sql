@@ -10,3 +10,6 @@ ALTER TABLE `activation` MODIFY `expiredAt` DATETIME NOT NULL;
 
 -- AlterTable
 ALTER TABLE `auth` MODIFY `expiredAt` DATETIME NOT NULL;
+
+-- AlterTable
+ALTER TABLE `biodata` MODIFY `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3);

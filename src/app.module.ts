@@ -25,7 +25,6 @@ import { ProvinceModule } from './province/province.module';
 import { BookmarkModule } from './bookmark/bookmark.module';
 import { CandidateModule } from './candidate/candidate.module';
 
-
 @Module({
     imports: [
         ConfigModule.forRoot(),
@@ -48,7 +47,11 @@ import { CandidateModule } from './candidate/candidate.module';
         ProvinceModule,
         BookmarkModule,
         CandidateModule,
-       
+        SkillsModule,
+        HobbiesModule,
+        MarriedGoalsModule,
+        LifeGoalsModule,
+        PhysicalCharsModule,
     ],
 
     controllers: [AppController],

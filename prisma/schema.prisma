@@ -85,15 +85,6 @@ model Auth {
   createdAt    DateTime @default(now())
 }
 
-model blog {
-  id        String   @id @default(uuid())
-  title     String   @db.VarChar(100)
-  content   String   @db.Text
-  deleted   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-}
-
 model Gallery {
   id        String   @id @default(uuid())
   Client    Client?  @relation(fields: [clientId], references: [id])
@@ -154,8 +145,8 @@ model Bookmark {
 
 model Biodata {
   id                  String             @id @default(uuid())
-  user                User               @relation(fields: [userId], references: [id])
-  userId              String             @unique
+  user                User?               @relation(fields: [userId], references: [id])
+  userId              String?             @unique
   bio                 String             @db.Text
   phone               String             @db.VarChar(20)
   manhaj              ManhajStatus
@@ -169,7 +160,7 @@ model Biodata {
   domicile_province   String             @db.VarChar(100)
   hometown_province   String             @db.VarChar(100)
   ethnic              String             @db.VarChar(100)
-  createdAt           DateTime           @db.Date
+  createdAt           DateTime           @default(now())
   updatedAt           DateTime           @default(now()) @updatedAt
 }
 
