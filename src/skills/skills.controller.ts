@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Request, HttpCode, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Request, HttpCode, NotFoundException, Query } from '@nestjs/common';
 import { SkillsService } from './skills.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
@@ -22,9 +22,10 @@ export class SkillsController {
 
   @Roles(Role.Member)
   @Get()
-  findAll(@Request() req : any) {
+  findAll(@Request() req : any, @Query('page') page: number, @Query('limit') limit: number) {
+    const userId = req.user.id
     try {
-      return this.skillsService.findAll(req.user.id);
+      return this.skillsService.findAll(userId, page, limit);
 
     } catch (error) {
       throw error;

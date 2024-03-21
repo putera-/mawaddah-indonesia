@@ -24,14 +24,28 @@ export class PhysicalCharsService {
     });
   }
 
-  async findAll(userId: string, page: number = 1, pageSize: number = 10) {
-    const skip = (page - 1) * pageSize;
-    const data = await this.prisma.physic_character.findMany({
-      where: { userId, deleted: false },
-      orderBy: { createdAt: 'desc' }, select, skip, take: pageSize
-    });
+  async findAll(userId: string, page: number = 1, limit: number = 10) {
+    const skip = (page - 1) * limit;
+    const [total, data] = await Promise.all([
+      this.prisma.physic_character.count({
+        where: { userId, deleted: false },
+      }),
+      this.prisma.physic_character.findMany({
+        where: { userId, deleted: false },
+        orderBy: { createdAt: 'desc' },
+        select,
+        skip,
+        take: Number(limit),
+      }),
+    ]);
     if (data.length == 0) throw new NotFoundException(`No Data Found`);
-    return data;
+    return {
+      data,
+      total,
+      page: +page,
+      maxPages: Math.ceil(total / limit),
+      limit: +limit
+    }
   }
 
   async findOne(userId: string, id: string) {
