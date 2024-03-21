@@ -28,6 +28,8 @@ model User {
     auth          Auth[]
     activations   Activation[]
     biodata       Biodata?
+    bookmarks     Bookmark[]   @relation("UserBookmarks")
+    relations     Bookmark[]   @relation("UserCandidates")
     createdAt     DateTime     @default(now())
     updatedAt     DateTime     @default(now()) @updatedAt
 }
@@ -135,22 +137,22 @@ model Activation {
 
 model Biodata {
     id                  String             @id @default(uuid())
-    user                User               @relation(fields: [userId], references: [id])
-    userId              String             @unique
+    user                User?              @relation(fields: [userId], references: [id])
+    userId              String?            @unique
     bio                 String             @db.Text
     phone               String             @db.VarChar(20)
-    manhaj              ManhajStatus
-    gender              Gender
-    marriage_status     MarriageStatus
-    marriage_permission MarriagePermission
+    manhaj              ManhajStatus       @default(SALAF)
+    gender              Gender             @default(PRIA)
+    marriage_status     MarriageStatus     @default(LAJANG)
+    marriage_permission MarriagePermission @default(NON_POLIGAMI)
     dob                 DateTime           @db.Date
     birth_place         String             @db.VarChar(100)
-    birth_order         Int                @db.TinyInt
+    birth_order         Int                @db.Int
     domicile_town       String             @db.VarChar(100)
-    domicile_province   String
-    hometown_province   String
+    domicile_province   String             @db.VarChar(100)
+    hometown_province   String             @db.VarChar(100)
     ethnic              String             @db.VarChar(100)
-    createdAt           DateTime           @db.Date
+    createdAt           DateTime           @default(now())
     updatedAt           DateTime           @default(now()) @updatedAt
 }
 
@@ -181,4 +183,15 @@ model Province {
     id      String  @id @default(uuid())
     name    String  @unique() @db.VarChar(100)
     deleted Boolean @default(false)
+}
+
+model Bookmark {
+    id          String   @id @default(uuid())
+    user        User     @relation(name: "UserBookmarks", fields: [userId], references: [id])
+    userId      String // This field holds the foreign key
+    candidate   User     @relation(name: "UserCandidates", fields: [candidateId], references: [id])
+    candidateId String // This field holds the foreign key
+    bookmarked  Boolean  @default(true)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @default(now()) @updatedAt
 }

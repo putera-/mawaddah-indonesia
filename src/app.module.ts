@@ -16,6 +16,8 @@ import { UserSuperadminModule } from './user-superadmin/user-superadmin.module';
 import { UserAdminModule } from './user-admin/user-admin.module';
 import { BiodataModule } from './biodata/biodata.module';
 import { ProvinceModule } from './province/province.module';
+import { BookmarkModule } from './bookmark/bookmark.module';
+import { CandidateModule } from './candidate/candidate.module';
 
 
 @Module({
@@ -32,6 +34,8 @@ import { ProvinceModule } from './province/province.module';
         UserAdminModule,
         BiodataModule,
         ProvinceModule,
+        BookmarkModule,
+        CandidateModule,
        
     ],
 
