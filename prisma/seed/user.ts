@@ -62,7 +62,7 @@ export async function userSeed(prisma: PrismaClient) {
 
         // create 100 Bob MEMBER
         for (let i = 0; i < 100; i++) {
-            const email = faker.internet.email();
+            const email = `bob_${i}@prisma.io`;
             const firstname = faker.person.firstName();
             await prisma.user.upsert({
                 where: { email },
