@@ -4,44 +4,64 @@ import { CreateEducationDto } from './dto/create-education.dto';
 import { UpdateEducationDto } from './dto/update-education.dto';
 import { Public } from 'src/auth/auth.metadata';
 import { Education } from './educations.interface';
+import { Roles } from 'src/roles/roles.decorator';
+import { Role } from 'src/roles/role.enums';
 
 @Controller('educations')
 export class EducationsController {
-  constructor(private readonly educationsService: EducationsService) {}
+  constructor(private readonly educationsService: EducationsService) { }
 
-  @Public()
-  @Post(':id')
+  @Roles(Role.Member, Role.Superadmin, Role.Admin)
   create(@Param('id') user: string, @Body() data: CreateEducationDto) {
     return this.educationsService.create(user, data);
   }
 
   //TODO ntar ganti2in pake yang bener
-  @Public()
+  @Roles(Role.Member, Role.Superadmin, Role.Admin)
   @Get()
   findAll() {
     try {
       return this.educationsService.findAll();
-      
+
     } catch (error) {
       throw error;
     }
   }
 
-  @Public()
+  @Roles(Role.Member, Role.Superadmin, Role.Admin)
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.educationsService.findOne(id);
+    try {
+      return this.educationsService.findOne(id);
+
+    } catch (error) {
+      throw error;
+
+    }
   }
 
-  @Public()
+  @Roles(Role.Member, Role.Superadmin, Role.Admin)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateEducationDto: UpdateEducationDto) {
-    return this.educationsService.update(id, updateEducationDto);
+    try {
+      return this.educationsService.update(id, updateEducationDto);
+
+    } catch (error) {
+      throw error;
+
+    }
   }
 
+  @Roles(Role.Member, Role.Superadmin, Role.Admin)
   @Public()
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.educationsService.remove(id);
+    try {
+      return this.educationsService.remove(id);
+
+    } catch (error) {
+      throw error;
+
+    }
   }
 }
