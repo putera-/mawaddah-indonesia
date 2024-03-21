@@ -1,82 +1,68 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateLifeGoalDto } from './dto/create-life_goal.dto';
 import { UpdateLifeGoalDto } from './dto/update-life_goal.dto';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/user.service';
 import { Prisma } from '@prisma/client';
 
+const select = {
+  id: true,
+  userId: true,
+  title: true,
+  createdAt: true,
+  updatedAt: true
+
+}
 @Injectable()
 export class LifeGoalsService {
   constructor(private prisma: PrismaService, private userService: UsersService) { }
 
   async create(id: string, data: Prisma.Life_goalCreateInput) {
-
-    const user = await this.prisma.user.findUnique({ where: { id } });
-
-    if (!user.id) throw new NotFoundException(`Id not found`);
-
     return this.prisma.life_goal.create({
-      data: {
-        ...data,
-        User: { connect: { id } }
-      },
-      select: {
-        id: true,
-        userId: true,
-        title: true
+      data: { ...data, User: { connect: { id } } },
+      select
+    });
+  }
+
+  async findAll(userId: string) {
+    const data = await this.prisma.life_goal.findMany({ where: { userId, deleted: false }, select });
+    if (data.length == 0) throw new NotFoundException(`No Data Found`);
+    return data;
+  }
+
+  async findOne(userId: string, id: string) {
+    const data = await this.prisma.life_goal.findFirst({ where: { id, userId, deleted: false }, select });
+    if (!data) {
+      // Check if the education record exists for any user
+      const life_goalExist = await this.prisma.life_goal.findUnique({ where: { id, deleted: false } });
+      // If the education record exists but does not belong to the requesting user
+      if (life_goalExist) {
+        throw new ForbiddenException(`You dont have permission to access / on this server`);
+      } else {
+        throw new NotFoundException(`Data Not Found`);
       }
+    };
+    return data;
+  }
+
+  async update(userId: string ,id: string, data: UpdateLifeGoalDto) {
+    const goalId = await this.findOne(userId, id);
+
+    return this.prisma.life_goal.update({
+      where: { id: goalId.id },
+      data: { ...data, User: { connect: { id: userId } } },
+      select
     });
   }
 
-  findAll() {
-    return this.prisma.life_goal.findMany({
-      where: { deleted: false }
-    });
-  }
+  async remove(userId: string, id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { id: true, Life_goal: true } });
+    if (!user.Life_goal.length === null) throw new NotFoundException(`No data found`);
+    const Life_goalId = await this.findOne(userId, id);
 
-  async findOne(id: string) {
-    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Life_goal: true } });
-
-    if (!user.id) throw new NotFoundException(`Id not found`);
-
-    const life_goalId = user.Life_goal[0].id;
-
-    return this.prisma.skill.findFirst({
-      where: { id: life_goalId, deleted: false }
-    });
-  }
-
-  async update(id: string, data: UpdateLifeGoalDto) {
-    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Life_goal: true } });
-
-    if (!user.id) throw new NotFoundException(`Id not found`);
-
-    const life_goalId = user.Life_goal[0].id;
-
-    return this.prisma.skill.update({
-      where: { id: life_goalId },
-      data: {
-        ...data,
-        User: { connect: { id } }
-      },
-      select: {
-        id: true,
-        userId: true,
-        title: true
-      }
-    });
-  }
-
-  async remove(id: string) {
-    const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, Life_goal: true } });
-
-    if (!user.id) throw new NotFoundException(`Id not found`);
-
-    const Life_goalId = user.Life_goal[0].id;
-
-    return this.prisma.skill.update({
-      where: { id: Life_goalId },
-      data: { deleted: true },
+    return this.prisma.life_goal.update({
+      where: { id: Life_goalId.id },
+      data: { deleted: true }
     });
   }
 }
