@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Bookmark } from '@prisma/client';
-import { connect } from 'http2';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/user.service';
 
