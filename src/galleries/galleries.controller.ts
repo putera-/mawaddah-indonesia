@@ -7,6 +7,9 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { PhotosService } from 'src/photos/photos.service';
 import * as path from 'path';
 import { AppService } from 'src/app.service';
+import { Role } from 'src/roles/role.enums';
+import { Roles } from 'src/roles/roles.decorator';
+import { Public } from 'src/auth/auth.metadata';
 
 @Controller('galleries')
 export class GalleriesController {
@@ -16,6 +19,7 @@ export class GalleriesController {
     private readonly appService: AppService
   ) { }
 
+  @Roles(Role.Superadmin, Role.Admin)
   @Post()
   @UseInterceptors(FileInterceptor('photo'))
   async create(@Body(new ValidationPipe()) data: CreateGalleryDto, @UploadedFile() file: Express.Multer.File) {
@@ -54,15 +58,20 @@ export class GalleriesController {
       throw error;
     };
   };
+  //public karena galleries ditampilkan di landing page
+  @Public()
   @Get()
   findAll() {
     return this.galleriesService.findAll();
   };
 
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.galleriesService.findOne(id);
   };
+
+  @Roles(Role.Superadmin, Role.Admin)
 
   @Patch(':id')
   @UseInterceptors(FileInterceptor('photo'))
@@ -102,6 +111,8 @@ export class GalleriesController {
       throw error;
     };
   };
+
+  @Roles(Role.Superadmin, Role.Admin)
 
   @Delete(':id')
   @HttpCode(204)

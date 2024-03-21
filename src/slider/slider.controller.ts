@@ -7,6 +7,9 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { PhotosService } from 'src/photos/photos.service';
 import * as path from 'path';
 import { AppService } from 'src/app.service';
+import { Roles } from 'src/roles/roles.decorator';
+import { Role } from 'src/roles/role.enums';
+import { Public } from 'src/auth/auth.metadata';
 
 @Controller('slider')
 export class SliderController {
@@ -17,6 +20,7 @@ export class SliderController {
 
   ) { }
 
+  @Roles(Role.Superadmin, Role.Admin)
   @Post()
   @UseInterceptors(FileInterceptor('photo'))
   async create(@Body(new ValidationPipe()) data: CreateSliderDto, @UploadedFile() file: Express.Multer.File) {
@@ -54,6 +58,7 @@ export class SliderController {
     };
   };
 
+  @Public()
   @Get()
   findAll() {
     try {
@@ -65,6 +70,9 @@ export class SliderController {
     };
   };
 
+  @Roles(Role.Member ,Role.Superadmin, Role.Admin)
+
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
     try {
@@ -76,6 +84,7 @@ export class SliderController {
     };
   };
 
+  @Roles(Role.Superadmin, Role.Admin)
   @Patch(':id')
   @UseInterceptors(FileInterceptor('photo'))
   async update(@Param('id') id: string, @Body(new ValidationPipe()) data: UpdateSliderDto, @UploadedFile() file: Express.Multer.File) {
@@ -117,6 +126,7 @@ export class SliderController {
 
   @Delete(':id')
   @HttpCode(204)
+  @Roles(Role.Superadmin, Role.Admin)
   remove(@Param('id') id: string) {
     try {
       return this.sliderService.remove(id);
