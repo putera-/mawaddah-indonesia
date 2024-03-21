@@ -12,6 +12,18 @@ ALTER TABLE `activation` MODIFY `expiredAt` DATETIME NOT NULL;
 ALTER TABLE `auth` MODIFY `expiredAt` DATETIME NOT NULL;
 
 -- CreateTable
+CREATE TABLE `Bookmark` (
+    `id` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+    `candidateId` VARCHAR(191) NOT NULL,
+    `bookmarked` BOOLEAN NOT NULL DEFAULT true,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Biodata` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
@@ -25,8 +37,6 @@ CREATE TABLE `Biodata` (
     `birth_place` VARCHAR(100) NOT NULL,
     `birth_order` TINYINT NOT NULL,
     `domicile_town` VARCHAR(100) NOT NULL,
-    `domicile_province` VARCHAR(100) NOT NULL,
-    `hometown_province` VARCHAR(100) NOT NULL,
     `ethnic` VARCHAR(100) NOT NULL,
     `createdAt` DATE NOT NULL,
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -36,24 +46,27 @@ CREATE TABLE `Biodata` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Education` (
+CREATE TABLE `Province` (
     `id` VARCHAR(191) NOT NULL,
-    `biodataId` VARCHAR(191) NULL,
-    `institutionName` VARCHAR(100) NOT NULL,
-    `major` VARCHAR(50) NULL,
-    `degree` VARCHAR(50) NULL,
-    `city` VARCHAR(50) NULL,
-    `startYear` INTEGER NOT NULL,
-    `endYear` INTEGER NOT NULL,
-    `deleted` BOOLEAN NOT NULL DEFAULT false,
-    `createdAt` DATE NOT NULL,
-    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `name` VARCHAR(100) NOT NULL,
+    `domicileId` VARCHAR(191) NOT NULL,
+    `hometownId` VARCHAR(191) NOT NULL,
+    `deleted` BOOLEAN NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
+ALTER TABLE `Bookmark` ADD CONSTRAINT `Bookmark_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Bookmark` ADD CONSTRAINT `Bookmark_candidateId_fkey` FOREIGN KEY (`candidateId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `Biodata` ADD CONSTRAINT `Biodata_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Education` ADD CONSTRAINT `Education_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `Biodata`(`userId`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Province` ADD CONSTRAINT `Province_domicileId_fkey` FOREIGN KEY (`domicileId`) REFERENCES `Biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Province` ADD CONSTRAINT `Province_hometownId_fkey` FOREIGN KEY (`hometownId`) REFERENCES `Biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

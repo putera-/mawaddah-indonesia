@@ -36,7 +36,6 @@ model User {
   biodata          Biodata?
   bookmarks        Bookmark[]         @relation("UserBookmarks")
   relations        Bookmark[]         @relation("UserCandidates")
-  biodata          Biodata?
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @default(now()) @updatedAt
 }
@@ -142,24 +141,35 @@ model Activation {
   createdAt      DateTime @default(now())
 }
 
+model Bookmark {
+  id          String   @id @default(uuid())
+  user        User     @relation(name: "UserBookmarks", fields: [userId], references: [id])
+  userId      String // This field holds the foreign key
+  candidate   User     @relation(name: "UserCandidates", fields: [candidateId], references: [id])
+  candidateId String // This field holds the foreign key
+  bookmarked  Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+}
+
 model Biodata {
   id                  String             @id @default(uuid())
-  user                User?              @relation(fields: [userId], references: [id])
-  userId              String?            @unique
+  user                User               @relation(fields: [userId], references: [id])
+  userId              String             @unique
   bio                 String             @db.Text
   phone               String             @db.VarChar(20)
-  manhaj              ManhajStatus       @default(SALAF)
-  gender              Gender             @default(PRIA)
-  marriage_status     MarriageStatus     @default(LAJANG)
-  marriage_permission MarriagePermission @default(NON_POLIGAMI)
+  manhaj              ManhajStatus
+  gender              Gender
+  marriage_status     MarriageStatus
+  marriage_permission MarriagePermission
   dob                 DateTime           @db.Date
   birth_place         String             @db.VarChar(100)
-  birth_order         Int                @db.Int
+  birth_order         Int                @db.TinyInt
   domicile_town       String             @db.VarChar(100)
   domicile_province   String             @db.VarChar(100)
   hometown_province   String             @db.VarChar(100)
   ethnic              String             @db.VarChar(100)
-  createdAt           DateTime           @default(now())
+  createdAt           DateTime           @db.Date
   updatedAt           DateTime           @default(now()) @updatedAt
 }
 
@@ -190,71 +200,6 @@ model Province {
   id      String  @id @default(uuid())
   name    String  @unique() @db.VarChar(100)
   deleted Boolean @default(false)
-}
-
-model Bookmark {
-  id          String   @id @default(uuid())
-  user        User     @relation(name: "UserBookmarks", fields: [userId], references: [id])
-  userId      String // This field holds the foreign key
-  candidate   User     @relation(name: "UserCandidates", fields: [candidateId], references: [id])
-  candidateId String // This field holds the foreign key
-  bookmarked  Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
-}
-
-model Biodata {
-  id                  String             @id @default(uuid())
-  user                User               @relation(fields: [userId], references: [id])
-  userId              String             @unique
-  bio                 String             @db.Text
-  phone               String             @db.VarChar(20)
-  manhaj              ManhajStatus
-  gender              Gender
-  marriage_status     MarriageStatus
-  marriage_permission MarriagePermission
-  dob                 DateTime           @db.Date
-  birth_place         String             @db.VarChar(100)
-  birth_order         Int                @db.TinyInt
-  domicile_town       String             @db.VarChar(100)
-  domicile_province   Province[]         @relation("domiliceProvince")
-  hometown_province   Province[]         @relation("hometownProvince")
-  ethnic              String             @db.VarChar(100)
-  createdAt           DateTime           @db.Date
-  updatedAt           DateTime           @default(now()) @updatedAt
-}
-
-enum ManhajStatus {
-  SALAF
-  BARU_BELAJAR
-  NON_SALAF
-}
-
-enum Gender {
-  PRIA
-  WANITA
-}
-
-enum MarriageStatus {
-  LAJANG
-  MENIKAH
-  DUDA
-  JANDA
-}
-
-enum MarriagePermission {
-  POLIGAMI
-  NON_POLIGAMI
-}
-
-model Province {
-  id         String  @id @default(uuid())
-  name       String  @db.VarChar(100)
-  domicile   Biodata @relation("domiliceProvince", fields: [domicileId], references: [id])
-  domicileId String
-  hometown   Biodata @relation("hometownProvince", fields: [hometownId], references: [id])
-  hometownId String
-  deleted    Boolean
 }
 
 model Education {

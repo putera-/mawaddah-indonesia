@@ -43,7 +43,7 @@ export async function provinceSeed(prisma: PrismaClient) {
     ];
     for (const name of provinces) {
         await prisma.province.upsert({
-            where: { name },
+            where: { name: name },
             create: {
                 name: name,
             },
