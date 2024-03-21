@@ -246,7 +246,7 @@ model Married_goal {
   id        String   @id @default(uuid())
   User      User?    @relation(fields: [userId], references: [id])
   userId    String?
-  title     String   @db.VarChar(100)
+  title     String   @db.VarChar(255)
   deleted   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -258,7 +258,7 @@ model Life_goal {
   id        String   @id @default(uuid())
   User      User?    @relation(fields: [userId], references: [id])
   userId    String?
-  title     String   @db.VarChar(100)
+  title     String   @db.VarChar(255)
   deleted   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -267,13 +267,14 @@ model Life_goal {
 }
 
 model Physic_character {
-  id        String   @id @default(uuid())
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String?
-  title     String   @db.VarChar(100)
-  deleted   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      String?
+  title       String   @db.VarChar(100)
+  description String   @db.VarChar(255)
+  deleted     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
 
   @@map("physic_character")
 }
