@@ -1,16 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe } from '@nestjs/common';
 import { SkillsService } from './skills.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
 import { Public } from 'src/auth/auth.metadata';
+import { Roles } from 'src/roles/roles.decorator';
+import { Role } from 'src/roles/role.enums';
 
 @Controller('skills')
 export class SkillsController {
   constructor(private readonly skillsService: SkillsService) { }
 
-  @Public()
-  @Post()
-  create(@Param('id') user: string, @Body() data: CreateSkillDto) {
+  
+  @Roles(Role.Member, Role.Superadmin, Role.Admin)
+  create(@Param('id') user: string, @Body(new ValidationPipe()) data: CreateSkillDto) {
     try {
       return this.skillsService.create(user, data);
 
@@ -19,7 +21,7 @@ export class SkillsController {
     }
   }
 
-  @Public()
+  @Roles(Role.Member, Role.Superadmin, Role.Admin)
   @Get()
   findAll() {
     try {
@@ -30,7 +32,7 @@ export class SkillsController {
     }
   }
 
-  @Public()
+  @Roles(Role.Member, Role.Superadmin, Role.Admin)
   @Get(':id')
   findOne(@Param('id') id: string) {
     try {
@@ -41,9 +43,9 @@ export class SkillsController {
     }
   }
 
-  @Public()
+  @Roles(Role.Member, Role.Superadmin, Role.Admin)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSkillDto: UpdateSkillDto) {
+  update(@Param('id') id: string, @Body(new ValidationPipe()) updateSkillDto: UpdateSkillDto) {
     try {
       return this.skillsService.update(id, updateSkillDto);
 
@@ -52,7 +54,7 @@ export class SkillsController {
     }
   }
 
-  @Public()
+  @Roles(Role.Member, Role.Superadmin, Role.Admin)
   @Delete(':id')
   remove(@Param('id') id: string) {
     try {
