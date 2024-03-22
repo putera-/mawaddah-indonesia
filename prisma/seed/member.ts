@@ -1,7 +1,7 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
-export async function userSeed(prisma: PrismaClient) {
+export async function memberSeed(prisma: PrismaClient) {
     const password = await bcrypt.hash('rahasia', 10);
     // BOB
     {
