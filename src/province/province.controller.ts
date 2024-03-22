@@ -27,12 +27,12 @@ export class ProvinceController {
             throw error;
         }
     }
-    @Roles(Role.Superadmin, Role.Admin)
+    @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Get()
     async findAll() {
         return await this.provinceService.findAll();
     }
-    @Roles(Role.Superadmin, Role.Admin)
+    @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Get(':id')
     async findOne(@Param('id') id: string) {
         return await this.provinceService.findOne(id);
