@@ -6,8 +6,6 @@ import { provinceSeed } from './seed/province';
 import { memberSeed } from './seed/member';
 import { sliderSeed } from './seed/slider';
 import { faqSeed } from './seed/faq';
-import { educationSeed } from './seed/education';
-import { married_goalsSeed } from './seed/married_goals';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -20,8 +18,6 @@ async function main() {
     await memberSeed(prisma);
     await sliderSeed(prisma, clientid);
     await faqSeed(prisma, clientid);
-    await educationSeed(prisma, userId);
-    await married_goalsSeed(prisma, userId);
 
 }
 
