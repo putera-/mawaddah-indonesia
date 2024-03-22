@@ -23,6 +23,7 @@ export async function userSeed(prisma: PrismaClient) {
             },
         };
 
+        //mikazuii user
         const myUser = {
             id: '0766a4ea-ac7a-49b1-acca-49f3a4c24648',
             firstname: 'Valent',
@@ -134,21 +135,6 @@ export async function userSeed(prisma: PrismaClient) {
                             institution_name: faker.lorem.word(),
                             startYear: faker.date.birthdate({ min: 2010, max: 2015 }).getFullYear(),
                             endYear: faker.date.birthdate({ min: 2015, max: 2020 }).getFullYear(),
-                        }
-                    },
-                    Hobby: {
-                        create: {
-                            title: faker.lorem.word(),
-                        }
-                    },
-                    Skill: {
-                        create: {
-                            title: faker.lorem.word(),
-                        }
-                    },
-                    Married_goal: {
-                        create: {
-                            title: faker.lorem.word(),
                         }
                     }
                 }
