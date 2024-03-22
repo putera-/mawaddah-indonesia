@@ -41,7 +41,6 @@ export class EducationsService {
         take: Number(limit),
       }),
     ]);
-    if (data.length == 0) throw new NotFoundException(`No Data Found`);
     return {
       data,
       total,
@@ -60,9 +59,9 @@ export class EducationsService {
 
       // If the education record exists but does not belong to the requesting user
       if (eduExists) {
-        throw new ForbiddenException(`You dont have permission to access / on this server`);
+        throw new ForbiddenException('You dont have permission to access / on this server'); 
       } else {
-        throw new NotFoundException(`Data Not Found`);
+        throw new NotFoundException('Data Not Found'); 
       }
     };
     return data;
