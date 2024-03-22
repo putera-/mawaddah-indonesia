@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-const select = {
+let select = {
     id: true,
     email: true,
     firstname: true,
@@ -17,9 +17,7 @@ const select = {
 export class CandidateService {
     constructor(private Prisma: PrismaService) {}
     async findNew(gender: any, query: Record<string, any>) {
-        let oppositeGender: any;
-        if (gender === 'PRIA') oppositeGender = 'WANITA';
-        else if (gender === 'WANITA') oppositeGender = 'PRIA';
+        const oppositeGender = this.getOppositeGender(gender);
         const limit = parseInt(query.limit);
         const newUsers = await this.Prisma.user.findMany({
             where: {
@@ -28,7 +26,7 @@ export class CandidateService {
                     gender: oppositeGender,
                 },
             },
-            select: { ...select },
+            select: { ...select, biodata: true },
             orderBy: {
                 biodata: {
                     createdAt: 'desc',
@@ -38,9 +36,35 @@ export class CandidateService {
         });
         return newUsers;
     }
-
-    findSuggestion(query: Record<string, any>) {
-        const limit = parseInt(query.limit);
+    getOppositeGender(gender: any) {
+        let oppositeGender: any;
+        if (gender === 'PRIA') oppositeGender = 'WANITA';
+        else if (gender === 'WANITA') oppositeGender = 'PRIA';
+        return oppositeGender;
+    }
+    async findSuggestion(gender: any, query: Record<string, any>) {
+        const oppositeGender = this.getOppositeGender(gender);
+        const limit = parseInt(query.limit) | 10;
+        const suggestions = await this.Prisma.user.findMany({
+            where: {
+                biodata: {
+                    gender: oppositeGender,
+                },
+            },
+            include: {
+                Skill: { select: { title: true } },
+                Hobby: { select: { title: true } },
+                Married_goal: { select: { title: true } },
+                Life_goal: { select: { title: true } },
+            },
+            orderBy: {
+                biodata: {
+                    createdAt: 'desc',
+                },
+            },
+            take: limit,
+        });
+        return suggestions;
         // return `This action returns a #${id} candidate`;
     }
     findLike(id: string) {
