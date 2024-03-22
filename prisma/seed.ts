@@ -2,11 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import { clientSeed } from './seed/client';
 import { userSeed } from './seed/user';
 import { gallerySeed } from './seed/gallery';
-import { provinceSeed } from './seed/province';
 import { sliderSeed } from './seed/slider';
 import { faqSeed } from './seed/faq';
-import { educationSeed } from './seed/education';
-import { married_goalsSeed } from './seed/married_goals';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -15,11 +12,8 @@ async function main() {
     await clientSeed(prisma, clientid);
     await userSeed(prisma);
     await gallerySeed(prisma, clientid);
-    await provinceSeed(prisma);
     await sliderSeed(prisma, clientid);
     await faqSeed(prisma, clientid);
-    await educationSeed(prisma, userId);
-    await married_goalsSeed(prisma, userId);
 
 }
 
