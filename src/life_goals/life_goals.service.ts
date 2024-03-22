@@ -38,7 +38,6 @@ export class LifeGoalsService {
         take: Number(limit),
       }),
     ]);
-    if (data.length == 0) throw new NotFoundException(`No Data Found`);
     return {
       data,
       total,
