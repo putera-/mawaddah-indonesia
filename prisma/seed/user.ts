@@ -23,7 +23,7 @@ export async function userSeed(prisma: PrismaClient) {
         // create 10 SUPERADMIN
         for (let i = 0; i < 10; i++) {
             const email = `superadmin_${i}@prisma.io`;
-            const firstname = "Bob" + i;
+            const firstname = 'Bob' + i;
             await prisma.user.upsert({
                 where: { email },
                 update: {
@@ -37,82 +37,10 @@ export async function userSeed(prisma: PrismaClient) {
                     firstname,
                     role: 'SUPERADMIN',
                     ...superadmin,
-                }
+                },
             });
         }
     }
 
-    // BOB
-    {
-        const bob = {
-            lastname: 'Is My Name',
-            password,
-            verified: true,
-            avatar: '/dummy/abang.png',
-            avatar_md: '/dummy/abang.png',
-            activations: {
-                create: {
-                    activation_key: 'lkjhafklhj@#$@#$@#dsfa',
-                    expiredAt: new Date(),
-                },
-            },
-        };
-
-        // create 100 Bob MEMBER
-        for (let i = 0; i < 100; i++) {
-            const email = `bob_${i}@prisma.io`;
-            const firstname = "Bob " + i;
-            await prisma.user.upsert({
-                where: { email },
-                update: {
-                    email,
-                    firstname,
-                    ...bob,
-                },
-                create: {
-                    email,
-                    firstname,
-                    ...bob,
-                }
-            });
-        }
-    }
-
-    // ALICE
-    {
-        const alice = {
-            lastname: 'In Wonderland',
-            password,
-            verified: true,
-            avatar: '/dummy/nissa.png',
-            avatar_md: '/dummy/nissa.png',
-            activations: {
-                create: {
-                    activation_key: 'lkjhafklhj@#$@#$@#dsfa',
-                    expiredAt: new Date(),
-                },
-            },
-        };
-
-        // create 100 Alice MEMBER
-        for (let i = 0; i < 100; i++) {
-            const email = `alice_${i}@prisma.io`;
-            const firstname = "Alice" + i;
-            await prisma.user.upsert({
-                where: { email },
-                update: {
-                    email,
-                    firstname,
-                    ...alice,
-                },
-                create: {
-                    email,
-                    firstname,
-                    ...alice,
-                }
-            });
-        }
-    }
-
-    console.log('Seed: User');
+    console.log('Seed: User SuperAdmin');
 }

@@ -7,6 +7,7 @@ import { Prisma } from '@prisma/client';
 export class ProvinceService {
     constructor(private Prisma: PrismaService) {}
     create(data: Prisma.ProvinceCreateInput) {
+        data.name = data.name.toLowerCase();
         return this.Prisma.province.create({
             data,
         });
@@ -23,6 +24,7 @@ export class ProvinceService {
     }
 
     update(id: string, data: Prisma.ProvinceCreateInput) {
+        data.name = data.name.toLowerCase();
         return this.Prisma.province.update({ where: { id }, data });
     }
 
