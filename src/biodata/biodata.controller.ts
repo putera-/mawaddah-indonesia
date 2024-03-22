@@ -32,10 +32,21 @@ export class BiodataController {
     }
 
     @Roles(Role.Member)
-    @Get()
-    async findAll() {
+    @Get('all')
+    async findAll(@Request() req: any) {
         try {
-            return await this.biodataService.findAll();
+            const user = await this.biodataService.findMe(req.user.id);
+            return await this.biodataService.findAll(user.gender);
+        } catch (error) {
+            throw error;
+        }
+    }
+    @Roles(Role.Member)
+    @Get()
+    async findMe(@Request() req: any) {
+        try {
+            const me = req.user.id;
+            return await this.biodataService.findMe(me);
         } catch (error) {
             throw error;
         }

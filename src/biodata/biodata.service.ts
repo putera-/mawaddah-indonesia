@@ -36,14 +36,32 @@ export class BiodataService {
         });
     }
 
-    findAll() {
-        return this.Prisma.biodata.findMany({ select: { ...select } });
+    findAll(gender: string) {
+        const oppositeGender = this.getOppositeGender(gender);
+        return this.Prisma.biodata.findMany({
+            select: { ...select },
+            where: { gender: oppositeGender },
+        });
+    }
+    getOppositeGender(gender: any) {
+        let oppositeGender: any;
+        if (gender === 'PRIA') oppositeGender = 'WANITA';
+        else if (gender === 'WANITA') oppositeGender = 'PRIA';
+        return oppositeGender;
     }
 
     findOne(id: string) {
         return this.Prisma.biodata.findFirst({
             where: {
                 id,
+            },
+            select: { ...select },
+        });
+    }
+    findMe(id: string) {
+        return this.Prisma.biodata.findFirst({
+            where: {
+                userId: id,
             },
             select: { ...select },
         });
