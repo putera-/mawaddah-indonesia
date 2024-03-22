@@ -36,7 +36,7 @@ export class BiodataService {
     }
 
     findAll() {
-        return this.Prisma.biodata.findMany();
+        return this.Prisma.biodata.findMany({ select: { ...select } });
     }
 
     findOne(id: string) {

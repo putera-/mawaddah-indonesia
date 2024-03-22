@@ -11,6 +11,7 @@ import {
     Request,
     UseInterceptors,
     UploadedFile,
+    Query,
 } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -47,29 +48,28 @@ async create(@Body(new ValidationPipe()) data: CreateUserDto) {
     }
 }
 
-@Roles(Role.Superadmin, Role.Admin, Role.Member)
-@Get()
-async findAll(@Request() req: any) {
-    try {
-        const role = req.user.role;
-        return await this.userService.findAll(role);
-    } catch (error) {
-        throw error;
+    @Roles(Role.Superadmin, Role.Admin, Role.Member)
+    @Get()
+    async findAll(@Request() req: any, @Query() query: Record<string, any>) {
+        try {
+            const role = req.user.role;
+            return await this.userService.findAll(role, query);
+        } catch (error) {
+            throw error;
+        }
     }
-}
 
-@Roles(Role.Superadmin, Role.Admin, Role.Member)
-@Get(':id')
-async findOne(@Param('id') id: string) {
-    try {
-        const user = await this.userService.findOne(id, 'MEMBER');
-        this.userService.formatGray(user);
-        return user;
-    } catch (error) {
-        throw error;
+    @Roles(Role.Superadmin, Role.Admin, Role.Member)
+    @Get(':id')
+    async findOne(@Param('id') id: string) {
+        try {
+            const user = await this.userService.findOne(id, 'MEMBER');
+            this.userService.formatGray(user);
+            return user;
+        } catch (error) {
+            throw error;
+        }
     }
-}
-
 
 @Roles(Role.Superadmin, Role.Admin, Role.Member)
 @Patch()

@@ -80,7 +80,7 @@ export async function userSeed(prisma: PrismaClient) {
         // create 10 SUPERADMIN
         for (let i = 0; i < 10; i++) {
             const email = `superadmin_${i}@prisma.io`;
-            const firstname = "Bob" + i;
+            const firstname = 'Bob' + i;
             await prisma.user.upsert({
                 where: { email },
                 update: {

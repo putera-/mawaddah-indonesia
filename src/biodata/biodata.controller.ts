@@ -53,12 +53,14 @@ export class BiodataController {
 
     @Roles(Role.Member)
     @Patch(':id')
-    async update(@Param('id') id: string, @Body() data: CreateBiodatumDto) {
+    async update(
+        @Request() req: any,
+        @Body(new ValidationPipe()) data: CreateBiodatumDto,
+    ) {
         try {
-            return await this.biodataService.update(id, data);
+            return await this.biodataService.update(req.user.id, data);
         } catch (error) {
             throw error;
         }
     }
-
 }
