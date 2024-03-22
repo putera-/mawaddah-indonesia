@@ -42,6 +42,43 @@ export class CandidateService {
         else if (gender === 'WANITA') oppositeGender = 'PRIA';
         return oppositeGender;
     }
+    getSimiliar(user: any, suggest: Record<string, any>[]) {
+        for (const data of suggest) {
+            const s: Record<string, any> = data;
+            s.similiarSkills = s.Skill.filter((cand) =>
+                user.Skill.some(
+                    (selectedSkill) => selectedSkill.title === cand.title,
+                ),
+            );
+            s.similiarHobbies = s.Hobby.filter((cand) =>
+                user.Hobby.some(
+                    (selectedHobbies) => selectedHobbies.title === cand.title,
+                ),
+            );
+            s.similiarMarriageGoals = s.Married_goal.filter((cand) =>
+                user.Married_goal.some(
+                    (selectedMarriage) => selectedMarriage.title === cand.title,
+                ),
+            );
+            s.similiarLifeGoals = s.Life_goal.filter((cand) =>
+                user.Life_goal.some(
+                    (selectedLife) => selectedLife.title === cand.title,
+                ),
+            );
+            delete s.password;
+            delete s.Skill;
+            delete s.Hobby;
+            delete s.Married_goal;
+            delete s.Life_goal;
+            s.similiarity =
+                s.similiarSkills.length +
+                s.similiarHobbies.length +
+                s.similiarMarriageGoals.length +
+                s.similiarLifeGoals.length;
+            console.log(s.similiarity);
+        }
+        return suggest;
+    }
     async findSuggestion(gender: any, query: Record<string, any>) {
         const oppositeGender = this.getOppositeGender(gender);
         const limit = parseInt(query.limit) | 10;

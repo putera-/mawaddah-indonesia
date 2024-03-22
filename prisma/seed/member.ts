@@ -150,12 +150,12 @@ export async function memberSeed(prisma: PrismaClient) {
                         ],
                     },
                 };
-                await prisma.user.upsert({
-                    where: { email },
-                    update: data,
-                    create: data,
-                });
             }
+            await prisma.user.upsert({
+                where: { email },
+                update: data,
+                create: data,
+            });
         }
     }
 
@@ -300,12 +300,12 @@ export async function memberSeed(prisma: PrismaClient) {
                         ],
                     },
                 };
-                await prisma.user.upsert({
-                    where: { email },
-                    update: data,
-                    create: data,
-                });
             }
+            await prisma.user.upsert({
+                where: { email },
+                update: data,
+                create: data,
+            });
         }
     }
 

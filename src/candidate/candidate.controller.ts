@@ -68,43 +68,8 @@ export class CandidateController {
                 bio.gender,
                 query,
             );
-
-            for (const data of suggest) {
-                const { password, ...s } = data;
-                const filteredSkills = s.Skill.filter((cand) =>
-                    user.Skill.some(
-                        (selectedSkill) => selectedSkill.title === cand.title,
-                    ),
-                );
-                const filteredHobbies = s.Hobby.filter((cand) =>
-                    user.Hobby.some(
-                        (selectedHobbies) =>
-                            selectedHobbies.title === cand.title,
-                    ),
-                );
-                const filteredMarriage = s.Married_goal.filter((cand) =>
-                    user.Married_goal.some(
-                        (selectedMarriage) =>
-                            selectedMarriage.title === cand.title,
-                    ),
-                );
-                const filteredLife = s.Life_goal.filter((cand) =>
-                    user.Life_goal.some(
-                        (selectedLife) => selectedLife.title === cand.title,
-                    ),
-                );
-                console.log('skills');
-                console.log(filteredSkills);
-                console.log('hobbies');
-                console.log(filteredHobbies);
-                console.log('marriage');
-                console.log(filteredMarriage);
-                console.log('life');
-                console.log(filteredLife);
-            }
-            return;
-            if (!bio) throw new NotFoundException('Silakan lengkapi biodata');
-            return;
+            const result = this.candidateService.getSimiliar(user, suggest);
+            return result.sort((a, b) => b.similiarity - a.similiarity);
         } catch (error) {
             throw error;
         }
