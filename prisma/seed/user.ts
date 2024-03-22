@@ -23,6 +23,7 @@ export async function userSeed(prisma: PrismaClient) {
             },
         };
 
+        //mikazuii user
         const myUser = {
             id: '0766a4ea-ac7a-49b1-acca-49f3a4c24648',
             firstname: 'Valent',
