@@ -18,6 +18,8 @@ import { UsersService } from 'src/users/user.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { User } from 'src/users/user.interface';
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -34,7 +36,23 @@ export class AuthController {
             throw error;
         }
     }
+    @Public()
+    @HttpCode(HttpStatus.OK)
+    @Post('register')
+    async create(@Body(new ValidationPipe()) data: CreateUserDto) {
+        try {
+            await this.userService.validateNewUser(data);
 
+            const user: User = await this.userService.create(data);
+
+            // FORMAT/HIDE USER DATA
+            // this.userService.formatGray(user);
+
+            return user;
+        } catch (error) {
+            throw error;
+        }
+    }
     @Roles(Role.Member, Role.Superadmin, Role.Admin)
     @Get('profile')
     async getProfile(@Request() req) {
