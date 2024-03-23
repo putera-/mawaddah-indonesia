@@ -307,6 +307,143 @@ paths:
                                     statusCode:
                                         type: number
                                         example: 404
+    "/auth/change_password":
+        patch:
+            tags:
+            - Auth
+            description: Change password for all user role
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                password:
+                                    type: string
+                                    format: password
+                                confirm_password:
+                                    type: string
+                                    format: password
+            responses:
+                204:
+                    description: OK. No Content
+                400:
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Password confirm is not match
+                                    error:
+                                        type: string
+                                        example: Bad Request
+                                    statusCode:
+                                        type: number
+                                        example: 400
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+    "/auth/reset_password":
+        post:
+            tags:
+            - Auth
+            description: Public change password. Reset token will be send to email. Token expired 24 hours
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    format: email
+            responses:
+                204:
+                    description: OK. No Content
+                400:
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Email is not valid
+                                    error:
+                                        type: string
+                                        example: Bad Request
+                                    statusCode:
+                                        type: number
+                                        example: 400
+    "/auth/reset_password/:token":
+        post:
+            tags:
+            - Auth
+            description: Public Do reset password. Get user by token
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                password:
+                                    type: string
+                                    format: password
+                                confirm_password:
+                                    type: string
+                                    format: password
+            responses:
+                204:
+                    description: OK. No Content
+                400:
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Password confirm is not match
+                                    error:
+                                        type: string
+                                        example: Bad Request
+                                    statusCode:
+                                        type: number
+                                        example: 400
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Token already expired
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
 components:
     examples:
         auth:

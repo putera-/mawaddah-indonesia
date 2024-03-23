@@ -191,56 +191,6 @@ paths:
                                     statusCode:
                                         type: number
                                         example: 404
-    "/users/change_password":
-        patch:
-            tags:
-            - User
-            description: Change password for all user role
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                password:
-                                    type: string
-                                    format: password
-                                confirm_password:
-                                    type: string
-                                    format: password
-            responses:
-                204:
-                    description: OK. No Content
-                400:
-                    description: Bad Request
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: Password confirm is not match
-                                    error:
-                                        type: string
-                                        example: Bad Request
-                                    statusCode:
-                                        type: number
-                                        example: 400
-                401:
-                    description: Unauthorized
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    error:
-                                        type: string
-                                        example: Unauthorized
-                                    statusCode:
-                                        type: number
-                                        example: 401
 components:
     schemas:
         user:
