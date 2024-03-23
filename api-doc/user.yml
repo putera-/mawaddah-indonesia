@@ -14,57 +14,6 @@ servers:
             default: "http://localhost:5000"
 paths:
     "/users":
-        post:
-            tags:
-            - User
-            description: Create user role as MEMBER
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                firstname:
-                                    type: string
-                                lastname:
-                                    type: string
-                                email:
-                                    type: string
-                                    format: email
-                                password:
-                                    type: string
-                                    format: password
-                                confirm_password:
-                                    type: string
-                                    format: password
-            responses:
-                200:
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                $ref: "#/components/schemas/user"
-                            examples:
-                                user:
-                                    $ref: "#/components/examples/user"
-                400:
-                    description: Bad Request
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message:
-                                        type: string
-                                        example: Email is invalid
-                                    error:
-                                        type: string
-                                        example: Bad Request
-                                    statusCode:
-                                        type: number
-                                        example: 400
         get:
             tags:
             - User
