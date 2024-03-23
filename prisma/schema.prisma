@@ -130,7 +130,7 @@ model Activation {
   used           Boolean  @default(false)
   expiredAt      DateTime @db.DateTime()
   createdAt      DateTime @default(now())
-}
+} 
 
 model Bookmark {
   id          String   @id @default(uuid())
