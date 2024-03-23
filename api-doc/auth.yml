@@ -240,6 +240,73 @@ paths:
                                     statusCode:
                                         type: number
                                         example: 401
+        patch:
+            tags:
+            - Auth
+            description: User can only update himself, for all roles
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            properties:
+                                firstname:
+                                    type: string
+                                lastname:
+                                    type: string
+                                avatar:
+                                    type: string
+                                    format: binary
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            examples:
+                                profile-data:
+                                    $ref: "#/components/examples/profile-data"
+                                profile-no-avatar:
+                                    $ref: "#/components/examples/profile-no-avatar"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
 components:
     examples:
         auth:
@@ -267,8 +334,21 @@ components:
                 lastname: "Doe"
                 active: true
                 verified: true
-                avatar: "/public/profile/avatar.jpg"
-                avatar_md: "/public/profile/avatar_md.jpg"
+                avatar: "/dummy/abang.png"
+                avatar_md: "/dummy/abang.png"
+                role: "MEMBER"
+                taaruf_status: "BLOCKED"
+        profile-no-avatar:
+            summary: profile-no-avatar
+            value:
+                id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                email: "john_doe@gmail.com"
+                firstname: "John"
+                lastname: "Doe"
+                active: true
+                verified: true
+                avatar: null
+                avatar_md: null
                 role: "MEMBER"
                 taaruf_status: "BLOCKED"
 
