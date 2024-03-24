@@ -29,6 +29,7 @@ export class HobbiesController {
         @Body(new ValidationPipe()) data: CreateHobbyDto,
     ) {
         try {
+            // FIXME make sure, auth user taaruf status is OPEN
             const userId = req.user.id;
             return this.hobbiesService.create(userId, data);
         } catch (error) {

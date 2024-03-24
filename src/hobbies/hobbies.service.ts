@@ -23,9 +23,9 @@ export class HobbiesService {
         private userService: UsersService,
     ) { }
 
-    async create(id: string, data: Prisma.HobbyCreateInput) {
+    async create(userId: string, data: Prisma.HobbyCreateInput) {
         return this.prisma.hobby.create({
-            data: { ...data, User: { connect: { id } } },
+            data: { ...data, User: { connect: { id: userId } } },
             select,
         });
     }
