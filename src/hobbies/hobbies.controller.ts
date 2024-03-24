@@ -20,7 +20,7 @@ import { Role } from 'src/roles/role.enums';
 
 @Controller('hobbies')
 export class HobbiesController {
-    constructor(private readonly hobbiesService: HobbiesService) {}
+    constructor(private readonly hobbiesService: HobbiesService) { }
 
     @Roles(Role.Member)
     @Post()
@@ -82,6 +82,7 @@ export class HobbiesController {
     @Delete(':id')
     remove(@Request() req: any, @Param('id') id: string) {
         try {
+            // FIXME id ga perlu di check, ga akan lewat sini klo manggil tanpa parameter id
             if (!id) throw new NotFoundException('Id not found');
             const userId = req.user.id;
             return this.hobbiesService.remove(userId, id);
