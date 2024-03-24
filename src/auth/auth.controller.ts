@@ -32,17 +32,8 @@ export class AuthController {
         private authService: AuthService,
         private userService: UsersService,
         private photoService: PhotosService,
-    ) {}
-    @Public()
-    @HttpCode(HttpStatus.OK)
-    @Post('login')
-    signIn(@Body(new ValidationPipe()) signInDto: SignInDto) {
-        try {
-            return this.authService.signIn(signInDto.email, signInDto.password);
-        } catch (error) {
-            throw error;
-        }
-    }
+    ) { }
+
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('register')
@@ -60,6 +51,34 @@ export class AuthController {
             throw error;
         }
     }
+
+    @Public()
+    @HttpCode(HttpStatus.OK)
+    @Post('login')
+    signIn(@Body(new ValidationPipe()) signInDto: SignInDto) {
+        try {
+            return this.authService.signIn(signInDto.email, signInDto.password);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    @Get('extend-access-token')
+    async extendAccessToken(@Req() req) {
+        const user = req.user;
+        const { access_token, exp } = await this.authService.createToken(
+            user.id,
+            user.username,
+            user.role,
+        );
+
+        // black list old token
+        const token = req.headers.authorization.split(' ')[1];
+        this.authService.addBlackListToken(token);
+
+        return { access_token, exp };
+    }
+
     @Roles(Role.Member, Role.Superadmin, Role.Admin)
     @Get('profile')
     async getProfile(@Request() req) {
@@ -70,6 +89,7 @@ export class AuthController {
             throw error;
         }
     }
+
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Patch('profile')
     @UseInterceptors(FileInterceptor('avatar'))
@@ -132,21 +152,6 @@ export class AuthController {
             throw error;
         }
     }
-    @Get('extend-access-token')
-    async extendAccessToken(@Req() req) {
-        const user = req.user;
-        const { access_token, exp } = await this.authService.createToken(
-            user.id,
-            user.username,
-            user.role,
-        );
-
-        // black list old token
-        const token = req.headers.authorization.split(' ')[1];
-        this.authService.addBlackListToken(token);
-
-        return { access_token, exp };
-    }
 
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Patch('change_password')
@@ -162,6 +167,7 @@ export class AuthController {
             throw error;
         }
     }
+
     @Delete('logout')
     @HttpCode(204)
     logOut(@Req() req) {
