@@ -15,9 +15,7 @@ export class ResetPasswordController {
     @Post()
     create(@Body(new ValidationPipe()) data: CreateResetPasswordDto) {
         try {
-            console.log(data)
             return this.resetPasswordService.create(data.email);
-
         } catch (error) {
             throw error
         }
@@ -28,10 +26,7 @@ export class ResetPasswordController {
     @Patch(':id')
     update(@Request() req: any, @Param('id') id: string, @Body(new ValidationPipe()) data: ChangePasswordDto) {
         try {
-            // console.log(req.user.userEmail)
-            console.log(req)
             return this.resetPasswordService.update(id, data);
-
         } catch (error) {
             throw error;
         }
