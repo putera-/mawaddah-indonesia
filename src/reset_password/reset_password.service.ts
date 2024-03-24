@@ -15,7 +15,8 @@ export class ResetPasswordService {
     constructor(private prisma: PrismaService, private userService: UsersService, private authService: AuthService, private jwtService: JwtService,
     ) { }
 
-    //TODO TINGGAL BIKIN VALIDASINYA DAN BLABLA
+    // TODO TINGGAL BIKIN VALIDASINYA DAN BLABLA
+    //  TODO parameter token buat apa?
     async create(token: string, userEmail: string, data: Prisma.ResetPasswordCreateInput) {
         // const token = req.headers.authorization.split(' ')[1];
         const user = await this.prisma.user.findUnique({ where: { email: userEmail }, select: { id: true, email: true } });
@@ -33,7 +34,7 @@ export class ResetPasswordService {
 
         });
 
-        //ini code buat ngirim email
+        // TODO code buat ngirim email
         //blabla..
         return result;
     }
