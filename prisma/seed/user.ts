@@ -94,10 +94,89 @@ export async function userSeed(prisma: PrismaClient) {
                     firstname,
                     role: 'SUPERADMIN',
                     ...superadmin,
-                },
+                }
             });
         }
     }
 
-    console.log('Seed: User SuperAdmin');
+    // BOB
+    {
+        const bob = {
+            lastname: faker.person.lastName(),
+            password,
+            verified: true,
+            avatar: faker.image.avatar(),
+            avatar_md: faker.image.avatar(),
+            activations: {
+                create: {
+                    activation_key: faker.string.alphanumeric(10),
+                    expiredAt: new Date(),
+                },
+            },
+        };
+
+        // create 100 Bob MEMBER
+        for (let i = 0; i < 100; i++) {
+            const email = `bob_${i}@prisma.io`;
+            const firstname = faker.person.firstName();
+            await prisma.user.upsert({
+                where: { email },
+                update: {
+                    email,
+                    firstname,
+                    ...bob,
+                },
+                create: {
+                    email,
+                    firstname,
+                    ...bob,
+                    Education: {
+                        create: {
+                            institution_name: faker.lorem.word(),
+                            startYear: faker.date.birthdate({ min: 2010, max: 2015 }).getFullYear(),
+                            endYear: faker.date.birthdate({ min: 2015, max: 2020 }).getFullYear(),
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    // ALICE
+    {
+        const alice = {
+            lastname: faker.person.lastName('female'),
+            password,
+            verified: true,
+            avatar: faker.image.avatar(),
+            avatar_md: faker.image.avatar(),
+            activations: {
+                create: {
+                    activation_key: faker.string.alphanumeric(10),
+                    expiredAt: new Date(),
+                },
+            },
+        };
+
+        // create 100 Alice MEMBER
+        for (let i = 0; i < 100; i++) {
+            const email = faker.internet.email();
+            const firstname = faker.person.firstName('female');
+            await prisma.user.upsert({
+                where: { email },
+                update: {
+                    email,
+                    firstname,
+                    ...alice,
+                },
+                create: {
+                    email,
+                    firstname,
+                    ...alice,
+                }
+            });
+        }
+    }
+
+    console.log('Seed: User');
 }
