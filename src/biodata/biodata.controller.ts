@@ -63,7 +63,7 @@ export class BiodataController {
     }
 
     @Roles(Role.Member)
-    @Patch(':id')
+    @Patch('')
     async update(
         @Request() req: any,
         @Body(new ValidationPipe()) data: CreateBiodatumDto,

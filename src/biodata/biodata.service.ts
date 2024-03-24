@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { Prisma } from '@prisma/client';
+import { UsersService } from 'src/users/user.service';
 
 const select = {
     bio: true,
@@ -21,7 +22,7 @@ const select = {
 @Injectable()
 export class BiodataService {
     constructor(
-        // private readonly userService: UsersService,
+        private readonly userService: UsersService,
         private Prisma: PrismaService,
     ) {}
     create(id: string, data: Prisma.BiodataCreateInput) {
@@ -67,6 +68,6 @@ export class BiodataService {
     }
 
     update(id: string, data: Prisma.BiodataCreateInput) {
-        return this.Prisma.biodata.update({ where: { id }, data });
+        return this.Prisma.biodata.update({ where: { userId: id }, data });
     }
 }
