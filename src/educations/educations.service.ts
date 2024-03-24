@@ -48,7 +48,7 @@ export class EducationsService {
       maxPages: Math.ceil(total / limit),
       limit: +limit
     }
-  }
+  } 
 
 
   async findOne(userId: string, id: string) {

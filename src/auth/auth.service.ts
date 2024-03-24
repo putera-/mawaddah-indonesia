@@ -12,7 +12,7 @@ export class AuthService {
         private usersService: UsersService,
         private jwtService: JwtService,
         private prisma: PrismaService,
-    ) {}
+    ) { }
     private blacklistedTokens: Set<string> = new Set();
 
     async signIn(email: string, pass: string): Promise<any> {
@@ -88,4 +88,4 @@ export class AuthService {
     isTokenBlacklisted(token: string): boolean {
         return this.blacklistedTokens.has(token);
     }
-}
+} 
