@@ -25,24 +25,8 @@ export class ResetPasswordController {
             return this.resetPasswordService.update(token, id, data);
 
         } catch (error) {
-            throw error;
+            throw error;    
         }
     }
 
-    // @Get()
-    // findAll() {
-    //   return this.resetPasswordService.findAll();
-    // }
-
-    // @Get(':id')
-    // findOne(@Param('id') id: string) {
-    //   return this.resetPasswordService.findOne(+id);
-    // }
-
-
-
-    // @Delete(':id')
-    // remove(@Param('id') id: string) {
-    //   return this.resetPasswordService.remove(+id);
-    // }
 }
