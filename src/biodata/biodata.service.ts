@@ -24,7 +24,8 @@ export class BiodataService {
     constructor(
         private readonly userService: UsersService,
         private Prisma: PrismaService,
-    ) {}
+    ) { }
+
     create(id: string, data: Prisma.BiodataCreateInput) {
         return this.Prisma.biodata.create({
             data: {
@@ -34,6 +35,7 @@ export class BiodataService {
                 },
             },
         });
+        // FIXME set auth user taaruf status to be OPEN
     }
 
     findAll(gender: string) {
