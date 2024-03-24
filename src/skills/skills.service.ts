@@ -15,7 +15,7 @@ const select = {
 @Injectable()
 export class SkillsService {
   constructor(private prisma: PrismaService, private userService: UsersService) { }
-  
+
   async create(id: string, data: Prisma.SkillCreateInput) {
     return this.prisma.skill.create({
       data: { ...data, User: { connect: { id } } },
