@@ -30,28 +30,29 @@ export class HobbiesService {
         });
     }
 
-    async findAll(userId: string, page: number = 1, limit: number = 10) {
-        const skip = (page - 1) * limit;
-        const [total, data] = await Promise.all([
-            this.prisma.hobby.count({
-                where: { userId, deleted: false },
-            }),
-            this.prisma.hobby.findMany({
-                where: { userId, deleted: false },
-                orderBy: { createdAt: 'desc' },
-                select,
-                skip,
-                take: Number(limit),
-            }),
-        ]);
-        return {
-            data,
-            total,
-            page: +page,
-            maxPages: Math.ceil(total / limit),
-            limit: +limit,
-        };
+  async findAll(userId: string, page: number = 1, limit: number = 10) {
+    const skip = (page - 1) * limit;
+    const [total, data] = await Promise.all([
+      this.prisma.hobby.count({
+        where: { userId, deleted: false },
+      }),
+      this.prisma.hobby.findMany({
+        where: { userId, deleted: false },
+        orderBy: { createdAt: 'desc' },
+        select,
+        skip,
+        take: Number(limit),
+      }),
+    ]);
+    if (data.length == 0) throw new NotFoundException(`No Data Found`);
+    return {
+      data,
+      total,
+      page: +page,
+      maxPages: Math.ceil(total / limit),
+      limit: +limit
     }
+  }
 
     async findOne(userId: string, id: string) {
         const data = await this.prisma.hobby.findFirst({
