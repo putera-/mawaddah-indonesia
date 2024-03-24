@@ -23,6 +23,8 @@ import { BiodataModule } from './biodata/biodata.module';
 import { ProvinceModule } from './province/province.module';
 import { BookmarkModule } from './bookmark/bookmark.module';
 import { CandidateModule } from './candidate/candidate.module';
+import { ResetPasswordModule } from './reset_password/reset_password.module';
+import { SkillsModule } from './skills/skills.module';
 
 @Module({
     imports: [
@@ -38,6 +40,7 @@ import { CandidateModule } from './candidate/candidate.module';
         UserSuperadminModule,
         UserAdminModule,
         HobbiesModule,
+        SkillsModule,
         MarriedGoalsModule,
         LifeGoalsModule,
         PhysicalCharsModule,
@@ -45,6 +48,7 @@ import { CandidateModule } from './candidate/candidate.module';
         ProvinceModule,
         BookmarkModule,
         CandidateModule,
+        ResetPasswordModule,
     ],
 
     controllers: [AppController],

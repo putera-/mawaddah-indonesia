@@ -8,6 +8,7 @@ import {
     HttpCode,
     Request,
     Query,
+    Ip,
 } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -21,7 +22,7 @@ export class UsersController {
     constructor(
         private readonly userService: UsersService,
         private photoService: PhotosService,
-    ) {}
+    ) { }
 
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Get()
