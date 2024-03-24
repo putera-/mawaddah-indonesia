@@ -47,15 +47,6 @@ export class UsersController {
         }
     }
 
-    @Roles(Role.Superadmin, Role.Admin, Role.Member)
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() data: UpdateUserDto) {
-        try {
-            return this.userService.update(id, data as Prisma.UserUpdateInput);
-        } catch (error) {
-            throw error;
-        }
-    }
     @Roles(Role.Admin, Role.Superadmin)
     @Patch('activate/:id')
     @HttpCode(204)
