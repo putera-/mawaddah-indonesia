@@ -3,6 +3,7 @@ import { ResetPasswordService } from './reset_password.service';
 import { CreateResetPasswordDto } from './dto/create-reset_password.dto';
 import { UpdateResetPasswordDto } from './dto/update-reset_password.dto';
 import { ChangePasswordDto } from 'src/auth/dto/change-password.dto';
+import { Prisma } from '@prisma/client';
 
 @Controller('reset-password')
 export class ResetPasswordController {
@@ -11,7 +12,7 @@ export class ResetPasswordController {
     @Post()
     create(@Request() token: string, @Body('userEmail') email: string, data: CreateResetPasswordDto) {
         try {
-            return this.resetPasswordService.create(token, email, data);
+            return this.resetPasswordService.create(token, email, data as Prisma.ResetPasswordCreateInput);
 
         } catch (error) {
             throw error

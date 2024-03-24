@@ -21,10 +21,10 @@ export class MarriedGoalsService {
     constructor(
         private prisma: PrismaService,
         private userService: UsersService,
-    ) {}
+    ) { }
 
-    async create(id: string, data: Prisma.Married_goalCreateInput) {
-        return this.prisma.married_goal.create({
+    async create(id: string, data: Prisma.MarriedGoalCreateInput) {
+        return this.prisma.marriedGoal.create({
             data: { ...data, User: { connect: { id } } },
             select,
         });
@@ -33,10 +33,10 @@ export class MarriedGoalsService {
     async findAll(userId: string, page: number = 1, limit: number = 10) {
         const skip = (page - 1) * limit;
         const [total, data] = await Promise.all([
-            this.prisma.married_goal.count({
+            this.prisma.marriedGoal.count({
                 where: { userId, deleted: false },
             }),
-            this.prisma.married_goal.findMany({
+            this.prisma.marriedGoal.findMany({
                 where: { userId, deleted: false },
                 orderBy: { createdAt: 'desc' },
                 select,
@@ -54,13 +54,13 @@ export class MarriedGoalsService {
     }
 
     async findOne(userId: string, id: string) {
-        const data = await this.prisma.married_goal.findFirst({
+        const data = await this.prisma.marriedGoal.findFirst({
             where: { id, userId, deleted: false },
             select,
         });
         if (!data) {
             // Check if the education record exists for any user
-            const goalExist = await this.prisma.married_goal.findUnique({
+            const goalExist = await this.prisma.marriedGoal.findUnique({
                 where: { id, deleted: false },
             });
 
@@ -79,7 +79,7 @@ export class MarriedGoalsService {
     async update(userId: string, id: string, data: UpdateMarriedGoalDto) {
         const goalId = await this.findOne(userId, id);
 
-        return this.prisma.married_goal.update({
+        return this.prisma.marriedGoal.update({
             where: { id: goalId.id },
             data: { ...data, User: { connect: { id: userId } } },
             select,
@@ -97,7 +97,7 @@ export class MarriedGoalsService {
 
         const goalId = await this.findOne(userId, id);
 
-        return this.prisma.married_goal.update({
+        return this.prisma.marriedGoal.update({
             where: { id: goalId.id },
             data: { deleted: false },
         });

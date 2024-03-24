@@ -52,6 +52,18 @@ CREATE TABLE `Auth` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `reset_password` (
+    `id` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NULL,
+    `userEmail` VARCHAR(100) NOT NULL,
+    `token` VARCHAR(191) NOT NULL,
+    `expiredAt` DATETIME NOT NULL,
+    `isUsed` BOOLEAN NOT NULL DEFAULT false,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `gallery` (
     `id` VARCHAR(191) NOT NULL,
     `clientId` VARCHAR(191) NULL,
@@ -212,7 +224,7 @@ CREATE TABLE `life_goal` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `physic_character` (
+CREATE TABLE `physical_character` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NULL,
     `title` VARCHAR(100) NOT NULL,
@@ -226,6 +238,9 @@ CREATE TABLE `physic_character` (
 
 -- AddForeignKey
 ALTER TABLE `Auth` ADD CONSTRAINT `Auth_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `reset_password` ADD CONSTRAINT `reset_password_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `gallery` ADD CONSTRAINT `gallery_clientId_fkey` FOREIGN KEY (`clientId`) REFERENCES `client`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
@@ -264,4 +279,4 @@ ALTER TABLE `married_goal` ADD CONSTRAINT `married_goal_userId_fkey` FOREIGN KEY
 ALTER TABLE `life_goal` ADD CONSTRAINT `life_goal_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `physic_character` ADD CONSTRAINT `physic_character_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `physical_character` ADD CONSTRAINT `physical_character_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

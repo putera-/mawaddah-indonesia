@@ -21,10 +21,10 @@ export class LifeGoalsService {
     constructor(
         private prisma: PrismaService,
         private userService: UsersService,
-    ) {}
+    ) { }
 
-    async create(id: string, data: Prisma.Life_goalCreateInput) {
-        return this.prisma.life_goal.create({
+    async create(id: string, data: Prisma.LifeGoalCreateInput) {
+        return this.prisma.lifeGoal.create({
             data: { ...data, User: { connect: { id } } },
             select,
         });
@@ -33,10 +33,10 @@ export class LifeGoalsService {
     async findAll(userId: string, page: number = 1, limit: number = 10) {
         const skip = (page - 1) * limit;
         const [total, data] = await Promise.all([
-            this.prisma.life_goal.count({
+            this.prisma.lifeGoal.count({
                 where: { userId, deleted: false },
             }),
-            this.prisma.life_goal.findMany({
+            this.prisma.lifeGoal.findMany({
                 where: { userId, deleted: false },
                 orderBy: { createdAt: 'desc' },
                 select,
@@ -54,13 +54,13 @@ export class LifeGoalsService {
     }
 
     async findOne(userId: string, id: string) {
-        const data = await this.prisma.life_goal.findFirst({
+        const data = await this.prisma.lifeGoal.findFirst({
             where: { id, userId, deleted: false },
             select,
         });
         if (!data) {
             // Check if the education record exists for any user
-            const life_goalExist = await this.prisma.life_goal.findUnique({
+            const life_goalExist = await this.prisma.lifeGoal.findUnique({
                 where: { id, deleted: false },
             });
             // If the education record exists but does not belong to the requesting user
@@ -78,7 +78,7 @@ export class LifeGoalsService {
     async update(userId: string, id: string, data: UpdateLifeGoalDto) {
         const goalId = await this.findOne(userId, id);
 
-        return this.prisma.life_goal.update({
+        return this.prisma.lifeGoal.update({
             where: { id: goalId.id },
             data: { ...data, User: { connect: { id: userId } } },
             select,
@@ -94,7 +94,7 @@ export class LifeGoalsService {
             throw new NotFoundException(`No data found`);
         const Life_goalId = await this.findOne(userId, id);
 
-        return this.prisma.life_goal.update({
+        return this.prisma.lifeGoal.update({
             where: { id: Life_goalId.id },
             data: { deleted: true },
         });
