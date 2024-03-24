@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateSkillDto } from './dto/update-skill.dto';
 import { UsersService } from 'src/users/user.service';
 import { PrismaService } from 'src/prisma.service';
