@@ -20,7 +20,7 @@ const select = {
 @Injectable()
 export class EducationsService {
   constructor(private prisma: PrismaService, private userService: UsersService) { }
-  async create(id: string, data: Prisma.EducationCreateInput): Promise<Education> {
+  async create(id: string, data: Prisma.EducationCreateInput) {
     if (!id) throw new Error('ID must be a valid ID');
     
     const user = await this.prisma.user.findUnique({ where: { id } });
