@@ -133,9 +133,6 @@ export class AuthController {
 
                 data.avatar = `/avatar/${uniqueSuffix}_lg.${ext}`;
                 data.avatar_md = `/avatar/${uniqueSuffix}_md.${ext}`;
-            } else {
-                data.avatar = '';
-                data.avatar_md = '';
             }
 
             return this.userService.update(id, data);
@@ -143,10 +140,10 @@ export class AuthController {
             // remove avatar
             if (file) {
                 this.photoService.removeFile(
-                    `/uploads/photos/${uniqueSuffix}_lg.${ext}`,
+                    `/public/avatar/${uniqueSuffix}_lg.${ext}`,
                 );
                 this.photoService.removeFile(
-                    `/uploads/photos/${uniqueSuffix}_md.${ext}`,
+                    `/public/avatar/${uniqueSuffix}_md.${ext}`,
                 );
             }
             throw error;

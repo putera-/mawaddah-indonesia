@@ -56,11 +56,6 @@ CREATE TABLE `reset_password` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NULL,
     `email` VARCHAR(100) NOT NULL,
-<<<<<<<< HEAD:prisma/migrations/20240325011241_re_create/migration.sql
-    `token` VARCHAR(191) NOT NULL,
-    `expiredAt` DATETIME NOT NULL,
-========
->>>>>>>> bd92ab48ff8c03932e1a9610a3b5a0a63eef2e0f:prisma/migrations/20240325021729_re_initial/migration.sql
     `isUsed` BOOLEAN NOT NULL DEFAULT false,
     `expiredAt` DATETIME NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),

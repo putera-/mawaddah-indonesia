@@ -39,6 +39,8 @@ model User {
     bookmark_candidate Bookmark[]          @relation("UserCandidates")
     createdAt          DateTime            @default(now())
     updatedAt          DateTime            @default(now()) @updatedAt
+
+    @@map("user")
 }
 
 model Client {
@@ -84,16 +86,19 @@ model Auth {
     path         String   @db.VarChar(100)
     method       String   @db.VarChar(100)
     createdAt    DateTime @default(now())
+
+    @@map("auth")
 }
 
 model ResetPassword {
     id        String   @id @default(uuid())
     user      User?    @relation(fields: [userId], references: [id])
     userId    String?
-    userEmail String   @db.VarChar(100)
-    token     String   @default(uuid())
-    expiredAt DateTime @db.DateTime()
+    email     String   @db.VarChar(100)
     isUsed    Boolean  @default(false)
+    expiredAt DateTime @db.DateTime()
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 
     @@map("reset_password")
 }
@@ -143,6 +148,8 @@ model Activation {
     used           Boolean  @default(false)
     expiredAt      DateTime @db.DateTime()
     createdAt      DateTime @default(now())
+
+    @@map("activation")
 }
 
 model Bookmark {
@@ -154,6 +161,8 @@ model Bookmark {
     bookmarked  Boolean  @default(true)
     createdAt   DateTime @default(now())
     updatedAt   DateTime @default(now()) @updatedAt
+
+    @@map("bookmark")
 }
 
 model Biodata {
@@ -175,6 +184,8 @@ model Biodata {
     ethnic              String             @db.VarChar(100)
     createdAt           DateTime           @default(now())
     updatedAt           DateTime           @default(now()) @updatedAt
+
+    @@map("biodata")
 }
 
 enum ManhajStatus {
@@ -204,6 +215,8 @@ model Province {
     id      String  @id @default(uuid())
     name    String  @unique() @db.VarChar(100)
     deleted Boolean @default(false)
+
+    @@map("province")
 }
 
 model Education {

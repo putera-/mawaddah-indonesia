@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, Req, ValidationPipe, HttpCode } from '@nestjs/common';
 import { ResetPasswordService } from './reset_password.service';
 import { CreateResetPasswordDto } from './dto/create-reset_password.dto';
 import { UpdateResetPasswordDto } from './dto/update-reset_password.dto';
@@ -10,47 +10,26 @@ import { Public } from 'src/auth/auth.metadata';
 export class ResetPasswordController {
     constructor(private readonly resetPasswordService: ResetPasswordService,) { }
 
-    // FIXME harus bisa di panggil tanpa login
-    // FIXME validation errir
-    // FIXME req token untuk apa?
-    // FIXME parameter data: CreateResetPasswordDto untuk apa?
+    @Public()
+    @HttpCode(204)
     @Post()
-    create(@Request() token: string, @Body('userEmail') email: string, data: CreateResetPasswordDto) {
+    create(@Body(new ValidationPipe()) data: CreateResetPasswordDto) {
         try {
-            return this.resetPasswordService.create(token, email, data as Prisma.ResetPasswordCreateInput);
-
+            return this.resetPasswordService.create(data.email);
         } catch (error) {
             throw error
         }
     }
 
-    // FIXME harusnya bisa di akses tanpa login
-    // FIXME perbaiki parameter
+    @Public()
+    @HttpCode(204)
     @Patch(':id')
-    update(@Body('token') token: string, @Param('id') id: string, @Body() data: ChangePasswordDto) {
+    update(@Request() req: any, @Param('id') id: string, @Body(new ValidationPipe()) data: ChangePasswordDto) {
         try {
-            // console.log(req.user.userEmail)
-            return this.resetPasswordService.update(token, id, data);
-
+            return this.resetPasswordService.update(id, data);
         } catch (error) {
             throw error;
         }
     }
 
-    // @Get()
-    // findAll() {
-    //   return this.resetPasswordService.findAll();
-    // }
-
-    // @Get(':id')
-    // findOne(@Param('id') id: string) {
-    //   return this.resetPasswordService.findOne(+id);
-    // }
-
-
-
-    // @Delete(':id')
-    // remove(@Param('id') id: string) {
-    //   return this.resetPasswordService.remove(+id);
-    // }
 }

@@ -15,7 +15,6 @@ export class AppService {
         try {
             await fs.rm('.' + file);
         } catch (error) {
-            throw error;
         }
     }
 }

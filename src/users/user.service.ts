@@ -27,7 +27,7 @@ export class UsersService {
     constructor(
         private Prisma: PrismaService,
         private appService: AppService,
-    ) {}
+    ) { }
 
     create(data: Prisma.UserCreateInput) {
         return this.Prisma.user.create({
@@ -128,8 +128,12 @@ export class UsersService {
             if (currentData.avatar != updatedData.avatar) {
                 // photo has been change
                 // remove old photo
-                this.appService.removeFile(currentData.avatar);
-                this.appService.removeFile(currentData.avatar_md);
+                // prevent remove dummy photo
+                const dummy_file = ['/dummy/nissa.png', '/dummy/abang.png']
+                if (!dummy_file.includes(currentData.avatar)) {
+                    this.appService.removeFile('/public' + currentData.avatar);
+                    this.appService.removeFile('/public' + currentData.avatar_md);
+                }
             }
         }
 
