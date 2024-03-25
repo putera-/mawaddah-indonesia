@@ -15,55 +15,55 @@ export class ResetPasswordService {
     constructor(private prisma: PrismaService, private userService: UsersService, private authService: AuthService, private jwtService: JwtService,
     ) { }
 
-    async create(token: string, userEmail: string, data: Prisma.Reset_passwordCreateInput) {
+    async create(email: string): Promise<void> {
         // const token = req.headers.authorization.split(' ')[1];
-        const user = await this.prisma.user.findUnique({ where: { email: userEmail }, select: { id: true, email: true } });
-        console.log(user.email)
-        // Check if the email record exists and the token is not expired
-        const expiredAt = dayjs().add(1, 'minute').toDate();
+        const user = await this.prisma.user.findUnique({ where: { email: email }, select: { id: true, email: true } });
+        //throw if user not registered
+        if (!user) throw new NotFoundException("Email is not registered");
+
+
+        const expiredAt = dayjs().add(10, 'minute').toDate();
+        const data: Prisma.ResetPasswordCreateInput = {
+            user: { connect: { id: user.id } },
+            email,
+            expiredAt: expiredAt,
+        }
 
         const result = await this.prisma.resetPassword.create({
-            data: {
-                ...data,
-                user: { connect: { id: user.id } },
-                userEmail,
-                expiredAt: expiredAt,
-            }
-
+            data
         });
 
-        // TODO code buat ngirim email
         //blabla..
-        return result;
+        return;
     }
 
-    async update(token: string, id: string, data: ChangePasswordDto) {
-        // const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, email: true } });
-        const user = await this.prisma.resetPassword.findUnique({ where: { id }, select: { id: true, userEmail: true, expiredAt: true, token: true, isUsed: true } });
-        if (!user) throw new NotFoundException('id itu gaada');
+    async update(id: string, data: ChangePasswordDto): Promise<void> {
+        //check if id exist
+        const dataReset = await this.prisma.resetPassword.findUnique({ where: { id } });
+        if (!dataReset) throw new NotFoundException();
 
         // Check if the email record exists and the token is not expired
-        if (!user.userEmail || dayjs().isAfter(dayjs(user.expiredAt)) || user.isUsed) {
+        if (dayjs().isAfter(dayjs(dataReset.expiredAt)) || dataReset.isUsed) {
             await this.prisma.resetPassword.update({
                 where: { id, isUsed: true },
                 data: { isUsed: true }
             })
-            throw new ForbiddenException('Token has expired');
+            throw new ForbiddenException('Token has expired or already used');
         }
 
+        //check if password match
         await this.userService.checkPassword(data);
 
         //pakai userId karena dari userServicenya dia terimanya id, bukan email.
         const result = await this.prisma.user.update({
-            where: { email: user.userEmail },
-            data: { password: data.password },
-            select: { id: true, email: true }
+            where: { email: dataReset.email },
+            data: { password: data.password }
         });
 
         await this.prisma.resetPassword.update({
-            where: { id, isUsed: false },
+            where: { id },
             data: { isUsed: true }
         })
-        return result;
+        return;
     }
 }

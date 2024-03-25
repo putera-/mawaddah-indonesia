@@ -24,10 +24,13 @@ export class HobbiesService {
     ) { }
 
     async create(userId: string, data: Prisma.HobbyCreateInput) {
-        return this.prisma.hobby.create({
-            data: { ...data, User: { connect: { id: userId } } },
-            select,
-        });
+        // const user = await this.findOne(userId, data.title);
+        // console.log(user)
+
+        // return this.prisma.hobby.create({
+        //     data: { ...data, User: { connect: { id: userId } } },
+        //     select,
+        // });
     }
 
     async findAll(userId: string, page: number = 1, limit: number = 10) {
