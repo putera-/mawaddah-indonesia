@@ -4,7 +4,6 @@ import {
     Post,
     Body,
     Patch,
-    Param,
     ValidationPipe,
     Request,
 } from '@nestjs/common';
@@ -30,34 +29,12 @@ export class BiodataController {
         }
     }
 
-    // TODO buat apa? satu user = 1 biodata. 1 to 1 relation
-    @Roles(Role.Member)
-    @Get('all')
-    async findAll(@Request() req: any) {
-        try {
-            const user = await this.biodataService.findMe(req.user.id);
-            return await this.biodataService.findAll(user.gender);
-        } catch (error) {
-            throw error;
-        }
-    }
     @Roles(Role.Member)
     @Get()
     async findMe(@Request() req: any) {
         try {
             const me = req.user.id;
             return await this.biodataService.findMe(me);
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    // TODO buat apa?
-    @Roles(Role.Member)
-    @Get(':id')
-    async findOne(@Param('id') id: string) {
-        try {
-            return await this.biodataService.findOne(id);
         } catch (error) {
             throw error;
         }

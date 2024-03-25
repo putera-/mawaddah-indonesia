@@ -11,6 +11,7 @@ import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { UsersService } from 'src/users/user.service';
 import { PrismaService } from 'src/prisma.service';
+import { BiodataService } from 'src/biodata/biodata.service';
 
 @Controller('candidate')
 export class CandidateController {
@@ -18,6 +19,7 @@ export class CandidateController {
         private readonly candidateService: CandidateService,
         private readonly userService: UsersService,
         private Prisma: PrismaService,
+        private readonly biodataService: BiodataService,
     ) {}
 
     @Roles(Role.Member)
@@ -39,6 +41,16 @@ export class CandidateController {
             }
 
             return candidate;
+        } catch (error) {
+            throw error;
+        }
+    }
+    @Roles(Role.Member)
+    @Get('all')
+    async findAll(@Request() req: any) {
+        try {
+            const user = await this.biodataService.findMe(req.user.id);
+            return await this.candidateService.findAll(user.gender);
         } catch (error) {
             throw error;
         }
@@ -78,5 +90,14 @@ export class CandidateController {
     @Get('you_may_like')
     findLike(@Param('id') id: string) {
         return this.candidateService.findLike(id);
+    }
+    @Roles(Role.Member)
+    @Get(':id')
+    async findOne(@Param('id') id: string) {
+        try {
+            return await this.candidateService.findOne(id);
+        } catch (error) {
+            throw error;
+        }
     }
 }

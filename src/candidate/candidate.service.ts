@@ -36,6 +36,21 @@ export class CandidateService {
         });
         return newUsers;
     }
+    findAll(gender: string) {
+        const oppositeGender = this.getOppositeGender(gender);
+        return this.Prisma.biodata.findMany({
+            select: { ...select },
+            where: { gender: oppositeGender },
+        });
+    }
+    findOne(id: string) {
+        return this.Prisma.biodata.findFirst({
+            where: {
+                id,
+            },
+            select: { ...select },
+        });
+    }
     getOppositeGender(gender: any) {
         let oppositeGender: any;
         if (gender === 'PRIA') oppositeGender = 'WANITA';
