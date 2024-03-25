@@ -55,7 +55,7 @@ CREATE TABLE `Auth` (
 CREATE TABLE `reset_password` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NULL,
-    `userEmail` VARCHAR(100) NOT NULL,
+    `email` VARCHAR(100) NOT NULL,
     `token` VARCHAR(191) NOT NULL,
     `expiredAt` DATETIME NOT NULL,
     `isUsed` BOOLEAN NOT NULL DEFAULT false,
