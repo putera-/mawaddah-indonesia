@@ -5,7 +5,6 @@ import {
     Body,
     Patch,
     Param,
-    Delete,
     ValidationPipe,
     Request,
 } from '@nestjs/common';
@@ -16,7 +15,7 @@ import { Role } from 'src/roles/role.enums';
 
 @Controller('biodata')
 export class BiodataController {
-    constructor(private readonly biodataService: BiodataService) { }
+    constructor(private readonly biodataService: BiodataService) {}
 
     @Roles(Role.Member)
     @Post()
