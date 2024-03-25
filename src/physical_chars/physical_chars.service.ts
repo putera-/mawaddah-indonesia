@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/commo
 import { UpdatePhysicalCharDto } from './dto/update-physical_char.dto';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/user.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, TaarufStatus } from '@prisma/client';
 
 const select = {
     id: true,
@@ -18,6 +18,13 @@ export class PhysicalCharsService {
     constructor(private prisma: PrismaService, private userService: UsersService) { }
 
     async create(id: string, data: Prisma.PhysicalCharacterCreateInput) {
+        const user = await this.prisma.user.findUnique({
+            where: { id },
+            select: { id: true, taaruf_status: true },
+        });
+
+        if (user.taaruf_status !== TaarufStatus.OPEN) throw new ForbiddenException(`Taaruf is not open or pending`);
+
         return this.prisma.physicalCharacter.create({
             data: { ...data, User: { connect: { id } } },
             select
@@ -38,7 +45,7 @@ export class PhysicalCharsService {
                 take: Number(limit),
             }),
         ]);
-        if (data.length == 0) throw new NotFoundException(`No Data Found`);
+
         return {
             data,
             total,
@@ -69,14 +76,12 @@ export class PhysicalCharsService {
 
         return this.prisma.physicalCharacter.update({
             where: { id: phyId.id },
-            data: { ...data, User: { connect: { id: userId } } },
+            data: { ...data },
             select
         });
     }
 
     async remove(userId: string, id: string) {
-        const user = await this.prisma.user.findUnique({ where: { id: userId }, select: { id: true, Physic_character: true } });
-        if (!user.Physic_character.length === null) throw new NotFoundException(`No data found`);
         const phyId = await this.findOne(userId, id);
 
         return this.prisma.physicalCharacter.update({

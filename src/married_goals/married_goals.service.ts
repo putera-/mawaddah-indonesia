@@ -4,7 +4,7 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { UpdateMarriedGoalDto } from './dto/update-married_goal.dto';
-import { Prisma } from '@prisma/client';
+import { Prisma, TaarufStatus } from '@prisma/client';
 import { UsersService } from 'src/users/user.service';
 import { PrismaService } from 'src/prisma.service';
 
@@ -24,6 +24,13 @@ export class MarriedGoalsService {
     ) { }
 
     async create(id: string, data: Prisma.MarriedGoalCreateInput) {
+        const user = await this.prisma.user.findUnique({
+            where: { id },
+            select: { id: true, taaruf_status: true },
+        });
+
+        if (user.taaruf_status !== TaarufStatus.OPEN) throw new ForbiddenException(`Taaruf is not open or pending`);
+
         return this.prisma.marriedGoal.create({
             data: { ...data, User: { connect: { id } } },
             select,
@@ -81,20 +88,12 @@ export class MarriedGoalsService {
 
         return this.prisma.marriedGoal.update({
             where: { id: goalId.id },
-            data: { ...data, User: { connect: { id: userId } } },
+            data: { ...data },
             select,
         });
     }
 
     async remove(userId: string, id: string) {
-        const user = await this.prisma.user.findUnique({
-            where: { id: userId },
-            select: { id: true, Married_goal: true },
-        });
-
-        if (!user.Married_goal.length === null)
-            throw new NotFoundException(`No data found`);
-
         const goalId = await this.findOne(userId, id);
 
         return this.prisma.marriedGoal.update({

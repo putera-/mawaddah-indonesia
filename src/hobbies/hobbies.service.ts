@@ -4,7 +4,7 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { UpdateHobbyDto } from './dto/update-hobby.dto';
-import { Prisma } from '@prisma/client';
+import { Prisma, TaarufStatus } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/user.service';
 
@@ -24,13 +24,16 @@ export class HobbiesService {
     ) { }
 
     async create(userId: string, data: Prisma.HobbyCreateInput) {
-        // const user = await this.findOne(userId, data.title);
-        // console.log(user)
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+            select: { id: true, taaruf_status: true },
+        });
+        if (user.taaruf_status !== TaarufStatus.OPEN) throw new ForbiddenException(`Taaruf is not open or pending`);
 
-        // return this.prisma.hobby.create({
-        //     data: { ...data, User: { connect: { id: userId } } },
-        //     select,
-        // });
+        return this.prisma.hobby.create({
+            data: { ...data, User: { connect: { id: userId } } },
+            select,
+        });
     }
 
     async findAll(userId: string, page: number = 1, limit: number = 10) {
@@ -47,10 +50,6 @@ export class HobbiesService {
                 take: Number(limit),
             }),
         ]);
-
-        // FIXME harusnya jgn notfound
-        // not found itu artinya data yg di cari tidak ada, bukan kosong
-        if (data.length == 0) throw new NotFoundException(`No Data Found`);
 
         return {
             data,
@@ -89,20 +88,12 @@ export class HobbiesService {
 
         return this.prisma.hobby.update({
             where: { id: hobbyId.id },
-            // FIXME utk apa connect user id ?
-            data: { ...data, User: { connect: { id: userId } } },
+            data: { ...data },
             select,
         });
     }
 
     async remove(userId: string, id: string) {
-        const user = await this.prisma.user.findUnique({
-            where: { id: userId },
-            select: { id: true, Hobby: true },
-        });
-        if (!user.Hobby.length === null)
-            throw new NotFoundException(`No data found`);
-        // FIXME code di atas sepertinya useless
         const hobbyId = await this.findOne(userId, id);
 
         return this.prisma.hobby.update({
