@@ -80,7 +80,6 @@ export class MarriedGoalsController {
     @Roles(Role.Member)
     @HttpCode(204)
     @Delete(':id')
-    //TODO NTAR UPDATE INI, SAMA DI SKILLS JUGA
     remove(@Request() req: any, @Param('id') id: string) {
         const userId = req.user.id;
         try {
