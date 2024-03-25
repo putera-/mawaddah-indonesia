@@ -17,7 +17,7 @@ paths:
         post:
             tags:
             - Biodata
-            description: Create biodata, hanya auth user yg bisa melakukan.
+            description: -Create biodata, hanya auth user yg bisa melakukan. <br /> -After create Update taaruf status tobe OPEN
             requestBody:
                 required: true
                 content:

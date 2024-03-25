@@ -15,14 +15,16 @@ export class ResetPasswordService {
     constructor(private prisma: PrismaService, private userService: UsersService, private authService: AuthService, private jwtService: JwtService,
     ) { }
 
-    async create(token: string, userEmail: string, data: Prisma.Reset_passwordCreateInput) {
+    // TODO TINGGAL BIKIN VALIDASINYA DAN BLABLA
+    //  TODO parameter token buat apa?
+    async create(token: string, userEmail: string, data: Prisma.ResetPasswordCreateInput) {
         // const token = req.headers.authorization.split(' ')[1];
         const user = await this.prisma.user.findUnique({ where: { email: userEmail }, select: { id: true, email: true } });
         console.log(user.email)
         // Check if the email record exists and the token is not expired
         const expiredAt = dayjs().add(1, 'minute').toDate();
 
-        const result = await this.prisma.reset_password.create({
+        const result = await this.prisma.resetPassword.create({
             data: {
                 ...data,
                 user: { connect: { id: user.id } },
@@ -32,19 +34,19 @@ export class ResetPasswordService {
 
         });
 
-        //ini code buat ngirim email
+        // TODO code buat ngirim email
         //blabla..
         return result;
     }
 
     async update(token: string, id: string, data: ChangePasswordDto) {
         // const user = await this.prisma.user.findUnique({ where: { id }, select: { id: true, email: true } });
-        const user = await this.prisma.reset_password.findUnique({ where: { id }, select: { id: true, userEmail: true, expiredAt: true, token: true, isUsed: true } });
+        const user = await this.prisma.resetPassword.findUnique({ where: { id }, select: { id: true, userEmail: true, expiredAt: true, token: true, isUsed: true } });
         if (!user) throw new NotFoundException('id itu gaada');
 
         // Check if the email record exists and the token is not expired
         if (!user.userEmail || dayjs().isAfter(dayjs(user.expiredAt)) || user.isUsed) {
-            await this.prisma.reset_password.update({
+            await this.prisma.resetPassword.update({
                 where: { id, isUsed: true },
                 data: { isUsed: true }
             })
@@ -60,7 +62,7 @@ export class ResetPasswordService {
             select: { id: true, email: true }
         });
 
-        await this.prisma.reset_password.update({
+        await this.prisma.resetPassword.update({
             where: { id, isUsed: false },
             data: { isUsed: true }
         })

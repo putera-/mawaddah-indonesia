@@ -16,7 +16,7 @@ import { Role } from 'src/roles/role.enums';
 
 @Controller('biodata')
 export class BiodataController {
-    constructor(private readonly biodataService: BiodataService) {}
+    constructor(private readonly biodataService: BiodataService) { }
 
     @Roles(Role.Member)
     @Post()
@@ -31,6 +31,7 @@ export class BiodataController {
         }
     }
 
+    // TODO buat apa? satu user = 1 biodata. 1 to 1 relation
     @Roles(Role.Member)
     @Get('all')
     async findAll(@Request() req: any) {
@@ -52,6 +53,7 @@ export class BiodataController {
         }
     }
 
+    // TODO buat apa?
     @Roles(Role.Member)
     @Get(':id')
     async findOne(@Param('id') id: string) {
@@ -63,7 +65,7 @@ export class BiodataController {
     }
 
     @Roles(Role.Member)
-    @Patch('')
+    @Patch()
     async update(
         @Request() req: any,
         @Body(new ValidationPipe()) data: CreateBiodatumDto,

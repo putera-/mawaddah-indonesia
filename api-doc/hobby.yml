@@ -16,8 +16,8 @@ paths:
     "/hobbies":
         post:
             tags:
-            - Married Goal
-            description: \- Only for MEMBER role <br> \- Auth user create married_goal, make sure have biodata <br> \- Prevent create married goal if no biodata (forbidden)
+            - Hobby
+            description: \- Only for MEMBER role <br> \- Make sure Auth user taaruf status is OPEN <br> \- Prevent create married goal if no biodata (forbidden)
             requestBody:
                 required: true
                 content:
@@ -80,7 +80,7 @@ paths:
         get:
             tags:
             - Hobby
-            description: \- Only for MEMBER role <br> \- Get All Auth user Hobbies <br> \- Prevent create if no biodata (forbidden)
+            description: \- Only for MEMBER role <br> \- Get All Auth user Hobbies
             responses:
                 200:
                     description: "OK"
@@ -102,19 +102,6 @@ paths:
                                     statusCode:
                                         type: number
                                         example: 401
-                403:
-                    description: Forbidden
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    error:
-                                        type: string
-                                        example: Forbidden
-                                    statusCode:
-                                        type: number
-                                        example: 403
     "/hobbies/:id":
         get:
             tags:
