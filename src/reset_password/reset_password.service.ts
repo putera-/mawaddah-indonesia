@@ -15,9 +15,7 @@ export class ResetPasswordService {
     constructor(private prisma: PrismaService, private userService: UsersService, private authService: AuthService, private jwtService: JwtService,
     ) { }
 
-    // TODO TINGGAL BIKIN VALIDASINYA DAN BLABLA
-    //  TODO parameter token buat apa?
-    async create(token: string, userEmail: string, data: Prisma.ResetPasswordCreateInput) {
+    async create(token: string, userEmail: string, data: Prisma.Reset_passwordCreateInput) {
         // const token = req.headers.authorization.split(' ')[1];
         const user = await this.prisma.user.findUnique({ where: { email: userEmail }, select: { id: true, email: true } });
         console.log(user.email)
@@ -56,7 +54,6 @@ export class ResetPasswordService {
         await this.userService.checkPassword(data);
 
         //pakai userId karena dari userServicenya dia terimanya id, bukan email.
-        // const result = await this.userService.updatePassword(email.userId, data.password);
         const result = await this.prisma.user.update({
             where: { email: user.userEmail },
             data: { password: data.password },
@@ -67,12 +64,6 @@ export class ResetPasswordService {
             where: { id, isUsed: false },
             data: { isUsed: true }
         })
-
-
-
         return result;
-
     }
-
-
 }
