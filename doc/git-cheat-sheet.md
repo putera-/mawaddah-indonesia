@@ -78,4 +78,7 @@ git branch -D [nama_branch]
 
 # Push delete
 git push origin --delete [nama_branch]
+
+# IN LOCAL remove unnecessary branch that deleted in remote
+git fetch --prune
 ```
