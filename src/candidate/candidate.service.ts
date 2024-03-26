@@ -15,7 +15,7 @@ let select = {
 };
 @Injectable()
 export class CandidateService {
-    constructor(private Prisma: PrismaService) {}
+    constructor(private Prisma: PrismaService) { }
     async findNew(gender: any, query: Record<string, any>) {
         const oppositeGender = this.getOppositeGender(gender);
         const limit = parseInt(query.limit);
@@ -90,7 +90,6 @@ export class CandidateService {
                 s.similiarHobbies.length +
                 s.similiarMarriageGoals.length +
                 s.similiarLifeGoals.length;
-            console.log(s.similiarity);
         }
         return suggest;
     }
