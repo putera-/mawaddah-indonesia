@@ -7,6 +7,7 @@ import { UpdateHobbyDto } from './dto/update-hobby.dto';
 import { Prisma, TaarufStatus } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/user.service';
+import { Hobbies } from './hobbies.interface';
 
 const select = {
     id: true,
@@ -23,7 +24,7 @@ export class HobbiesService {
         private userService: UsersService,
     ) { }
 
-    async create(userId: string, data: Prisma.HobbyCreateInput) {
+    async create(userId: string, data: Prisma.HobbyCreateInput): Promise<Hobbies> {
         const user = await this.prisma.user.findUnique({
             where: { id: userId },
             select: { id: true, taaruf_status: true },
@@ -36,7 +37,7 @@ export class HobbiesService {
         });
     }
 
-    async findAll(userId: string, page: number = 1, limit: number = 10) {
+    async findAll(userId: string, page: number = 1, limit: number = 10): Promise<Record<string, any>> {
         const skip = (page - 1) * limit;
         const [total, data] = await Promise.all([
             this.prisma.hobby.count({
@@ -60,7 +61,7 @@ export class HobbiesService {
         }
     }
 
-    async findOne(userId: string, id: string) {
+    async findOne(userId: string, id: string): Promise<Record<string, any>> {
         const data = await this.prisma.hobby.findFirst({
             where: { id, userId, deleted: false },
             select,
@@ -83,7 +84,7 @@ export class HobbiesService {
         return data;
     }
 
-    async update(userId: string, id: string, data: UpdateHobbyDto) {
+    async update(userId: string, id: string, data: UpdateHobbyDto): Promise<Hobbies> {
         const hobbyId = await this.findOne(userId, id);
 
         return this.prisma.hobby.update({
@@ -93,7 +94,7 @@ export class HobbiesService {
         });
     }
 
-    async remove(userId: string, id: string) {
+    async remove(userId: string, id: string): Promise<Hobbies> {
         const hobbyId = await this.findOne(userId, id);
 
         return this.prisma.hobby.update({

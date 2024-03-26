@@ -3,6 +3,7 @@ import { UpdateEducationDto } from './dto/update-education.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Prisma, TaarufStatus } from '@prisma/client';
 import { UsersService } from 'src/users/user.service';
+import { Education } from './educations.interface';
 
 const select = {
     id: true,
@@ -20,7 +21,7 @@ const select = {
 @Injectable()
 export class EducationsService {
     constructor(private prisma: PrismaService, private userService: UsersService) { }
-    async create(id: string, data: Prisma.EducationCreateInput) {
+    async create(id: string, data: Prisma.EducationCreateInput): Promise<Education> {
 
         const user = await this.prisma.user.findUnique({
             where: { id },
@@ -35,7 +36,7 @@ export class EducationsService {
         });
     }
 
-    async findAll(userId: string, page: number = 1, limit: number = 10) {
+    async findAll(userId: string, page: number = 1, limit: number = 10): Promise<Record<string, any>> {
         const skip = (page - 1) * limit;
         const [total, data] = await Promise.all([
             this.prisma.education.count({
@@ -59,7 +60,7 @@ export class EducationsService {
     }
 
 
-    async findOne(userId: string, id: string) {
+    async findOne(userId: string, id: string): Promise<Record<string, any>> {
         const data = await this.prisma.education.findFirst({ where: { id, userId, deleted: false }, select });
         if (!data) {
             // Check if the education record exists for any user
@@ -75,7 +76,7 @@ export class EducationsService {
         return data;
     }
 
-    async update(userId: string, id: string, data: UpdateEducationDto) {
+    async update(userId: string, id: string, data: UpdateEducationDto): Promise<Education> {
         const educationId = await this.findOne(userId, id);
 
         return this.prisma.education.update({
@@ -85,7 +86,7 @@ export class EducationsService {
         });
     }
 
-    async remove(userId: string, id: string) {
+    async remove(userId: string, id: string): Promise<Education> {
         const educationId = await this.findOne(userId, id);
 
         return this.prisma.education.update({

@@ -3,6 +3,7 @@ import { UpdateSkillDto } from './dto/update-skill.dto';
 import { UsersService } from 'src/users/user.service';
 import { PrismaService } from 'src/prisma.service';
 import { Prisma, TaarufStatus } from '@prisma/client';
+import { Skills } from './skills.interface';
 
 const select = {
     id: true,
@@ -16,7 +17,7 @@ const select = {
 export class SkillsService {
     constructor(private prisma: PrismaService, private userService: UsersService) { }
 
-    async create(id: string, data: Prisma.SkillCreateInput) {
+    async create(id: string, data: Prisma.SkillCreateInput): Promise<Skills> {
         const user = await this.prisma.user.findUnique({
             where: { id },
             select: { id: true, taaruf_status: true },
@@ -30,7 +31,7 @@ export class SkillsService {
         });
     }
 
-    async findAll(userId: string, page: number = 1, limit: number = 10) {
+    async findAll(userId: string, page: number = 1, limit: number = 10): Promise<Record<string, any>> {
         const skip = (page - 1) * limit;
         const [total, data] = await Promise.all([
             this.prisma.skill.count({
@@ -53,7 +54,7 @@ export class SkillsService {
         }
     }
 
-    async findOne(userId: string, id: string) {
+    async findOne(userId: string, id: string): Promise<Record<string, any>> {
         const data = await this.prisma.skill.findFirst({ where: { id, userId, deleted: false }, select });
         if (!data) {
             // Check if the education record exists for any user
@@ -69,7 +70,7 @@ export class SkillsService {
         return data;
     }
 
-    async update(userId: string, id: string, data: UpdateSkillDto) {
+    async update(userId: string, id: string, data: UpdateSkillDto): Promise<Skills> {
         const skillId = await this.findOne(userId, id);
 
         return this.prisma.skill.update({
@@ -79,7 +80,7 @@ export class SkillsService {
         });
     }
 
-    async remove(userId: string, id: string) {
+    async remove(userId: string, id: string): Promise<Skills> {
         const skillId = await this.findOne(userId, id);
 
         return this.prisma.skill.update({

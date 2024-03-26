@@ -7,6 +7,7 @@ import { UpdateMarriedGoalDto } from './dto/update-married_goal.dto';
 import { Prisma, TaarufStatus } from '@prisma/client';
 import { UsersService } from 'src/users/user.service';
 import { PrismaService } from 'src/prisma.service';
+import { Marries_goal } from './married_goals.interface';
 
 const select = {
     id: true,
@@ -23,7 +24,7 @@ export class MarriedGoalsService {
         private userService: UsersService,
     ) { }
 
-    async create(id: string, data: Prisma.MarriedGoalCreateInput) {
+    async create(id: string, data: Prisma.MarriedGoalCreateInput): Promise<Marries_goal> {
         const user = await this.prisma.user.findUnique({
             where: { id },
             select: { id: true, taaruf_status: true },
@@ -37,7 +38,7 @@ export class MarriedGoalsService {
         });
     }
 
-    async findAll(userId: string, page: number = 1, limit: number = 10) {
+    async findAll(userId: string, page: number = 1, limit: number = 10): Promise<Record<string, any>> {
         const skip = (page - 1) * limit;
         const [total, data] = await Promise.all([
             this.prisma.marriedGoal.count({
@@ -60,7 +61,7 @@ export class MarriedGoalsService {
         };
     }
 
-    async findOne(userId: string, id: string) {
+    async findOne(userId: string, id: string): Promise<Record<string, any>> {
         const data = await this.prisma.marriedGoal.findFirst({
             where: { id, userId, deleted: false },
             select,
@@ -83,7 +84,7 @@ export class MarriedGoalsService {
         return data;
     }
 
-    async update(userId: string, id: string, data: UpdateMarriedGoalDto) {
+    async update(userId: string, id: string, data: UpdateMarriedGoalDto): Promise<Marries_goal> {
         const goalId = await this.findOne(userId, id);
 
         return this.prisma.marriedGoal.update({
@@ -93,7 +94,7 @@ export class MarriedGoalsService {
         });
     }
 
-    async remove(userId: string, id: string) {
+    async remove(userId: string, id: string): Promise<Marries_goal> {
         const goalId = await this.findOne(userId, id);
 
         return this.prisma.marriedGoal.update({

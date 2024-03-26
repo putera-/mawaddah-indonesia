@@ -1,9 +1,9 @@
 export interface Skills {
     id: string
-    User: string
+    User?: string
     userId: string
     title: string
-    deleted: boolean
+    deleted?: boolean
     createdAt: Date
     updatedAt: Date
 }
