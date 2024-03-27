@@ -19,7 +19,7 @@ import { Role } from 'src/roles/role.enums';
 
 @Controller('married-goals')
 export class MarriedGoalsController {
-    constructor(private readonly marriedGoalsService: MarriedGoalsService) {}
+    constructor(private readonly marriedGoalsService: MarriedGoalsService) { }
 
     @Roles(Role.Member)
     @Post()
@@ -70,7 +70,6 @@ export class MarriedGoalsController {
     ) {
         try {
             const userId = req.user.id;
-            // console.log(req.user.id)
             return this.marriedGoalsService.update(userId, id, data);
         } catch (error) {
             throw error;

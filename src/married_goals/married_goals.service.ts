@@ -4,9 +4,9 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { UpdateMarriedGoalDto } from './dto/update-married_goal.dto';
-import { Prisma } from '@prisma/client';
-import { UsersService } from 'src/users/user.service';
+import { Prisma, TaarufStatus } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
+import { Marries_goal } from './married_goals.interface';
 
 const select = {
     id: true,
@@ -20,17 +20,23 @@ const select = {
 export class MarriedGoalsService {
     constructor(
         private prisma: PrismaService,
-        private userService: UsersService,
     ) { }
 
-    async create(id: string, data: Prisma.MarriedGoalCreateInput) {
+    async create(id: string, data: Prisma.MarriedGoalCreateInput): Promise<Marries_goal> {
+        const user = await this.prisma.user.findUnique({
+            where: { id },
+            select: { id: true, taaruf_status: true },
+        });
+
+        if (user.taaruf_status !== TaarufStatus.OPEN) throw new ForbiddenException(`Taaruf is not open or pending`);
+
         return this.prisma.marriedGoal.create({
             data: { ...data, User: { connect: { id } } },
             select,
         });
     }
 
-    async findAll(userId: string, page: number = 1, limit: number = 10) {
+    async findAll(userId: string, page: number = 1, limit: number = 10): Promise<Pagination<Marries_goal[]>> {
         const skip = (page - 1) * limit;
         const [total, data] = await Promise.all([
             this.prisma.marriedGoal.count({
@@ -53,53 +59,33 @@ export class MarriedGoalsService {
         };
     }
 
-    async findOne(userId: string, id: string) {
+    async findOne(userId: string, id: string): Promise<Record<string, any>> {
         const data = await this.prisma.marriedGoal.findFirst({
             where: { id, userId, deleted: false },
             select,
         });
-        if (!data) {
-            // Check if the education record exists for any user
-            const goalExist = await this.prisma.marriedGoal.findUnique({
-                where: { id, deleted: false },
-            });
 
-            // If the education record exists but does not belong to the requesting user
-            if (goalExist) {
-                throw new ForbiddenException(
-                    `You dont have permission to access / on this server`,
-                );
-            } else {
-                throw new NotFoundException(`Data Not Found`);
-            }
-        }
+        if (!data) throw new NotFoundException(`Data Not Found`);
         return data;
     }
 
-    async update(userId: string, id: string, data: UpdateMarriedGoalDto) {
+    async update(userId: string, id: string, data: UpdateMarriedGoalDto): Promise<Marries_goal> {
         const goalId = await this.findOne(userId, id);
 
         return this.prisma.marriedGoal.update({
             where: { id: goalId.id },
-            data: { ...data, User: { connect: { id: userId } } },
+            data: { ...data },
             select,
         });
     }
 
-    async remove(userId: string, id: string) {
-        const user = await this.prisma.user.findUnique({
-            where: { id: userId },
-            select: { id: true, Married_goal: true },
-        });
-
-        if (!user.Married_goal.length === null)
-            throw new NotFoundException(`No data found`);
-
+    async remove(userId: string, id: string): Promise<void> {
         const goalId = await this.findOne(userId, id);
 
-        return this.prisma.marriedGoal.update({
+        await this.prisma.marriedGoal.update({
             where: { id: goalId.id },
             data: { deleted: false },
         });
+        return;
     }
 }

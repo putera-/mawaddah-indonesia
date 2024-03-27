@@ -29,7 +29,6 @@ export class HobbiesController {
         @Body(new ValidationPipe()) data: CreateHobbyDto,
     ) {
         try {
-            // FIXME make sure, auth user taaruf status is OPEN
             const userId = req.user.id;
             return this.hobbiesService.create(userId, data);
         } catch (error) {
@@ -83,8 +82,6 @@ export class HobbiesController {
     @Delete(':id')
     remove(@Request() req: any, @Param('id') id: string) {
         try {
-            // FIXME id ga perlu di check, ga akan lewat sini klo manggil tanpa parameter id
-            if (!id) throw new NotFoundException('Id not found');
             const userId = req.user.id;
             return this.hobbiesService.remove(userId, id);
         } catch (error) {

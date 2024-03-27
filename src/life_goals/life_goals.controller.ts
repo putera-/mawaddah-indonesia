@@ -63,7 +63,6 @@ export class LifeGoalsController {
   remove(@Request() req: any, @Param('id') id: string) {
     try {
       const userId = req.user.id
-      if (!id) throw new NotFoundException('Id not found');
       return this.lifeGoalsService.remove(userId, id);
 
     } catch (error) {

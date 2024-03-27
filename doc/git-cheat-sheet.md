@@ -43,6 +43,7 @@ git pull [nama_remote] [nama_branch]
 ```
 
 ## COMMIT
+
 ```sh
 # Add all file to stage
 git add .
@@ -65,4 +66,19 @@ git commit --amend -m "[New Message]"
 
 # Update previeous commit with new change, without edit message
 git commit --amend --no-edit
+```
+
+## DELETE BRANCH
+
+```SH
+# delete from local
+git branch -d [nama_branch]
+# forece delete
+git branch -D [nama_branch]
+
+# Push delete
+git push origin --delete [nama_branch]
+
+# IN LOCAL remove unnecessary branch that deleted in remote
+git fetch --prune
 ```

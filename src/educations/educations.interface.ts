@@ -7,7 +7,7 @@ export interface Education {
     city?: string
     startYear: number
     endYear: number
-    deleted: boolean
+    deleted?: boolean
     createdAt: Date
     updatedAt: Date
 }

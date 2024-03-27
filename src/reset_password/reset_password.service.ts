@@ -12,7 +12,7 @@ import { ChangePasswordDto } from 'src/auth/dto/change-password.dto';
 
 @Injectable()
 export class ResetPasswordService {
-    constructor(private prisma: PrismaService, private userService: UsersService, private authService: AuthService, private jwtService: JwtService,
+    constructor(private prisma: PrismaService, private userService: UsersService
     ) { }
 
     async create(email: string): Promise<void> {
@@ -29,7 +29,7 @@ export class ResetPasswordService {
             expiredAt: expiredAt,
         }
 
-        const result = await this.prisma.resetPassword.create({
+        await this.prisma.resetPassword.create({
             data
         });
 
@@ -48,14 +48,14 @@ export class ResetPasswordService {
                 where: { id, isUsed: true },
                 data: { isUsed: true }
             })
-            throw new ForbiddenException('Token has expired or already used');
+            throw new ForbiddenException('Token has expired or already in use');
         }
 
         //check if password match
         await this.userService.checkPassword(data);
 
         //pakai userId karena dari userServicenya dia terimanya id, bukan email.
-        const result = await this.prisma.user.update({
+        await this.prisma.user.update({
             where: { email: dataReset.email },
             data: { password: data.password }
         });

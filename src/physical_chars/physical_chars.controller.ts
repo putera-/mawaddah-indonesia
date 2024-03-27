@@ -63,7 +63,6 @@ export class PhysicalCharsController {
   remove(@Request() req: any, @Param('id') id: string) {
     try {
       const userId = req.user.id
-      if (!id) throw new NotFoundException('Id not found');
       return this.physicalCharsService.remove(userId, id);
 
     } catch (error) {

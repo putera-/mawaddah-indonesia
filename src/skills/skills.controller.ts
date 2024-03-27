@@ -83,7 +83,6 @@ export class SkillsController {
     remove(@Request() req: any, @Param('id') id: string) {
         try {
             const userId = req.user.id;
-            if (!id) throw new NotFoundException('Id not found');
             return this.skillsService.remove(userId, id);
         } catch (error) {
             throw error;
