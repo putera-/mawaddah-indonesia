@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { UpdateMarriedGoalDto } from './dto/update-married_goal.dto';
 import { Prisma, TaarufStatus } from '@prisma/client';
-import { UsersService } from 'src/users/user.service';
 import { PrismaService } from 'src/prisma.service';
 import { Marries_goal } from './married_goals.interface';
 
@@ -21,7 +20,6 @@ const select = {
 export class MarriedGoalsService {
     constructor(
         private prisma: PrismaService,
-        private userService: UsersService,
     ) { }
 
     async create(id: string, data: Prisma.MarriedGoalCreateInput): Promise<Marries_goal> {
@@ -38,7 +36,7 @@ export class MarriedGoalsService {
         });
     }
 
-    async findAll(userId: string, page: number = 1, limit: number = 10): Promise<Record<string, any>> {
+    async findAll(userId: string, page: number = 1, limit: number = 10): Promise<Pagination<Marries_goal[]>> {
         const skip = (page - 1) * limit;
         const [total, data] = await Promise.all([
             this.prisma.marriedGoal.count({
@@ -66,21 +64,8 @@ export class MarriedGoalsService {
             where: { id, userId, deleted: false },
             select,
         });
-        if (!data) {
-            // Check if the education record exists for any user
-            const goalExist = await this.prisma.marriedGoal.findUnique({
-                where: { id, deleted: false },
-            });
 
-            // If the education record exists but does not belong to the requesting user
-            if (goalExist) {
-                throw new ForbiddenException(
-                    `You dont have permission to access / on this server`,
-                );
-            } else {
-                throw new NotFoundException(`Data Not Found`);
-            }
-        }
+        if (!data) throw new NotFoundException(`Data Not Found`);
         return data;
     }
 
@@ -94,12 +79,13 @@ export class MarriedGoalsService {
         });
     }
 
-    async remove(userId: string, id: string): Promise<Marries_goal> {
+    async remove(userId: string, id: string): Promise<void> {
         const goalId = await this.findOne(userId, id);
 
-        return this.prisma.marriedGoal.update({
+        await this.prisma.marriedGoal.update({
             where: { id: goalId.id },
             data: { deleted: false },
         });
+        return;
     }
 }

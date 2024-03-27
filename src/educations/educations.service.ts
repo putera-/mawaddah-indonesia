@@ -2,7 +2,6 @@ import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/commo
 import { UpdateEducationDto } from './dto/update-education.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Prisma, TaarufStatus } from '@prisma/client';
-import { UsersService } from 'src/users/user.service';
 import { Education } from './educations.interface';
 
 const select = {
@@ -20,7 +19,7 @@ const select = {
 
 @Injectable()
 export class EducationsService {
-    constructor(private prisma: PrismaService, private userService: UsersService) { }
+    constructor(private prisma: PrismaService) { }
     async create(id: string, data: Prisma.EducationCreateInput): Promise<Education> {
 
         const user = await this.prisma.user.findUnique({
@@ -36,7 +35,7 @@ export class EducationsService {
         });
     }
 
-    async findAll(userId: string, page: number = 1, limit: number = 10): Promise<Record<string, any>> {
+    async findAll(userId: string, page: number = 1, limit: number = 10): Promise<Pagination<Education[]>> {
         const skip = (page - 1) * limit;
         const [total, data] = await Promise.all([
             this.prisma.education.count({
@@ -62,17 +61,7 @@ export class EducationsService {
 
     async findOne(userId: string, id: string): Promise<Record<string, any>> {
         const data = await this.prisma.education.findFirst({ where: { id, userId, deleted: false }, select });
-        if (!data) {
-            // Check if the education record exists for any user
-            const eduExists = await this.prisma.education.findUnique({ where: { id, deleted: false } });
-
-            // If the education record exists but does not belong to the requesting user
-            if (eduExists) {
-                throw new ForbiddenException('You dont have permission to access / on this server');
-            } else {
-                throw new NotFoundException('Data Not Found');
-            }
-        };
+        if (!data) throw new NotFoundException();
         return data;
     }
 
@@ -86,12 +75,13 @@ export class EducationsService {
         });
     }
 
-    async remove(userId: string, id: string): Promise<Education> {
+    async remove(userId: string, id: string): Promise<void> {
         const educationId = await this.findOne(userId, id);
 
-        return this.prisma.education.update({
+        await this.prisma.education.update({
             where: { id: educationId.id },
             data: { deleted: true },
         });
+        return;
     }
 }
