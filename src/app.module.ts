@@ -25,6 +25,7 @@ import { BookmarkModule } from './bookmark/bookmark.module';
 import { CandidateModule } from './candidate/candidate.module';
 import { ResetPasswordModule } from './reset_password/reset_password.module';
 import { SkillsModule } from './skills/skills.module';
+import { ActivationModule } from './activation/activation.module';
 
 @Module({
     imports: [
@@ -49,6 +50,8 @@ import { SkillsModule } from './skills/skills.module';
         BookmarkModule,
         CandidateModule,
         ResetPasswordModule,
+        ConfigModule,
+        ActivationModule,
     ],
 
     controllers: [AppController],

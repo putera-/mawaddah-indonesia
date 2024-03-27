@@ -40,7 +40,9 @@ export class AuthController {
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('register')
-    async create(@Body(new ValidationPipe()) data: CreateUserDto) {
+    async create(
+        @Body(new ValidationPipe()) data: CreateUserDto,
+    ): Promise<User> {
         try {
             await this.userService.validateNewUser(data);
 
@@ -65,7 +67,7 @@ export class AuthController {
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('login')
-    signIn(@Body(new ValidationPipe()) signInDto: SignInDto) {
+    signIn(@Body(new ValidationPipe()) signInDto: SignInDto): Promise<User> {
         try {
             return this.authService.signIn(signInDto.email, signInDto.password);
         } catch (error) {
