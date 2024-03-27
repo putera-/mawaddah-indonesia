@@ -5,7 +5,6 @@ import * as bcrypt from 'bcrypt';
 
 export async function userSeed(prisma: PrismaClient) {
     const password = await bcrypt.hash('rahasia', 10);
-    const MyUserpassword = await bcrypt.hash('koboKanaeru@2232', 10);
 
     // SUPERADMIN
     {

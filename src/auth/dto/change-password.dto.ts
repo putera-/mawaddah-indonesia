@@ -7,6 +7,10 @@ import {
 
 export class ChangePasswordDto {
     @IsString()
+    @IsNotEmpty()
+    old_password: string;
+
+    @IsString()
     @IsStrongPassword()
     @Length(6, 100)
     password: string;
