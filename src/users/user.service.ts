@@ -27,7 +27,7 @@ export class UsersService {
     constructor(
         private Prisma: PrismaService,
         private appService: AppService,
-    ) { }
+    ) {}
 
     create(data: Prisma.UserCreateInput) {
         return this.Prisma.user.create({
@@ -82,35 +82,7 @@ export class UsersService {
 
         return users;
     }
-    // async findCouple(id: string): Promise<{ user: any; partner: any }> {
-    //     // Find the user with the given ID
-    //     const user = await this.Prisma.user.findFirst({
-    //         where: { id },
-    //         select: { preference: true },
-    //     });
 
-    //     // Find a user with a compatible interest
-    //     const partner = await this.Prisma.user.findFirst({
-    //         where: {
-    //             preference: {
-    //                 some: {
-    //                     title: {
-    //                         equals: user.preference.title, // assuming interest is an object with a 'name' field
-    //                     },
-    //                 },
-    //             },
-    //             AND: {
-    //                 id: {
-    //                     notIn: userId,
-    //                 },
-    //             },
-    //         },
-    //         include: { preference: true },
-    //     });
-
-    //     // Return an object with the user and their partner
-    //     return { user, partner };
-    // }
     async update(id: string, data: Prisma.UserUpdateInput): Promise<User> {
         const currentData = await this.Prisma.user.findUnique({
             where: { id },
@@ -128,10 +100,12 @@ export class UsersService {
                 // photo has been change
                 // remove old photo
                 // prevent remove dummy photo
-                const dummy_file = ['/dummy/nissa.png', '/dummy/abang.png']
+                const dummy_file = ['/dummy/nissa.png', '/dummy/abang.png'];
                 if (!dummy_file.includes(currentData.avatar)) {
                     this.appService.removeFile('/public' + currentData.avatar);
-                    this.appService.removeFile('/public' + currentData.avatar_md);
+                    this.appService.removeFile(
+                        '/public' + currentData.avatar_md,
+                    );
                 }
             }
         }
@@ -139,10 +113,23 @@ export class UsersService {
         return updatedData;
     }
 
-    async updatePassword(id: string, password: string): Promise<void> {
+    async updatePassword(id: string, data: any): Promise<void> {
+        const user = await this.Prisma.user.findFirst({ where: { id } });
+        if (!user) throw new NotFoundException();
+        if (data.password != data.confirm_password)
+            throw new BadRequestException('Konfirmasi password tidak sesuai');
+        const checkPassword = await bcrypt.compare(
+            data.old_password,
+            user.password,
+        );
+        if (!checkPassword) throw new BadRequestException('Password salah');
+
+        delete data.confirm_password;
+        delete data.old_password;
+        data.password = await bcrypt.hash(data.password, 10);
         await this.Prisma.user.update({
-            where: { id },
-            data: { password },
+            where: { id: user.id },
+            data: { password: data.password },
         });
     }
 

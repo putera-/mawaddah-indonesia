@@ -8,6 +8,9 @@ import { jwtConstants } from './constants';
 import { UsersModule } from 'src/users/user.module';
 import { AppService } from 'src/app.service';
 import { PhotosService } from 'src/photos/photos.service';
+import { ActivationService } from 'src/activation/activation.service';
+import { EmailService } from 'src/email.service';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
     imports: [
@@ -25,6 +28,9 @@ import { PhotosService } from 'src/photos/photos.service';
         PrismaService,
         AppService,
         PhotosService,
+        ActivationService,
+        EmailService,
+        ConfigService
     ],
     exports: [AuthService],
 })

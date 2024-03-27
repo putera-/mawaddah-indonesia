@@ -5,6 +5,7 @@ import {
     Get,
     HttpCode,
     HttpStatus,
+    Param,
     Patch,
     Post,
     Req,
@@ -26,36 +27,47 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import path from 'path';
 import { PhotosService } from 'src/photos/photos.service';
+import { ActivationService } from 'src/activation/activation.service';
 @Controller('auth')
 export class AuthController {
     constructor(
         private authService: AuthService,
         private userService: UsersService,
         private photoService: PhotosService,
-    ) { }
+        private activation: ActivationService,
+    ) {}
 
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('register')
-    async create(@Body(new ValidationPipe()) data: CreateUserDto) {
+    async create(
+        @Body(new ValidationPipe()) data: CreateUserDto,
+    ): Promise<User> {
         try {
             await this.userService.validateNewUser(data);
 
             const user: User = await this.userService.create(data);
 
-            // FORMAT/HIDE USER DATA
-            // this.userService.formatGray(user);
-
+            await this.activation.create(user.email);
             return user;
         } catch (error) {
             throw error;
         }
     }
-
+    @Public()
+    @Patch('activate/:id')
+    @HttpCode(204)
+    async activateUser(@Param('id') id: string): Promise<void> {
+        try {
+            await this.userService.activateUser(id);
+        } catch (error) {
+            throw error;
+        }
+    }
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('login')
-    signIn(@Body(new ValidationPipe()) signInDto: SignInDto) {
+    signIn(@Body(new ValidationPipe()) signInDto: SignInDto): Promise<User> {
         try {
             return this.authService.signIn(signInDto.email, signInDto.password);
         } catch (error) {
@@ -153,13 +165,12 @@ export class AuthController {
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Patch('change_password')
     @HttpCode(204)
-    async updatePassword(@Request() req: any, @Body() data: ChangePasswordDto) {
+    async updatePassword(
+        @Request() req: any,
+        @Body(new ValidationPipe()) data: ChangePasswordDto,
+    ) {
         try {
-            const role = req.user.role;
-            const id = req.user.id;
-            const user = await this.userService.findOne(id, role);
-            this.userService.checkPassword(data);
-            await this.userService.updatePassword(user.id, data.password);
+            return await this.userService.updatePassword(req.user.id, data);
         } catch (error) {
             throw error;
         }
@@ -176,6 +187,4 @@ export class AuthController {
             throw error;
         }
     }
-
-
 }

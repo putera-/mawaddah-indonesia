@@ -47,16 +47,7 @@ export class UsersController {
         }
     }
 
-    @Roles(Role.Admin, Role.Superadmin)
-    @Patch('activate/:id')
-    @HttpCode(204)
-    async activateUser(@Param('id') id: string): Promise<void> {
-        try {
-            await this.userService.activateUser(id);
-        } catch (error) {
-            throw error;
-        }
-    }
+
     @Roles(Role.Admin, Role.Superadmin)
     @Patch('deactivate/:id')
     @HttpCode(204)

@@ -3,9 +3,9 @@ import { User } from 'src/users/user.interface';
 export interface Auth {
     id: string;
     user: User;
-    userId: string;
+    email: string;
     access_token: string;
-    expiredAt?: number ;
+    expiredAt?: number;
     path: string;
     method: string;
     createdAt?: Date;
