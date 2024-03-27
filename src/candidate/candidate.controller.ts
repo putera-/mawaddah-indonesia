@@ -45,7 +45,6 @@ export class CandidateController {
             throw error;
         }
     }
-
     @Roles(Role.Member)
     @Get('all')
     async findAll(@Request() req: any) {
@@ -56,7 +55,6 @@ export class CandidateController {
             throw error;
         }
     }
-
     @Roles(Role.Member)
     @Get('suggestion')
     async findSuggestion(
@@ -88,31 +86,16 @@ export class CandidateController {
             throw error;
         }
     }
-
     @Roles(Role.Member)
-    @Get('you-may-like')
-    async findLike(@Request() req: any, @Query() query: Record<string, any>) {
+    @Get('you_may_like')
+    findLike(@Param('id') id: string) {
+        return this.candidateService.findLike(id);
+    }
+    @Roles(Role.Member)
+    @Get(':id')
+    async findOne(@Param('id') id: string) {
         try {
-            const bio = await this.Prisma.biodata.findFirst({
-                where: {
-                    userId: req.user.id,
-                },
-            });
-            const user = await this.Prisma.user.findFirst({
-                where: { id: req.user.id },
-                select: {
-                    Skill: { select: { title: true } },
-                    Hobby: { select: { title: true } },
-                    Married_goal: { select: { title: true } },
-                    Life_goal: { select: { title: true } },
-                },
-            });
-            const suggest = await this.candidateService.findMayLike(
-                bio.gender,
-                query,
-            );
-            const result = this.candidateService.getSimiliar(user, suggest);
-            return result.sort((a, b) => b.similiarity - a.similiarity);
+            return await this.candidateService.findOne(id);
         } catch (error) {
             throw error;
         }

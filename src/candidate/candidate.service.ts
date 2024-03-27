@@ -90,6 +90,7 @@ export class CandidateService {
                 s.similiarHobbies.length +
                 s.similiarMarriageGoals.length +
                 s.similiarLifeGoals.length;
+            console.log(s.similiarity);
         }
         return suggest;
     }
@@ -116,30 +117,9 @@ export class CandidateService {
             take: limit,
         });
         return suggestions;
+        // return `This action returns a #${id} candidate`;
     }
-    async findMayLike(gender: any, query: Record<string, any>) {
-        const oppositeGender = this.getOppositeGender(gender);
-        const limit = parseInt(query.limit) | 10;
-        const suggestions = await this.Prisma.user.findMany({
-            where: {
-                biodata: {
-                    gender: oppositeGender,
-                },
-            },
-            include: {
-                Skill: { select: { title: true } },
-                Hobby: { select: { title: true } },
-                Married_goal: { select: { title: true } },
-                Life_goal: { select: { title: true } },
-            },
-            orderBy: {
-                biodata: {
-                    createdAt: 'desc',
-                },
-            },
-            take: limit,
-            skip: limit,
-        });
-        return suggestions;
+    findLike(id: string) {
+        return `This action returns a #${id} candidate`;
     }
 }
