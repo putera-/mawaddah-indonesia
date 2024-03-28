@@ -122,7 +122,7 @@ export class UsersService {
             data.old_password,
             user.password,
         );
-        if (!checkPassword) throw new BadRequestException('Password salah');
+        if (!checkPassword) throw new BadRequestException('Password Lama Salah');
 
         delete data.confirm_password;
         delete data.old_password;
@@ -163,7 +163,7 @@ export class UsersService {
 
         // check is email taken?
         const checkUser = await this.findByEmail(data.email);
-        if (checkUser) throw new ConflictException('Email sudah terpakai');
+        if (checkUser) throw new ConflictException('Email sudah terdaftar');
     }
     async activateUser(id: string): Promise<User> {
         const user = await this.Prisma.user.findFirst({
