@@ -122,7 +122,7 @@ export class UsersService {
             data.old_password,
             user.password,
         );
-        if (!checkPassword) throw new BadRequestException('Password Lama Salah');
+        if (!checkPassword) throw new BadRequestException('Password lama salah');
 
         delete data.confirm_password;
         delete data.old_password;
