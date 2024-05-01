@@ -357,6 +357,148 @@ paths:
                                     statusCode:
                                         type: number
                                         example: 401
+    "/auth/send-activation":
+        post:
+            tags:
+            - Auth
+            description: Send Activation Request ke email, contoh tombol link web url http://domainweb/activate?token=alkdfhaljkfh
+            parameters:
+              - name: email
+                in: query
+                description: Email of the user
+                required: true
+                schema:
+                    type: string
+                    format: email
+            responses:
+                204:
+                    description: OK. No Content
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: User tidak ditemukan
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
+    "/auth/activate":
+        post:
+            tags:
+            - Auth
+            description: Aktivasi User
+            parameters:
+              - name: token
+                in: query
+                description: token adalah activation id
+                required: true
+                schema:
+                    type: string
+            responses:
+                204:
+                    description: OK. No Content
+                404:
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Aktivasi tidak valid, atau sudah expired
+                                    error:
+                                        type: string
+                                        example: Bad Request
+                                    statusCode:
+                                        type: number
+                                        example: 404
+    "/auth/send-reset-password":
+        post:
+            tags:
+            - Auth
+            description: Send Reset Password Request ke email, contoh tombol link web url http://domainweb/reset-password?token=alkdfhaljkfh
+            parameters:
+              - name: email
+                in: query
+                description: Email of the user
+                required: true
+                schema:
+                    type: string
+                    format: email
+            responses:
+                204:
+                    description: OK. No Content
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: User tidak ditemukan
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
+    "/auth/reset-password":
+        post:
+            tags:
+            - Auth
+            description: Reset Password User
+            parameters:
+              - name: token
+                in: query
+                description: token adalah reset-password id
+                required: true
+                schema:
+                    type: string
+            responses:
+                204:
+                    description: OK. No Content
+                404-1:
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Reset Password tidak valid, atau sudah expired
+                                    error:
+                                        type: string
+                                        example: Bad Request
+                                    statusCode:
+                                        type: number
+                                        example: 404
+                404-2:
+                    description: Bad Request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: Konfirmasi password tidak sesuai
+                                    error:
+                                        type: string
+                                        example: Bad Request
+                                    statusCode:
+                                        type: number
+                                        example: 404
 components:
     examples:
         auth:
