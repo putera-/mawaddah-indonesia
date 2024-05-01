@@ -29,7 +29,7 @@ export class UsersService {
         private Prisma: PrismaService,
         private appService: AppService,
         // private activation: ActivationService,
-    ) {}
+    ) { }
 
     create(data: Prisma.UserCreateInput) {
         return this.Prisma.user.create({

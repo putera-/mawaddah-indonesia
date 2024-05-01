@@ -4,7 +4,7 @@ import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class EmailService {
-    constructor(private Prisma: PrismaService) {}
+    constructor(private Prisma: PrismaService) { }
     getGmailTransport(): nodemailer.Transporter {
         return nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -38,7 +38,7 @@ export class EmailService {
         const activationTo = email;
         const activationSubject = 'Aktivasi akun';
         const activationHtml = `
-        <div style=" width:100%; height: 100%">        
+        <div style=" width:100%; height: 100%">
         <div style="background-image: url('https://mawaddahindonesia.albashiroh.com/Mawaddah-icon.png'); height: 250px; width: 250px; background-size:contain;background-repeat: no-repeat;">
         </div>
         </div>
@@ -48,7 +48,7 @@ export class EmailService {
         <div>
         <a href='${web_uri}/activate?token=${id}'>
         <button style="font-size:15px; font-weight: bold; background-color: #F8B23B ;background-image: linear-gradient(#F8B23B, #926923); border-color:black; border-size: 2px; padding: 8px; border-radius:20px;"> Aktivasi akun </button>
-        </a > 
+        </a >
         <p style="color: red; font-size: 10px; margin-top:10px;">Link akan kadaluarsa dalam 1 hari.</p>
         <a href="${web_uri}">${web_uri}</a>
         </div>
@@ -62,7 +62,7 @@ export class EmailService {
         const sendResetTo = email;
         const sendResetSubject = 'Atur ulang kata sandi';
         const sendResetHtml = `
-        <div style="display: flex; justify-content: center; width:100%;">        
+        <div style="display: flex; justify-content: center; width:100%;">
             <div style="background-image: url("https://mawaddahindonesia.albashiroh.com/Mawaddah-icon.png"); height: 250px; width: 250px; background-size:contain; background-color: red;background-repeat: no-repeat;">
             </div>
         </div>
