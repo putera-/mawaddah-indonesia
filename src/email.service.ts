@@ -5,59 +5,52 @@ import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class EmailService {
-    // private transporter: nodemailer.Transporter;
-    constructor(
-        private readonly configService: ConfigService,
-        private Prisma: PrismaService,
-        // private activationService: ActivationService
-    ) {
-        // this.transporter = nodemailer.createTransport({
-        //     host: this.configService.get('AUTH_HOST'),
-        //     port: this.configService.get('AUTH_PORT'),
-        //     secure: false,
-        //     auth: {
-        //         user: this.configService.get('AUTH_EMAIL'),
-        //         pass: this.configService.get('AUTH_PASSWORD'),
-        //     },
-        //     tls: {
-        //         rejectUnauthorized: false,
-        //     },
-        // });
-    }
-
     async sendToken(id: string) {
-        const transporter = nodemailer.createTransport({
-            host: this.configService.get('AUTH_HOST'),
-            port: this.configService.get('AUTH_PORT'),
-            secure: false,
-            auth: {
-                user: this.configService.get('AUTH_EMAIL'),
-                pass: this.configService.get('AUTH_PASSWORD'),
-            },
-            tls: {
-                rejectUnauthorized: false,
-            },
-        });
-        const act = await this.Prisma.activation.findFirst({ where: { id } });
-        const mailOptions: any = {
-            from: `"${this.configService.get('AUTH_NAME')}" <${this.configService.get('AUTH_EMAIL')}>`,
-            to: act.email,
-            subject: 'Activation link',
-            html: `<h1>Assalamualaikum,  ${act.email}.</h1>
-            <p>Silakan tekan tombol ini untuk mengaktifkan akun Mawaddah anda.</p>
-            <a href="${this.configService.get('CLIENT_URL')}/auth/activate/
-            ${id}?token=${act.activation_key}">Aktivasi</a>
-            <p>Aktivasi ini hanya berlaku 1 jam.</p>`,
-        };
-        const sendEmail = transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error(error);
-            } else {
-                console.log(`Email sent: ${info.response}`);
-            }
-        });
-        console.log('email sent');
-        return sendEmail;
+        try {
+            const clientId =
+                '1080905388605-ief99h038d1vek9h69mo82iam46b55rf.apps.googleusercontent.com';
+            const clientSecret = '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';
+            const refreshToken =
+                '1//04Gox1tL1ojf_CgYIARAAGAQSNwF-L9IrsHPd6ixVGDb4nFxgyk1BnQhwYfVe-AP_B_yzI3je_7LgcP21hoWRBNazV9OVdDbAiGo';
+            const accessToken =
+                'ya29.a0Ad52N39AMSxiOJbyAUj25e7z4FeUkG7e5gLgwMqIjkOg-vaJTbdwYt2j0JhgxOFJIBz6oskpydgX8k2qkAlMT2jRNypfRsWTs7uQo_iNAwcAOkFODAVm5xnPB9ZBvPqJU5Q5Ciru6N2USpiUbghMMFj5sQgOUnr9-zZ0aCgYKAUUSARMSFQHGX2Mi8uiKZdPHMN3W8OpOZoPwwA0171';
+
+            const from = 'rizjamiputera@gmail.com';
+
+            const transport = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    type: 'OAuth2',
+                    user: from,
+                    clientId,
+                    clientSecret,
+                    refreshToken,
+                    accessToken,
+                },
+                tls: { rejectUnauthorized: true },
+            });
+
+            const to = 'halaqahngupi@gmail.com';
+            const subject = 'Test Kirim email lewat Nest';
+            const html = `
+                <h2><bold>Test Lagi</bold></h2>
+                <p>Thanks a lot</p>
+            `;
+
+            await transport.sendMail({
+                from,
+                to,
+                subject,
+                html,
+            });
+
+            console.log('kirim email berhasil');
+
+            return 'SUCCESS';
+        } catch (error) {
+            console.log('error kirim email');
+            console.log(error);
+        }
     }
     async sendMailGun(id: string) {
         const DOMAIN = 'sandboxaf5854dd8a164233babb6dfb69607e1a.mailgun.org';
