@@ -1,0 +1,63 @@
+openapi: "3.0.2"
+info:
+    title: PAYMENT API
+    version: "1.0"
+    contact:
+        name: "Rizjami Putera"
+        email: "rizjamiputera@gmail.com"
+        url: "https://udaputera.com"
+servers:
+  - description: PAYMENT API
+    url: "{url}:5000/v1"
+    variables:
+        url:
+            default: "http://localhost:5000"
+paths:
+    "/payment/gold_member":
+        post:
+            tags:
+            - Payment
+            description: Create Payment for Gold Member, will return midtrans token to use for payment
+            parameters:
+              - name: gross_amount
+                description: nominal kotor
+                required: true
+                schema:
+                    type: integer
+            responses:
+                200:
+                    description: "OK"
+                    content:
+                        application/json:
+                            examples:
+                                example1:
+                                    summary: Example 1
+                                    value:
+                                      - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                                        gross_amount: "100000"
+                                        midtransToken: "7fdbabd1-e15b-43e2-91a5-123fed2a1440"
+                                        paidAt: null
+                                        status: "pending"
+                                        createdAt: "2024-05-02T01:34:31.064Z"
+                                        updatedAt: "2024-05-02T01:34:31.064Z"
+    "/payment/midtrans_notification":
+        post:
+            tags:
+            - Payment
+            description: Public. Callback api, yg digunakan oleh midtrans ketika ada pembayaran oleh customer.
+            parameters:
+              - name: gross_amount
+                description: nominal kotor
+                required: true
+                schema:
+                    type: integer
+            responses:
+                200:
+                    description: "OK"
+                    content:
+                        application/json:
+                            examples:
+                                example1:
+                                    summary: Example 1
+                                    value:
+                                      - success: "OK"
