@@ -26,6 +26,7 @@ import { CandidateModule } from './candidate/candidate.module';
 import { ResetPasswordModule } from './reset_password/reset_password.module';
 import { SkillsModule } from './skills/skills.module';
 import { ActivationModule } from './activation/activation.module';
+import { TokenizerModule } from './tokenizer/tokenizer.module';
 
 @Module({
     imports: [
@@ -52,6 +53,7 @@ import { ActivationModule } from './activation/activation.module';
         ResetPasswordModule,
         ConfigModule,
         ActivationModule,
+        TokenizerModule,
     ],
 
     controllers: [AppController],
