@@ -20,7 +20,7 @@ export class CandidateController {
         private readonly userService: UsersService,
         private Prisma: PrismaService,
         private readonly biodataService: BiodataService,
-    ) {}
+    ) { }
 
     @Roles(Role.Member)
     @Get('new')
@@ -80,6 +80,12 @@ export class CandidateController {
                 bio.gender,
                 query,
             );
+
+            // gray name
+            for (const c of suggest) {
+                this.userService.formatGray(c);
+            }
+
             const result = this.candidateService.getSimiliar(user, suggest);
             return result.sort((a, b) => b.similiarity - a.similiarity);
         } catch (error) {
@@ -87,9 +93,41 @@ export class CandidateController {
         }
     }
     @Roles(Role.Member)
-    @Get('you_may_like')
-    findLike(@Param('id') id: string) {
-        return this.candidateService.findLike(id);
+    @Get('you-may-like')
+    async findLike(
+        @Request() req: any,
+        @Query() query: Record<string, any>,
+    ) {
+        try {
+            const bio = await this.Prisma.biodata.findFirst({
+                where: {
+                    userId: req.user.id,
+                },
+            });
+            const user = await this.Prisma.user.findFirst({
+                where: { id: req.user.id },
+                select: {
+                    Skill: { select: { title: true } },
+                    Hobby: { select: { title: true } },
+                    Married_goal: { select: { title: true } },
+                    Life_goal: { select: { title: true } },
+                },
+            });
+            const suggest = await this.candidateService.findSuggestion(
+                bio.gender,
+                query,
+            );
+
+            // gray name
+            for (const c of suggest) {
+                this.userService.formatGray(c);
+            }
+
+            const result = this.candidateService.getSimiliar(user, suggest);
+            return result.sort((a, b) => b.similiarity - a.similiarity);
+        } catch (error) {
+            throw error;
+        }
     }
     @Roles(Role.Member)
     @Get(':id')
