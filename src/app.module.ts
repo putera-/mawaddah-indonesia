@@ -27,7 +27,6 @@ import { ResetPasswordModule } from './reset_password/reset_password.module';
 import { SkillsModule } from './skills/skills.module';
 import { ActivationModule } from './activation/activation.module';
 import { TokenizerModule } from './tokenizer/tokenizer.module';
-
 @Module({
     imports: [
         ConfigModule.forRoot(),

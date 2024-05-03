@@ -299,30 +299,31 @@ model PhysicalCharacter {
 }
 
 model Taaruf_gold {
-    id        String    @id @default(uuid())
-    user      User?     @relation(fields: [userId], references: [id])
-    userId    String?
-    payment   Payment?  @relation(fields: [paymentId], references: [id])
-    paymentId String?
+    id     String  @id @default(uuid())
+    user   User?   @relation(fields: [userId], references: [id])
+    userId String?
+
     startedAt DateTime?
     endingAt  DateTime?
     createdAt DateTime  @default(now())
     updatedAt DateTime  @default(now()) @updatedAt
+    Payment   Payment?
 }
 
 model Payment {
-    id           String              @id @default(uuid())
-    user         User?               @relation(fields: [userId], references: [id])
-    userId       String?
-    gross_amount Int
-    status       PaymentStatus?      @default(PENDING)
-    paidAt       DateTime?
-    taaruf_gold  Taaruf_gold[]
-    midtrans     MIdtrans_callback[]
-    startedAt    DateTime
-    endingAt     DateTime
-    createdAt    DateTime            @default(now())
-    updatedAt    DateTime            @default(now()) @updatedAt
+    id            String              @id @default(uuid())
+    user          User?               @relation(fields: [userId], references: [id])
+    userId        String?
+    gross_amount  Int
+    midtransToken String?             @db.VarChar(255)
+    status        String              @default("pending")
+    paidAt        DateTime?
+    midtrans      MIdtrans_callback[]
+   
+    createdAt     DateTime            @default(now())
+    updatedAt     DateTime            @default(now()) @updatedAt
+    taaruf_gold   Taaruf_gold         @relation(fields: [taaruf_goldId], references: [id])
+    taaruf_goldId String              @unique
 }
 
 model MIdtrans_callback {
@@ -331,10 +332,4 @@ model MIdtrans_callback {
     paymentId     String?
     callback_data String   @db.LongText
     createdAt     DateTime @default(now())
-}
-
-enum PaymentStatus {
-    SUCCESS
-    PENDING
-    FAILED
 }
