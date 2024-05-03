@@ -1,10 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+    Injectable,
+    NotFoundException,
+    UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from 'src/users/user.service';
 import bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import dayjs from 'dayjs';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
+import { ActivationService } from 'src/activation/activation.service';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +17,8 @@ export class AuthService {
         private usersService: UsersService,
         private jwtService: JwtService,
         private prisma: PrismaService,
-    ) { }
+        private activationService: ActivationService,
+    ) {}
     private blacklistedTokens: Set<string> = new Set();
 
     async signIn(email: string, pass: string): Promise<any> {
@@ -39,7 +45,11 @@ export class AuthService {
 
         return { access_token, exp, user };
     }
-
+    async sendActivation(email: string) {
+        const user = await this.usersService.findByEmail(email);
+        if (!user) throw new NotFoundException('Email salah.');
+        return await this.activationService.create(email);
+    }
     async createToken(
         userId: string,
         email: string,
@@ -88,4 +98,4 @@ export class AuthService {
     isTokenBlacklisted(token: string): boolean {
         return this.blacklistedTokens.has(token);
     }
-} 
+}

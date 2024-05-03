@@ -26,10 +26,10 @@ export class ActivationController {
         return this.activationService.findAll();
     }
 
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.activationService.findOne(+id);
-    }
+    // @Get(':id')
+    // findOne(@Param('id') id: string) {
+    //     return this.activationService.findOne(id);
+    // }
 
     @Delete(':id')
     remove(@Param('id') id: string) {

@@ -11,38 +11,43 @@ export class ActivationService {
         private emailService: EmailService,
     ) {}
     async create(email: string): Promise<Activation> {
-        const exist = await this.Prisma.activation.findFirst({
+        // cek activation yg ada dri data user yg belum terpakai
+        // jika ada, ubah used = true, exp = now
+        const now = new Date();
+        await this.Prisma.activation.updateMany({
+            where: { email, used: false },
+            data: { used: true, expiredAt: now },
+        });
+        // buat baru
+        const data: any = [];
+        const exp = Math.round(dayjs().add(1, 'd').valueOf()) as number;
+        const expDate = new Date(exp);
+        data.expiredAt = expDate;
+        // find user by email
+        const user = await this.Prisma.user.findFirst({
             where: { email },
         });
-        if (exist) throw new ConflictException();
-        const data: any = [];
-        const exp = Math.round(dayjs().add(1, 'h').valueOf()) as number;
-        const expDate = new Date(exp);
-        const random = this.getRandomIntInclusive(5, 15);
-        data.activation_key = `"${random}"`;
-        data.expiredAt = expDate;
+        const userId = user.id;
+
+        // create activation
         const result = await this.Prisma.activation.create({
             data: {
                 ...data,
                 user: {
-                    connect: { email },
+                    connect: { userId },
                 },
             },
         });
-        await this.emailService.sendToken(result.id);
+        await this.emailService.sendActivation(result.id, email);
         return result;
     }
-    getRandomIntInclusive(min: number, max: number) {
-        min = Math.ceil(min); // Round `min` up to the nearest integer
-        max = Math.floor(max); // Round `max` down to the nearest integer
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
+
     findAll() {
         return `This action returns all activation`;
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} activation`;
+    async findOne(id: any) {
+        const find = await this.Prisma.activation.findFirst(id);
     }
 
     remove(id: number) {

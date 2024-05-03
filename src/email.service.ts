@@ -1,21 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
-import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class EmailService {
-    async sendToken(id: string) {
+    async sendToken(email: string, subject: string, html: string) {
         try {
-            const clientId =
-                '1080905388605-ief99h038d1vek9h69mo82iam46b55rf.apps.googleusercontent.com';
-            const clientSecret = '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';
-            const refreshToken =
-                '1//04Gox1tL1ojf_CgYIARAAGAQSNwF-L9IrsHPd6ixVGDb4nFxgyk1BnQhwYfVe-AP_B_yzI3je_7LgcP21hoWRBNazV9OVdDbAiGo';
-            const accessToken =
-                'ya29.a0Ad52N39AMSxiOJbyAUj25e7z4FeUkG7e5gLgwMqIjkOg-vaJTbdwYt2j0JhgxOFJIBz6oskpydgX8k2qkAlMT2jRNypfRsWTs7uQo_iNAwcAOkFODAVm5xnPB9ZBvPqJU5Q5Ciru6N2USpiUbghMMFj5sQgOUnr9-zZ0aCgYKAUUSARMSFQHGX2Mi8uiKZdPHMN3W8OpOZoPwwA0171';
+            const clientId = process.env.EMAIL_ID;
+            const clientSecret = process.env.EMAIL_SECRET;
+            const refreshToken = process.env.REFRESH_TOKEN;
+            const accessToken = process.env.EMAIL_TOKEN;
 
-            const from = 'rizjamiputera@gmail.com';
+            const from = process.env.EMAIL_ADDRESS;
 
             const transport = nodemailer.createTransport({
                 service: 'gmail',
@@ -30,12 +25,7 @@ export class EmailService {
                 tls: { rejectUnauthorized: true },
             });
 
-            const to = 'halaqahngupi@gmail.com';
-            const subject = 'Test Kirim email lewat Nest';
-            const html = `
-                <h2><bold>Test Lagi</bold></h2>
-                <p>Thanks a lot</p>
-            `;
+            const to = email;
 
             await transport.sendMail({
                 from,
@@ -44,30 +34,25 @@ export class EmailService {
                 html,
             });
 
-            console.log('kirim email berhasil');
-
             return 'SUCCESS';
-        } catch (error) {
-            console.log('error kirim email');
-            console.log(error);
-        }
+        } catch (error) {}
     }
-    async sendMailGun(id: string) {
-        const DOMAIN = 'sandboxaf5854dd8a164233babb6dfb69607e1a.mailgun.org';
-        // const mg = mailgun({ apiKey: '<PRIVATE_API_KEY>', domain: DOMAIN });
-        const data = {
-            from: 'Mailgun Sandbox <postmaster@sandboxaf5854dd8a164233babb6dfb69607e1a.mailgun.org>',
-            to: 'albashiroh.programming@gmail.com',
-            subject: 'Hello',
-            text: 'Testing some Mailgun awesomness!',
-        };
-        // mg.messages().send(data, function (error, body) {
-        //     console.log(body);
-        // });
+    async sendActivation(id: string, email: string) {
+        const activationTo = email;
+        const activationSubject = 'Activate your account';
+        const activationHtml = `
+            <h2><bold>Activate your account</bold></h2>
+            <a href='${process.env.DOMAIN_NAME}/activate?token=${id}'>Activate token</a >
+        `;
+        await this.sendToken(activationTo, activationSubject, activationHtml);
     }
-    async createToken(email: string) {
-        // const createToken = await this.Prisma.activation.create({
-        //     data: email,
-        // }); SrqzwF3H*x6Nj@5
+    async sendResetPassword(id: string, email: string) {
+        const sendResetTo = email;
+        const sendResetSubject = 'Reset your password';
+        const sendResetHtml = `
+            <h2><bold>Reset your password</bold></h2>
+            <a href='${process.env.DOMAIN_NAME}/reset-password?token=${id}'>Reset password</a >
+        `;
+        await this.sendToken(sendResetTo, sendResetSubject, sendResetHtml);
     }
 }

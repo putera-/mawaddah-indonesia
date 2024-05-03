@@ -55,11 +55,21 @@ export class AuthController {
         }
     }
     @Public()
-    @Patch('activate/:id')
+    @Patch('activate')
     @HttpCode(204)
-    async activateUser(@Param('id') id: string): Promise<void> {
+    async activateUser(@Param('token') id: string): Promise<void> {
         try {
             await this.userService.activateUser(id);
+        } catch (error) {
+            throw error;
+        }
+    }
+    @Public()
+    @HttpCode(HttpStatus.OK)
+    @Post('send-activation')
+    async sendActivation(@Param('email') email: string): Promise<void> {
+        try {
+            await this.authService.sendActivation(email);
         } catch (error) {
             throw error;
         }

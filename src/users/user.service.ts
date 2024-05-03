@@ -9,6 +9,7 @@ import { Prisma, RoleStatus } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { User } from './user.interface';
 import { AppService } from 'src/app.service';
+import { ActivationService } from 'src/activation/activation.service';
 
 const select = {
     id: true,
@@ -27,6 +28,7 @@ export class UsersService {
     constructor(
         private Prisma: PrismaService,
         private appService: AppService,
+        private activation: ActivationService,
     ) {}
 
     create(data: Prisma.UserCreateInput) {
@@ -122,7 +124,8 @@ export class UsersService {
             data.old_password,
             user.password,
         );
-        if (!checkPassword) throw new BadRequestException('Password lama salah');
+        if (!checkPassword)
+            throw new BadRequestException('Password lama salah');
 
         delete data.confirm_password;
         delete data.old_password;
@@ -166,12 +169,30 @@ export class UsersService {
         if (checkUser) throw new ConflictException('Email sudah terdaftar');
     }
     async activateUser(id: string): Promise<User> {
-        const user = await this.Prisma.user.findFirst({
-            where: { id },
+        // find data by id
+        const find = await this.Prisma.activation.findFirst({
+            where: { id, used: false },
         });
-        if (!user) throw new NotFoundException(`User tidak ditemukan`);
-        return this.Prisma.user.update({
+        // if data is not found
+        if (!find)
+            throw new BadRequestException(
+                'Aktivasi tidak valid, atau sudah expired',
+            );
+        // set data to used
+        await this.Prisma.activation.update({
             where: { id },
+            data: { used: true },
+        });
+        const userId = find.userId;
+        // find user
+        const user = await this.Prisma.user.findFirst({
+            where: { id: userId, active: false },
+        });
+        // if not found
+        if (!user) throw new NotFoundException(`User tidak ditemukan`);
+        // set user to active
+        return this.Prisma.user.update({
+            where: { id: userId },
             data: { active: true },
         });
     }
