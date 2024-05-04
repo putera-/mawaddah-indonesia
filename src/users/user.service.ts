@@ -9,7 +9,7 @@ import { Prisma, RoleStatus } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { User } from './user.interface';
 import { AppService } from 'src/app.service';
-import { ActivationService } from 'src/activation/activation.service';
+// import { ActivationService } from 'src/activation/activation.service';
 
 const select = {
     id: true,
@@ -28,7 +28,7 @@ export class UsersService {
     constructor(
         private Prisma: PrismaService,
         private appService: AppService,
-        private activation: ActivationService,
+        // private activation: ActivationService,
     ) {}
 
     create(data: Prisma.UserCreateInput) {

@@ -2,8 +2,7 @@ import { User } from '@prisma/client';
 
 export interface Activation {
     id: string;
-    email: User;
-    activation_key: string;
+    userId?: User;
     used: boolean;
     expiredAt?: Date;
     createdAt?: Date;

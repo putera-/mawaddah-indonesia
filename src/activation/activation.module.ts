@@ -8,5 +8,6 @@ import { ConfigService } from '@nestjs/config';
 @Module({
     controllers: [ActivationController],
     providers: [ActivationService, PrismaService, EmailService, ConfigService],
+    exports: [ActivationService],
 })
 export class ActivationModule {}

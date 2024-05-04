@@ -5,9 +5,11 @@ import { UsersService } from 'src/users/user.service';
 import { AppService } from 'src/app.service';
 import { PrismaService } from 'src/prisma.service';
 import { AuthService } from 'src/auth/auth.service';
+import { ActivationService } from 'src/activation/activation.service';
+import { EmailService } from 'src/email.service';
 
 @Module({
   controllers: [ResetPasswordController],
-  providers: [ResetPasswordService, UsersService, AppService, AuthService, PrismaService],
+  providers: [ResetPasswordService, UsersService, AppService, AuthService, EmailService, ActivationService, PrismaService],
 })
 export class ResetPasswordModule { }

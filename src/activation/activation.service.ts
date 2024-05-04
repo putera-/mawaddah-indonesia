@@ -14,8 +14,11 @@ export class ActivationService {
         // cek activation yg ada dri data user yg belum terpakai
         // jika ada, ubah used = true, exp = now
         const now = new Date();
+        const user = await this.Prisma.user.findFirst({
+            where: { email },
+        });
         await this.Prisma.activation.updateMany({
-            where: { email, used: false },
+            where: { userId: user.id, used: false },
             data: { used: true, expiredAt: now },
         });
         // buat baru
@@ -24,9 +27,7 @@ export class ActivationService {
         const expDate = new Date(exp);
         data.expiredAt = expDate;
         // find user by email
-        const user = await this.Prisma.user.findFirst({
-            where: { email },
-        });
+       
         const userId = user.id;
 
         // create activation
