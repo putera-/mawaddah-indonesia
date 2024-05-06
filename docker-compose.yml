@@ -10,9 +10,9 @@ services:
         image: api_mawaddah:0.0.1
         restart: always
         ports:
-            - 5011:5011
+            - 5021:5000
         environment:
-            PORT: 5011
+            PORT: 5000
             JWTSECRET: MAWADDAHINDONESIA2024
             # for prisma
             DATABASE_URL: mysql://root:my-secret-pw@mawaddah_mysql:3306/mawaddah_indonesia
