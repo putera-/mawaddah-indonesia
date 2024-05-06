@@ -3,8 +3,6 @@ import { CreateTokenDto } from './dto/create-tokenizer.dto';
 import { TokenizerService } from './tokenizer.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
-import { MidtransNotificationDto } from './dto/midtransNotifications.dto';
-import { TaarufStatus } from '@prisma/client';
 
 @Controller('tokenizer')
 export class TokenizerController {
