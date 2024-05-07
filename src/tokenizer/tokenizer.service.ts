@@ -4,6 +4,7 @@ import MidtransClient from 'midtrans-client';
 import { PrismaService } from 'src/prisma.service';
 import { Taaruf_gold } from './taaruf_gold.interface';
 import dayjs from 'dayjs';
+import { ADDRGETNETWORKPARAMS } from 'dns';
 
 @Injectable()
 export class TokenizerService {
