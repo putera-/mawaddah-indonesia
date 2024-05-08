@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import { Prisma, PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
@@ -6,7 +7,7 @@ export async function memberSeed(prisma: PrismaClient) {
     // BOB
     {
         const bob = {
-            lastname: 'Is My Name',
+            lastname: faker.person.lastName('male'),
             password,
             active: true,
             verified: true,
@@ -26,8 +27,8 @@ export async function memberSeed(prisma: PrismaClient) {
 
         // create 100 Bob MEMBER
         for (let i = 0; i < 100; i++) {
-            const email = `bob_${i}@prisma.io`;
-            const firstname = 'Bob ' + i;
+            const firstname = faker.person.firstName('male');
+            const email = faker.internet.email({ firstName: firstname });
 
             const data: Prisma.UserCreateInput = {
                 email,
@@ -162,7 +163,7 @@ export async function memberSeed(prisma: PrismaClient) {
     // ALICE
     {
         const alice = {
-            lastname: 'In Wonderland',
+            lastname: faker.person.lastName('female'),
             password,
             active: true,
             verified: true,
@@ -180,8 +181,8 @@ export async function memberSeed(prisma: PrismaClient) {
         }
         // create 100 Alice MEMBER
         for (let i = 0; i < 100; i++) {
-            const email = `alice_${i}@prisma.io`;
-            const firstname = 'Alice ' + i;
+            const firstname = faker.person.firstName('female');
+            const email = faker.internet.email({ firstName: firstname });
             const data: Prisma.UserCreateInput = {
                 email,
                 firstname,

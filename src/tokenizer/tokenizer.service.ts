@@ -40,7 +40,8 @@ export class TokenizerService {
 
         }
         const data = await this.prismaService.taaruf_gold.create({
-            data: dataTaaruf, include: {
+            data: dataTaaruf,
+            include: {
                 Payment: true
             }
         })
