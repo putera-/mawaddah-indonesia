@@ -11,6 +11,7 @@ import {
     Query,
     Req,
     Request,
+    Res,
     UploadedFile,
     UseInterceptors,
     ValidationPipe,
@@ -29,7 +30,7 @@ import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import path from 'path';
 import { PhotosService } from 'src/photos/photos.service';
 import { ActivationService } from 'src/activation/activation.service';
-import { ResetPassword } from '@prisma/client';
+import { Response } from 'express';
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -44,15 +45,19 @@ export class AuthController {
     @Post('register')
     async create(
         @Body(new ValidationPipe()) data: CreateUserDto,
-    ): Promise<User> {
+        @Res() res: Response,
+    ) {
         try {
             // validasi apakah user sudah terdaftar atau belum
             await this.userService.validateNewUser(data);
             // buat user
             const user: User = await this.userService.create(data);
             // kirim kode aktivasi ke email
-            await this.sendActivation(user.email);
-            return user;
+            await this.authService.sendActivation(user.email);
+
+            res.status(HttpStatus.OK).json({
+                message: 'Silahkan periksa email untuk verifikasi akun.',
+            });
         } catch (error) {
             throw error;
         }
