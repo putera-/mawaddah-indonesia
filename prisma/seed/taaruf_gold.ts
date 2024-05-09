@@ -23,7 +23,7 @@ export async function taaruf_goldSeed(prisma: PrismaClient) {
     //secara random, bikin punya data taaruf gold
     for (let i = 0; i < users.length; i++) {
         if (selectedUsers.indexOf(i) != -1) {
-            const paymentStatus = Math.random() < 0.5 ? 'PENDING' : 'SETTLEMENT';
+            const paymentStatus = Math.random() < 0.5 ? 'pending' : 'settlement';
 
             // const tahun = 2024
             // const bulan = 1-12 bikin secara random
@@ -32,9 +32,8 @@ export async function taaruf_goldSeed(prisma: PrismaClient) {
             // startedAt = dayjs(`${tahun}-${bulam}-${tanggal}`)
             // endingAt = startedAt.add(1, "month")
 
-
-            const startedAt = generateRandomDate()
-            const endingAt = new Date(startedAt.getTime() + Math.floor(Math.random() * 1000000));
+            const startedAt = new Date()
+            const endingAt = dayjs().add(1, "month").toISOString()
 
             const user = users[i];
             await prisma.taaruf_gold.create({
@@ -54,15 +53,35 @@ export async function taaruf_goldSeed(prisma: PrismaClient) {
                                 }
                             },
                             gross_amount: 100000,
+                            paidAt: new Date(),
                             status: paymentStatus
                         }
                     },
                 }
             });
+
+            await prisma.payment.updateMany({
+                where: {
+                    status: 'PENDING'
+                },
+                data: {
+                    paidAt: null,
+                }
+
+            })
+
+            await prisma.taaruf_gold.updateMany({
+                where: {
+                    Payment: {
+                        status: 'PENDING'
+                    }
+                },
+                data: {
+                    startedAt: null,
+                    endingAt: null,
+                }
+            });
         }
-    }
-    function generateRandomDate() {
-        return new Date(Date.now() - Math.floor(Math.random() * 1000000));
     }
 
     console.log('Seed: Taaruf Gold & Payment')

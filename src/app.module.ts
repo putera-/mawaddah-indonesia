@@ -27,6 +27,7 @@ import { ResetPasswordModule } from './reset_password/reset_password.module';
 import { SkillsModule } from './skills/skills.module';
 import { ActivationModule } from './activation/activation.module';
 import { TokenizerModule } from './tokenizer/tokenizer.module';
+import { TaarufGoldModule } from './taaruf_gold/taaruf_gold.module';
 @Module({
     imports: [
         ConfigModule.forRoot(),
@@ -53,6 +54,7 @@ import { TokenizerModule } from './tokenizer/tokenizer.module';
         ConfigModule,
         ActivationModule,
         TokenizerModule,
+        TaarufGoldModule,
     ],
 
     controllers: [AppController],

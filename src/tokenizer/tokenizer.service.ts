@@ -4,7 +4,6 @@ import MidtransClient from 'midtrans-client';
 import { PrismaService } from 'src/prisma.service';
 import { Taaruf_gold } from './taaruf_gold.interface';
 import dayjs from 'dayjs';
-import { ADDRGETNETWORKPARAMS } from 'dns';
 
 @Injectable()
 export class TokenizerService {
@@ -85,7 +84,15 @@ export class TokenizerService {
     async updateStatus(paymentId: string, transStatus: string) {
         const paidDate = new Date()
 
-        const payment = await this.prismaService.payment.findUnique({
+        const checkPaymentId = await this.prismaService.payment.findFirst({
+            where: { id: paymentId }
+        })
+
+
+        if (!checkPaymentId) throw new NotFoundException()
+        console.log(checkPaymentId)
+
+        await this.prismaService.payment.findUnique({
             where: { id: paymentId },
         });
 
