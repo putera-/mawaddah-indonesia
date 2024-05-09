@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma.service';
 import { CreateTaarufGoldDto } from './dto/create-taaruf_gold.dto';
 import { UpdateTaarufGoldDto } from './dto/update-taaruf_gold.dto';
 import dayjs from 'dayjs';
+import { max } from 'class-validator';
 
 @Injectable()
 export class TaarufGoldService {
@@ -11,8 +12,9 @@ export class TaarufGoldService {
         private readonly prismaService: PrismaService,
     ) { }
 
-    async findAllActiveUser() {
+    async findAllActiveUser(page = 1, limit = 10) {
         //find user by their payment status (taaruf_gold active membership status & membership activeness)
+        const skip = (page - 1) * limit;
         const activeUser = await this.prismaService.taaruf_gold.findMany({
             where: {
                 OR: [
@@ -29,14 +31,40 @@ export class TaarufGoldService {
             include: {
                 Payment: true,
                 user: true
+            },
+            skip,
+            take: +limit,
+        });
+
+        const users = await this.prismaService.taaruf_gold.count({
+            where: {
+                OR: [
+                    {
+                        startedAt: { lte: dayjs().add(30, 'days').toISOString() },
+                    },
+                    {
+                        Payment: {
+                            status: 'settlement'
+                        }
+                    },
+                ]
             }
         });
-        console.log(dayjs().add(30, 'days').toISOString())
 
-        return activeUser;
+        const maxPages = Math.ceil(users / limit);
+        const Page = page;
+        const pagesLeft = maxPages - Page;
+
+        return {
+            users,
+            Page: +page,
+            pagesLeft,
+            activeUser,
+        };
     }
 
-    async findAllInActiveUser() {
+    async findAllInActiveUser(page = 1, limit = 10) {
+        const skip = (page - 1) * limit;
         const inActiveUser = await this.prismaService.taaruf_gold.findMany({
             where: {
                 OR: [
@@ -51,9 +79,34 @@ export class TaarufGoldService {
             include: {
                 Payment: true,
                 user: true
+            },
+            skip,
+            take: +limit,
+        });
+
+        const users = await this.prismaService.taaruf_gold.count({
+            where: {
+                OR: [
+                    {
+                        startedAt: { gte: dayjs().subtract(30, 'days').toISOString() },
+                    },
+                    {
+                        startedAt: null
+                    },
+                ]
             }
-        })
-        return inActiveUser;
+        });
+
+        const maxPages = Math.ceil(users / limit);
+        const Page = page;
+        const pagesLeft = maxPages - Page;
+
+        return {
+            users,
+            Page: +page,
+            pagesLeft,
+            inActiveUser,
+        };
     }
 
 

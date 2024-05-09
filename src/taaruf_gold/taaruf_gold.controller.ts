@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { TaarufGoldService } from './taaruf_gold.service';
 import { CreateTaarufGoldDto } from './dto/create-taaruf_gold.dto';
 import { UpdateTaarufGoldDto } from './dto/update-taaruf_gold.dto';
@@ -11,13 +11,13 @@ export class TaarufGoldController {
     constructor(private readonly taarufGoldService: TaarufGoldService) { }
 
         @Get('active-users')
-        findAllActiveUsers() {
-            return this.taarufGoldService.findAllActiveUser();
+        findAllActiveUsers(@Query('page') page: number, @Query('limit') limit: number) {
+            return this.taarufGoldService.findAllActiveUser(page, limit);
         }
 
         @Get('inactive-users')
-        findAllInActiveUsers() {
-            return this.taarufGoldService.findAllInActiveUser();
+        findAllInActiveUsers(@Query('page') page: number, @Query('limit') limit: number) {
+            return this.taarufGoldService.findAllInActiveUser(page, limit);
         }
 
         @Get(':id')

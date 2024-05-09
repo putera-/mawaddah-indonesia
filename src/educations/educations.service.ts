@@ -35,7 +35,7 @@ export class EducationsService {
         });
     }
 
-    async findAll(userId: string, page: number = 1, limit: number = 10): Promise<Pagination<Education[]>> {
+    async findAll(userId: string, page: number = 1, limit: number = 10):  Promise<Pagination<Education[]>> {
         const skip = (page - 1) * limit;
         const [total, data] = await Promise.all([
             this.prisma.education.count({
