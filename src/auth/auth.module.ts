@@ -11,6 +11,7 @@ import { PhotosService } from 'src/photos/photos.service';
 import { ActivationService } from 'src/activation/activation.service';
 import { EmailService } from 'src/email.service';
 import { ConfigService } from '@nestjs/config';
+import { ResetPasswordService } from 'src/reset_password/reset_password.service';
 
 @Module({
     imports: [
@@ -30,7 +31,8 @@ import { ConfigService } from '@nestjs/config';
         PhotosService,
         ActivationService,
         EmailService,
-        ConfigService
+        ConfigService,
+        ResetPasswordService,
     ],
     exports: [AuthService],
 })

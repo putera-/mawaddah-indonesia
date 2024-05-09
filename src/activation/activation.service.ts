@@ -1,8 +1,13 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+    ConflictException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import dayjs from 'dayjs';
 import { Activation } from './entities/activation.entity';
 import { EmailService } from 'src/email.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ActivationService {
@@ -11,34 +16,36 @@ export class ActivationService {
         private emailService: EmailService,
     ) {}
     async create(email: string): Promise<Activation> {
-        // cek activation yg ada dri data user yg belum terpakai
-        // jika ada, ubah used = true, exp = now
-        const now = new Date();
+        // cek user by email
         const user = await this.Prisma.user.findFirst({
             where: { email },
         });
+
+        // throw jika user tidak terdaftar
+        if (!user) throw new NotFoundException('Email tidak terdaftar');
+        const now = new Date();
+        // cek activation yg ada dri data user yg belum terpakai
+        // jika ada, ubah used = true, exp = now
         await this.Prisma.activation.updateMany({
             where: { userId: user.id, used: false },
             data: { used: true, expiredAt: now },
         });
         // buat baru
         const data: any = [];
-        const exp = Math.round(dayjs().add(1, 'd').valueOf()) as number;
+        const exp = Math.round(dayjs().add(10, 'm').valueOf()) as number;
         const expDate = new Date(exp);
         data.expiredAt = expDate;
-        // find user by email
-       
         const userId = user.id;
-
         // create activation
-        const result = await this.Prisma.activation.create({
-            data: {
-                ...data,
-                user: {
-                    connect: { userId },
+        const result: Prisma.ActivationCreateInput =
+            await this.Prisma.activation.create({
+                data: {
+                    ...data,
+                    user: {
+                        connect: { id: userId },
+                    },
                 },
-            },
-        });
+            });
         await this.emailService.sendActivation(result.id, email);
         return result;
     }

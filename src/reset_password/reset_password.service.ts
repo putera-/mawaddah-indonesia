@@ -1,69 +1,90 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateResetPasswordDto } from './dto/create-reset_password.dto';
-import { UpdateResetPasswordDto } from './dto/update-reset_password.dto';
+import {
+    ForbiddenException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
+
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/user.service';
-import { Prisma } from '@prisma/client';
-import { AuthService } from 'src/auth/auth.service';
-import { JwtService } from '@nestjs/jwt';
+import { Prisma, ResetPassword } from '@prisma/client';
 
 import dayjs from 'dayjs';
 import { ChangePasswordDto } from 'src/auth/dto/change-password.dto';
+import { EmailService } from 'src/email.service';
 
 @Injectable()
 export class ResetPasswordService {
-    constructor(private prisma: PrismaService, private userService: UsersService
-    ) { }
+    constructor(
+        private prisma: PrismaService,
+        private userService: UsersService,
+        private emailService: EmailService,
+    ) {}
 
-    async create(email: string): Promise<void> {
-        // const token = req.headers.authorization.split(' ')[1];
-        const user = await this.prisma.user.findUnique({ where: { email: email }, select: { id: true, email: true } });
-        //throw if user not registered
-        if (!user) throw new NotFoundException("Email is not registered");
+    async create(email: string): Promise<ResetPassword> {
+        // cek user by email
 
-
+        const user = await this.prisma.user.findFirst({
+            where: { email },
+        });
+        // throw jika user tidak terdaftar
+        if (!user) throw new NotFoundException('Email tidak terdaftar');
+        const now = new Date();
+        // cek reset password yg ada dri data user yg belum terpakai
+        // jika ada, ubah used = true, exp = now
+        await this.prisma.resetPassword.updateMany({
+            where: { userId: user.id, used: false },
+            data: { used: true, expiredAt: now },
+        });
+        // buat baru
         const expiredAt = dayjs().add(10, 'minute').toDate();
         const data: Prisma.ResetPasswordCreateInput = {
             user: { connect: { id: user.id } },
-            email,
-            expiredAt: expiredAt,
-        }
-
-        await this.prisma.resetPassword.create({
-            data
+            expiredAt,
+        };
+        // create reset password
+        const result = await this.prisma.resetPassword.create({
+            data,
         });
-
-        //blabla..
-        return;
+        console.log(result, email);
+        await this.emailService.sendResetPassword(result.id, email);
+        return result;
     }
 
     async update(id: string, data: ChangePasswordDto): Promise<void> {
         //check if id exist
-        const dataReset = await this.prisma.resetPassword.findUnique({ where: { id } });
-        if (!dataReset) throw new NotFoundException();
-
-        // Check if the email record exists and the token is not expired
-        if (dayjs().isAfter(dayjs(dataReset.expiredAt)) || dataReset.isUsed) {
+        const dataReset = await this.prisma.resetPassword.findFirst({
+            where: { id, used: false },
+        });
+        if (!dataReset) throw new NotFoundException('Data tidak ditemukan');
+        // find user by data reset userid
+        const user = await this.prisma.user.findFirst({
+            where: { id: dataReset.userId },
+        });
+        if (!user) throw new NotFoundException('User tidak terdaftar');
+        // check expired at tidak boleh sama atau lebih kecil dari sekarang
+        // dan check jika used = true
+        if (dayjs().isAfter(dayjs(dataReset.expiredAt)) || dataReset.used) {
             await this.prisma.resetPassword.update({
-                where: { id, isUsed: true },
-                data: { isUsed: true }
-            })
-            throw new ForbiddenException('Token has expired or already in use');
+                where: { id, used: true },
+                data: { used: true },
+            });
+            throw new ForbiddenException(
+                'Reset Password tidak valid, atau sudah expired',
+            );
         }
-
         //check if password match
         await this.userService.checkPassword(data);
-
-        //pakai userId karena dari userServicenya dia terimanya id, bukan email.
+        // delete confirm password
+        delete data.confirm_password;
+        // update password.
         await this.prisma.user.update({
-            where: { email: dataReset.email },
-            data: { password: data.password }
+            where: { id: user.id },
+            data: { password: data.password },
         });
-
         await this.prisma.resetPassword.update({
             where: { id },
-            data: { isUsed: true }
-        })
+            data: { used: true },
+        });
         return;
     }
 }

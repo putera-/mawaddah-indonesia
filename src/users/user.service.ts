@@ -152,7 +152,7 @@ export class UsersService {
     }
     async checkPassword(data: any) {
         if (data.password != data.confirm_password)
-            throw new BadRequestException('Confirm password tidak sesuai');
+            throw new BadRequestException('Konfirmasi password tidak sesuai');
 
         delete data.confirm_password;
         data.password = await bcrypt.hash(data.password, 10);
@@ -179,11 +179,11 @@ export class UsersService {
                 'Aktivasi tidak valid, atau sudah expired',
             );
         // set data to used
-        await this.Prisma.activation.update({
-            where: { id },
+        const userId = find.userId;
+        await this.Prisma.activation.updateMany({
+            where: { id: userId },
             data: { used: true },
         });
-        const userId = find.userId;
         // find user
         const user = await this.Prisma.user.findFirst({
             where: { id: userId, active: false },

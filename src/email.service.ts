@@ -1,57 +1,82 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
+import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class EmailService {
+    constructor(private Prisma: PrismaService) {}
+    getGmailTransport(): nodemailer.Transporter {
+        return nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: process.env.GMAIL_ADDRESS,
+                pass: process.env.GMAIL_APP_PASSWORD,
+            },
+        });
+    }
     async sendToken(email: string, subject: string, html: string) {
         try {
-            const clientId = process.env.EMAIL_ID;
-            const clientSecret = process.env.EMAIL_SECRET;
-            const refreshToken = process.env.REFRESH_TOKEN;
-            const accessToken = process.env.EMAIL_TOKEN;
-
-            const from = process.env.EMAIL_ADDRESS;
-
-            const transport = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    type: 'OAuth2',
-                    user: from,
-                    clientId,
-                    clientSecret,
-                    refreshToken,
-                    accessToken,
-                },
-                tls: { rejectUnauthorized: true },
-            });
-
+            const transport: nodemailer.Transporter = this.getGmailTransport();
             const to = email;
-
             await transport.sendMail({
-                from,
                 to,
                 subject,
                 html,
             });
-
+            console.log('SUCCESS');
             return 'SUCCESS';
-        } catch (error) {}
+        } catch (error) {
+            console.log(error);
+        }
     }
     async sendActivation(id: string, email: string) {
+        const web_uri = process.env.WEB_URI;
+        const user = await this.Prisma.user.findFirst({ where: { email } });
+        const fullname = user.firstname + ' ' + user.lastname;
         const activationTo = email;
-        const activationSubject = 'Activate your account';
+        const activationSubject = 'Aktivasi akun';
         const activationHtml = `
-            <h2><bold>Activate your account</bold></h2>
-            <a href='${process.env.DOMAIN_NAME}/activate?token=${id}'>Activate token</a >
-        `;
+        <div style=" width:100%; height: 100%">        
+        <div style="background-image: url('https://mawaddahindonesia.albashiroh.com/Mawaddah-icon.png'); height: 250px; width: 250px; background-size:contain;background-repeat: no-repeat;">
+        </div>
+        </div>
+        <h2><bold>Assalamualaikum, ${fullname}.</bold></h2>
+        <p>Aktivasi akun anda dengan klik tombol dibawah ini. </p>
+        <div style="width:250px; text-align:center;">
+        <div>
+        <a href='${web_uri}/activate?token=${id}'>
+        <button style="font-size:15px; font-weight: bold; background-color: #F8B23B ;background-image: linear-gradient(#F8B23B, #926923); border-color:black; border-size: 2px; padding: 8px; border-radius:20px;"> Aktivasi akun </button>
+        </a > 
+        <p style="color: red; font-size: 10px; margin-top:10px;">Link akan kadaluarsa dalam 1 hari.</p>
+        <a href="${web_uri}">${web_uri}</a>
+        </div>
+            </div>`;
         await this.sendToken(activationTo, activationSubject, activationHtml);
     }
     async sendResetPassword(id: string, email: string) {
+        const web_uri = process.env.WEB_URI;
+        const user = await this.Prisma.user.findFirst({ where: { email } });
+        const fullname = user.firstname + ' ' + user.lastname;
         const sendResetTo = email;
-        const sendResetSubject = 'Reset your password';
+        const sendResetSubject = 'Atur ulang kata sandi';
         const sendResetHtml = `
-            <h2><bold>Reset your password</bold></h2>
-            <a href='${process.env.DOMAIN_NAME}/reset-password?token=${id}'>Reset password</a >
+        <div style="display: flex; justify-content: center; width:100%;">        
+            <div style="background-image: url("https://mawaddahindonesia.albashiroh.com/Mawaddah-icon.png"); height: 250px; width: 250px; background-size:contain; background-color: red;background-repeat: no-repeat;">
+            </div>
+        </div>
+        <h2><bold>Assalamualaikum, ${fullname}.</bold></h2>
+        <p>Atur ulang sandi anda dengan klik tombol dibawah ini. </p>
+        <div style="width:250px; text-align:center;">
+        <div>
+        <a href='${web_uri}/reset-password?token=${id}'>
+        <button style="font-size:15px; font-weight: bold; background-color: #F8B23B ;background-image: linear-gradient(#F8B23B, #926923); border-color:black; border-size: 2px; padding: 8px; border-radius:20px;"> Atur ulang sandi </button>
+        </a >
+        <p style="color: red; font-size: 10px; margin-top:10px;">Link akan kadaluarsa dalam 1 hari.</p>
+        <a href="${web_uri}">${web_uri}</a>
+        </div>
+        </div>
         `;
         await this.sendToken(sendResetTo, sendResetSubject, sendResetHtml);
     }

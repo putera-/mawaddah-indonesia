@@ -11,6 +11,7 @@ export async function userSeed(prisma: PrismaClient) {
         const superadmin = {
             lastname: 'So Super',
             password,
+            active: true,
             verified: true,
             avatar: '/dummy/abang.png',
             avatar_md: '/dummy/abang.png',

@@ -8,6 +8,7 @@ export async function memberSeed(prisma: PrismaClient) {
         const bob = {
             lastname: 'Is My Name',
             password,
+            active: true,
             verified: true,
             avatar: '/dummy/abang.png',
             avatar_md: '/dummy/abang.png',
@@ -163,6 +164,7 @@ export async function memberSeed(prisma: PrismaClient) {
         const alice = {
             lastname: 'In Wonderland',
             password,
+            active: true,
             verified: true,
             avatar: '/dummy/nissa.png',
             avatar_md: '/dummy/nissa.png',

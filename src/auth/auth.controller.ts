@@ -8,6 +8,7 @@ import {
     Param,
     Patch,
     Post,
+    Query,
     Req,
     Request,
     UploadedFile,
@@ -28,6 +29,7 @@ import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import path from 'path';
 import { PhotosService } from 'src/photos/photos.service';
 import { ActivationService } from 'src/activation/activation.service';
+import { ResetPassword } from '@prisma/client';
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -44,20 +46,21 @@ export class AuthController {
         @Body(new ValidationPipe()) data: CreateUserDto,
     ): Promise<User> {
         try {
+            // validasi apakah user sudah terdaftar atau belum
             await this.userService.validateNewUser(data);
-
+            // buat user
             const user: User = await this.userService.create(data);
-
-            await this.activation.create(user.email);
+            // kirim kode aktivasi ke email
+            await this.sendActivation(user.email);
             return user;
         } catch (error) {
             throw error;
         }
     }
     @Public()
+    @HttpCode(HttpStatus.OK)
     @Patch('activate')
-    @HttpCode(204)
-    async activateUser(@Param('token') id: string): Promise<void> {
+    async activateUser(@Query('token') id: string): Promise<void> {
         try {
             await this.userService.activateUser(id);
         } catch (error) {
@@ -70,6 +73,30 @@ export class AuthController {
     async sendActivation(@Param('email') email: string): Promise<void> {
         try {
             await this.authService.sendActivation(email);
+        } catch (error) {
+            throw error;
+        }
+    }
+    @Public()
+    @HttpCode(HttpStatus.OK)
+    @Post('reset-password')
+    async resetPassword(
+        @Param('token') id: string,
+        @Body(new ValidationPipe()) data: any,
+    ): Promise<void> {
+        try {
+            await this.authService.resetPassword(id, data);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    @Public()
+    @HttpCode(HttpStatus.OK)
+    @Post('send-reset-password')
+    async sendResetPassword(@Param('email') email: string): Promise<void> {
+        try {
+            await this.authService.sendResetPassword(email);
         } catch (error) {
             throw error;
         }
