@@ -5,7 +5,7 @@ CREATE TABLE `user` (
     `firstname` VARCHAR(100) NOT NULL,
     `lastname` VARCHAR(100) NOT NULL,
     `password` VARCHAR(100) NOT NULL,
-    `active` BOOLEAN NOT NULL DEFAULT true,
+    `active` BOOLEAN NOT NULL DEFAULT false,
     `verified` BOOLEAN NOT NULL DEFAULT false,
     `avatar` VARCHAR(255) NULL,
     `avatar_md` VARCHAR(255) NULL,
@@ -55,8 +55,7 @@ CREATE TABLE `auth` (
 CREATE TABLE `reset_password` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NULL,
-    `email` VARCHAR(100) NOT NULL,
-    `isUsed` BOOLEAN NOT NULL DEFAULT false,
+    `used` BOOLEAN NOT NULL DEFAULT false,
     `expiredAt` DATETIME NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -104,8 +103,7 @@ CREATE TABLE `faq` (
 -- CreateTable
 CREATE TABLE `activation` (
     `id` VARCHAR(191) NOT NULL,
-    `email` VARCHAR(191) NULL,
-    `activation_key` VARCHAR(200) NOT NULL,
+    `userId` VARCHAR(191) NULL,
     `used` BOOLEAN NOT NULL DEFAULT false,
     `expiredAt` DATETIME NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -253,7 +251,7 @@ ALTER TABLE `slider` ADD CONSTRAINT `slider_clientId_fkey` FOREIGN KEY (`clientI
 ALTER TABLE `faq` ADD CONSTRAINT `faq_clientId_fkey` FOREIGN KEY (`clientId`) REFERENCES `client`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `activation` ADD CONSTRAINT `activation_email_fkey` FOREIGN KEY (`email`) REFERENCES `user`(`email`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `activation` ADD CONSTRAINT `activation_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `bookmark` ADD CONSTRAINT `bookmark_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

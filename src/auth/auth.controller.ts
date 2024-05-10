@@ -8,8 +8,10 @@ import {
     Param,
     Patch,
     Post,
+    Query,
     Req,
     Request,
+    Res,
     UploadedFile,
     UseInterceptors,
     ValidationPipe,
@@ -28,6 +30,7 @@ import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import path from 'path';
 import { PhotosService } from 'src/photos/photos.service';
 import { ActivationService } from 'src/activation/activation.service';
+import { Response } from 'express';
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -42,24 +45,63 @@ export class AuthController {
     @Post('register')
     async create(
         @Body(new ValidationPipe()) data: CreateUserDto,
-    ): Promise<User> {
+        @Res() res: Response,
+    ) {
         try {
+            // validasi apakah user sudah terdaftar atau belum
             await this.userService.validateNewUser(data);
-
+            // buat user
             const user: User = await this.userService.create(data);
+            // kirim kode aktivasi ke email
+            await this.authService.sendActivation(user.email);
 
-            await this.activation.create(user.email);
-            return user;
+            res.status(HttpStatus.OK).json({
+                message: 'Silahkan periksa email untuk verifikasi akun.',
+            });
         } catch (error) {
             throw error;
         }
     }
     @Public()
-    @Patch('activate/:id')
-    @HttpCode(204)
-    async activateUser(@Param('id') id: string): Promise<void> {
+    @HttpCode(HttpStatus.OK)
+    @Patch('activate')
+    async activateUser(@Query('token') id: string): Promise<void> {
         try {
             await this.userService.activateUser(id);
+        } catch (error) {
+            throw error;
+        }
+    }
+    @Public()
+    @HttpCode(HttpStatus.OK)
+    @Post('send-activation')
+    async sendActivation(@Param('email') email: string): Promise<void> {
+        try {
+            await this.authService.sendActivation(email);
+        } catch (error) {
+            throw error;
+        }
+    }
+    @Public()
+    @HttpCode(HttpStatus.OK)
+    @Post('reset-password')
+    async resetPassword(
+        @Param('token') id: string,
+        @Body(new ValidationPipe()) data: any,
+    ): Promise<void> {
+        try {
+            await this.authService.resetPassword(id, data);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    @Public()
+    @HttpCode(HttpStatus.OK)
+    @Post('send-reset-password')
+    async sendResetPassword(@Param('email') email: string): Promise<void> {
+        try {
+            await this.authService.sendResetPassword(email);
         } catch (error) {
             throw error;
         }

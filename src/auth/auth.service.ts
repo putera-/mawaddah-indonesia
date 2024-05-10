@@ -1,10 +1,19 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+    BadRequestException,
+    HttpException,
+    HttpStatus,
+    Injectable,
+    NotFoundException,
+    UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from 'src/users/user.service';
 import bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import dayjs from 'dayjs';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
+import { ActivationService } from 'src/activation/activation.service';
+import { ResetPasswordService } from 'src/reset_password/reset_password.service';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +21,9 @@ export class AuthService {
         private usersService: UsersService,
         private jwtService: JwtService,
         private prisma: PrismaService,
-    ) { }
+        private activationService: ActivationService,
+        private resetPasswordService: ResetPasswordService,
+    ) {}
     private blacklistedTokens: Set<string> = new Set();
 
     async signIn(email: string, pass: string): Promise<any> {
@@ -25,21 +36,64 @@ export class AuthService {
             throw new UnauthorizedException('Email atau password salah.');
         }
 
-        delete user.password;
-        delete user.createdAt;
-        delete user.updatedAt;
+        if (!user.active) {
+            const usedToken = await this.prisma.activation.findMany({
+                where: { userId: user.id, used: false },
+            });
+            if (!usedToken) {
+                this.sendActivation(email);
+                throw new HttpException(
+                    'Silahkan periksa email untuk verifikasi akun.',
+                    HttpStatus.ACCEPTED,
+                );
+            }
+        } else {
+            delete user.password;
+            delete user.createdAt;
+            delete user.updatedAt;
 
-        if (!user.active) throw new UnauthorizedException('User telah dihapus');
+            if (!user.active)
+                throw new UnauthorizedException('User telah dinonaktifkan');
 
-        const { access_token, exp } = await this.createToken(
-            user.id,
-            user.email,
-            user.role,
-        );
+            const { access_token, exp } = await this.createToken(
+                user.id,
+                user.email,
+                user.role,
+            );
 
-        return { access_token, exp, user };
+            return { access_token, exp, user };
+        }
+    }
+    async sendActivation(email: string) {
+        const user = await this.usersService.findByEmail(email);
+        if (!user) throw new NotFoundException('Email salah.');
+        return await this.activationService.create(email);
     }
 
+    async sendResetPassword(email: string) {
+        const user = await this.usersService.findByEmail(email);
+        if (!user) throw new NotFoundException('Email salah.');
+        return await this.resetPasswordService.create(email);
+    }
+    async resetPassword(id: string, data: any): Promise<void> {
+        // find data by id
+        const find = await this.prisma.resetPassword.findFirst({
+            where: { id, used: false },
+        });
+        if (!find) throw new NotFoundException('Data tidak ditemukan');
+        const user = await this.prisma.user.findFirst({
+            where: { id: find.userId },
+        });
+        if (!user) throw new NotFoundException('User tidak ditemukan');
+        if (data.password != data.confirm_password)
+            throw new BadRequestException('Konfirmasi password tidak sesuai');
+        delete data.confirm_password;
+        data.password = await bcrypt.hash(data.password, 10);
+        await this.prisma.user.update({
+            where: { id: user.id },
+            data: { password: data.password },
+        });
+    }
     async createToken(
         userId: string,
         email: string,
@@ -88,4 +142,4 @@ export class AuthService {
     isTokenBlacklisted(token: string): boolean {
         return this.blacklistedTokens.has(token);
     }
-} 
+}

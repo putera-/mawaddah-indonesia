@@ -1,7 +1,11 @@
+import { User } from '@prisma/client';
+
 export interface reset_password {
     id: string;
-    userId: string;
-    email: string;
-    isUsed: boolean;
-    expiredAt: string;
+    user: User;
+    userId?: string;
+    used: boolean;
+    expiredAt?: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
 }

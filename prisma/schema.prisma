@@ -25,7 +25,7 @@ model User {
   Married_goal       MarriedGoal[]
   Life_goal          LifeGoal[]
   Physic_character   PhysicalCharacter[]
-  active             Boolean             @default(true)
+  active             Boolean             @default(false)
   verified           Boolean             @default(false)
   avatar             String?             @db.VarChar(255)
   avatar_md          String?             @db.VarChar(255)
@@ -94,8 +94,7 @@ model ResetPassword {
   id        String   @id @default(uuid())
   user      User?    @relation(fields: [userId], references: [id])
   userId    String?
-  email     String   @db.VarChar(100)
-  isUsed    Boolean  @default(false)
+  used      Boolean  @default(false)
   expiredAt DateTime @db.DateTime()
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -141,13 +140,12 @@ model FAQ {
 }
 
 model Activation {
-  id             String   @id @default(uuid())
-  user           User?    @relation(fields: [email], references: [email])
-  email          String?
-  activation_key String   @db.VarChar(200)
-  used           Boolean  @default(false)
-  expiredAt      DateTime @db.DateTime()
-  createdAt      DateTime @default(now())
+  id        String   @id @default(uuid())
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  used      Boolean  @default(false)
+  expiredAt DateTime @db.DateTime()
+  createdAt DateTime @default(now())
 
   @@map("activation")
 }
