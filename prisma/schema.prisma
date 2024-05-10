@@ -84,7 +84,7 @@ model Auth {
     user         User?    @relation(fields: [userId], references: [id])
     userId       String?
     access_token String   @db.VarChar(300)
-    expiredAt    DateTime @db.DateTime()
+    expiredAt    DateTime @default(now())
     path         String   @db.VarChar(100)
     method       String   @db.VarChar(100)
     createdAt    DateTime @default(now())
@@ -97,7 +97,7 @@ model ResetPassword {
     user      User?    @relation(fields: [userId], references: [id])
     userId    String?
     used      Boolean  @default(false)
-    expiredAt DateTime @db.DateTime()
+    expiredAt DateTime @default(now())
     createdAt DateTime @default(now())
     updatedAt DateTime @default(now()) @updatedAt
 
@@ -147,7 +147,7 @@ model Activation {
     userId         String?
     activation_key String   @db.VarChar(200)
     used           Boolean  @default(false)
-    expiredAt      DateTime @db.DateTime()
+    expiredAt      DateTime @default(now())
     createdAt      DateTime @default(now())
 
     @@map("activation")

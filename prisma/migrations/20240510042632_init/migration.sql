@@ -43,7 +43,7 @@ CREATE TABLE `auth` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NULL,
     `access_token` VARCHAR(300) NOT NULL,
-    `expiredAt` DATETIME NOT NULL,
+    `expiredAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `path` VARCHAR(100) NOT NULL,
     `method` VARCHAR(100) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -56,7 +56,7 @@ CREATE TABLE `reset_password` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NULL,
     `used` BOOLEAN NOT NULL DEFAULT false,
-    `expiredAt` DATETIME NOT NULL,
+    `expiredAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -104,8 +104,9 @@ CREATE TABLE `faq` (
 CREATE TABLE `activation` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NULL,
+    `activation_key` VARCHAR(200) NOT NULL,
     `used` BOOLEAN NOT NULL DEFAULT false,
-    `expiredAt` DATETIME NOT NULL,
+    `expiredAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
@@ -235,6 +236,46 @@ CREATE TABLE `physical_character` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `Taaruf_gold` (
+    `id` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+    `startedAt` DATETIME(3) NULL,
+    `endingAt` DATETIME(3) NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    UNIQUE INDEX `Taaruf_gold_id_key`(`id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Payment` (
+    `id` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+    `gross_amount` INTEGER NOT NULL,
+    `midtransToken` VARCHAR(255) NULL,
+    `status` VARCHAR(191) NOT NULL DEFAULT 'pending',
+    `paidAt` DATETIME(3) NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `taaruf_goldId` VARCHAR(191) NULL,
+
+    UNIQUE INDEX `Payment_taaruf_goldId_key`(`taaruf_goldId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Midtrans_callback` (
+    `id` VARCHAR(191) NOT NULL,
+    `paymentId` VARCHAR(191) NOT NULL,
+    `callback_data` LONGTEXT NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    UNIQUE INDEX `Midtrans_callback_paymentId_key`(`paymentId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `auth` ADD CONSTRAINT `auth_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
@@ -279,3 +320,15 @@ ALTER TABLE `life_goal` ADD CONSTRAINT `life_goal_userId_fkey` FOREIGN KEY (`use
 
 -- AddForeignKey
 ALTER TABLE `physical_character` ADD CONSTRAINT `physical_character_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Taaruf_gold` ADD CONSTRAINT `Taaruf_gold_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Payment` ADD CONSTRAINT `Payment_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Payment` ADD CONSTRAINT `Payment_taaruf_goldId_fkey` FOREIGN KEY (`taaruf_goldId`) REFERENCES `Taaruf_gold`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Midtrans_callback` ADD CONSTRAINT `Midtrans_callback_paymentId_fkey` FOREIGN KEY (`paymentId`) REFERENCES `Payment`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
