@@ -75,7 +75,7 @@ export class AuthController {
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('send-activation')
-    async sendActivation(@Param('email') email: string): Promise<void> {
+    async sendActivation(@Query('email') email: string): Promise<void> {
         try {
             await this.authService.sendActivation(email);
         } catch (error) {
@@ -99,7 +99,7 @@ export class AuthController {
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('send-reset-password')
-    async sendResetPassword(@Param('email') email: string): Promise<void> {
+    async sendResetPassword(@Query('email') email: string): Promise<void> {
         try {
             await this.authService.sendResetPassword(email);
         } catch (error) {
