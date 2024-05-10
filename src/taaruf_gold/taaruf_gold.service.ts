@@ -15,7 +15,7 @@ export class TaarufGoldService {
     async findAllActiveUser(page = 1, limit = 10) {
         //find user by their payment status (taaruf_gold active membership status & membership activeness)
         const skip = (page - 1) * limit;
-        const activeUser = await this.prismaService.taaruf_gold.findMany({
+        const data = await this.prismaService.taaruf_gold.findMany({
             where: {
                 OR: [
                     {
@@ -36,7 +36,7 @@ export class TaarufGoldService {
             take: +limit,
         });
 
-        const users = await this.prismaService.taaruf_gold.count({
+        const total = await this.prismaService.taaruf_gold.count({
             where: {
                 OR: [
                     {
@@ -51,21 +51,23 @@ export class TaarufGoldService {
             }
         });
 
-        const maxPages = Math.ceil(users / limit);
+        const maxPages = Math.ceil(total / limit);
         const Page = page;
         const pagesLeft = maxPages - Page;
 
         return {
-            users,
+            total,
             Page: +page,
-            pagesLeft,
-            activeUser,
+            maxPages,
+            limit: +limit,
+            data,
+
         };
     }
 
     async findAllInActiveUser(page = 1, limit = 10) {
         const skip = (page - 1) * limit;
-        const inActiveUser = await this.prismaService.taaruf_gold.findMany({
+        const data = await this.prismaService.taaruf_gold.findMany({
             where: {
                 OR: [
                     {
@@ -84,7 +86,7 @@ export class TaarufGoldService {
             take: +limit,
         });
 
-        const users = await this.prismaService.taaruf_gold.count({
+        const total = await this.prismaService.taaruf_gold.count({
             where: {
                 OR: [
                     {
@@ -97,15 +99,16 @@ export class TaarufGoldService {
             }
         });
 
-        const maxPages = Math.ceil(users / limit);
+        const maxPages = Math.ceil(total / limit);
         const Page = page;
         const pagesLeft = maxPages - Page;
 
         return {
-            users,
+            total,
             Page: +page,
-            pagesLeft,
-            inActiveUser,
+            maxPages,
+            limit: +limit,
+            data,
         };
     }
 
