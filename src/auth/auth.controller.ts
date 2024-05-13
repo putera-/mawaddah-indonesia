@@ -155,6 +155,8 @@ export class AuthController {
         // for avatar
         const ext = file ? file.originalname.split('.').pop() : '';
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        const blurUniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9 * 2);
 
         // only can update belongs to auth user
         const { id } = req.user;
@@ -173,8 +175,12 @@ export class AuthController {
                     sizes.map(async (s) => {
                         const { key, size } = s;
                         const filename = `${uniqueSuffix}_${key}.${ext}`;
+                        const blurredFilename = `${blurUniqueSuffix}_${key}.${ext}`;
                         const filepath = path.join(
                             './public/avatar/' + filename,
+                        );
+                        const blurredFilepath = path.join(
+                            './public/avatar/' + blurredFilename,
                         );
 
                         await this.photoService.resize(
@@ -182,11 +188,18 @@ export class AuthController {
                             avatarBuffer,
                             filepath,
                         );
+                        await this.photoService.blurringImage(
+                            size,
+                            avatarBuffer,
+                            blurredFilepath,
+                        );
                     }),
                 );
 
                 data.avatar = `/avatar/${uniqueSuffix}_lg.${ext}`;
                 data.avatar_md = `/avatar/${uniqueSuffix}_md.${ext}`;
+                data.blurred_avatar = `/avatar/${blurUniqueSuffix}_lg.${ext}`;
+                data.blurred_avatar_md = `/avatar/${blurUniqueSuffix}_md.${ext}`;
             }
 
             return this.userService.update(id, data);

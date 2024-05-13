@@ -20,6 +20,8 @@ const select = {
     verified: true,
     avatar: true,
     avatar_md: true,
+    blurred_avatar:true,
+    blurred_avatar_md:true,
     role: true,
     taaruf_status: true,
 };
