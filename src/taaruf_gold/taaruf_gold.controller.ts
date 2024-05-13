@@ -22,7 +22,7 @@ export class TaarufGoldController {
         try {
 
             //create taaruf gold
-            const taarufGold = await this.paymentService.createTaarufGold(request.user.id);
+            const taarufGold = await this.taarufGoldService.create(request.user.id);
 
             //craete payment
             const payment = await this.paymentService.createPayment(request.user.id, data.gross_amount, taarufGold.id);

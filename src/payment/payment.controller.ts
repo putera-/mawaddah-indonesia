@@ -1,9 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PaymentService } from './payment.service';
+import { TaarufGoldService } from 'src/taaruf_gold/taaruf_gold.service';
 
 @Controller('payment')
 export class PaymentController {
-    constructor(private readonly paymentService: PaymentService) { }
+    constructor(
+        private readonly paymentService: PaymentService,
+        private readonly taarufGoldService: TaarufGoldService
+    ) { }
 
     @Post("midtrans-notification")
     async midtransNotification(@Body() data: any) {
@@ -19,7 +23,7 @@ export class PaymentController {
                     await this.paymentService.updateStatus(paymentId, data.transaction_status)
 
                     //update taarufGold
-                    await this.paymentService.updateTaarufGold(paymentId)
+                    await this.taarufGoldService.update(paymentId)
 
                     //upsert midtrans_callback (update/create)
                     await this.paymentService.upsertMidtransCallback(data)

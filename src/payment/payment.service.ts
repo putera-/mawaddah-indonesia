@@ -29,23 +29,7 @@ export class PaymentService {
         return response;
     }
 
-    async createTaarufGold(userId: string): Promise<Taaruf_gold> {
 
-        const dataTaaruf: Prisma.Taaruf_goldCreateInput = {
-            user: { connect: { id: userId, } },
-            Payment: {
-                create: { user: { connect: { id: userId } }, gross_amount: 100000 }
-            }
-
-        }
-        const data = await this.prismaService.taaruf_gold.create({
-            data: dataTaaruf,
-            include: {
-                Payment: true
-            }
-        })
-        return data;
-    }
 
     async generateMidtransToken(payment: any) {
         let data = new MidtransClient.Snap({
@@ -102,23 +86,7 @@ export class PaymentService {
         });
     }
 
-    async updateTaarufGold(paymentId: string) {
-
-        const endDate = dayjs().add(1, "month").toISOString()
-
-        const taaruf_gold = await this.prismaService.taaruf_gold.findFirst({
-            where: {
-                Payment: { id: paymentId }
-            },
-        });
-
-        const data = await this.prismaService.taaruf_gold.update({
-            where: { id: taaruf_gold.id },
-            data: { startedAt: new Date(), endingAt: endDate },
-        });
-        return data;
-    }
-
+    
     async upsertMidtransCallback(data: any) {
         const payment_id = data.order_id
         const midtransData: Prisma.Midtrans_callbackCreateInput = {

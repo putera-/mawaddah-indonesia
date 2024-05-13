@@ -1,16 +1,51 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
-import { CreateTaarufGoldDto } from './dto/create-taaruf_gold.dto';
-import { UpdateTaarufGoldDto } from './dto/update-taaruf_gold.dto';
 import dayjs from 'dayjs';
 import { max } from 'class-validator';
+import { Taaruf_gold } from './taaruf_gold.interface';
 
 @Injectable()
 export class TaarufGoldService {
     constructor(
         private readonly prismaService: PrismaService,
     ) { }
+    async create(userId: string): Promise<Taaruf_gold> {
+
+        const dataTaaruf: Prisma.Taaruf_goldCreateInput = {
+            user: { connect: { id: userId, } },
+            Payment: {
+                create: { user: { connect: { id: userId } }, gross_amount: 100000 }
+            }
+
+        }
+        const data = await this.prismaService.taaruf_gold.create({
+            data: dataTaaruf,
+            include: {
+                Payment: true
+            }
+        })
+        return data;
+    }
+
+    async update(paymentId: string) {
+
+        const endDate = dayjs().add(1, "month").toISOString()
+
+        const taaruf_gold = await this.prismaService.taaruf_gold.findFirst({
+            where: {
+                Payment: { id: paymentId }
+            },
+        });
+
+        const data = await this.prismaService.taaruf_gold.update({
+            where: { id: taaruf_gold.id },
+            data: { startedAt: new Date(), endingAt: endDate },
+        });
+        return data;
+    }
+
+
 
     async findAllActiveUser(page = 1, limit = 10) {
         //find user by their payment status (taaruf_gold active membership status & membership activeness)
