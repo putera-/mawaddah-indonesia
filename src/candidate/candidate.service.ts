@@ -16,9 +16,8 @@ let select = {
 @Injectable()
 export class CandidateService {
     constructor(private Prisma: PrismaService) { }
-    async findNew(gender: any, query: Record<string, any>) {
+    async findNew(gender: any, page = '1', limit = '10') {
         const oppositeGender = this.getOppositeGender(gender);
-        const limit = parseInt(query.limit);
         const newUsers = await this.Prisma.user.findMany({
             where: {
                 biodata: {
@@ -32,7 +31,7 @@ export class CandidateService {
                     createdAt: 'desc',
                 },
             },
-            take: limit,
+            take: Number(limit),
         });
         return newUsers;
     }
@@ -93,9 +92,8 @@ export class CandidateService {
         }
         return suggest;
     }
-    async findSuggestion(gender: any, query: Record<string, any>) {
+    async findSuggestion(gender: any, page = '1', limit = '10') {
         const oppositeGender = this.getOppositeGender(gender);
-        const limit = parseInt(query.limit) | 10;
         const suggestions = await this.Prisma.user.findMany({
             where: {
                 biodata: {
@@ -114,7 +112,7 @@ export class CandidateService {
                     createdAt: 'desc',
                 },
             },
-            take: limit,
+            take: Number(limit),
         });
         return suggestions;
         // return `This action returns a #${id} candidate`;

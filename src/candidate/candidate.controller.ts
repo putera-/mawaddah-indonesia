@@ -24,8 +24,12 @@ export class CandidateController {
 
     @Roles(Role.Member)
     @Get('new')
-    async findNew(@Request() req: any, @Query() query: Record<string, any>) {
+    async findNew(@Request() req: any,
+        @Query('page') page: string,
+        @Query('limit') limit: string) {
         try {
+
+
             const user = await this.Prisma.biodata.findFirst({
                 where: {
                     userId: req.user.id,
@@ -34,7 +38,8 @@ export class CandidateController {
             if (!user) throw new NotFoundException('Silakan lengkapi biodata');
             const candidate = await this.candidateService.findNew(
                 user.gender,
-                query,
+                page,
+                limit
             );
             for (const c of candidate) {
                 this.userService.formatGray(c);
@@ -59,7 +64,8 @@ export class CandidateController {
     @Get('suggestion')
     async findSuggestion(
         @Request() req: any,
-        @Query() query: Record<string, any>,
+        @Query('page') page: string,
+        @Query('limit') limit: string,
     ) {
         try {
             const bio = await this.Prisma.biodata.findFirst({
@@ -78,7 +84,8 @@ export class CandidateController {
             });
             const suggest = await this.candidateService.findSuggestion(
                 bio.gender,
-                query,
+                page,
+                limit
             );
 
             // gray name
@@ -96,7 +103,8 @@ export class CandidateController {
     @Get('you-may-like')
     async findLike(
         @Request() req: any,
-        @Query() query: Record<string, any>,
+        @Query('page') page: string,
+        @Query('limit') limit: string,
     ) {
         try {
             const bio = await this.Prisma.biodata.findFirst({
@@ -115,7 +123,8 @@ export class CandidateController {
             });
             const suggest = await this.candidateService.findSuggestion(
                 bio.gender,
-                query,
+                page,
+                limit
             );
 
             // gray name
