@@ -29,6 +29,8 @@ model User {
     verified           Boolean             @default(false)
     avatar             String?             @db.VarChar(255)
     avatar_md          String?             @db.VarChar(255)
+    blurred_avatar     String?             @db.VarChar(255)
+    blurred_avatar_md  String?             @db.VarChar(255)
     role               RoleStatus          @default(MEMBER)
     taaruf_status      TaarufStatus        @default(BLOCKED)
     auth               Auth[]
