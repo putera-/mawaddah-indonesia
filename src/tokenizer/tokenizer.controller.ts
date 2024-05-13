@@ -8,29 +8,6 @@ import { Role } from 'src/roles/role.enums';
 export class TokenizerController {
     constructor(private readonly tokenizerService: TokenizerService) { }
 
-    @Roles(Role.Member)
-    @Post()
-    async create(@Request() request: any, @Body(new ValidationPipe()) data: CreateTokenDto) {
-        try {
-
-            //create taaruf gold
-            const taarufGold = await this.tokenizerService.createTaarufGold(request.user.id);
-
-            //craete payment
-            const payment = await this.tokenizerService.createPayment(request.user.id, data.gross_amount, taarufGold.id);
-
-            //create token
-            const token = await this.tokenizerService.generateMidtransToken(payment);
-
-            //update payment > return payment data
-            const result = await this.tokenizerService.updatePayment(payment.id, token);
-            return result
-
-
-        } catch (error) {
-            throw error
-        }
-    }
 
     @Post("midtrans-notification")
     async midtransNotification(@Body() data: any) {
