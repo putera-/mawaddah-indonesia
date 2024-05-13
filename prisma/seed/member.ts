@@ -15,8 +15,7 @@ export async function memberSeed(prisma: PrismaClient) {
             avatar_md: '/dummy/abang.png',
             activations: {
                 create: {
-                    expiredAt: new Date(),
-                    activation_key: '...'
+                    expiredAt: new Date()
                 },
             },
         };
@@ -172,8 +171,7 @@ export async function memberSeed(prisma: PrismaClient) {
             avatar_md: '/dummy/nissa.png',
             activations: {
                 create: {
-                    expiredAt: new Date(),
-                    activation_key: '...'
+                    expiredAt: new Date()
                 },
             },
         };
