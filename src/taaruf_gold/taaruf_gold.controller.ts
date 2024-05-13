@@ -4,34 +4,34 @@ import { CreateTaarufGoldDto } from './dto/create-taaruf_gold.dto';
 import { UpdateTaarufGoldDto } from './dto/update-taaruf_gold.dto';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
-import { TokenizerService } from 'src/tokenizer/tokenizer.service';
-import { CreateTokenDto } from 'src/tokenizer/dto/create-tokenizer.dto';
+import { CreateTaarufGoldPaymentDto } from 'src/payment/dto/create-taaruf_gold-payment.dto';
+import { PaymentService } from 'src/payment/payment.service';
 
 
 @Controller('taaruf-gold')
 export class TaarufGoldController {
     constructor(
         private readonly taarufGoldService: TaarufGoldService,
-        private readonly tokenizerService: TokenizerService
+        private readonly paymentService: PaymentService
     ) { }
 
 
     @Roles(Role.Member)
     @Post('generate-payment')
-    async create(@Request() request: any, @Body(new ValidationPipe()) data: CreateTokenDto) {
+    async create(@Request() request: any, @Body(new ValidationPipe()) data: CreateTaarufGoldPaymentDto) {
         try {
 
             //create taaruf gold
-            const taarufGold = await this.tokenizerService.createTaarufGold(request.user.id);
+            const taarufGold = await this.paymentService.createTaarufGold(request.user.id);
 
             //craete payment
-            const payment = await this.tokenizerService.createPayment(request.user.id, data.gross_amount, taarufGold.id);
+            const payment = await this.paymentService.createPayment(request.user.id, data.gross_amount, taarufGold.id);
 
             //create token
-            const token = await this.tokenizerService.generateMidtransToken(payment);
+            const token = await this.paymentService.generateMidtransToken(payment);
 
             //update payment > return payment data
-            const result = await this.tokenizerService.updatePayment(payment.id, token);
+            const result = await this.paymentService.updatePayment(payment.id, token);
             return result
 
 

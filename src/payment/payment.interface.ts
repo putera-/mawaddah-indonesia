@@ -1,15 +1,5 @@
-import { User } from "src/users/user.interface";
-
-export interface Taaruf_gold {
-    id: string,
-    user?: User,
-    userId: string,
-    startedAt?: Date,
-    endingAt?: Date,
-    createdAt: Date,
-    updatedAt: Date,
-    Payment: Payment
-}
+import { Taaruf_gold } from "src/taaruf_gold/taaruf_gold.interface"
+import { User } from "src/users/user.interface"
 
 export interface Payment {
     id: string,
@@ -33,4 +23,5 @@ export interface Midtrans {
     callback_data: string,
     createdAt: Date
 }
+
 

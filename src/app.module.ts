@@ -26,8 +26,8 @@ import { CandidateModule } from './candidate/candidate.module';
 import { ResetPasswordModule } from './reset_password/reset_password.module';
 import { SkillsModule } from './skills/skills.module';
 import { ActivationModule } from './activation/activation.module';
-import { TokenizerModule } from './tokenizer/tokenizer.module';
 import { TaarufGoldModule } from './taaruf_gold/taaruf_gold.module';
+import { PaymentModule } from './payment/payment.module';
 @Module({
     imports: [
         ConfigModule.forRoot(),
@@ -53,8 +53,8 @@ import { TaarufGoldModule } from './taaruf_gold/taaruf_gold.module';
         ResetPasswordModule,
         ConfigModule,
         ActivationModule,
-        TokenizerModule,
         TaarufGoldModule,
+        PaymentModule,
     ],
 
     controllers: [AppController],

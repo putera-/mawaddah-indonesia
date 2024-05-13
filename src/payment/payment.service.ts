@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-import MidtransClient from 'midtrans-client';
 import { PrismaService } from 'src/prisma.service';
-import { Taaruf_gold } from './taaruf_gold.interface';
+import { Prisma } from '@prisma/client';
+import { Taaruf_gold } from 'src/taaruf_gold/taaruf_gold.interface';
+import MidtransClient from 'midtrans-client';
 import dayjs from 'dayjs';
 
 @Injectable()
-export class TokenizerService {
+export class PaymentService {
     constructor(
         private readonly prismaService: PrismaService,
     ) { }
