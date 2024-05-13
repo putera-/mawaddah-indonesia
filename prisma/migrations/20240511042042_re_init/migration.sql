@@ -9,6 +9,8 @@ CREATE TABLE `user` (
     `verified` BOOLEAN NOT NULL DEFAULT false,
     `avatar` VARCHAR(255) NULL,
     `avatar_md` VARCHAR(255) NULL,
+    `blurred_avatar` VARCHAR(255) NULL,
+    `blurred_avatar_md` VARCHAR(255) NULL,
     `role` ENUM('MEMBER', 'ADMIN', 'SUPERADMIN') NOT NULL DEFAULT 'MEMBER',
     `taaruf_status` ENUM('OPEN', 'PENDING', 'BLOCKED') NOT NULL DEFAULT 'BLOCKED',
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -104,7 +106,6 @@ CREATE TABLE `faq` (
 CREATE TABLE `activation` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NULL,
-    `activation_key` VARCHAR(200) NOT NULL,
     `used` BOOLEAN NOT NULL DEFAULT false,
     `expiredAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),

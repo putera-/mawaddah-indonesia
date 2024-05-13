@@ -18,7 +18,6 @@ export async function userSeed(prisma: PrismaClient) {
             activations: {
                 create: {
                     expiredAt: new Date(),
-                    activation_key: '...'
                 },
             },
         };

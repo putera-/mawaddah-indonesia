@@ -16,7 +16,6 @@ export async function memberSeed(prisma: PrismaClient) {
             activations: {
                 create: {
                     expiredAt: new Date(),
-                    activation_key: '...'
                 },
             },
         };
@@ -173,7 +172,6 @@ export async function memberSeed(prisma: PrismaClient) {
             activations: {
                 create: {
                     expiredAt: new Date(),
-                    activation_key: '...'
                 },
             },
         };
