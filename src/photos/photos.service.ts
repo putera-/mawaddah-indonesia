@@ -17,6 +17,7 @@ export class PhotosService {
         // Save the resized image to disk
         fs.writeFile(filepath, resizedBuffer);
     }
+
     async removeFile(file) {
         try {
             await fs.rm('.' + file);
@@ -24,23 +25,18 @@ export class PhotosService {
             throw error;
         }
     }
-    //   create(createPhotoDto: CreatePhotoDto) {
-    //     return 'This action adds a new photo';
-    //   }
+    async blurringImage(size, buffer, filepath) {
+        const resizedBuffer = await sharp(buffer, { animated: true })
+            .blur(50)
+            .resize(size)
+            .toBuffer();
 
-    //   findAll() {
-    //     return `This action returns all photos`;
-    //   }
-
-    //   findOne(id: number) {
-    //     return `This action returns a #${id} photo`;
-    //   }
-
-    //   update(id: number, updatePhotoDto: UpdatePhotoDto) {
-    //     return `This action updates a #${id} photo`;
-    //   }
-
-    //   remove(id: number) {
-    //     return `This action removes a #${id} photo`;
-    //   }
+        const dir = path.dirname(filepath);
+        await fs.mkdir(dir, { recursive: true });
+        fs.writeFile(filepath, resizedBuffer);
+    }
 }
+
+// return await sharp(buffer)
+//     .blur(10) // Adjust blur strength as needed
+//     .toBuffer();
