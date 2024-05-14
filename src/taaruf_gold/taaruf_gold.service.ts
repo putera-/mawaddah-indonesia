@@ -146,22 +146,4 @@ export class TaarufGoldService {
             data,
         };
     }
-
-
-    findOne(id: string) {
-        return `This action returns a #${id} taarufGold`;
-    }
-
-    //   create(createTaarufGoldDto: CreateTaarufGoldDto) {
-    //     return 'This action adds a new taarufGold';
-    //   }
-
-
-    //   update(id: number, updateTaarufGoldDto: UpdateTaarufGoldDto) {
-    //     return `This action updates a #${id} taarufGold`;
-    //   }
-
-    //   remove(id: number) {
-    //     return `This action removes a #${id} taarufGold`;
-    //   }
 }
