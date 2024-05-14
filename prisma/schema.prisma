@@ -5,292 +5,330 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+    provider = "mysql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id                 String              @id @default(uuid())
-  email              String              @unique @db.VarChar(100)
-  firstname          String              @db.VarChar(100)
-  lastname           String              @db.VarChar(100)
-  password           String              @db.VarChar(100)
-  Education          Education[]
-  Hobby              Hobby[]
-  Skill              Skill[]
-  Married_goal       MarriedGoal[]
-  Life_goal          LifeGoal[]
-  Physic_character   PhysicalCharacter[]
-  active             Boolean             @default(false)
-  verified           Boolean             @default(false)
-  avatar             String?             @db.VarChar(255)
-  avatar_md          String?             @db.VarChar(255)
-  role               RoleStatus          @default(MEMBER)
-  taaruf_status      TaarufStatus        @default(BLOCKED)
-  auth               Auth[]
-  reset_password     ResetPassword[]
-  activations        Activation[]
-  biodata            Biodata?
-  bookmarks          Bookmark[]          @relation("UserBookmarks")
-  bookmark_candidate Bookmark[]          @relation("UserCandidates")
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @default(now()) @updatedAt
+    id                 String              @id @default(uuid())
+    email              String              @unique @db.VarChar(100)
+    firstname          String              @db.VarChar(100)
+    lastname           String              @db.VarChar(100)
+    password           String              @db.VarChar(100)
+    Education          Education[]
+    Hobby              Hobby[]
+    Skill              Skill[]
+    Married_goal       MarriedGoal[]
+    Life_goal          LifeGoal[]
+    Physic_character   PhysicalCharacter[]
+    active             Boolean             @default(false)
+    verified           Boolean             @default(false)
+    avatar             String?             @db.VarChar(255)
+    avatar_md          String?             @db.VarChar(255)
+    blurred_avatar     String?             @db.VarChar(255)
+    blurred_avatar_md  String?             @db.VarChar(255)
+    role               RoleStatus          @default(MEMBER)
+    taaruf_status      TaarufStatus        @default(BLOCKED)
+    auth               Auth[]
+    Taaruf_gold        Taaruf_gold[]
+    Payment            Payment[]
+    reset_password     ResetPassword[]
+    activations        Activation[]
+    biodata            Biodata?
+    bookmarks          Bookmark[]          @relation("UserBookmarks")
+    bookmark_candidate Bookmark[]          @relation("UserCandidates")
+    createdAt          DateTime            @default(now())
+    updatedAt          DateTime            @default(now()) @updatedAt
 
-  @@map("user")
+    @@map("user")
 }
 
 model Client {
-  id                String    @id @default(uuid())
-  name              String    @db.VarChar(100)
-  about             String?   @db.Text
-  phone             String    @db.VarChar(20)
-  address           String    @db.Text
-  taaruf_muqoddimah String?   @db.Text
-  login_muqoddimah  String?   @db.Text
-  signup_muqoddimah String?   @db.Text
-  youtube           String?   @db.VarChar(100)
-  facebook          String?   @db.VarChar(100)
-  twitter           String?   @db.VarChar(100)
-  tiktok            String?   @db.VarChar(100)
-  instagram         String?   @db.VarChar(100)
-  linkedin          String?   @db.VarChar(100)
-  galleries         Gallery[]
-  sliders           Slider[]
-  faqs              FAQ[]
+    id                String    @id @default(uuid())
+    name              String    @db.VarChar(100)
+    about             String?   @db.Text
+    phone             String    @db.VarChar(20)
+    address           String    @db.Text
+    taaruf_muqoddimah String?   @db.Text
+    login_muqoddimah  String?   @db.Text
+    signup_muqoddimah String?   @db.Text
+    youtube           String?   @db.VarChar(100)
+    facebook          String?   @db.VarChar(100)
+    twitter           String?   @db.VarChar(100)
+    tiktok            String?   @db.VarChar(100)
+    instagram         String?   @db.VarChar(100)
+    linkedin          String?   @db.VarChar(100)
+    galleries         Gallery[]
+    sliders           Slider[]
+    faqs              FAQ[]
 
-  @@map("client")
+    @@map("client")
 }
 
 enum RoleStatus {
-  MEMBER
-  ADMIN
-  SUPERADMIN
+    MEMBER
+    ADMIN
+    SUPERADMIN
 }
 
 enum TaarufStatus {
-  OPEN
-  PENDING
-  BLOCKED
+    OPEN
+    PENDING
+    BLOCKED
 }
 
 model Auth {
-  id           String   @id @default(uuid())
-  user         User?    @relation(fields: [userId], references: [id])
-  userId       String?
-  access_token String   @db.VarChar(300)
-  expiredAt    DateTime @db.DateTime()
-  path         String   @db.VarChar(100)
-  method       String   @db.VarChar(100)
-  createdAt    DateTime @default(now())
+    id           String   @id @default(uuid())
+    user         User?    @relation(fields: [userId], references: [id])
+    userId       String?
+    access_token String   @db.VarChar(300)
+    expiredAt    DateTime @default(now())
+    path         String   @db.VarChar(100)
+    method       String   @db.VarChar(100)
+    createdAt    DateTime @default(now())
 
-  @@map("auth")
+    @@map("auth")
 }
 
 model ResetPassword {
-  id        String   @id @default(uuid())
-  user      User?    @relation(fields: [userId], references: [id])
-  userId    String?
-  used      Boolean  @default(false)
-  expiredAt DateTime @db.DateTime()
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+    id        String   @id @default(uuid())
+    user      User?    @relation(fields: [userId], references: [id])
+    userId    String?
+    used      Boolean  @default(false)
+    expiredAt DateTime @default(now())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 
-  @@map("reset_password")
+    @@map("reset_password")
 }
 
 model Gallery {
-  id        String   @id @default(uuid())
-  Client    Client?  @relation(fields: [clientId], references: [id])
-  clientId  String?
-  title     String?  @db.VarChar(100)
-  photo     String?  @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+    id        String   @id @default(uuid())
+    Client    Client?  @relation(fields: [clientId], references: [id])
+    clientId  String?
+    title     String?  @db.VarChar(100)
+    photo     String?  @db.Text
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 
-  @@map("gallery")
+    @@map("gallery")
 }
 
 model Slider {
-  id        String   @id @default(uuid())
-  Client    Client?  @relation(fields: [clientId], references: [id])
-  clientId  String?
-  title     String?  @db.Text
-  photo     String?  @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+    id        String   @id @default(uuid())
+    Client    Client?  @relation(fields: [clientId], references: [id])
+    clientId  String?
+    title     String?  @db.Text
+    photo     String?  @db.Text
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 
-  @@map("slider")
+    @@map("slider")
 }
 
 model FAQ {
-  id        String   @id @default(uuid())
-  Client    Client?  @relation(fields: [clientId], references: [id])
-  clientId  String?
-  question  String   @db.VarChar(255)
-  answer    String   @db.VarChar(255)
-  deleted   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+    id        String   @id @default(uuid())
+    Client    Client?  @relation(fields: [clientId], references: [id])
+    clientId  String?
+    question  String   @db.VarChar(255)
+    answer    String   @db.VarChar(255)
+    deleted   Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 
-  @@map("faq")
+    @@map("faq")
 }
 
 model Activation {
-  id        String   @id @default(uuid())
-  user      User?    @relation(fields: [userId], references: [id])
-  userId    String?
-  used      Boolean  @default(false)
-  expiredAt DateTime @db.DateTime()
-  createdAt DateTime @default(now())
+    id        String   @id @default(uuid())
+    user      User?    @relation(fields: [userId], references: [id])
+    userId    String?
+    used      Boolean  @default(false)
+    expiredAt DateTime @default(now())
+    createdAt DateTime @default(now())
 
-  @@map("activation")
+    @@map("activation")
 }
 
 model Bookmark {
-  id          String   @id @default(uuid())
-  user        User     @relation(name: "UserBookmarks", fields: [userId], references: [id])
-  userId      String // This field holds the foreign key
-  candidate   User     @relation(name: "UserCandidates", fields: [candidateId], references: [id])
-  candidateId String // This field holds the foreign key
-  bookmarked  Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
+    id          String   @id @default(uuid())
+    user        User     @relation(name: "UserBookmarks", fields: [userId], references: [id])
+    userId      String // This field holds the foreign key
+    candidate   User     @relation(name: "UserCandidates", fields: [candidateId], references: [id])
+    candidateId String // This field holds the foreign key
+    bookmarked  Boolean  @default(true)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @default(now()) @updatedAt
 
-  @@map("bookmark")
+    @@map("bookmark")
 }
 
 model Biodata {
-  id                  String             @id @default(uuid())
-  user                User?              @relation(fields: [userId], references: [id])
-  userId              String?            @unique
-  bio                 String             @db.Text
-  phone               String             @db.VarChar(20)
-  manhaj              ManhajStatus
-  gender              Gender
-  marriage_status     MarriageStatus
-  marriage_permission MarriagePermission
-  dob                 DateTime           @db.Date
-  birth_place         String             @db.VarChar(100)
-  birth_order         Int                @db.TinyInt
-  domicile_town       String             @db.VarChar(100)
-  domicile_province   String             @db.VarChar(100)
-  hometown_province   String             @db.VarChar(100)
-  ethnic              String             @db.VarChar(100)
-  createdAt           DateTime           @default(now())
-  updatedAt           DateTime           @default(now()) @updatedAt
+    id                  String             @id @default(uuid())
+    user                User?              @relation(fields: [userId], references: [id])
+    userId              String?            @unique
+    bio                 String             @db.Text
+    phone               String             @db.VarChar(20)
+    manhaj              ManhajStatus
+    gender              Gender
+    marriage_status     MarriageStatus
+    marriage_permission MarriagePermission
+    dob                 DateTime           @db.Date
+    birth_place         String             @db.VarChar(100)
+    birth_order         Int                @db.TinyInt
+    domicile_town       String             @db.VarChar(100)
+    domicile_province   String             @db.VarChar(100)
+    hometown_province   String             @db.VarChar(100)
+    ethnic              String             @db.VarChar(100)
+    createdAt           DateTime           @default(now())
+    updatedAt           DateTime           @default(now()) @updatedAt
 
-  @@map("biodata")
+    @@map("biodata")
 }
 
 enum ManhajStatus {
-  SALAF
-  BARU_BELAJAR
-  NON_SALAF
+    SALAF
+    BARU_BELAJAR
+    NON_SALAF
 }
 
 enum Gender {
-  PRIA
-  WANITA
+    PRIA
+    WANITA
 }
 
 enum MarriageStatus {
-  LAJANG
-  MENIKAH
-  DUDA
-  JANDA
+    LAJANG
+    MENIKAH
+    DUDA
+    JANDA
 }
 
 enum MarriagePermission {
-  POLIGAMI
-  NON_POLIGAMI
+    POLIGAMI
+    NON_POLIGAMI
 }
 
 model Province {
-  id      String  @id @default(uuid())
-  name    String  @unique() @db.VarChar(100)
-  deleted Boolean @default(false)
+    id      String  @id @default(uuid())
+    name    String  @unique() @db.VarChar(100)
+    deleted Boolean @default(false)
 
-  @@map("province")
+    @@map("province")
 }
 
 model Education {
-  id               String   @id @default(uuid())
-  User             User?    @relation(fields: [userId], references: [id])
-  userId           String?
-  institution_name String   @db.VarChar(100)
-  major            String?  @db.VarChar(100)
-  degree           String?  @db.VarChar(100)
-  city             String?  @db.VarChar(100)
-  startYear        Int      @db.Year
-  endYear          Int?     @db.Year
-  deleted          Boolean  @default(false)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @default(now()) @updatedAt
+    id               String   @id @default(uuid())
+    User             User?    @relation(fields: [userId], references: [id])
+    userId           String?
+    institution_name String   @db.VarChar(100)
+    major            String?  @db.VarChar(100)
+    degree           String?  @db.VarChar(100)
+    city             String?  @db.VarChar(100)
+    startYear        Int      @db.Year
+    endYear          Int?     @db.Year
+    deleted          Boolean  @default(false)
+    createdAt        DateTime @default(now())
+    updatedAt        DateTime @default(now()) @updatedAt
 
-  @@map("education")
+    @@map("education")
 }
 
 model Hobby {
-  id        String   @id @default(uuid())
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String?
-  title     String   @db.VarChar(100)
-  deleted   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+    id        String   @id @default(uuid())
+    User      User?    @relation(fields: [userId], references: [id])
+    userId    String?
+    title     String   @db.VarChar(100)
+    deleted   Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 
-  @@map("hobby")
+    @@map("hobby")
 }
 
 model Skill {
-  id        String   @id @default(uuid())
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String?
-  title     String   @db.VarChar(100)
-  deleted   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+    id        String   @id @default(uuid())
+    User      User?    @relation(fields: [userId], references: [id])
+    userId    String?
+    title     String   @db.VarChar(100)
+    deleted   Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 
-  @@map("skill")
+    @@map("skill")
 }
 
 model MarriedGoal {
-  id        String   @id @default(uuid())
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String?
-  title     String   @db.VarChar(255)
-  deleted   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+    id        String   @id @default(uuid())
+    User      User?    @relation(fields: [userId], references: [id])
+    userId    String?
+    title     String   @db.VarChar(255)
+    deleted   Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 
-  @@map("married_goal")
+    @@map("married_goal")
 }
 
 model LifeGoal {
-  id        String   @id @default(uuid())
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String?
-  title     String   @db.VarChar(255)
-  deleted   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+    id        String   @id @default(uuid())
+    User      User?    @relation(fields: [userId], references: [id])
+    userId    String?
+    title     String   @db.VarChar(255)
+    deleted   Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 
-  @@map("life_goal")
+    @@map("life_goal")
 }
 
 model PhysicalCharacter {
-  id          String   @id @default(uuid())
-  User        User?    @relation(fields: [userId], references: [id])
-  userId      String?
-  title       String   @db.VarChar(100)
-  description String   @db.VarChar(255)
-  deleted     Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
+    id          String   @id @default(uuid())
+    User        User?    @relation(fields: [userId], references: [id])
+    userId      String?
+    title       String   @db.VarChar(100)
+    description String   @db.VarChar(255)
+    deleted     Boolean  @default(false)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @default(now()) @updatedAt
 
-  @@map("physical_character")
+    @@map("physical_character")
+}
+
+model Taaruf_gold {
+    id        String    @id @unique @default(uuid())
+    user      User?     @relation(fields: [userId], references: [id])
+    userId    String
+    startedAt DateTime?
+    endingAt  DateTime?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @default(now()) @updatedAt
+    Payment   Payment?
+}
+
+model Payment {
+    id            String             @id @default(uuid())
+    user          User?              @relation(fields: [userId], references: [id])
+    userId        String
+    gross_amount  Int
+    midtransToken String?            @db.VarChar(255)
+    status        String             @default("pending")
+    paidAt        DateTime?
+    midtrans      Midtrans_callback?
+    createdAt     DateTime           @default(now())
+    updatedAt     DateTime           @default(now()) @updatedAt
+    taaruf_gold   Taaruf_gold?       @relation(fields: [taaruf_goldId], references: [id])
+    taaruf_goldId String?            @unique
+}
+
+model Midtrans_callback {
+    id            String   @id @default(uuid())
+    payment       Payment? @relation(fields: [paymentId], references: [id])
+    paymentId     String   @unique
+    callback_data String   @db.LongText
+    createdAt     DateTime @default(now())
 }

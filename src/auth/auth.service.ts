@@ -23,7 +23,7 @@ export class AuthService {
         private prisma: PrismaService,
         private activationService: ActivationService,
         private resetPasswordService: ResetPasswordService,
-    ) {}
+    ) { }
     private blacklistedTokens: Set<string> = new Set();
 
     async signIn(email: string, pass: string): Promise<any> {
@@ -36,17 +36,24 @@ export class AuthService {
             throw new UnauthorizedException('Email atau password salah.');
         }
 
-        if (!user.active) {
-            const usedToken = await this.prisma.activation.findMany({
-                where: { userId: user.id, used: false },
+        if (!user.verified) {
+            const usedToken = await this.prisma.activation.findFirst({
+                where: {
+                    userId: user.id,
+                    used: false,
+                    expiredAt: { gt: new Date() }
+                },
+                orderBy: { createdAt: 'desc' }
             });
+
             if (!usedToken) {
-                this.sendActivation(email);
-                throw new HttpException(
-                    'Silahkan periksa email untuk verifikasi akun.',
-                    HttpStatus.ACCEPTED,
-                );
+                await this.sendActivation(email);
             }
+
+            throw new HttpException(
+                'Silahkan periksa email untuk verifikasi akun.',
+                HttpStatus.ACCEPTED,
+            );
         } else {
             delete user.password;
             delete user.createdAt;

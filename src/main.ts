@@ -19,7 +19,7 @@ async function bootstrap() {
 
     // CORS
     app.enableCors({
-        origin: ['http://localhost:3000', 'http://localhost:3001'],
+        origin: ['https://mawaddahindonesia.albashiroh.com', 'http://localhost:3000', 'http://localhost:3001'],
         credentials: true
     });
 

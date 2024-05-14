@@ -20,6 +20,8 @@ const select = {
     verified: true,
     avatar: true,
     avatar_md: true,
+    blurred_avatar:true,
+    blurred_avatar_md:true,
     role: true,
     taaruf_status: true,
 };
@@ -29,7 +31,7 @@ export class UsersService {
         private Prisma: PrismaService,
         private appService: AppService,
         // private activation: ActivationService,
-    ) {}
+    ) { }
 
     create(data: Prisma.UserCreateInput) {
         return this.Prisma.user.create({
