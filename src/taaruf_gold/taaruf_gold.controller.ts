@@ -51,9 +51,4 @@ export class TaarufGoldController {
         return this.taarufGoldService.findAllInActiveUser(page, limit);
     }
 
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.taarufGoldService.findOne(id);
-    }
-
 }

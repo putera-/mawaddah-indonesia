@@ -86,7 +86,7 @@ export class PaymentService {
         });
     }
 
-    
+
     async upsertMidtransCallback(data: any) {
         const payment_id = data.order_id
         const midtransData: Prisma.Midtrans_callbackCreateInput = {
