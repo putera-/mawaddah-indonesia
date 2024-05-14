@@ -15,7 +15,7 @@ let select = {
 };
 @Injectable()
 export class CandidateService {
-    constructor(private Prisma: PrismaService) { }
+    constructor(private Prisma: PrismaService) {}
     async findNew(gender: any, query: Record<string, any>) {
         const oppositeGender = this.getOppositeGender(gender);
         const limit = parseInt(query.limit);
@@ -44,7 +44,7 @@ export class CandidateService {
         });
     }
     findOne(id: string) {
-        return this.Prisma.biodata.findFirst({
+        return this.Prisma.user.findFirst({
             where: {
                 id,
             },
@@ -107,7 +107,7 @@ export class CandidateService {
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },
                 Life_goal: { select: { title: true } },
-                biodata: true
+                biodata: true,
             },
             orderBy: {
                 biodata: {
