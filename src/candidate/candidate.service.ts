@@ -43,7 +43,7 @@ export class CandidateService {
         });
     }
     findOne(id: string) {
-        return this.Prisma.biodata.findFirst({
+        return this.Prisma.user.findFirst({
             where: {
                 id,
             },
@@ -105,7 +105,7 @@ export class CandidateService {
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },
                 Life_goal: { select: { title: true } },
-                biodata: true
+                biodata: true,
             },
             orderBy: {
                 biodata: {
