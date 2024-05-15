@@ -62,8 +62,8 @@ export class EmailService {
         const sendResetTo = email;
         const sendResetSubject = 'Atur ulang kata sandi';
         const sendResetHtml = `
-        <div style="display: flex; justify-content: center; width:100%;">
-            <div style="background-image: url("https://mawaddahindonesia.albashiroh.com/Mawaddah-icon.png"); height: 250px; width: 250px; background-size:contain; background-color: red;background-repeat: no-repeat;">
+        <div style="height:100%; width:100%;">
+            <div style="background-image: url('https://mawaddahindonesia.albashiroh.com/Mawaddah-icon.png'); height: 250px; width: 250px; background-size:contain; background-repeat: no-repeat;">
             </div>
         </div>
         <h2><bold>Assalamualaikum, ${fullname}.</bold></h2>

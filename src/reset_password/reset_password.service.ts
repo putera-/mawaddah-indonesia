@@ -45,7 +45,6 @@ export class ResetPasswordService {
         const result = await this.prisma.resetPassword.create({
             data,
         });
-        console.log(result, email);
         await this.emailService.sendResetPassword(result.id, email);
         return result;
     }
