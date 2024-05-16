@@ -4,9 +4,9 @@ import * as bcrypt from 'bcrypt';
 
 export async function memberSeed(prisma: PrismaClient) {
     const password = await bcrypt.hash('rahasia', 10);
-    const randomNumber = Math.floor(Math.random() * 10) + 1;
     // BOB
     {
+        const randomNumber = Math.floor(Math.random() * 10) + 1;
         const bob = {
             lastname: faker.person.lastName('male'),
             password,
@@ -167,6 +167,7 @@ export async function memberSeed(prisma: PrismaClient) {
 
     // ALICE
     {
+        const randomNumber = Math.floor(Math.random() * 10) + 1;
         const alice = {
             lastname: faker.person.lastName('female'),
             password,
