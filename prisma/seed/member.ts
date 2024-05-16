@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 
 export async function memberSeed(prisma: PrismaClient) {
     const password = await bcrypt.hash('rahasia', 10);
+    const randomNumber = Math.floor(Math.random() * 10) + 1;
     // BOB
     {
         const bob = {
@@ -11,8 +12,12 @@ export async function memberSeed(prisma: PrismaClient) {
             password,
             active: true,
             verified: true,
-            avatar: '/dummy/abang.png',
-            avatar_md: '/dummy/abang.png',
+            avatar: '/dummy/ikhwan/' + randomNumber + '_lg.png',
+            avatar_md: '/dummy/ikhwan/' + randomNumber + '_md.png',
+            blurred_avatar:
+                '/dummy/ikhwan/blurred/blurred_' + randomNumber + '_lg.png',
+            blurred_avatar_md:
+                '/dummy/ikhwan/blurred/blurred_' + randomNumber + '_md.png',
             activations: {
                 create: {
                     expiredAt: new Date(),
@@ -167,8 +172,12 @@ export async function memberSeed(prisma: PrismaClient) {
             password,
             active: true,
             verified: true,
-            avatar: '/dummy/nissa.png',
-            avatar_md: '/dummy/nissa.png',
+            avatar: '/dummy/akhwat/' + randomNumber + '_lg.png',
+            avatar_md: '/dummy/akhwat/' + randomNumber + '_md.png',
+            blurred_avatar:
+                '/dummy/akhwat/blurred/blurred_' + randomNumber + '_lg.png',
+            blurred_avatar_md:
+                '/dummy/akhwat/blurred/blurred_' + randomNumber + '_md.png',
             activations: {
                 create: {
                     expiredAt: new Date(),
