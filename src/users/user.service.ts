@@ -20,8 +20,20 @@ const select = {
     verified: true,
     avatar: true,
     avatar_md: true,
-    blurred_avatar:true,
-    blurred_avatar_md:true,
+    blurred_avatar: true,
+    blurred_avatar_md: true,
+    role: true,
+    taaruf_status: true,
+};
+const hiddenSelect = {
+    id: true,
+    email: true,
+    firstname: true,
+    lastname: true,
+    active: true,
+    verified: true,
+    blurred_avatar: true,
+    blurred_avatar_md: true,
     role: true,
     taaruf_status: true,
 };
@@ -31,7 +43,7 @@ export class UsersService {
         private Prisma: PrismaService,
         private appService: AppService,
         // private activation: ActivationService,
-    ) { }
+    ) {}
 
     create(data: Prisma.UserCreateInput) {
         return this.Prisma.user.create({
@@ -53,7 +65,7 @@ export class UsersService {
         return await this.Prisma.user.findMany({
             where: { role, active: true },
             select: {
-                ...select,
+                ...hiddenSelect,
                 Education: true,
                 Skill: true,
                 Hobby: true,
@@ -68,7 +80,7 @@ export class UsersService {
         const user = await this.Prisma.user.findFirst({
             where: { id, role, active: true },
             select: {
-                ...select,
+                ...hiddenSelect,
                 Education: true,
                 Skill: true,
                 Hobby: true,
@@ -196,6 +208,7 @@ export class UsersService {
         return this.Prisma.user.update({
             where: { id: userId },
             data: { active: true },
+            select: hiddenSelect,
         });
     }
     async deactivateUser(id: string): Promise<User> {

@@ -12,12 +12,11 @@ export async function memberSeed(prisma: PrismaClient) {
             password,
             active: true,
             verified: true,
-            avatar: '/dummy/ikhwan/' + randomNumber + '_lg.png',
-            avatar_md: '/dummy/ikhwan/' + randomNumber + '_md.png',
-            blurred_avatar:
-                '/dummy/ikhwan/blurred/blurred_' + randomNumber + '_lg.png',
+            avatar: '/dummy/ikhwan_' + randomNumber + '_lg.png',
+            avatar_md: '/dummy/ikhwan_' + randomNumber + '_md.png',
+            blurred_avatar: '/dummy/ikhwan_blurred_' + randomNumber + '_lg.png',
             blurred_avatar_md:
-                '/dummy/ikhwan/blurred/blurred_' + randomNumber + '_md.png',
+                '/dummy/ikhwan_blurred_' + randomNumber + '_md.png',
             activations: {
                 create: {
                     expiredAt: new Date(),
@@ -173,12 +172,11 @@ export async function memberSeed(prisma: PrismaClient) {
             password,
             active: true,
             verified: true,
-            avatar: '/dummy/akhwat/' + randomNumber + '_lg.png',
-            avatar_md: '/dummy/akhwat/' + randomNumber + '_md.png',
-            blurred_avatar:
-                '/dummy/akhwat/blurred/blurred_' + randomNumber + '_lg.png',
+            avatar: '/dummy/akhwat_' + randomNumber + '_lg.png',
+            avatar_md: '/dummy/akhwat_' + randomNumber + '_md.png',
+            blurred_avatar: '/dummy/akhwat_blurred_' + randomNumber + '_lg.png',
             blurred_avatar_md:
-                '/dummy/akhwat/blurred/blurred_' + randomNumber + '_md.png',
+                '/dummy/akhwat_blurred_' + randomNumber + '_md.png',
             activations: {
                 create: {
                     expiredAt: new Date(),

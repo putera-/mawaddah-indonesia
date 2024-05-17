@@ -20,16 +20,16 @@ export class CandidateController {
         private readonly userService: UsersService,
         private Prisma: PrismaService,
         private readonly biodataService: BiodataService,
-    ) { }
+    ) {}
 
     @Roles(Role.Member)
     @Get('new')
-    async findNew(@Request() req: any,
+    async findNew(
+        @Request() req: any,
         @Query('page') page: string,
-        @Query('limit') limit: string) {
+        @Query('limit') limit: string,
+    ) {
         try {
-
-
             const user = await this.Prisma.biodata.findFirst({
                 where: {
                     userId: req.user.id,
@@ -39,7 +39,7 @@ export class CandidateController {
             const candidate = await this.candidateService.findNew(
                 user.gender,
                 page,
-                limit
+                limit,
             );
             for (const c of candidate) {
                 this.userService.formatGray(c);
@@ -85,7 +85,7 @@ export class CandidateController {
             const suggest = await this.candidateService.findSuggestion(
                 bio.gender,
                 page,
-                limit
+                limit,
             );
 
             // gray name
@@ -112,6 +112,10 @@ export class CandidateController {
                     userId: req.user.id,
                 },
             });
+            if (!bio)
+                throw new NotFoundException(
+                    'Silakan isi biodata terlebih dahulu',
+                );
             const user = await this.Prisma.user.findFirst({
                 where: { id: req.user.id },
                 select: {
@@ -121,18 +125,18 @@ export class CandidateController {
                     Life_goal: { select: { title: true } },
                 },
             });
-            const suggest = await this.candidateService.findSuggestion(
+
+            const mayLike = await this.candidateService.findLike(
                 bio.gender,
                 page,
-                limit
+                limit,
             );
-
             // gray name
-            for (const c of suggest) {
+            for (const c of mayLike) {
                 this.userService.formatGray(c);
             }
 
-            const result = this.candidateService.getSimiliar(user, suggest);
+            const result = this.candidateService.getSimiliar(user, mayLike);
             return result.sort((a, b) => b.similiarity - a.similiarity);
         } catch (error) {
             throw error;

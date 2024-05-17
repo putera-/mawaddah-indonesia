@@ -30,7 +30,6 @@ export class AuthService {
         const user = await this.usersService.findByEmail(email);
         if (!user)
             throw new UnauthorizedException('Email atau password salah.');
-
         const match = await bcrypt.compare(pass, user.password);
         if (!match) {
             throw new UnauthorizedException('Email atau password salah.');
