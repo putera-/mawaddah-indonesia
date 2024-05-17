@@ -6,17 +6,11 @@ export async function memberSeed(prisma: PrismaClient) {
     const password = await bcrypt.hash('rahasia', 10);
     // BOB
     {
-        const randomNumber = Math.floor(Math.random() * 10) + 1;
         const bob = {
             lastname: faker.person.lastName('male'),
             password,
             active: true,
             verified: true,
-            avatar: '/dummy/ikhwan_' + randomNumber + '_lg.png',
-            avatar_md: '/dummy/ikhwan_' + randomNumber + '_md.png',
-            blurred_avatar: '/dummy/ikhwan_blurred_' + randomNumber + '_lg.png',
-            blurred_avatar_md:
-                '/dummy/ikhwan_blurred_' + randomNumber + '_md.png',
             activations: {
                 create: {
                     expiredAt: new Date(),
@@ -31,13 +25,19 @@ export async function memberSeed(prisma: PrismaClient) {
 
         // create 100 Bob MEMBER
         for (let i = 0; i < 100; i++) {
+            const randomNumber = Math.floor(Math.random() * 10) + 1;
             const firstname = faker.person.firstName('male');
             const email = faker.internet.email({ firstName: firstname });
 
             const data: Prisma.UserCreateInput = {
+                ...bob,
                 email,
                 firstname,
-                ...bob,
+                avatar: '/dummy/ikhwan_' + randomNumber + '_lg.png',
+                avatar_md: '/dummy/ikhwan_' + randomNumber + '_md.png',
+                blurred_avatar: '/dummy/ikhwan_blurred_' + randomNumber + '_lg.png',
+                blurred_avatar_md:
+                    '/dummy/ikhwan_blurred_' + randomNumber + '_md.png',
             };
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
@@ -166,17 +166,11 @@ export async function memberSeed(prisma: PrismaClient) {
 
     // ALICE
     {
-        const randomNumber = Math.floor(Math.random() * 10) + 1;
         const alice = {
             lastname: faker.person.lastName('female'),
             password,
             active: true,
             verified: true,
-            avatar: '/dummy/akhwat_' + randomNumber + '_lg.png',
-            avatar_md: '/dummy/akhwat_' + randomNumber + '_md.png',
-            blurred_avatar: '/dummy/akhwat_blurred_' + randomNumber + '_lg.png',
-            blurred_avatar_md:
-                '/dummy/akhwat_blurred_' + randomNumber + '_md.png',
             activations: {
                 create: {
                     expiredAt: new Date(),
@@ -189,12 +183,19 @@ export async function memberSeed(prisma: PrismaClient) {
         }
         // create 100 Alice MEMBER
         for (let i = 0; i < 100; i++) {
+            const randomNumber = Math.floor(Math.random() * 10) + 1;
+
             const firstname = faker.person.firstName('female');
             const email = faker.internet.email({ firstName: firstname });
             const data: Prisma.UserCreateInput = {
+                ...alice,
                 email,
                 firstname,
-                ...alice,
+                avatar: '/dummy/akhwat_' + randomNumber + '_lg.png',
+                avatar_md: '/dummy/akhwat_' + randomNumber + '_md.png',
+                blurred_avatar: '/dummy/akhwat_blurred_' + randomNumber + '_lg.png',
+                blurred_avatar_md:
+                    '/dummy/akhwat_blurred_' + randomNumber + '_md.png',
             };
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
