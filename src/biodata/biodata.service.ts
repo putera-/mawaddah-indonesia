@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 import { UsersService } from 'src/users/user.service';
 
 const select = {
+    user: true,
     bio: true,
     phone: true,
     manhaj: true,

@@ -21,7 +21,7 @@ async function main() {
     await memberSeed(prisma);
     await provinceSeed(prisma);
     await taaruf_goldSeed(prisma)
-    await bookmarksSeed(prisma, 100)
+    await bookmarksSeed(prisma)
 }
 
 main()
