@@ -31,6 +31,7 @@ import path from 'path';
 import { PhotosService } from 'src/photos/photos.service';
 import { ActivationService } from 'src/activation/activation.service';
 import { Response } from 'express';
+import { sendResetPassword } from './dto/send-reset-password.dto';
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -99,9 +100,11 @@ export class AuthController {
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('send-reset-password')
-    async sendResetPassword(@Query('email') email: string): Promise<void> {
+    async sendResetPassword(
+        @Body(new ValidationPipe()) data: sendResetPassword,
+    ): Promise<void> {
         try {
-            await this.authService.sendResetPassword(email);
+            await this.authService.sendResetPassword(data.email);
         } catch (error) {
             throw error;
         }
