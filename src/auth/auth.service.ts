@@ -14,6 +14,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { ActivationService } from 'src/activation/activation.service';
 import { ResetPasswordService } from 'src/reset_password/reset_password.service';
+import { ResetPasswordDto } from 'src/reset_password/dto/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,7 @@ export class AuthService {
         private prisma: PrismaService,
         private activationService: ActivationService,
         private resetPasswordService: ResetPasswordService,
-    ) { }
+    ) {}
     private blacklistedTokens: Set<string> = new Set();
 
     async signIn(email: string, pass: string): Promise<any> {
@@ -34,21 +35,18 @@ export class AuthService {
         if (!match) {
             throw new UnauthorizedException('Email atau password salah.');
         }
-
         if (!user.verified) {
             const usedToken = await this.prisma.activation.findFirst({
                 where: {
                     userId: user.id,
                     used: false,
-                    expiredAt: { gt: new Date() }
+                    expiredAt: { gt: new Date() },
                 },
-                orderBy: { createdAt: 'desc' }
+                orderBy: { createdAt: 'desc' },
             });
-
             if (!usedToken) {
                 await this.sendActivation(email);
             }
-
             throw new HttpException(
                 'Silahkan periksa email untuk verifikasi akun.',
                 HttpStatus.ACCEPTED,
@@ -57,19 +55,17 @@ export class AuthService {
             delete user.password;
             delete user.createdAt;
             delete user.updatedAt;
-
             if (!user.active)
                 throw new UnauthorizedException('User telah dinonaktifkan');
-
             const { access_token, exp } = await this.createToken(
                 user.id,
                 user.email,
                 user.role,
             );
-
             return { access_token, exp, user };
         }
     }
+
     async sendActivation(email: string) {
         const user = await this.usersService.findByEmail(email);
         if (!user) throw new NotFoundException('Email salah.');
@@ -81,10 +77,12 @@ export class AuthService {
         if (!user) throw new NotFoundException('Email salah.');
         return await this.resetPasswordService.create(email);
     }
-    async resetPassword(id: string, data: any): Promise<void> {
+
+    async resetPassword(id: string, data: ResetPasswordDto): Promise<void> {
         // find data by id
+        const now = new Date();
         const find = await this.prisma.resetPassword.findFirst({
-            where: { id, used: false },
+            where: { id, used: false, expiredAt: { gt: now } },
         });
         if (!find) throw new NotFoundException('Data tidak ditemukan');
         const user = await this.prisma.user.findFirst({
@@ -95,11 +93,16 @@ export class AuthService {
             throw new BadRequestException('Konfirmasi password tidak sesuai');
         delete data.confirm_password;
         data.password = await bcrypt.hash(data.password, 10);
+        await this.prisma.resetPassword.updateMany({
+            where: { id },
+            data: { used: true, expiredAt: now },
+        });
         await this.prisma.user.update({
             where: { id: user.id },
             data: { password: data.password },
         });
     }
+
     async createToken(
         userId: string,
         email: string,
@@ -110,18 +113,16 @@ export class AuthService {
             username: email,
             role: role,
         };
-
         const access_token = (await this.jwtService.signAsync(
             payload,
         )) as string;
         const exp = Math.round(dayjs().add(7, 'd').valueOf()) as number;
         const expDate = new Date(exp);
-
         // save to db
         await this.createAuth(userId, access_token, expDate);
-
         return { access_token, exp };
     }
+
     async createAuth(
         userId: string,
         access_token: string,
@@ -138,9 +139,9 @@ export class AuthService {
             path,
             method,
         };
-
         await this.prisma.auth.create({ data });
     }
+
     addBlackListToken(token: string) {
         this.blacklistedTokens.add(token);
     }

@@ -32,6 +32,7 @@ import { PhotosService } from 'src/photos/photos.service';
 import { ActivationService } from 'src/activation/activation.service';
 import { Response } from 'express';
 import { sendResetPassword } from './dto/send-reset-password.dto';
+import { ResetPasswordDto } from 'src/reset_password/dto/reset-password.dto';
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -87,8 +88,8 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @Post('reset-password')
     async resetPassword(
-        @Param('token') id: string,
-        @Body(new ValidationPipe()) data: any,
+        @Query('token') id: string,
+        @Body(new ValidationPipe()) data: ResetPasswordDto,
     ): Promise<void> {
         try {
             await this.authService.resetPassword(id, data);
