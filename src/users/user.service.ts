@@ -43,7 +43,7 @@ export class UsersService {
         private Prisma: PrismaService,
         private appService: AppService,
         // private activation: ActivationService,
-    ) {}
+    ) { }
 
     create(data: Prisma.UserCreateInput) {
         return this.Prisma.user.create({
@@ -81,6 +81,8 @@ export class UsersService {
             where: { id, role, active: true },
             select: {
                 ...hiddenSelect,
+                biodata: true,
+                Physic_character: true,
                 Education: true,
                 Skill: true,
                 Hobby: true,
