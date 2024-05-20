@@ -33,6 +33,7 @@ export async function bookmarksSeed(prisma: PrismaClient) {
 
             // Create bookmarks
             await prisma.bookmark.create({
+                
                 data: {
                     user: {
                         connect: {
