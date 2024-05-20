@@ -6,6 +6,7 @@ import {
     Request,
     HttpCode,
     Patch,
+    Query,
 } from '@nestjs/common';
 import { BookmarkService } from './bookmark.service';
 import { Roles } from 'src/roles/roles.decorator';
@@ -24,9 +25,9 @@ export class BookmarkController {
 
     @Roles(Role.Member)
     @Get()
-    findAll(@Request() req: any) {
+    findAll(@Request() req: any, @Query('page') page: number, @Query('limit') limit: number) {
         const id = req.user.id;
-        return this.bookmarkService.findAll(id);
+        return this.bookmarkService.findAll(id, page, limit);
     }
 
     @Roles(Role.Member)
