@@ -64,6 +64,7 @@ export class AuthController {
             throw error;
         }
     }
+
     @Public()
     @HttpCode(HttpStatus.OK)
     @Patch('activate')
@@ -74,6 +75,7 @@ export class AuthController {
             throw error;
         }
     }
+
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('send-activation')
@@ -84,6 +86,7 @@ export class AuthController {
             throw error;
         }
     }
+
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('reset-password')
@@ -93,6 +96,17 @@ export class AuthController {
     ): Promise<void> {
         try {
             await this.authService.resetPassword(id, data);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    @Public()
+    @HttpCode(HttpStatus.OK)
+    @Get('check-reset-password-expiration')
+    async checkExpiration(@Query('token') id: string): Promise<boolean> {
+        try {
+            return this.authService.checkExpiration(id);
         } catch (error) {
             throw error;
         }
@@ -110,6 +124,7 @@ export class AuthController {
             throw error;
         }
     }
+
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('login')

@@ -103,6 +103,15 @@ export class AuthService {
         });
     }
 
+    async checkExpiration(id: string): Promise<boolean> {
+        // find data by id
+        const now = new Date();
+        const expiration = await this.prisma.resetPassword.findFirst({
+            where: { id, used: false, expiredAt: { gt: now } },
+        });
+        return expiration ? true : false;
+    }
+
     async createToken(
         userId: string,
         email: string,
