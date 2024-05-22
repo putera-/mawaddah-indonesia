@@ -294,7 +294,7 @@ CREATE TABLE `Taaruf` (
 CREATE TABLE `TaarufApproval` (
     `id` VARCHAR(191) NOT NULL,
     `taarufId` VARCHAR(191) NOT NULL,
-    `status` ENUM('pending', 'yes', 'no') NOT NULL DEFAULT 'pending',
+    `status` ENUM('Pending', 'Yes', 'No') NOT NULL DEFAULT 'Pending',
     `reason` TEXT NOT NULL,
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -305,9 +305,9 @@ CREATE TABLE `TaarufApproval` (
 -- CreateTable
 CREATE TABLE `Nadhar` (
     `id` VARCHAR(191) NOT NULL,
-    `taarufId` VARCHAR(191) NULL,
+    `taarufId` VARCHAR(191) NOT NULL,
     `schedule` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `status` ENUM('pending', 'yes', 'no') NOT NULL DEFAULT 'pending',
+    `status` ENUM('Pending', 'Yes', 'No') NOT NULL DEFAULT 'Pending',
     `reason` TEXT NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -318,9 +318,9 @@ CREATE TABLE `Nadhar` (
 -- CreateTable
 CREATE TABLE `Khitbah` (
     `id` VARCHAR(191) NOT NULL,
-    `taarufId` VARCHAR(191) NULL,
+    `taarufId` VARCHAR(191) NOT NULL,
     `schedule` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `status` ENUM('pending', 'yes', 'no') NOT NULL DEFAULT 'pending',
+    `status` ENUM('Pending', 'Yes', 'No') NOT NULL DEFAULT 'Pending',
     `reason` TEXT NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -331,9 +331,9 @@ CREATE TABLE `Khitbah` (
 -- CreateTable
 CREATE TABLE `Akad` (
     `id` VARCHAR(191) NOT NULL,
-    `taarufId` VARCHAR(191) NULL,
+    `taarufId` VARCHAR(191) NOT NULL,
     `schedule` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `status` ENUM('pending', 'yes', 'no') NOT NULL DEFAULT 'pending',
+    `status` ENUM('Pending', 'Yes', 'No') NOT NULL DEFAULT 'Pending',
     `reason` TEXT NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -408,10 +408,10 @@ ALTER TABLE `Taaruf` ADD CONSTRAINT `Taaruf_candidateId_fkey` FOREIGN KEY (`cand
 ALTER TABLE `TaarufApproval` ADD CONSTRAINT `TaarufApproval_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `Taaruf`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Nadhar` ADD CONSTRAINT `Nadhar_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `Taaruf`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Nadhar` ADD CONSTRAINT `Nadhar_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `Taaruf`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Khitbah` ADD CONSTRAINT `Khitbah_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `Taaruf`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Khitbah` ADD CONSTRAINT `Khitbah_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `Taaruf`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Akad` ADD CONSTRAINT `Akad_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `Taaruf`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Akad` ADD CONSTRAINT `Akad_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `Taaruf`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

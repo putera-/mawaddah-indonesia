@@ -358,7 +358,7 @@ model TaarufApproval {
     id        String        @id @default(uuid())
     taaruf    Taaruf?       @relation(fields: [taarufId], references: [id])
     taarufId  String        @unique
-    status    AprovalStatus @default(pending)
+    status    AprovalStatus @default(Pending)
     reason    String        @db.Text
     updatedAt DateTime      @default(now()) @updatedAt
 }
@@ -366,9 +366,9 @@ model TaarufApproval {
 model Nadhar {
     id        String        @id @default(uuid())
     Taaruf    Taaruf?       @relation(fields: [taarufId], references: [id])
-    taarufId  String?
+    taarufId  String
     schedule  DateTime      @default(now())
-    status    AprovalStatus @default(pending)
+    status    AprovalStatus @default(Pending)
     reason    String        @db.Text
     createdAt DateTime      @default(now())
     updatedAt DateTime      @default(now()) @updatedAt
@@ -377,9 +377,9 @@ model Nadhar {
 model Khitbah {
     id        String        @id @default(uuid())
     Taaruf    Taaruf?       @relation(fields: [taarufId], references: [id])
-    taarufId  String?
+    taarufId  String
     schedule  DateTime      @default(now())
-    status    AprovalStatus @default(pending)
+    status    AprovalStatus @default(Pending)
     reason    String        @db.Text
     createdAt DateTime      @default(now())
     updatedAt DateTime      @default(now()) @updatedAt
@@ -388,16 +388,16 @@ model Khitbah {
 model Akad {
     id        String        @id @default(uuid())
     Taaruf    Taaruf?       @relation(fields: [taarufId], references: [id])
-    taarufId  String?
+    taarufId  String
     schedule  DateTime      @default(now())
-    status    AprovalStatus @default(pending)
+    status    AprovalStatus @default(Pending)
     reason    String        @db.Text
     createdAt DateTime      @default(now())
     updatedAt DateTime      @default(now()) @updatedAt
 }
 
 enum AprovalStatus {
-    pending
-    yes
-    no
+    Pending
+    Yes
+    No
 }
