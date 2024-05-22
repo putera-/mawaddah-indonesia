@@ -16,7 +16,7 @@ export class BookmarkService {
             where: {
                 userId: idUser,
                 candidateId: idCandidate,
-            },4-
+            },
         });
 
         if (exist) {
