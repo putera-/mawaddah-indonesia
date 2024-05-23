@@ -78,17 +78,22 @@ export class UsersService {
 
     async findOne(id: string, role: RoleStatus): Promise<User> {
         const user = await this.Prisma.user.findFirst({
-            where: { id, role, active: true },
-            select: {
-                ...hiddenSelect,
-                biodata: true,
-                Physic_character: true,
-                Education: true,
-                Skill: true,
-                Hobby: true,
-                Married_goal: true,
-                Life_goal: true,
-            },
+            where: { id, role, active: true }
+            // FIXME ini global find user, klo butuh di hidden, hide di controller, atau buat service baru
+            // FIXME relasi data lain jgn di select / includ disini
+
+            // select: {
+            //     ...hiddenSelect,
+            //     avatar: true,
+            //     avatar_md: true,
+            //     biodata: true,
+            //     Physic_character: true,
+            //     Education: true,
+            //     Skill: true,
+            //     Hobby: true,
+            //     Married_goal: true,
+            //     Life_goal: true,
+            // },
         });
         if (!user) throw new NotFoundException(`User tidak ditemukan`);
         return user;
