@@ -1,0 +1,604 @@
+# ROLE MEMBER
+
+# POST /taaruf/:candidateid
+# data created: taaruf + taaruf approval
+# user mengajukan penawaran untuk taaruf kpd candidate
+
+# GET /taaruf/outgoing
+# user mengambil list data taaruf, dgn semua status (pending, yes, no)
+
+# GET /taaruf/incoming
+# candidate mengambil list data penawaran untuk taaruf, dgn semua status (pending, yes, no)
+
+# GET /taaruf/outgoing/:id
+# user mengambil data taaruf berdasarkan id
+
+# GET /taaruf/incoming/:id
+# user mengambil data taaruf berdasarkan id
+
+# PATCH /taaruf/approve/:id
+# candidate melakukan approval (taaruf_approval), optional mengisi message
+
+# PATCH /taaruf/reject/:id
+# candidate melakukan reject (taaruf_approval), optional mengisi message
+
+# PATCH /taaruf/cancel/:id
+# user membatalkan taaruf berdasarkan id, data yg diubah (status, reson)
+# user tidak dapat membatalkan taaruf jika sudah melewati akad
+
+openapi: "3.0.2"
+info:
+    title: TAARUF API
+    version: "1.0"
+    contact:
+        name: "Rizjami Putera"
+        email: "rizjamiputera@gmail.com"
+        url: "https://udaputera.com"
+servers:
+  - description: TAARUF API
+    url: "{url}:5000/v1"
+    variables:
+        url:
+            default: "http://localhost:5000"
+paths:
+    "/taaruf/:candidateid":
+        post:
+            tags:
+            - TAARUF
+            description: User mengajukan taaruf terhadap kandidat. Hanya role Member yg bisa melakukan
+            responses:
+                204:
+                    description: OK. No Content
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+    "/taaruf/outgoing":
+        get:
+            tags:
+            - TAARUF
+            description: Data pengajuan taaruf. Hanya role Member yg bisa melakukan
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            examples:
+                                data:
+                                    $ref: "#/components/examples/taarufs_outgoing"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+    "/taaruf/incoming":
+        get:
+            tags:
+            - TAARUF
+            description: Data taaruf request. Hanya role Member yg bisa melakukan
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            examples:
+                                data:
+                                    $ref: "#/components/examples/taarufs_incoming"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+    "/taaruf/outgoing/:id":
+        get:
+            tags:
+            - TAARUF
+            description: Data taaruf berdasarkan Id. Hanya role Member yg bisa melakukan
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            examples:
+                                data:
+                                    $ref: "#/components/examples/taaruf_outgoing"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
+    "/taaruf/incoming/:id":
+        get:
+            tags:
+            - TAARUF
+            description: Data taaruf berdasarkan Id. Hanya role Member yg bisa melakukan
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            examples:
+                                data:
+                                    $ref: "#/components/examples/taaruf_incoming"
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
+    "/taaruf/approve/:id":
+        patch:
+            tags:
+            - TAARUF
+            description: Candidate melakukan aproval taaruf. Hanya role Member yg bisa melakukan
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    type: string
+                                    example: Siap abang ganteng
+            responses:
+                204:
+                    description: OK. No Content
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
+    "/taaruf/reject/:id":
+        patch:
+            tags:
+            - TAARUF
+            description: Candidate melakukan reject terhadap taaruf request. Hanya role Member yg bisa melakukan
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    type: string
+                                    example: Maaf kamu melampaui atap
+            responses:
+                204:
+                    description: OK. No Content
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
+    "/taaruf/cancel/:id":
+        patch:
+            tags:
+            - TAARUF
+            description: User melakukan pembatalan terhadap taaruf request. Hanya role Member yg bisa melakukan
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    type: string
+                                    example: Maaf salah orang
+            responses:
+                204:
+                    description: OK. No Content
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+                404:
+                    description: Not Found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Not Found
+                                    statusCode:
+                                        type: number
+                                        example: 404
+components:
+    examples:
+        taaruf_outgoing:
+            summary: TAARUF
+            value:
+                id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                candidateId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
+                candidate:
+                    id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                    email: "jo..."
+                    firstname: "Jo..."
+                    lastname: "Do..."
+                    blurred_avatar: "/public/profile/avatar.jpg"
+                    blurred_avatar_md: "/public/profile/avatar.jpg"
+                    biodata: "..."
+                    educations: "..."
+                    hobbies: "..."
+                    skills: "..."
+                    married_goals: "..."
+                    physic_characters: "..."
+                status: true
+                message: ""
+                approval: null
+                nadhar: null
+                khitbah: null
+                akad: null
+                nadhars: []
+                khitbahs: []
+                akads: []
+        taaruf_incoming:
+            summary: TAARUF
+            value:
+                id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                userId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
+                user:
+                    id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                    email: "jo..."
+                    firstname: "Jo..."
+                    lastname: "Do..."
+                    blurred_avatar: "/public/profile/avatar.jpg"
+                    blurred_avatar_md: "/public/profile/avatar.jpg"
+                    biodata: "..."
+                    educations: "..."
+                    hobbies: "..."
+                    skills: "..."
+                    married_goals: "..."
+                    physic_characters: "..."
+                status: true
+                message: ""
+                approval: null
+                nadhar: null
+                khitbah: null
+                akad: null
+                nadhars: []
+                khitbahs: []
+                akads: []
+        taarufs_outgoing:
+            summary: TAARUFS
+            value:
+                data:
+                  - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                    candidateId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
+                    candidate:
+                        id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                        email: "jo..."
+                        firstname: "Jo..."
+                        lastname: "Do..."
+                        blurred_avatar: "/public/profile/avatar.jpg"
+                        blurred_avatar_md: "/public/profile/avatar.jpg"
+                        biodata: "..."
+                        educations: "..."
+                        hobbies: "..."
+                        skills: "..."
+                        married_goals: "..."
+                        physic_characters: "..."
+                    status: true
+                    message: ""
+                    approval: null
+                    nadhar: null
+                    khitbah: null
+                    akad: null
+                    nadhars: []
+                    khitbahs: []
+                    akads: []
+                  - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                    candidateId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
+                    candidate:
+                        id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                        email: "jo..."
+                        firstname: "Jo..."
+                        lastname: "Do..."
+                        blurred_avatar: "/public/profile/avatar.jpg"
+                        blurred_avatar_md: "/public/profile/avatar.jpg"
+                        biodata: "..."
+                        educations: "..."
+                        hobbies: "..."
+                        skills: "..."
+                        married_goals: "..."
+                        physic_characters: "..."
+                    status: true
+                    message: ""
+                    approval:
+                        taarufId: 591c6b44-9331-4fa0-95a5-1dddc617a033
+                        status: No
+                        message: Kamu terlalu ganteng
+                    nadhar: null
+                    khitbah: null
+                    akad: null
+                    nadhars: []
+                    khitbahs: []
+                    akads: []
+                total: 2
+                page: 1
+                maxPages: 1
+                limit: 10
+        taarufs_incoming:
+            summary: TAARUFS
+            value:
+                data:
+                  - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                    userId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
+                    user:
+                        id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                        email: "jo..."
+                        firstname: "Jo..."
+                        lastname: "Do..."
+                        blurred_avatar: "/public/profile/avatar.jpg"
+                        blurred_avatar_md: "/public/profile/avatar.jpg"
+                        biodata: "..."
+                        educations: "..."
+                        hobbies: "..."
+                        skills: "..."
+                        married_goals: "..."
+                        physic_characters: "..."
+                    status: true
+                    message: ""
+                    approval: null
+                    nadhar: null
+                    khitbah: null
+                    akad: null
+                    nadhars: []
+                    khitbahs: []
+                    akads: []
+                  - id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                    userId: "768c6b44-2334-4fa0-95a5-1dffgs617a033"
+                    user:
+                        id: "591c6b44-9331-4fa0-95a5-1dddc617a033"
+                        email: "jo..."
+                        firstname: "Jo..."
+                        lastname: "Do..."
+                        blurred_avatar: "/public/profile/avatar.jpg"
+                        blurred_avatar_md: "/public/profile/avatar.jpg"
+                        biodata: "..."
+                        educations: "..."
+                        hobbies: "..."
+                        skills: "..."
+                        married_goals: "..."
+                        physic_characters: "..."
+                    status: true
+                    message: ""
+                    approval:
+                        taarufId: 591c6b44-9331-4fa0-95a5-1dddc617a033
+                        status: No
+                        message: Kamu terlalu cantik
+                    nadhar: null
+                    khitbah: null
+                    akad: null
+                    nadhars: []
+                    khitbahs: []
+                    akads: []
+                total: 2
+                page: 1
+                maxPages: 1
+                limit: 10

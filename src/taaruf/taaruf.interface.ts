@@ -11,7 +11,7 @@ export interface Taaruf {
     candidate?: User
     candidateId: string
     status: boolean
-    reason: string
+    message: string
     approval?: TaarufApproval
     nadhars: Nadhar[]
     khitbahs: Khitbah[]

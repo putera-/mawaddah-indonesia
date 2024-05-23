@@ -1,0 +1,11 @@
+# ROLE MEMBER
+
+# KHITBAH
+# POST /khitbah/:taarufid
+# user melakukan request khitbah
+
+# PATCH /khitbah/:taarufid
+# user merubah data khitbah, (schedule, status, message)
+
+# PATCH /khitbah/approval/:taarufid
+# candidate melakukan approval khitbah, jika menolak, optional mengisi message

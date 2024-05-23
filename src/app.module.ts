@@ -32,9 +32,8 @@ import { TaarufModule } from './taaruf/taaruf.module';
 import { AkadModule } from './akad/akad.module';
 import { KhitbahModule } from './khitbah/khitbah.module';
 import { NadharModule } from './nadhar/nadhar.module';
-import { TaarufsModule } from './taarufs/taarufs.module';
 import { TaarufApprovalModule } from './taaruf_approval/taaruf_approval.module';
-import { TaarufModule } from './taaruf/taaruf.module';
+
 @Module({
     imports: [
         ConfigModule.forRoot(),
@@ -63,7 +62,6 @@ import { TaarufModule } from './taaruf/taaruf.module';
         TaarufGoldModule,
         PaymentModule,
         TaarufModule,
-        TaarufsModule,
         TaarufApprovalModule,
         NadharModule,
         KhitbahModule,
@@ -83,4 +81,4 @@ import { TaarufModule } from './taaruf/taaruf.module';
         },
     ],
 })
-export class AppModule {}
+export class AppModule { }

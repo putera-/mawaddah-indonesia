@@ -5,6 +5,6 @@ export interface TaarufApproval {
     taaruf?: Taaruf
     taarufId: string
     status: AprrovalStatus
-    reason: string
+    message: string
     updatedAt: Date
 }

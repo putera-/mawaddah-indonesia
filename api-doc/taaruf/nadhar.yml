@@ -1,0 +1,11 @@
+# ROLE MEMBER
+
+# NADHAR
+# POST /nadhar/:taarufid
+# user melakukan request nadhar
+
+# PATCH /nadhar/:taarufid
+# user merubah data nadhar, (schedule, status, message)
+
+# PATCH /nadhar/approval/:taarufid
+# candidate melakukan approval nadhar, jika menolak, optional mengisi message

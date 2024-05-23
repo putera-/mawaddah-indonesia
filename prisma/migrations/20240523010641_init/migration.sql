@@ -283,7 +283,7 @@ CREATE TABLE `Taaruf` (
     `userId` VARCHAR(191) NOT NULL,
     `candidateId` VARCHAR(191) NOT NULL,
     `status` BOOLEAN NOT NULL DEFAULT true,
-    `reason` TEXT NOT NULL,
+    `message` TEXT NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -295,7 +295,7 @@ CREATE TABLE `TaarufApproval` (
     `id` VARCHAR(191) NOT NULL,
     `taarufId` VARCHAR(191) NOT NULL,
     `status` ENUM('Pending', 'Yes', 'No') NOT NULL DEFAULT 'Pending',
-    `reason` TEXT NOT NULL,
+    `message` TEXT NOT NULL,
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     UNIQUE INDEX `TaarufApproval_taarufId_key`(`taarufId`),
@@ -308,7 +308,7 @@ CREATE TABLE `Nadhar` (
     `taarufId` VARCHAR(191) NOT NULL,
     `schedule` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `status` ENUM('Pending', 'Yes', 'No') NOT NULL DEFAULT 'Pending',
-    `reason` TEXT NOT NULL,
+    `message` TEXT NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -321,7 +321,7 @@ CREATE TABLE `Khitbah` (
     `taarufId` VARCHAR(191) NOT NULL,
     `schedule` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `status` ENUM('Pending', 'Yes', 'No') NOT NULL DEFAULT 'Pending',
-    `reason` TEXT NOT NULL,
+    `message` TEXT NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -334,7 +334,7 @@ CREATE TABLE `Akad` (
     `taarufId` VARCHAR(191) NOT NULL,
     `schedule` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `status` ENUM('Pending', 'Yes', 'No') NOT NULL DEFAULT 'Pending',
-    `reason` TEXT NOT NULL,
+    `message` TEXT NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 

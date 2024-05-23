@@ -6,7 +6,7 @@ export interface Khitbah {
     taarufId: string
     schedule: Date
     status: AprrovalStatus
-    reason: string
+    message: string
     createdAt: Date
     updatedAt: Date
 }
