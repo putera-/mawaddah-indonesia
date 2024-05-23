@@ -343,8 +343,8 @@ model Taaruf {
     candidate   User            @relation(name: "TaarufCandidates", fields: [candidateId], references: [id])
     candidateId String // This field holds the foreign key
     status      Boolean         @default(true)
-    // message dibutuhkan saat taaruf di batalkan oleh candidate,
-    // candidate mengisi alasan pembatalan
+    // message dibutuhkan saat taaruf di batalkan oleh user,
+    // user mengisi alasan pembatalan
     message     String          @db.Text
     approval    TaarufApproval?
     nadhars     Nadhar[]
@@ -360,6 +360,7 @@ model TaarufApproval {
     taarufId  String        @unique
     status    AprovalStatus @default(Pending)
     message   String        @db.Text
+    reply     String        @db.Text
     updatedAt DateTime      @default(now()) @updatedAt
 }
 
@@ -370,6 +371,7 @@ model Nadhar {
     schedule  DateTime      @default(now())
     status    AprovalStatus @default(Pending)
     message   String        @db.Text
+    reply     String        @db.Text
     createdAt DateTime      @default(now())
     updatedAt DateTime      @default(now()) @updatedAt
 }
@@ -381,6 +383,7 @@ model Khitbah {
     schedule  DateTime      @default(now())
     status    AprovalStatus @default(Pending)
     message   String        @db.Text
+    reply     String        @db.Text
     createdAt DateTime      @default(now())
     updatedAt DateTime      @default(now()) @updatedAt
 }
@@ -392,6 +395,7 @@ model Akad {
     schedule  DateTime      @default(now())
     status    AprovalStatus @default(Pending)
     message   String        @db.Text
+    reply     String        @db.Text
     createdAt DateTime      @default(now())
     updatedAt DateTime      @default(now()) @updatedAt
 }

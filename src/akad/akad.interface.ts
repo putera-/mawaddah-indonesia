@@ -7,6 +7,7 @@ export interface Akad {
     schedule: Date
     status: AprrovalStatus
     message: string
+    reply: string
     createdAt: Date
     updatedAt: Date
 }

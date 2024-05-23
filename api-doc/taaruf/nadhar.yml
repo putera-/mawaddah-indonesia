@@ -5,7 +5,254 @@
 # user melakukan request nadhar
 
 # PATCH /nadhar/:taarufid
-# user merubah data nadhar, (schedule, status, message)
+# user merubah data nadhar, (schedule, message)
 
-# PATCH /nadhar/approval/:taarufid
+# PATCH /nadhar/cancel/:taarufid
+# user membatalkan nadhar, (status, message)
+
+# PATCH /nadhar/approve/:taarufid
 # candidate melakukan approval nadhar, jika menolak, optional mengisi message
+
+# PATCH /nadhar/reject/:taarufid
+# candidate menolak nadhar, jika menolak, optional mengisi message
+
+openapi: "3.0.2"
+info:
+    title: NADHAR API
+    version: "1.0"
+    contact:
+        name: "Rizjami Putera"
+        email: "rizjamiputera@gmail.com"
+        url: "https://udaputera.com"
+servers:
+  - description: NADHAR API
+    url: "{url}:5000/v1"
+    variables:
+        url:
+            default: "http://localhost:5000"
+paths:
+    "/nadhar/:taarufid":
+        post:
+            tags:
+            - NADHAR
+            description: User mengajukan request nadhar terhadap kandidat. Hanya role Member yg bisa melakukan
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                shcedule:
+                                    format: DateTime
+                                    example: "2024-06-06 12:00:00"
+                                message:
+                                    type: string
+                                    example: Yuk Ketemuan
+            responses:
+                204:
+                    description: OK. No Content
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+        patch:
+            tags:
+            - NADHAR
+            description: User merubah data nadhar. Hanya role Member yg bisa melakukan
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                shcedule:
+                                    format: DateTime
+                                    example: "2024-07-07 12:00:00"
+                                message:
+                                    type: string
+                                    example: Ganti tanggal ya
+            responses:
+                204:
+                    description: OK. No Content
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+    "/nadhar/cancel/:taarufid":
+        patch:
+            tags:
+            - NADHAR
+            description: User membatalkan request nadhar. Hanya role Member yg bisa melakukan
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    type: string
+                                    example: Maaf ga jadi
+            responses:
+                204:
+                    description: OK. No Content
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+    "/nadhar/approve/:taarufid":
+        patch:
+            tags:
+            - NADHAR
+            description: Candidate mengabulkan request nadhar. Hanya role Member yg bisa melakukan
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                reply:
+                                    type: string
+                                    example: Siap abangku
+            responses:
+                204:
+                    description: OK. No Content
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403
+    "/nadhar/reject/:taarufid":
+        patch:
+            tags:
+            - NADHAR
+            description: Candidate menolak request nadhar. Hanya role Member yg bisa melakukan
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                reply:
+                                    type: string
+                                    example: Maaf, orangtuaku tak merestui
+            responses:
+                204:
+                    description: OK. No Content
+                401:
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Unauthorized
+                                    statusCode:
+                                        type: number
+                                        example: 401
+                403:
+                    description: Forbidden
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: Forbidden
+                                    statusCode:
+                                        type: number
+                                        example: 403

@@ -46,6 +46,16 @@ paths:
             tags:
             - TAARUF
             description: User mengajukan taaruf terhadap kandidat. Hanya role Member yg bisa melakukan
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                message:
+                                    type: string
+                                    example: Ku ajak kau taaruf kau dengan bismillah
             responses:
                 204:
                     description: OK. No Content
@@ -269,7 +279,7 @@ paths:
                         schema:
                             type: object
                             properties:
-                                message:
+                                reply:
                                     type: string
                                     example: Siap abang ganteng
             responses:
@@ -326,7 +336,7 @@ paths:
                         schema:
                             type: object
                             properties:
-                                message:
+                                reply:
                                     type: string
                                     example: Maaf kamu melampaui atap
             responses:
