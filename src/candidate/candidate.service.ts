@@ -32,7 +32,7 @@ export class CandidateService {
     constructor(
         private Prisma: PrismaService,
         private User: UsersService,
-    ) {}
+    ) { }
     async findNew(gender: any, page = '1', limit = '10') {
         const oppositeGender = this.getOppositeGender(gender);
         const newUsers = await this.Prisma.user.findMany({
@@ -64,11 +64,19 @@ export class CandidateService {
             where: {
                 id,
             },
+            include: {
+                biodata: true,
+                Physic_character: true,
+                Education: true,
+                Skill: true,
+                Hobby: true,
+                Married_goal: true,
+                Life_goal: true,
+            }
         });
         if (!user) throw new NotFoundException('User tidak ditemukan');
-        const result = await this.User.findOne(user.id, user.role);
-        this.User.formatGray(result);
-        return result;
+        this.User.formatGray(user);
+        return user;
     }
     getOppositeGender(gender: any) {
         let oppositeGender: any;

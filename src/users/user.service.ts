@@ -56,8 +56,8 @@ export class UsersService {
         data.email = data.email.slice(0, 2) + '...';
         data.firstname = data.firstname.slice(0, 2) + '...';
         data.lastname = data.lastname.slice(0, 2) + '...';
-        // delete data.avatar;
-        // delete data.avatar_md;
+        delete data.avatar;
+        delete data.avatar_md;
     }
 
     async findAll(role: RoleStatus, query: Record<string, any>) {
