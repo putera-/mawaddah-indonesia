@@ -46,7 +46,7 @@ export class EmailService {
         <p>Aktivasi akun anda dengan klik tombol dibawah ini. </p>
         <div style="width:250px; text-align:center;">
         <div>
-        <a href='${web_uri}/activate?token=${id}'>
+        <a href='${web_uri}/auth/activate?token=${id}'>
         <button style="font-size:15px; font-weight: bold; background-color: #F8B23B ;background-image: linear-gradient(#F8B23B, #926923); border-color:black; border-size: 2px; padding: 8px; border-radius:20px;"> Aktivasi akun </button>
         </a >
         <p style="color: red; font-size: 10px; margin-top:10px;">Link akan kadaluarsa dalam 1 hari.</p>
@@ -70,7 +70,7 @@ export class EmailService {
         <p>Atur ulang sandi anda dengan klik tombol dibawah ini. </p>
         <div style="width:250px; text-align:center;">
         <div>
-        <a href='${web_uri}/reset-password?token=${id}'>
+        <a href='${web_uri}/auth/reset-password?token=${id}'>
         <button style="font-size:15px; font-weight: bold; background-color: #F8B23B ;background-image: linear-gradient(#F8B23B, #926923); border-color:black; border-size: 2px; padding: 8px; border-radius:20px;"> Atur ulang sandi </button>
         </a >
         <p style="color: red; font-size: 10px; margin-top:10px;">Link akan kadaluarsa dalam 1 hari.</p>
