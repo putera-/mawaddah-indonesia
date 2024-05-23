@@ -7,28 +7,32 @@ import { UpdateNadharDto } from './dto/update-nadhar.dto';
 export class NadharController {
   constructor(private readonly nadharService: NadharService) {}
 
+//ini kalo gaada taaruf ya gabisa kerja dong bang
+
   @Post()
   create(@Body() createNadharDto: CreateNadharDto) {
     return this.nadharService.create(createNadharDto);
   }
 
-  @Get()
-  findAll() {
-    return this.nadharService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.nadharService.findOne(+id);
+  @Patch(':id')
+  updateDate(@Param('id') id: string, @Body() updateNadharDto: UpdateNadharDto) {
+    return this.nadharService.updateDate(id, updateNadharDto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateNadharDto: UpdateNadharDto) {
-    return this.nadharService.update(+id, updateNadharDto);
+  cancel(@Param('id') id: string, @Body() updateNadharDto: UpdateNadharDto) {
+    return this.nadharService.cancel(id, updateNadharDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.nadharService.remove(+id);
+  @Patch(':id')
+  approve(@Param('id') id: string, @Body() updateNadharDto: UpdateNadharDto) {
+    return this.nadharService.approve(id, updateNadharDto);
   }
+
+  @Patch(':id')
+  reject(@Param('id') id: string, @Body() updateNadharDto: UpdateNadharDto) {
+    return this.nadharService.reject(id, updateNadharDto);
+  }
+
+
 }

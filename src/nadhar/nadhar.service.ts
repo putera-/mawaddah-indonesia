@@ -8,19 +8,17 @@ export class NadharService {
     return 'This action adds a new nadhar';
   }
 
-  findAll() {
-    return `This action returns all nadhar`;
+  updateDate(id: string, updateNadharDto: UpdateNadharDto) {
+    return `This action updates a #${id} nadhar`;
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} nadhar`;
+  cancel(id: string, updateNadharDto: UpdateNadharDto) {
+    return `This action updates a #${id} nadhar`;
   }
-
-  update(id: number, updateNadharDto: UpdateNadharDto) {
+  approve(id: string, updateNadharDto: UpdateNadharDto) {
+    return `This action updates a #${id} nadhar`;
+  }
+  reject(id: string, updateNadharDto: UpdateNadharDto) {
     return `This action updates a #${id} nadhar`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} nadhar`;
-  }
 }
