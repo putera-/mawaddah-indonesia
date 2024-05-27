@@ -12,6 +12,7 @@ import { Role } from 'src/roles/role.enums';
 import { UsersService } from 'src/users/user.service';
 import { PrismaService } from 'src/prisma.service';
 import { BiodataService } from 'src/biodata/biodata.service';
+import { User } from 'src/users/user.interface';
 
 @Controller('candidate')
 export class CandidateController {
@@ -20,7 +21,7 @@ export class CandidateController {
         private readonly userService: UsersService,
         private Prisma: PrismaService,
         private readonly biodataService: BiodataService,
-    ) {}
+    ) { }
 
     @Roles(Role.Member)
     @Get('new')
@@ -38,10 +39,10 @@ export class CandidateController {
             if (!user) throw new NotFoundException('Silakan lengkapi biodata');
             const candidate = await this.candidateService.findNew(
                 user.gender,
-                page,
-                limit,
+                +page || 1,
+                +limit || 10,
             );
-            for (const c of candidate) {
+            for (const c of candidate.data) {
                 this.userService.formatGray(c);
             }
 
@@ -84,17 +85,19 @@ export class CandidateController {
             });
             const suggest = await this.candidateService.findSuggestion(
                 bio.gender,
-                page,
-                limit,
+                +page || 1,
+                +limit || 10,
             );
 
             // gray name
-            for (const c of suggest) {
+            for (const c of suggest.data) {
                 this.userService.formatGray(c);
             }
 
-            const result = this.candidateService.getSimiliar(user, suggest);
-            return result.sort((a, b) => b.similiarity - a.similiarity);
+            const result = this.candidateService.getSimiliar(user, suggest.data);
+            suggest.data = result.sort((a, b) => b.similiarity - a.similiarity) as User[];
+
+            return suggest;
         } catch (error) {
             throw error;
         }
@@ -126,18 +129,20 @@ export class CandidateController {
                 },
             });
 
-            const mayLike = await this.candidateService.findLike(
+            const mayLike = await this.candidateService.findSuggestion(
                 bio.gender,
-                page,
-                limit,
+                +page || 1,
+                +limit || 10,
             );
             // gray name
-            for (const c of mayLike) {
+            for (const c of mayLike.data) {
                 this.userService.formatGray(c);
             }
 
-            const result = this.candidateService.getSimiliar(user, mayLike);
-            return result.sort((a, b) => b.similiarity - a.similiarity);
+            const result = this.candidateService.getSimiliar(user, mayLike.data);
+            mayLike.data = result.sort((a, b) => b.similiarity - a.similiarity) as User[];
+
+            return mayLike;
         } catch (error) {
             throw error;
         }

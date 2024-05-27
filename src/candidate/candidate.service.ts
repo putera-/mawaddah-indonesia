@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
+import { User } from 'src/users/user.interface';
 import { UsersService } from 'src/users/user.service';
 let select = {
     id: true,
@@ -33,7 +34,9 @@ export class CandidateService {
         private Prisma: PrismaService,
         private User: UsersService,
     ) { }
-    async findNew(gender: any, page = '1', limit = '10') {
+    async findNew(gender: any, page: number = 1, limit: number = 10): Promise<Pagination<User[]>> {
+        const skip = (page - 1) * limit;
+
         const oppositeGender = this.getOppositeGender(gender);
         const newUsers = await this.Prisma.user.findMany({
             where: {
@@ -48,9 +51,17 @@ export class CandidateService {
                     createdAt: 'desc',
                 },
             },
-            take: Number(limit),
+            take: limit,
+            skip
         });
-        return newUsers;
+
+        return {
+            data: newUsers,
+            total: 0,
+            page: page,
+            maxPages: Math.ceil(0 / limit),
+            limit: limit
+        }
     }
     async findAll(gender: string) {
         const oppositeGender = this.getOppositeGender(gender);
@@ -120,7 +131,9 @@ export class CandidateService {
         }
         return suggest;
     }
-    async findSuggestion(gender: any, page = '1', limit = '10') {
+    async findSuggestion(gender: any, page: number = 1, limit: number = 10): Promise<Pagination<User[]>> {
+        const skip = (page - 1) * limit;
+
         const oppositeGender = this.getOppositeGender(gender);
         const suggestions = await this.Prisma.user.findMany({
             where: {
@@ -141,10 +154,16 @@ export class CandidateService {
                     createdAt: 'desc',
                 },
             },
-            take: Number(limit),
+            take: limit,
+            skip
         });
-        return suggestions;
-        // return `This action returns a #${id} candidate`;
+        return {
+            data: suggestions,
+            total: 0,
+            page: page,
+            maxPages: Math.ceil(0 / limit),
+            limit: +limit
+        }
     }
     async findLike(gender: any, page = '3', limit = '10') {
         const oppositeGender = this.getOppositeGender(gender);
