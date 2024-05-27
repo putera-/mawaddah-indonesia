@@ -1,38 +1,35 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Request } from '@nestjs/common';
 import { NadharService } from './nadhar.service';
 import { CreateNadharDto } from './dto/create-nadhar.dto';
 import { UpdateNadharDto } from './dto/update-nadhar.dto';
 
 @Controller('nadhar')
 export class NadharController {
-  constructor(private readonly nadharService: NadharService) {}
+    constructor(private readonly nadharService: NadharService) {}
 
-//ini kalo gaada taaruf ya gabisa kerja dong bang
+    @Post()
+    async create(@Request() req: any, @Body() data: CreateNadharDto) {
+        const userId = req.user.id;
+        return this.nadharService.create(data, userId);
+    }
 
-  @Post()
-  create(@Body() createNadharDto: CreateNadharDto) {
-    return this.nadharService.create(createNadharDto);
-  }
+    @Patch(':id')
+    updateDate(@Param('id') id: string, @Body() data: UpdateNadharDto) {
+        return this.nadharService.updateDate(id, data);
+    }
 
-  @Patch(':id')
-  updateDate(@Param('id') id: string, @Body() updateNadharDto: UpdateNadharDto) {
-    return this.nadharService.updateDate(id, updateNadharDto);
-  }
+    @Patch(':id')
+    cancel(@Param('id') id: string, @Body() data: UpdateNadharDto) {
+        return this.nadharService.cancel(id, data);
+    }
 
-  @Patch(':id')
-  cancel(@Param('id') id: string, @Body() updateNadharDto: UpdateNadharDto) {
-    return this.nadharService.cancel(id, updateNadharDto);
-  }
+    @Patch(':id')
+    approve(@Param('id') id: string, @Body() data: UpdateNadharDto) {
+        return this.nadharService.approve(id, data);
+    }
 
-  @Patch(':id')
-  approve(@Param('id') id: string, @Body() updateNadharDto: UpdateNadharDto) {
-    return this.nadharService.approve(id, updateNadharDto);
-  }
-
-  @Patch(':id')
-  reject(@Param('id') id: string, @Body() updateNadharDto: UpdateNadharDto) {
-    return this.nadharService.reject(id, updateNadharDto);
-  }
-
-
+    @Patch(':id')
+    reject(@Param('id') id: string, @Body() data: UpdateNadharDto) {
+        return this.nadharService.reject(id, data);
+    }
 }

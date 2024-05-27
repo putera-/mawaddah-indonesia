@@ -1,1 +1,3 @@
-export class CreateNadharDto {}
+export class CreateNadharDto {
+    
+}

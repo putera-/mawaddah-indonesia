@@ -33,7 +33,6 @@ import { AkadModule } from './akad/akad.module';
 import { KhitbahModule } from './khitbah/khitbah.module';
 import { NadharModule } from './nadhar/nadhar.module';
 import { TaarufApprovalModule } from './taaruf_approval/taaruf_approval.module';
-import { NadhorModule } from './nadhor/nadhor.module';
 
 @Module({
     imports: [
@@ -67,7 +66,6 @@ import { NadhorModule } from './nadhor/nadhor.module';
         NadharModule,
         KhitbahModule,
         AkadModule,
-        NadhorModule,
     ],
 
     controllers: [AppController],
