@@ -13,29 +13,40 @@ export class NadharController {
         const userId = req.user.id;
         return this.nadharService.getAll(userId);
     }
+
+    @Get('requests')
+    async getAllRequests(@Request() req: any) {
+        const userId = req.user.id;
+        return this.nadharService.getAllRequests();
+    }
     
     @Post(':id')
-    async create(@Request() req: any,@Param('id') taarufId: string, @Body() data: Nadhar) {
+    async create(@Request() req: any,@Param('id') taarufId: string, @Body() data: CreateNadharDto) {
         const userId = req.user.id;
-        return this.nadharService.create(data, userId, taarufId);
+        try {
+            return this.nadharService.create(data, userId, taarufId);
+            
+        } catch (error) {
+            console.log(error);
+        }
     }
 
-    @Patch(':id')
-    updateDate(@Param('id') id: string, @Body() data: UpdateNadharDto) {
-        return this.nadharService.updateDate(id, data);
+    @Patch('set-new-date/:id')
+    updateDate(@Param('id') taarufId: string, @Body() data: UpdateNadharDto) {
+        return this.nadharService.updateDate(taarufId, data);
     }
 
-    @Patch(':id')
+    @Patch('cancel/:id')
     cancel(@Param('id') id: string, @Body() data: UpdateNadharDto) {
         return this.nadharService.cancel(id, data);
     }
 
-    @Patch(':id')
+    @Patch('approve/:id')
     approve(@Param('id') id: string, @Body() data: UpdateNadharDto) {
         return this.nadharService.approve(id, data);
     }
 
-    @Patch(':id')
+    @Patch('reject/:id')
     reject(@Param('id') id: string, @Body() data: UpdateNadharDto) {
         return this.nadharService.reject(id, data);
     }
