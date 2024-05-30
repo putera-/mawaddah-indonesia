@@ -62,7 +62,7 @@ export class CandidateController {
         }
     }
     @Roles(Role.Member)
-    @Get('suggestion')
+    @Get('suggestion_old')
     async findSuggestion(
         @Request() req: any,
         @Query('page') page: string,
@@ -102,8 +102,42 @@ export class CandidateController {
             throw error;
         }
     }
+
+    @Roles(Role.Member)
+    @Get('suggestion')
+    async findSuggestion2(
+        @Request() req: any,
+        @Query('page') page: string,
+        @Query('limit') limit: string,
+    ) {
+        try {
+            const userBiodata = await this.biodataService.findMe(req.user.id);
+
+            return await this.candidateService.getSimiliar2(req.user.id, userBiodata);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     @Roles(Role.Member)
     @Get('you-may-like')
+    async findLike2(
+        @Request() req: any,
+        @Query('page') page: string,
+        @Query('limit') limit: string,
+    ) {
+        try {
+            const userBiodata = await this.biodataService.findMe(req.user.id);
+
+            return await this.candidateService.getSimiliar2(req.user.id, userBiodata, 1, 14);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+    @Roles(Role.Member)
+    @Get('you-may-like-old')
     async findLike(
         @Request() req: any,
         @Query('page') page: string,
@@ -147,6 +181,8 @@ export class CandidateController {
             throw error;
         }
     }
+
+
     @Roles(Role.Member)
     @Get(':id')
     async findOne(@Param('id') id: string) {

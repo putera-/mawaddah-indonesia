@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Biodata } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { User } from 'src/users/user.interface';
 import { UsersService } from 'src/users/user.service';
@@ -89,12 +90,14 @@ export class CandidateService {
         this.User.formatGray(user);
         return user;
     }
+
     getOppositeGender(gender: any) {
         let oppositeGender: any;
         if (gender === 'PRIA') oppositeGender = 'WANITA';
         else if (gender === 'WANITA') oppositeGender = 'PRIA';
         return oppositeGender;
     }
+
     getSimiliar(user: any, suggest: Record<string, any>[]) {
         for (const data of suggest) {
             const s: Record<string, any> = data;
@@ -131,6 +134,59 @@ export class CandidateService {
         }
         return suggest;
     }
+
+    async getSimiliar2(userId: string, userBiodata: Biodata, minScore = 15, maxScore = 40): Promise<Pagination<User[]>> {
+        const oppositeGender = this.getOppositeGender(userBiodata.gender);
+        const candidates = await this.Prisma.user.findMany({
+            where: {
+                id: { not: userId },
+                biodata: {
+                    gender: oppositeGender
+                }
+            },
+            select: {
+                ...hiddenSelect,
+                biodata: true,
+                Skill: { select: { title: true } },
+                Hobby: { select: { title: true } },
+                Married_goal: { select: { title: true } },
+                Life_goal: { select: { title: true } },
+                Physic_character: { select: { title: true } },
+                Education: true,
+            }
+        });
+
+        const similarityScore = candidates.map(can => ({
+            can,
+            score: this.calculateSimilarity(userBiodata, can.biodata)
+        }))
+            .filter(c => c.score <= maxScore && c.score >= minScore)
+            .sort((a, b) => b.score - a.score)
+            .map(u => {
+                this.User.formatGray(u.can);
+                return u.can;
+            });
+
+        return {
+            data: similarityScore,
+            total: similarityScore.length,
+            page: 1,
+            maxPages: 1,
+            limit: similarityScore.length
+        }
+    }
+
+    calculateSimilarity(userBiodata: Biodata, candidateBiodata: Biodata) {
+        let score = 0;
+
+        if (userBiodata.domicile_town == candidateBiodata.domicile_town) score += 15;
+        if (userBiodata.domicile_province == candidateBiodata.domicile_province) score += 5;
+        if (userBiodata.hometown_province == candidateBiodata.hometown_province) score += 10;
+        if (userBiodata.ethnic == candidateBiodata.ethnic) score += 10;
+
+        return score;
+    }
+
     async findSuggestion(gender: any, page: number = 1, limit: number = 10): Promise<Pagination<User[]>> {
         const skip = (page - 1) * limit;
 

@@ -18,8 +18,8 @@ async function main() {
     await gallerySeed(prisma, clientid);
     await sliderSeed(prisma, clientid);
     await faqSeed(prisma, clientid);
-    await memberSeed(prisma);
     await provinceSeed(prisma);
+    await memberSeed(prisma);
     await taaruf_goldSeed(prisma)
     await bookmarksSeed(prisma)
 }

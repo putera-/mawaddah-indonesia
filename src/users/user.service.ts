@@ -54,7 +54,7 @@ export class UsersService {
 
     formatGray(data: User) {
         data.email = data.email.slice(0, 2) + '...';
-        data.firstname = data.firstname.slice(0, 2) + '...';
+        // data.firstname = data.firstname.slice(0, 2) + '...';
         data.lastname = data.lastname.slice(0, 2) + '...';
         delete data.avatar;
         delete data.avatar_md;
@@ -98,6 +98,7 @@ export class UsersService {
         if (!user) throw new NotFoundException(`User tidak ditemukan`);
         return user;
     }
+
     async findSuperUser(): Promise<User[]> {
         const users = await this.Prisma.user.findMany({
             where: { role: 'SUPERADMIN' },
