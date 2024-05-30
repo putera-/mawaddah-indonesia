@@ -1,5 +1,6 @@
 import {
     BadRequestException,
+    GoneException,
     HttpException,
     HttpStatus,
     Injectable,
@@ -84,7 +85,10 @@ export class AuthService {
         const find = await this.prisma.resetPassword.findFirst({
             where: { id, used: false, expiredAt: { gt: now } },
         });
-        if (!find) throw new NotFoundException('Data tidak ditemukan');
+        if (!find)
+            throw new GoneException(
+                'Kode reset password sudah invalid, kadaluarsa, atau telah digunakan.',
+            );
         const user = await this.prisma.user.findFirst({
             where: { id: find.userId },
         });
