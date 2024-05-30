@@ -1,34 +1,139 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    HttpCode,
+    HttpStatus,
+    Req,
+    ValidationPipe,
+} from '@nestjs/common';
 import { TaarufService } from './taaruf.service';
-import { CreateTaarufDto } from './dto/create-taaruf.dto';
-import { UpdateTaarufDto } from './dto/update-taaruf.dto';
+import { Roles } from 'src/roles/roles.decorator';
+import { Role } from 'src/roles/role.enums';
+import { UsersService } from 'src/users/user.service';
 
 @Controller('taaruf')
 export class TaarufController {
-  constructor(private readonly taarufService: TaarufService) {}
+    constructor(
+        private readonly taarufService: TaarufService,
+        private readonly User: UsersService,
+    ) {}
 
-  @Post()
-  create(@Body() createTaarufDto: CreateTaarufDto) {
-    return this.taarufService.create(createTaarufDto);
-  }
+    @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
+    @Post(':candidateId')
+    async create(
+        @Param('id') id: string,
+        @Req() req: any,
+        @Body() message: string,
+    ) {
+        try {
+            const user = await this.User.findOne(req.id, req.role);
+            return await this.taarufService.create(user.id, id, message);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-  @Get()
-  findAll() {
-    return this.taarufService.findAll();
-  }
+    @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
+    @Get('incoming')
+    async allIncoming(@Req() req: any) {
+        try {
+            const user = await this.User.findOne(req.id, req.role);
+            return await this.taarufService.findAllIncoming(user.id);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.taarufService.findOne(+id);
-  }
+    @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
+    @Get('outgoing')
+    async allOutgoing(@Req() req: any) {
+        try {
+            const user = await this.User.findOne(req.id, req.role);
+            return await this.taarufService.findAllOutgoing(user.id);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaarufDto: UpdateTaarufDto) {
-    return this.taarufService.update(+id, updateTaarufDto);
-  }
+    @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
+    @Get('incoming/:id')
+    async incoming(@Req() req: any, @Param() id: string) {
+        try {
+            const user = await this.User.findOne(req.id, req.role);
+            return await this.taarufService.findIncoming(user.id, id);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.taarufService.remove(+id);
-  }
+    @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
+    @Get('outgoing/:id')
+    async outgoing(@Req() req: any, @Param() id: string) {
+        try {
+            const user = await this.User.findOne(req.id, req.role);
+            const userId = user.id;
+            return this.taarufService.findOutgoing(user.id, id);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
+    @Patch('approve/:id')
+    async approve(
+        @Req() req: any,
+        @Param() id: string,
+        @Body(new ValidationPipe()) message: string,
+    ) {
+        try {
+            const user = await this.User.findOne(req.id, req.role);
+            return this.taarufService.approve(user.id, id, message);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
+    @Patch('reject/:id')
+    async reject(
+        @Req() req: any,
+        @Param() id: string,
+        @Body(new ValidationPipe()) message: string,
+    ) {
+        try {
+            const user = await this.User.findOne(req.id, req.role);
+            return this.taarufService.reject(user.id, id, message);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
+    @Patch('cancel/:id')
+    async cancel(
+        @Req() req: any,
+        @Param() id: string,
+        @Body(new ValidationPipe()) message: string,
+    ) {
+        try {
+            const user = await this.User.findOne(req.id, req.role);
+            return this.taarufService.cancel(user.id, id, message);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
+ 

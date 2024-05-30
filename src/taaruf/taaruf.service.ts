@@ -1,26 +1,111 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTaarufDto } from './dto/create-taaruf.dto';
 import { UpdateTaarufDto } from './dto/update-taaruf.dto';
+import { PrismaService } from 'src/prisma.service';
+import { UsersService } from 'src/users/user.service';
+import { Prisma } from '@prisma/client';
+import { Taaruf } from './taaruf.interface';
 
 @Injectable()
 export class TaarufService {
-  create(createTaarufDto: CreateTaarufDto) {
-    return 'This action adds a new taaruf';
-  }
+    constructor(
+        private PrismaService: PrismaService,
+        private User: UsersService,
+    ) {}
+    async create(userId: string, id: string, message: string): Promise<void> {
+        const user = await this.User.findOne(userId, 'MEMBER');
+        if (!user) throw new NotFoundException('Pengguna tidak ditemukan');
 
-  findAll() {
-    return `This action returns all taaruf`;
-  }
+        const candidate = await this.PrismaService.user.findFirst({
+            where: { id },
+        });
 
-  findOne(id: number) {
-    return `This action returns a #${id} taaruf`;
-  }
+        if (!candidate) throw new NotFoundException('Pengguna tidak ditemukan');
+        const data: Prisma.TaarufCreateInput = {
+            message,
+            user: { connect: { id: user.id } },
+            candidate: { connect: { id: candidate.id } },
+            approval: {
+                create: {
+                    message,
+                    reply: '',
+                },
+            },
+        };
+        data.message = message;
+        const result = await this.PrismaService.taaruf.create({
+            data,
+            include: {
+                approval: true,
+                nadhars: true,
+                khitbahs: true,
+                akads: true,
+            },
+        });
+        console.log(result);
+    }
 
-  update(id: number, updateTaarufDto: UpdateTaarufDto) {
-    return `This action updates a #${id} taaruf`;
-  }
+    async findAllIncoming(userId: string) {
+        const result = await this.PrismaService.taaruf.findMany({
+            where: { candidateId: userId },
+        });
+        return result;
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} taaruf`;
-  }
+    async findAllOutgoing(userId: string) {
+        const result = await this.PrismaService.taaruf.findMany({
+            where: { userId: userId },
+        });
+        return result;
+    }
+
+    async findIncoming(candidateId: string, id: string): Promise<Taaruf> {
+        return await this.PrismaService.taaruf.findFirst({
+            where: { id, candidateId },
+        });
+    }
+
+    async findOutgoing(userId: string, id: string): Promise<Taaruf> {
+        return await this.PrismaService.taaruf.findFirst({
+            where: { id, userId },
+        });
+    }
+
+    async approve(candidateId: string, id: string, message: string) {
+        return await this.PrismaService.taaruf.update({
+            where: { id, candidateId },
+            data: {
+                approval: {
+                    update: {
+                        status: 'Yes',
+                        message,
+                    },
+                },
+            },
+        });
+    }
+
+    async reject(candidateId: string, id: string, message: string) {
+        return await this.PrismaService.taaruf.update({
+            where: { id, candidateId },
+            data: {
+                approval: {
+                    update: {
+                        status: 'No',
+                        message,
+                    },
+                },
+            },
+        });
+    }
+
+    async cancel(userId: string, id: string, message: string) {
+        return await this.PrismaService.taaruf.update({
+            where: { id, userId },
+            data: {
+                status: false,
+                message,
+            },
+        });
+    }
 }

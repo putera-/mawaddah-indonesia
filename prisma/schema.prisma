@@ -327,7 +327,7 @@ model Bookmark {
     user        User     @relation(name: "UserBookmarks", fields: [userId], references: [id])
     userId      String // This field holds the foreign key
     candidate   User     @relation(name: "UserCandidates", fields: [candidateId], references: [id])
-    candidateId String // This field holds the foreign key
+    candidateId String // This field holds the foreign key`
     bookmarked  Boolean  @default(true)
     createdAt   DateTime @default(now())
     updatedAt   DateTime @default(now()) @updatedAt
@@ -345,7 +345,7 @@ model Taaruf {
     status      Boolean         @default(true)
     // message dibutuhkan saat taaruf di batalkan oleh user,
     // user mengisi alasan pembatalan
-    message     String          @db.Text
+    message     String          @default("") @db.Text
     approval    TaarufApproval?
     nadhars     Nadhar[]
     khitbahs    Khitbah[]
@@ -359,8 +359,8 @@ model TaarufApproval {
     taaruf    Taaruf?       @relation(fields: [taarufId], references: [id])
     taarufId  String        @unique
     status    AprovalStatus @default(Pending)
-    message   String        @db.Text
-    reply     String        @db.Text
+    message   String        @default("") @db.Text
+    reply     String        @default("") @db.Text
     updatedAt DateTime      @default(now()) @updatedAt
 }
 
