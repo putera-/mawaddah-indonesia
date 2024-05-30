@@ -1,7 +1,6 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateNadharDto } from './dto/create-nadhar.dto';
 import { UpdateNadharDto } from './dto/update-nadhar.dto';
-import { Nadhar, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
@@ -30,7 +29,7 @@ export class NadharService {
                     data: {
                         ...data,
                         Taaruf: { connect: { id: taarufid } },
-                        schedule: data.schedule,
+                        schedule: data.schedule || 'aku mau kenal lebih dekat sama kamu',
                         message: data.message,
                         reply: data.reply || '',
                         status: 'Pending'
