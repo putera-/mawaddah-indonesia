@@ -1,12 +1,12 @@
 import { IsDate, IsOptional, IsString } from "class-validator"
 
 export class CreateNadharDto {
-    @IsOptional()
     @IsDate()
-    schedule?: Date
+    schedule: Date
 
+    @IsOptional()
     @IsString()
-    message: string
+    message?: string
 
     @IsOptional()
     @IsString()

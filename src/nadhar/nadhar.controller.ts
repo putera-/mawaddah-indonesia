@@ -31,23 +31,23 @@ export class NadharController {
         }
     }
 
-    @Patch('set-new-date/:id')
+    @Patch(':id')
     updateDate(@Param('id') taarufId: string, @Body() data: UpdateNadharDto) {
         return this.nadharService.updateDate(taarufId, data);
     }
 
     @Patch('cancel/:id')
-    cancel(@Param('id') id: string, @Body() data: UpdateNadharDto) {
-        return this.nadharService.cancel(id, data);
+    cancel(@Param('id') id: string) {
+        return this.nadharService.cancel(id);
     }
 
     @Patch('approve/:id')
-    approve(@Param('id') id: string, @Body() data: UpdateNadharDto) {
-        return this.nadharService.approve(id, data);
+    approve(@Param('id') id: string) {
+        return this.nadharService.approve(id);
     }
 
     @Patch('reject/:id')
-    reject(@Param('id') id: string, @Body() data: UpdateNadharDto) {
-        return this.nadharService.reject(id, data);
+    reject(@Param('id') id: string) {
+        return this.nadharService.reject(id);
     }
 }
