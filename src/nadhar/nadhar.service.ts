@@ -40,12 +40,6 @@ export class NadharService {
         return data;
     }
 
-    getAllRequests() {
-        return this.prisma.nadhar.findMany({
-            where: { status: 'Pending' }
-        });
-    }
-
     async updateDate(nadharId: string, data: UpdateNadharDto) {
         const nadhor = await this.prisma.nadhar.findFirst({ where: { id: nadharId } });
         if (nadhor.status == "No" || "Pending") throw new ForbiddenException('Request is has Been rejected or either cancelled');
@@ -104,5 +98,11 @@ export class NadharService {
             }
         })
         return result;
+    }
+
+    getAllRequests() {
+        return this.prisma.nadhar.findMany({
+            where: { status: 'Pending' }
+        });
     }
 }
