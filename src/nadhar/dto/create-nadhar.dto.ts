@@ -1,8 +1,10 @@
+import { Type } from "class-transformer";
 import { IsDate, IsOptional, IsString } from "class-validator"
 
 export class CreateNadharDto {
     @IsDate()
-    schedule: Date
+    @Type(() => Date)
+    schedule: Date;
 
     @IsOptional()
     @IsString()

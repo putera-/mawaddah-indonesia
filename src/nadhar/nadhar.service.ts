@@ -2,7 +2,6 @@ import { BadRequestException, ForbiddenException, Injectable, NotFoundException 
 import { CreateNadharDto } from './dto/create-nadhar.dto';
 import { UpdateNadharDto } from './dto/update-nadhar.dto';
 import { PrismaService } from 'src/prisma.service';
-import { error } from 'console';
 
 @Injectable()
 export class NadharService {
@@ -14,16 +13,17 @@ export class NadharService {
             include: { approval: true }
         });
     }
-
+    
     async create(data: CreateNadharDto, userId: string, taarufid: string) {
         const target = await this.prisma.taaruf.findFirst({
             //supaya hanya mendapatkan punya user dan yang status approved
             where: { id: taarufid, userId: userId, approval: { status: 'Yes' } },
             include: { approval: true }
         });
-
+        
         //cek apakan data taaruf ada apa tidak
         if (!target) throw new NotFoundException('Data taaruf tidak ditemukan');
+        
 
         //memastikan taaruf sudah disetujui
         if (target.approval.status != 'Yes') throw new BadRequestException('Taaruf belum disetujui');
@@ -50,6 +50,9 @@ export class NadharService {
             take: 1,
         });
 
+        //cek apakan data taaruf ada apa tidak
+        if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan');
+        
         const nadhars = taaruf.nadhars;
         if (!nadhars.length) throw new NotFoundException();
         const nadhar = nadhars[0];
@@ -75,6 +78,9 @@ export class NadharService {
             take: 1,
         });
 
+        //cek apakan data taaruf ada apa tidak
+        if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan');
+
         const nadhars = taaruf.nadhars;
         if (!nadhars.length) throw new NotFoundException();
         const nadhar = nadhars[0];
@@ -99,6 +105,9 @@ export class NadharService {
             take: 1,
         });
 
+        //cek apakan data taaruf ada apa tidak
+        if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan');
+
         const nadhars = taaruf.nadhars;
         if (!nadhars.length) throw new NotFoundException();
         const nadhar = nadhars[0];
@@ -121,6 +130,9 @@ export class NadharService {
             orderBy: { createdAt: 'desc' },
             take: 1,
         });
+
+        //cek apakan data taaruf ada apa tidak
+        if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan');
 
         const nadhars = taaruf.nadhars;
         if (!nadhars.length) throw new NotFoundException();

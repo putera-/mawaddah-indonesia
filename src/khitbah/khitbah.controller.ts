@@ -1,34 +1,54 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request } from '@nestjs/common';
 import { KhitbahService } from './khitbah.service';
 import { CreateKhitbahDto } from './dto/create-khitbah.dto';
 import { UpdateKhitbahDto } from './dto/update-khitbah.dto';
 
 @Controller('khitbah')
 export class KhitbahController {
-  constructor(private readonly khitbahService: KhitbahService) {}
-
-  @Post()
-  create(@Body() createKhitbahDto: CreateKhitbahDto) {
-    return this.khitbahService.create(createKhitbahDto);
-  }
+  constructor(private readonly khitbahService: KhitbahService) { }
 
   @Get()
-  findAll() {
-    return this.khitbahService.findAll();
+  async getAll(@Request() req: any) {
+    const userId = req.user.id;
+    return this.khitbahService.getAll(userId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.khitbahService.findOne(+id);
+
+  @Get('requests')
+  async getAllRequests(@Request() req: any) {
+    const userId = req.user.id;
+    return this.khitbahService.getAllRequests();
+  }
+
+  @Post(':id')
+  async create(@Request() req: any, @Param('id') taarufId: string, @Body() data: CreateKhitbahDto) {
+    const userId = req.user.id;
+    try {
+      return this.khitbahService.create(data, userId, taarufId);
+
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateKhitbahDto: UpdateKhitbahDto) {
-    return this.khitbahService.update(+id, updateKhitbahDto);
+  updateDate(@Param('id') taarufId: string, @Body() data: UpdateKhitbahDto) {
+    return this.khitbahService.updateDate(taarufId, data);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.khitbahService.remove(+id);
+  @Patch('cancel/:id')
+  cancel(@Param('id') id: string) {
+    return this.khitbahService.cancel(id);
   }
+
+  @Patch('approve/:id')
+  approve(@Param('id') id: string) {
+    return this.khitbahService.approve(id);
+  }
+
+  @Patch('reject/:id')
+  reject(@Param('id') id: string) {
+    return this.khitbahService.reject(id);
+  }
+
 }
