@@ -49,8 +49,16 @@ export class BookmarkService {
                 orderBy: { createdAt: 'desc' },
                 skip,
                 take: Number(limit),
+                include: {
+                    candidate: true
+                }
             }),
         ]);
+
+        for (const bookmark of data) {
+            const candidate = bookmark.candidate;
+            this.userService.formatGray(candidate);
+        }
 
         return {
             page: +page,
