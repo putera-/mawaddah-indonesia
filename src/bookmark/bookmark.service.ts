@@ -50,7 +50,9 @@ export class BookmarkService {
                 skip,
                 take: Number(limit),
                 include: {
-                    candidate: true
+                    candidate: {
+                        include: { biodata: true }
+                    }
                 }
             }),
         ]);
