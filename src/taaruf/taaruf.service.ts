@@ -45,17 +45,28 @@ export class TaarufService {
         console.log(result);
     }
 
-    async findAllIncoming(userId: string) {
-        const result = await this.PrismaService.taaruf.findMany({
+    async findAllIncoming(userId: string, page = '1', limit = '10') {
+        const data = await this.PrismaService.taaruf.findMany({
             where: { candidateId: userId },
+            orderBy: { createdAt: 'desc' },
+            take: Number(limit),
         });
+        const total = data.length;
+        var maxPages = total / Number(limit);
+        maxPages = Math.ceil(maxPages);
+        const result = { data, total, page, maxPages, limit };
         return result;
     }
 
-    async findAllOutgoing(userId: string) {
-        const result = await this.PrismaService.taaruf.findMany({
+    async findAllOutgoing(userId: string, page = '1', limit = '10') {
+        const data = await this.PrismaService.taaruf.findMany({
             where: { userId: userId },
+            take: Number(limit),
         });
+        const total = data.length;
+        var maxPages = total / Number(limit);
+        maxPages = Math.ceil(maxPages);
+        const result = { data, total, page, maxPages, limit };
         return result;
     }
 

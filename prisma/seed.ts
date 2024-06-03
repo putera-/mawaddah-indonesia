@@ -8,6 +8,7 @@ import { memberSeed } from './seed/member';
 import { provinceSeed } from './seed/province';
 import { taaruf_goldSeed } from './seed/taaruf_gold';
 import { bookmarksSeed } from './seed/bookmark';
+import { taarufSeed } from './seed/taaruf';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -20,8 +21,9 @@ async function main() {
     await faqSeed(prisma, clientid);
     await provinceSeed(prisma);
     await memberSeed(prisma);
-    await taaruf_goldSeed(prisma)
-    await bookmarksSeed(prisma)
+    await taaruf_goldSeed(prisma);
+    await bookmarksSeed(prisma);
+    await taarufSeed(prisma);
 }
 
 main()

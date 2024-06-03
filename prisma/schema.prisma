@@ -345,7 +345,7 @@ model Taaruf {
     status      Boolean         @default(true)
     // message dibutuhkan saat taaruf di batalkan oleh user,
     // user mengisi alasan pembatalan
-    message     String          @default("") @db.Text
+    message     String          @db.Text
     approval    TaarufApproval?
     nadhars     Nadhar[]
     khitbahs    Khitbah[]
@@ -359,8 +359,8 @@ model TaarufApproval {
     taaruf    Taaruf?       @relation(fields: [taarufId], references: [id])
     taarufId  String        @unique
     status    AprovalStatus @default(Pending)
-    message   String        @default("") @db.Text
-    reply     String        @default("") @db.Text
+    message   String        @db.Text
+    reply     String        @db.Text
     updatedAt DateTime      @default(now()) @updatedAt
 }
 

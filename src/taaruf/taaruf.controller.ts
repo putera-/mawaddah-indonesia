@@ -10,6 +10,7 @@ import {
     HttpStatus,
     Req,
     ValidationPipe,
+    Query,
 } from '@nestjs/common';
 import { TaarufService } from './taaruf.service';
 import { Roles } from 'src/roles/roles.decorator';
@@ -42,10 +43,18 @@ export class TaarufController {
     @Roles(Role.Member)
     @HttpCode(HttpStatus.OK)
     @Get('incoming')
-    async allIncoming(@Req() req: any) {
+    async allIncoming(
+        @Req() req: any,
+        @Query('page') page: string,
+        @Query('limit') limit: string,
+    ) {
         try {
             const user = await this.User.findOne(req.id, req.role);
-            return await this.taarufService.findAllIncoming(user.id);
+            return await this.taarufService.findAllIncoming(
+                user.id,
+                page,
+                limit,
+            );
         } catch (error) {
             console.log(error);
         }
@@ -54,10 +63,18 @@ export class TaarufController {
     @Roles(Role.Member)
     @HttpCode(HttpStatus.OK)
     @Get('outgoing')
-    async allOutgoing(@Req() req: any) {
+    async allOutgoing(
+        @Req() req: any,
+        @Query('page') page: string,
+        @Query('limit') limit: string,
+    ) {
         try {
             const user = await this.User.findOne(req.id, req.role);
-            return await this.taarufService.findAllOutgoing(user.id);
+            return await this.taarufService.findAllOutgoing(
+                user.id,
+                page,
+                limit,
+            );
         } catch (error) {
             console.log(error);
         }
@@ -136,4 +153,3 @@ export class TaarufController {
         }
     }
 }
- 
