@@ -22,12 +22,12 @@ export async function memberSeed(prisma: PrismaClient) {
         };
 
         const randoms = [];
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 1000; i++) {
             if (i % 2 == 0) randoms.push(i);
         }
 
         // create 100 Bob MEMBER
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 1000; i++) {
             process.stdout.write('.');
             const randomNumber = Math.floor(Math.random() * 10) + 1;
             const firstname = faker.person.firstName('male');
@@ -186,11 +186,11 @@ export async function memberSeed(prisma: PrismaClient) {
             },
         };
         const randoms = [];
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 1000; i++) {
             if (i % 2 == 1) randoms.push(i);
         }
         // create 100 Alice MEMBER
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 1000; i++) {
             process.stdout.write('.');
             const randomNumber = Math.floor(Math.random() * 10) + 1;
 
