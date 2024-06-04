@@ -39,7 +39,7 @@ export class AuthService {
         if (!match) {
             throw new UnauthorizedException('Email atau password salah.');
         }
-        this.loginProcess(email, user);
+        return this.loginProcess(email, user);
     }
     async adminSignIn(email: string, pass: string): Promise<any> {
         email = email.toLowerCase();
@@ -54,7 +54,7 @@ export class AuthService {
         if (!match) {
             throw new UnauthorizedException('Otentikasi tidak valid.');
         }
-        this.loginProcess(email, user);
+        return this.loginProcess(email, user);
     }
 
     async loginProcess(email: string, user: any) {
