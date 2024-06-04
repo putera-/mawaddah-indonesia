@@ -135,6 +135,16 @@ export class AuthController {
             throw error;
         }
     }
+    @Public()
+    @HttpCode(HttpStatus.OK)
+    @Post('admin/login')
+    adminSignIn(@Body(new ValidationPipe()) signInDto: SignInDto): Promise<User> {
+        try {
+            return this.authService.adminSignIn(signInDto.email, signInDto.password);
+        } catch (error) {
+            throw error;
+        }
+    }
 
     @Get('extend-access-token')
     async extendAccessToken(@Req() req) {

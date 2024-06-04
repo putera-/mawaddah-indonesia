@@ -36,6 +36,21 @@ export class AuthService {
         if (!match) {
             throw new UnauthorizedException('Email atau password salah.');
         }
+        this.loginProcess(email, user);
+    }
+    async adminSignIn(email: string, pass: string): Promise<any> {
+        const user = await this.prisma.user.findFirst({
+            where: { role: 'MEMBER', AND: { role: 'SUPERADMIN' } },
+        });
+        if (!user) throw new UnauthorizedException('Otentikasi tidak valid.');
+        const match = await bcrypt.compare(pass, user.password);
+        if (!match) {
+            throw new UnauthorizedException('Otentikasi tidak valid.');
+        }
+        this.loginProcess(email, user);
+    }
+
+    async loginProcess(email: string, user: any) {
         if (!user.verified) {
             const usedToken = await this.prisma.activation.findFirst({
                 where: {
