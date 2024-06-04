@@ -40,7 +40,13 @@ export class AuthService {
     }
     async adminSignIn(email: string, pass: string): Promise<any> {
         const user = await this.prisma.user.findFirst({
-            where: { role: 'MEMBER', AND: { role: 'SUPERADMIN' } },
+            where: {
+                email,
+                role: { in: ['ADMIN', 'SUPERADMIN'] },
+                AND: {
+                    role: 'SUPERADMIN',
+                },
+            },
         });
         if (!user) throw new UnauthorizedException('Otentikasi tidak valid.');
         const match = await bcrypt.compare(pass, user.password);
