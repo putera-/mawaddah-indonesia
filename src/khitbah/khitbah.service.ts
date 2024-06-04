@@ -42,7 +42,7 @@ export class KhitbahService {
     const nadhar = nadhars[0];
 
     //memastikan nadhor sudah disetujui
-    if (nadhar.status != 'Yes') throw new BadRequestException('Nadhor belum disetujui');
+    if (nadhar.status != 'Yes') throw new BadRequestException('Kamu harus menyelesaikan tahap sebelumnya sebelum dapat melanjutkan ke tahap berikutnya');
 
     // create khitbah dengan status pending
     await this.prisma.khitbah.create({
