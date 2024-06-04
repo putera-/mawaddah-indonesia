@@ -29,7 +29,10 @@ export class AuthService {
     private blacklistedTokens: Set<string> = new Set();
 
     async signIn(email: string, pass: string): Promise<any> {
-        const user = await this.usersService.findByEmail(email);
+        email = email.toLowerCase();
+        const user = await this.prisma.user.findFirst({
+            where: { email, role: 'MEMBER' },
+        });
         if (!user)
             throw new UnauthorizedException('Email atau password salah.');
         const match = await bcrypt.compare(pass, user.password);
@@ -39,13 +42,11 @@ export class AuthService {
         this.loginProcess(email, user);
     }
     async adminSignIn(email: string, pass: string): Promise<any> {
+        email = email.toLowerCase();
         const user = await this.prisma.user.findFirst({
             where: {
                 email,
                 role: { in: ['ADMIN', 'SUPERADMIN'] },
-                AND: {
-                    role: 'SUPERADMIN',
-                },
             },
         });
         if (!user) throw new UnauthorizedException('Otentikasi tidak valid.');
