@@ -51,7 +51,15 @@ export class BookmarkService {
                 take: Number(limit),
                 include: {
                     candidate: {
-                        include: { biodata: true }
+                        include: {
+                            biodata: true,
+                            Physic_character: true,
+                            Education: true,
+                            Skill: true,
+                            Hobby: true,
+                            Married_goal: true,
+                            Life_goal: true,
+                        }
                     }
                 }
             }),
