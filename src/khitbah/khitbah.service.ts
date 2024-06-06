@@ -7,19 +7,6 @@ import { PrismaService } from 'src/prisma.service';
 export class KhitbahService {
   constructor(private prisma: PrismaService) { }
 
-  async getAll(userId: string) {
-    return this.prisma.taaruf.findMany({
-      where: { userId: userId },
-      include: { approval: true, nadhars: true }
-    });
-  }
-
-  getAllRequests() {
-    return this.prisma.khitbah.findMany({
-      where: { status: 'Pending' }
-    });
-  }
-
   async create(data: CreateKhitbahDto, userId: string, taarufid: string) {
     const target = await this.prisma.taaruf.findFirst({
       //supaya hanya mendapatkan punya user dan yang status approved
@@ -41,9 +28,6 @@ export class KhitbahService {
     if (!nadhars.length) throw new NotFoundException();
     const nadhar = nadhars[0];
 
-    //memastikan nadhor sudah disetujui
-    if (nadhar.status != 'Yes') throw new BadRequestException('Kamu harus menyelesaikan tahap sebelumnya sebelum dapat melanjutkan ke tahap berikutnya');
-
     // create khitbah dengan status pending
     await this.prisma.khitbah.create({
       data: {
@@ -61,9 +45,12 @@ export class KhitbahService {
   async updateDate(taarufId: string, data: UpdateKhitbahDto) {
     const taaruf = await this.prisma.taaruf.findFirst({
       where: { id: taarufId },
-      include: { khitbahs: true },
-      orderBy: { createdAt: 'desc' },
-      take: 1,
+      include: {
+        khitbahs: {
+          orderBy: { createdAt: 'desc' },
+          take: 1
+        }
+      },
     });
 
     //cek apakan data taaruf ada apa tidak
@@ -88,9 +75,10 @@ export class KhitbahService {
   async cancel(taarufId: string) {
     const taaruf = await this.prisma.taaruf.findFirst({
       where: { id: taarufId },
-      include: { khitbahs: true },
-      orderBy: { createdAt: 'desc' },
-      take: 1,
+      include: { khitbahs: {
+        orderBy: { createdAt: 'desc' },
+        take: 1
+      } },
     });
 
     //cek apakan data taaruf ada apa tidak
@@ -115,8 +103,10 @@ export class KhitbahService {
   async approve(taarufId: string) {
     const taaruf = await this.prisma.taaruf.findFirst({
       where: { id: taarufId },
-      include: { khitbahs: true },
-      orderBy: { createdAt: 'desc' },
+      include: { khitbahs: {
+        orderBy: { createdAt: 'desc' },
+        take: 1
+      } },
       take: 1,
     });
 
@@ -142,8 +132,10 @@ export class KhitbahService {
   async reject(taarufId: string) {
     const taaruf = await this.prisma.taaruf.findFirst({
       where: { id: taarufId },
-      include: { khitbahs: true },
-      orderBy: { createdAt: 'desc' },
+      include: { khitbahs: {
+        orderBy: { createdAt: 'desc' },
+        take: 1
+      } },
       take: 1,
     });
 

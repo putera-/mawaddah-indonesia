@@ -7,14 +7,6 @@ import { PrismaService } from 'src/prisma.service';
 export class NadharService {
     constructor(private prisma: PrismaService) { }
 
-    // FIXME buang aja
-    async getAll(userId: string) {
-        return this.prisma.taaruf.findMany({
-            where: { userId: userId },
-            include: { approval: true }
-        });
-    }
-
     async create(data: CreateNadharDto, userId: string, taarufid: string) {
         const target = await this.prisma.taaruf.findFirst({
             //supaya hanya mendapatkan punya user dan yang status approved
@@ -24,11 +16,6 @@ export class NadharService {
 
         //cek apakan data taaruf ada apa tidak
         if (!target) throw new NotFoundException('Data taaruf tidak ditemukan');
-
-
-        // FIXME ga terpakai, karena dr get target sudah where status == 'yes
-        //memastikan taaruf sudah disetujui
-        if (target.approval.status != 'Yes') throw new BadRequestException('Taaruf belum disetujui');
 
         //create nadhor dengan status pending
         await this.prisma.nadhar.create({
@@ -45,12 +32,12 @@ export class NadharService {
     }
 
     async updateDate(taarufId: string, data: UpdateNadharDto) {
-        // FIXME order by nadhor, take 1 by nadhor
         const taaruf = await this.prisma.taaruf.findFirst({
             where: { id: taarufId },
-            include: { nadhars: true },
-            orderBy: { createdAt: 'desc' },
-            take: 1,
+            include: { nadhars: {
+                orderBy: {createdAt: 'desc'},
+                take: 1
+            } },
         });
 
         //cek apakan data taaruf ada apa tidak
@@ -74,12 +61,12 @@ export class NadharService {
     }
 
     async cancel(taarufId: string) {
-        // FIXME order by nadhor, take 1 by nadhor
         const taaruf = await this.prisma.taaruf.findFirst({
             where: { id: taarufId },
-            include: { nadhars: true },
-            orderBy: { createdAt: 'desc' },
-            take: 1,
+            include: { nadhars: {
+                orderBy: {createdAt: 'desc'},
+                take: 1
+            } },
         });
 
         //cek apakan data taaruf ada apa tidak
@@ -102,12 +89,12 @@ export class NadharService {
     }
 
     async approve(taarufId: string) {
-        // FIXME order by nadhor, take 1 by nadhor
         const taaruf = await this.prisma.taaruf.findFirst({
             where: { id: taarufId },
-            include: { nadhars: true },
-            orderBy: { createdAt: 'desc' },
-            take: 1,
+            include: { nadhars: {
+                orderBy: {createdAt: 'desc'},
+                take: 1
+            } },
         });
 
         //cek apakan data taaruf ada apa tidak
@@ -129,12 +116,12 @@ export class NadharService {
         return result;
     }
     async reject(taarufId: string) {
-        // FIXME order by nadhor, take 1 by nadhor
         const taaruf = await this.prisma.taaruf.findFirst({
             where: { id: taarufId },
-            include: { nadhars: true },
-            orderBy: { createdAt: 'desc' },
-            take: 1,
+            include: { nadhars: {
+                orderBy: {createdAt: 'desc'},
+                take: 1
+            } },
         });
 
         //cek apakan data taaruf ada apa tidak

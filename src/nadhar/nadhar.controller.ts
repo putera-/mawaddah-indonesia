@@ -8,22 +8,8 @@ import { Nadhar } from './nadhar.interface';
 export class NadharController {
     constructor(private readonly nadharService: NadharService) { }
 
-    // TODO ini buang aja, karena ga ada di api doc
-    @Get()
-    async getAll(@Request() req: any) {
-        const userId = req.user.id;
-        return this.nadharService.getAll(userId);
-    }
 
-    // TODO ini buang aja, karena ga ada di api doc
-    @Get('requests')
-    async getAllRequests(@Request() req: any) {
-        const userId = req.user.id;
-        return this.nadharService.getAllRequests();
-    }
-
-    // FIXME keynya ganti :taarufid, supaya ga rancu
-    @Post(':id')
+    @Post(':taarufid')
     async create(@Request() req: any, @Param('id') taarufId: string, @Body() data: CreateNadharDto) {
         const userId = req.user.id;
         try {
@@ -34,26 +20,22 @@ export class NadharController {
         }
     }
 
-    // FIXME keynya ganti :taarufid, supaya ga rancu
-    @Patch(':id')
+    @Patch(':taarufid')
     updateDate(@Param('id') taarufId: string, @Body() data: UpdateNadharDto) {
         return this.nadharService.updateDate(taarufId, data);
     }
 
-    // FIXME keynya ganti :taarufid, supaya ga rancu
-    @Patch('cancel/:id')
+    @Patch('cancel/:taarufid')
     cancel(@Param('id') id: string) {
         return this.nadharService.cancel(id);
     }
 
-    // FIXME keynya ganti :taarufid, supaya ga rancu
-    @Patch('approve/:id')
+    @Patch('approve/:taarufid')
     approve(@Param('id') id: string) {
         return this.nadharService.approve(id);
     }
 
-    // FIXME keynya ganti :taarufid, supaya ga rancu
-    @Patch('reject/:id')
+    @Patch('reject/:taarufid')
     reject(@Param('id') id: string) {
         return this.nadharService.reject(id);
     }

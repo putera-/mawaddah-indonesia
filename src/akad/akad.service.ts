@@ -6,20 +6,7 @@ import { PrismaService } from 'src/prisma.service';
 @Injectable()
 export class AkadService {
   constructor(private prisma: PrismaService) { }
-  
-    async getAll(userId: string) {
-    return this.prisma.taaruf.findMany({
-      where: { userId: userId },
-      include: { approval: true, nadhars: true }
-    });
-  }
 
-  getAllRequests() {
-    return this.prisma.akad.findMany({
-      where: { status: 'Pending' }
-    });
-  }
-  
     async create(data: CreateAkadDto, userId: string, taarufid: string) {
     const target = await this.prisma.taaruf.findFirst({
       //supaya hanya mendapatkan punya user dan yang status approved
@@ -41,9 +28,6 @@ export class AkadService {
     if (!khitbahs.length) throw new NotFoundException();
     const khitbah = khitbahs[0];
 
-    //memastikan nadhor sudah disetujui
-    if (khitbah.status != 'Yes') throw new BadRequestException('Kamu harus menyelesaikan tahap sebelumnya sebelum dapat melanjutkan ke tahap berikutnya');
-
     // create khitbah dengan status pending
     await this.prisma.akad.create({
       data: {
@@ -61,9 +45,10 @@ export class AkadService {
     async updateDate(taarufId: string, data: UpdateAkadDto) {
     const taaruf = await this.prisma.taaruf.findFirst({
       where: { id: taarufId },
-      include: { akads: true },
-      orderBy: { createdAt: 'desc' },
-      take: 1,
+      include: { akads: {
+        orderBy: {createdAt: 'desc'},
+        take: 1
+      } },
     });
 
     //cek apakan data taaruf ada apa tidak
@@ -88,9 +73,10 @@ export class AkadService {
     async cancel(taarufId: string) {
     const taaruf = await this.prisma.taaruf.findFirst({
       where: { id: taarufId },
-      include: { akads: true },
-      orderBy: { createdAt: 'desc' },
-      take: 1,
+      include: { akads: {
+        orderBy: {createdAt: 'desc'},
+        take: 1
+      } },
     });
 
     //cek apakan data taaruf ada apa tidak
@@ -115,9 +101,10 @@ export class AkadService {
     async approve(taarufId: string) {
     const taaruf = await this.prisma.taaruf.findFirst({
       where: { id: taarufId },
-      include: { akads: true },
-      orderBy: { createdAt: 'desc' },
-      take: 1,
+      include: { akads: {
+        orderBy: {createdAt: 'desc'},
+        take: 1
+      } },
     });
 
     //cek apakan data taaruf ada apa tidak
@@ -142,9 +129,10 @@ export class AkadService {
     async reject(taarufId: string) {
     const taaruf = await this.prisma.taaruf.findFirst({
       where: { id: taarufId },
-      include: { akads: true },
-      orderBy: { createdAt: 'desc' },
-      take: 1,
+      include: { akads: {
+        orderBy: {createdAt: 'desc'},
+        take: 1
+      } },
     });
 
     //cek apakan data taaruf ada apa tidak

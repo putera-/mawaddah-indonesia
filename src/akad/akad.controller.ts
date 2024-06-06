@@ -7,20 +7,7 @@ import { UpdateAkadDto } from './dto/update-akad.dto';
 export class AkadController {
   constructor(private readonly akadService: AkadService) { }
 
-  @Get()
-  async getAll(@Request() req: any) {
-    const userId = req.user.id;
-    return this.akadService.getAll(userId);
-  }
-
-
-  @Get('requests')
-  async getAllRequests(@Request() req: any) {
-    const userId = req.user.id;
-    return this.akadService.getAllRequests();
-  }
-
-  @Post(':id')
+  @Post(':taarufid')
   async create(@Request() req: any, @Param('id') taarufId: string, @Body() data: CreateAkadDto) {
     const userId = req.user.id;
     try {
@@ -31,22 +18,22 @@ export class AkadController {
     }
   }
 
-  @Patch(':id')
+  @Patch(':taarufid')
   updateDate(@Param('id') taarufId: string, @Body() data: UpdateAkadDto) {
     return this.akadService.updateDate(taarufId, data);
   }
 
-  @Patch('cancel/:id')
+  @Patch('cancel/:taarufid')
   cancel(@Param('id') id: string) {
     return this.akadService.cancel(id);
   }
 
-  @Patch('approve/:id')
+  @Patch('approve/:taarufid')
   approve(@Param('id') id: string) {
     return this.akadService.approve(id);
   }
 
-  @Patch('reject/:id')
+  @Patch('reject/:taarufid')
   reject(@Param('id') id: string) {
     return this.akadService.reject(id);
   }
