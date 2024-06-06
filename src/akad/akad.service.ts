@@ -121,7 +121,7 @@ export class AkadService {
     });
 
     //cek apakan data taaruf ada apa tidak
-    if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan');
+    if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan'); 
 
     const akads = taaruf.akads;
     if (!akads.length) throw new NotFoundException();
