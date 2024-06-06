@@ -7,6 +7,8 @@ import { PrismaService } from 'src/prisma.service';
 export class NadharService {
     constructor(private prisma: PrismaService) { }
 
+    //ga dihapus karena untuk keperluan testing
+    
     //    async getAll(userId: string) {
     //     return this.prisma.taaruf.findMany({
     //         where: { userId: userId },
