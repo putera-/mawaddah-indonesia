@@ -21,6 +21,7 @@ export async function taarufSeed(prisma: PrismaClient) {
             where: {
                 role: 'MEMBER',
                 // biodata: { id: { not: undefined } },
+                // TODO FIX THIS
                 biodata: { NOT: null, gender: { not: biodata.gender } },
                 // biodata: {AND : {}},
                 AND: {
