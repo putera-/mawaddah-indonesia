@@ -7,6 +7,13 @@ import { PrismaService } from 'src/prisma.service';
 export class NadharService {
     constructor(private prisma: PrismaService) { }
 
+    //    async getAll(userId: string) {
+    //     return this.prisma.taaruf.findMany({
+    //         where: { userId: userId },
+    //         include: { approval: true }
+    //     });
+    // }
+    
     async create(data: CreateNadharDto, userId: string, taarufid: string) {
         const target = await this.prisma.taaruf.findFirst({
             //supaya hanya mendapatkan punya user dan yang status approved
@@ -21,7 +28,7 @@ export class NadharService {
         await this.prisma.nadhar.create({
             data: {
                 ...data,
-                Taaruf: { connect: { id: taarufid } },
+                Taaruf: { connect: { id: target.id } },
                 schedule: data.schedule,
                 message: data.message || '',
                 reply: data.reply || '',
@@ -143,10 +150,9 @@ export class NadharService {
         return result;
     }
 
-    // fIXME  buang aja
-    getAllRequests() {
-        return this.prisma.nadhar.findMany({
-            where: { status: 'Pending' }
-        });
-    }
+    // getAllRequests() {
+    //     return this.prisma.nadhar.findMany({
+    //         where: { status: 'Pending' }
+    //     });
+    // }
 }

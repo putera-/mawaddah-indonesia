@@ -26,13 +26,12 @@ export class AkadService {
 
     const khitbahs = taaruf.khitbahs;
     if (!khitbahs.length) throw new NotFoundException();
-    const khitbah = khitbahs[0];
 
     // create khitbah dengan status pending
     await this.prisma.akad.create({
       data: {
         ...data,
-        Taaruf: { connect: { id: taarufid } },
+        Taaruf: { connect: { id: target.id } },
         schedule: data.schedule,
         message: data.message || '',
         reply: data.reply || '',

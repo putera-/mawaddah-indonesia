@@ -8,7 +8,7 @@ export class AkadController {
   constructor(private readonly akadService: AkadService) { }
 
   @Post(':taarufid')
-  async create(@Request() req: any, @Param('id') taarufId: string, @Body() data: CreateAkadDto) {
+  async create(@Request() req: any, @Param('taarufid') taarufId: string, @Body() data: CreateAkadDto) {
     const userId = req.user.id;
     try {
       return this.akadService.create(data, userId, taarufId);
@@ -19,22 +19,22 @@ export class AkadController {
   }
 
   @Patch(':taarufid')
-  updateDate(@Param('id') taarufId: string, @Body() data: UpdateAkadDto) {
+  updateDate(@Param('taarufid') taarufId: string, @Body() data: UpdateAkadDto) {
     return this.akadService.updateDate(taarufId, data);
   }
 
   @Patch('cancel/:taarufid')
-  cancel(@Param('id') id: string) {
+  cancel(@Param('taarufid') id: string) {
     return this.akadService.cancel(id);
   }
 
   @Patch('approve/:taarufid')
-  approve(@Param('id') id: string) {
+  approve(@Param('taarufid') id: string) {
     return this.akadService.approve(id);
   }
 
   @Patch('reject/:taarufid')
-  reject(@Param('id') id: string) {
+  reject(@Param('taarufid') id: string) {
     return this.akadService.reject(id);
   }
 }

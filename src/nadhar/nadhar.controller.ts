@@ -8,9 +8,20 @@ import { Nadhar } from './nadhar.interface';
 export class NadharController {
     constructor(private readonly nadharService: NadharService) { }
 
+    //  @Get()
+    //  async getAll(@Request() req: any) {
+    //      const userId = req.user.id;
+    //      return this.nadharService.getAll(userId);
+    //  }
+ 
+    //  @Get('requests')
+    //  async getAllRequests(@Request() req: any) {
+    //      const userId = req.user.id;
+    //      return this.nadharService.getAllRequests();
+    //  }
 
     @Post(':taarufid')
-    async create(@Request() req: any, @Param('id') taarufId: string, @Body() data: CreateNadharDto) {
+    async create(@Request() req: any, @Param('taarufid') taarufId: string, @Body() data: CreateNadharDto) {
         const userId = req.user.id;
         try {
             return this.nadharService.create(data, userId, taarufId);
@@ -21,22 +32,22 @@ export class NadharController {
     }
 
     @Patch(':taarufid')
-    updateDate(@Param('id') taarufId: string, @Body() data: UpdateNadharDto) {
+    updateDate(@Param('taarufid') taarufId: string, @Body() data: UpdateNadharDto) {
         return this.nadharService.updateDate(taarufId, data);
     }
 
     @Patch('cancel/:taarufid')
-    cancel(@Param('id') id: string) {
+    cancel(@Param('taarufid') id: string) {
         return this.nadharService.cancel(id);
     }
 
     @Patch('approve/:taarufid')
-    approve(@Param('id') id: string) {
+    approve(@Param('taarufid') id: string) {
         return this.nadharService.approve(id);
     }
 
     @Patch('reject/:taarufid')
-    reject(@Param('id') id: string) {
+    reject(@Param('taarufid') id: string) {
         return this.nadharService.reject(id);
     }
 }

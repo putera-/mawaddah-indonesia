@@ -8,7 +8,7 @@ export class KhitbahController {
   constructor(private readonly khitbahService: KhitbahService) { }
 
   @Post(':taarufid')
-  async create(@Request() req: any, @Param('id') taarufId: string, @Body() data: CreateKhitbahDto) {
+  async create(@Request() req: any, @Param('taarufid') taarufId: string, @Body() data: CreateKhitbahDto) {
     const userId = req.user.id;
     try {
       return this.khitbahService.create(data, userId, taarufId);
@@ -19,22 +19,22 @@ export class KhitbahController {
   }
 
   @Patch(':taarufid')
-  updateDate(@Param('id') taarufId: string, @Body() data: UpdateKhitbahDto) {
+  updateDate(@Param('taarufid') taarufId: string, @Body() data: UpdateKhitbahDto) {
     return this.khitbahService.updateDate(taarufId, data);
   }
 
   @Patch('cancel/:taarufid')
-  cancel(@Param('id') id: string) {
+  cancel(@Param('taarufid') id: string) {
     return this.khitbahService.cancel(id);
   }
 
   @Patch('approve/:taarufid')
-  approve(@Param('id') id: string) {
+  approve(@Param('taarufid') id: string) {
     return this.khitbahService.approve(id);
   }
 
   @Patch('reject/:taarufid')
-  reject(@Param('id') id: string) {
+  reject(@Param('taarufid') id: string) {
     return this.khitbahService.reject(id);
   }
 

@@ -26,13 +26,12 @@ export class KhitbahService {
 
     const nadhars = taaruf.nadhars;
     if (!nadhars.length) throw new NotFoundException();
-    const nadhar = nadhars[0];
 
     // create khitbah dengan status pending
     await this.prisma.khitbah.create({
       data: {
         ...data,
-        Taaruf: { connect: { id: taarufid } },
+        Taaruf: { connect: { id: target.id } },
         schedule: data.schedule,
         message: data.message || '',
         reply: data.reply || '',
