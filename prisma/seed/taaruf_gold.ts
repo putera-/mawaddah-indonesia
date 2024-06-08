@@ -22,6 +22,7 @@ export async function taaruf_goldSeed(prisma: PrismaClient) {
 
     //secara random, bikin punya data taaruf gold
     for (let i = 0; i < users.length; i++) {
+        process.stdout.write('.');
         if (selectedUsers.indexOf(i) != -1) {
             const paymentStatus = Math.random() < 0.5 ? 'pending' : 'settlement';
 

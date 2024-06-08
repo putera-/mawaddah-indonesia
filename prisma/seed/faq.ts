@@ -9,7 +9,7 @@ export async function faqSeed(prisma: PrismaClient, id: string) {
             createdAt: new Date(faker.date.past({ years: 10 })),
             updatedAt: new Date(faker.date.recent()),
         }
-
+9
         await prisma.fAQ.upsert({
             where: { id },
             update: data,

@@ -17,7 +17,7 @@ export async function userSeed(prisma: PrismaClient) {
             avatar_md: '/dummy/abang.png',
             activations: {
                 create: {
-                    expiredAt: new Date()
+                    expiredAt: new Date(),
                 },
             },
         };

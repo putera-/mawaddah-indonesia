@@ -12,6 +12,7 @@ import { Role } from 'src/roles/role.enums';
 import { UsersService } from 'src/users/user.service';
 import { PrismaService } from 'src/prisma.service';
 import { BiodataService } from 'src/biodata/biodata.service';
+import { User } from 'src/users/user.interface';
 
 @Controller('candidate')
 export class CandidateController {
@@ -24,12 +25,12 @@ export class CandidateController {
 
     @Roles(Role.Member)
     @Get('new')
-    async findNew(@Request() req: any,
+    async findNew(
+        @Request() req: any,
         @Query('page') page: string,
-        @Query('limit') limit: string) {
+        @Query('limit') limit: string,
+    ) {
         try {
-
-
             const user = await this.Prisma.biodata.findFirst({
                 where: {
                     userId: req.user.id,
@@ -38,10 +39,10 @@ export class CandidateController {
             if (!user) throw new NotFoundException('Silakan lengkapi biodata');
             const candidate = await this.candidateService.findNew(
                 user.gender,
-                page,
-                limit
+                +page || 1,
+                +limit || 10,
             );
-            for (const c of candidate) {
+            for (const c of candidate.data) {
                 this.userService.formatGray(c);
             }
 
@@ -61,7 +62,7 @@ export class CandidateController {
         }
     }
     @Roles(Role.Member)
-    @Get('suggestion')
+    @Get('suggestion_old')
     async findSuggestion(
         @Request() req: any,
         @Query('page') page: string,
@@ -84,23 +85,59 @@ export class CandidateController {
             });
             const suggest = await this.candidateService.findSuggestion(
                 bio.gender,
-                page,
-                limit
+                +page || 1,
+                +limit || 10,
             );
 
             // gray name
-            for (const c of suggest) {
+            for (const c of suggest.data) {
                 this.userService.formatGray(c);
             }
 
-            const result = this.candidateService.getSimiliar(user, suggest);
-            return result.sort((a, b) => b.similiarity - a.similiarity);
+            const result = this.candidateService.getSimiliar(user, suggest.data);
+            suggest.data = result.sort((a, b) => b.similiarity - a.similiarity) as User[];
+
+            return suggest;
         } catch (error) {
             throw error;
         }
     }
+
+    @Roles(Role.Member)
+    @Get('suggestion')
+    async findSuggestion2(
+        @Request() req: any,
+        @Query('page') page: string,
+        @Query('limit') limit: string,
+    ) {
+        try {
+            const userBiodata = await this.biodataService.findMe(req.user.id);
+
+            return await this.candidateService.getSimiliar2(req.user.id, userBiodata);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     @Roles(Role.Member)
     @Get('you-may-like')
+    async findLike2(
+        @Request() req: any,
+        @Query('page') page: string,
+        @Query('limit') limit: string,
+    ) {
+        try {
+            const userBiodata = await this.biodataService.findMe(req.user.id);
+
+            return await this.candidateService.getSimiliar2(req.user.id, userBiodata, 1, 14);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+    @Roles(Role.Member)
+    @Get('you-may-like-old')
     async findLike(
         @Request() req: any,
         @Query('page') page: string,
@@ -112,6 +149,10 @@ export class CandidateController {
                     userId: req.user.id,
                 },
             });
+            if (!bio)
+                throw new NotFoundException(
+                    'Silakan isi biodata terlebih dahulu',
+                );
             const user = await this.Prisma.user.findFirst({
                 where: { id: req.user.id },
                 select: {
@@ -121,23 +162,27 @@ export class CandidateController {
                     Life_goal: { select: { title: true } },
                 },
             });
-            const suggest = await this.candidateService.findSuggestion(
-                bio.gender,
-                page,
-                limit
-            );
 
+            const mayLike = await this.candidateService.findSuggestion(
+                bio.gender,
+                +page || 1,
+                +limit || 10,
+            );
             // gray name
-            for (const c of suggest) {
+            for (const c of mayLike.data) {
                 this.userService.formatGray(c);
             }
 
-            const result = this.candidateService.getSimiliar(user, suggest);
-            return result.sort((a, b) => b.similiarity - a.similiarity);
+            const result = this.candidateService.getSimiliar(user, mayLike.data);
+            mayLike.data = result.sort((a, b) => b.similiarity - a.similiarity) as User[];
+
+            return mayLike;
         } catch (error) {
             throw error;
         }
     }
+
+
     @Roles(Role.Member)
     @Get(':id')
     async findOne(@Param('id') id: string) {

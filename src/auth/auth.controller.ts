@@ -31,6 +31,8 @@ import path from 'path';
 import { PhotosService } from 'src/photos/photos.service';
 import { ActivationService } from 'src/activation/activation.service';
 import { Response } from 'express';
+import { sendResetPassword } from './dto/send-reset-password.dto';
+import { ResetPasswordDto } from 'src/reset_password/dto/reset-password.dto';
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -62,6 +64,7 @@ export class AuthController {
             throw error;
         }
     }
+
     @Public()
     @HttpCode(HttpStatus.OK)
     @Patch('activate')
@@ -72,6 +75,7 @@ export class AuthController {
             throw error;
         }
     }
+
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('send-activation')
@@ -82,12 +86,13 @@ export class AuthController {
             throw error;
         }
     }
+
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('reset-password')
     async resetPassword(
-        @Param('token') id: string,
-        @Body(new ValidationPipe()) data: any,
+        @Query('token') id: string,
+        @Body(new ValidationPipe()) data: ResetPasswordDto,
     ): Promise<void> {
         try {
             await this.authService.resetPassword(id, data);
@@ -98,20 +103,44 @@ export class AuthController {
 
     @Public()
     @HttpCode(HttpStatus.OK)
-    @Post('send-reset-password')
-    async sendResetPassword(@Query('email') email: string): Promise<void> {
+    @Get('check-reset-password-expiration')
+    async checkExpiration(@Query('token') id: string): Promise<boolean> {
         try {
-            await this.authService.sendResetPassword(email);
+            return this.authService.checkExpiration(id);
         } catch (error) {
             throw error;
         }
     }
+
+    @Public()
+    @HttpCode(HttpStatus.OK)
+    @Post('send-reset-password')
+    async sendResetPassword(
+        @Body(new ValidationPipe()) data: sendResetPassword,
+    ): Promise<void> {
+        try {
+            await this.authService.sendResetPassword(data.email);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('login')
     signIn(@Body(new ValidationPipe()) signInDto: SignInDto): Promise<User> {
         try {
             return this.authService.signIn(signInDto.email, signInDto.password);
+        } catch (error) {
+            throw error;
+        }
+    }
+    @Public()
+    @HttpCode(HttpStatus.OK)
+    @Post('admin/login')
+    adminSignIn(@Body(new ValidationPipe()) signInDto: SignInDto): Promise<User> {
+        try {
+            return this.authService.adminSignIn(signInDto.email, signInDto.password);
         } catch (error) {
             throw error;
         }
@@ -155,6 +184,8 @@ export class AuthController {
         // for avatar
         const ext = file ? file.originalname.split('.').pop() : '';
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        const blurUniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9 * 2);
 
         // only can update belongs to auth user
         const { id } = req.user;
@@ -173,8 +204,12 @@ export class AuthController {
                     sizes.map(async (s) => {
                         const { key, size } = s;
                         const filename = `${uniqueSuffix}_${key}.${ext}`;
+                        const blurredFilename = `${blurUniqueSuffix}_${key}.${ext}`;
                         const filepath = path.join(
                             './public/avatar/' + filename,
+                        );
+                        const blurredFilepath = path.join(
+                            './public/avatar/' + blurredFilename,
                         );
 
                         await this.photoService.resize(
@@ -182,11 +217,18 @@ export class AuthController {
                             avatarBuffer,
                             filepath,
                         );
+                        await this.photoService.blurringImage(
+                            size,
+                            avatarBuffer,
+                            blurredFilepath,
+                        );
                     }),
                 );
 
                 data.avatar = `/avatar/${uniqueSuffix}_lg.${ext}`;
                 data.avatar_md = `/avatar/${uniqueSuffix}_md.${ext}`;
+                data.blurred_avatar = `/avatar/${blurUniqueSuffix}_lg.${ext}`;
+                data.blurred_avatar_md = `/avatar/${blurUniqueSuffix}_md.${ext}`;
             }
 
             return this.userService.update(id, data);

@@ -28,6 +28,12 @@ import { SkillsModule } from './skills/skills.module';
 import { ActivationModule } from './activation/activation.module';
 import { TaarufGoldModule } from './taaruf_gold/taaruf_gold.module';
 import { PaymentModule } from './payment/payment.module';
+import { TaarufModule } from './taaruf/taaruf.module';
+import { AkadModule } from './akad/akad.module';
+import { KhitbahModule } from './khitbah/khitbah.module';
+import { NadharModule } from './nadhar/nadhar.module';
+import { TaarufApprovalModule } from './taaruf_approval/taaruf_approval.module';
+
 @Module({
     imports: [
         ConfigModule.forRoot(),
@@ -55,6 +61,11 @@ import { PaymentModule } from './payment/payment.module';
         ActivationModule,
         TaarufGoldModule,
         PaymentModule,
+        TaarufModule,
+        TaarufApprovalModule,
+        NadharModule,
+        KhitbahModule,
+        AkadModule,
     ],
 
     controllers: [AppController],
@@ -70,4 +81,4 @@ import { PaymentModule } from './payment/payment.module';
         },
     ],
 })
-export class AppModule {}
+export class AppModule { }

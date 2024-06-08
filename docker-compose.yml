@@ -7,15 +7,23 @@ services:
             context: .
             dockerfile: Dockerfile
         container_name: api_mawaddah
-        image: api_mawaddah:0.0.3
+        image: api_mawaddah:0.0.8
         restart: always
         ports:
             - 5021:5000
+            - 5555:5555
         environment:
             PORT: 5000
             JWTSECRET: MAWADDAHINDONESIA2024
+            JWT_EXPIRATION: 180
             # for prisma
             DATABASE_URL: mysql://root:my-secret-pw@mawaddah_mysql:3306/mawaddah_indonesia
+            # gmail for blast email. use different docker compose file to extend
+            GMAIL_APP_PASSWORD: abc abc abc
+            GMAIL_ADDRESS: test@gmail.com
+            # credential for midtrans payment gateway. use different docker compose file to extend
+            MIDTRANS_CLIENT_KEY: SB-Mid-client-aaaaa
+            MIDTRANS_SERVER_KEY: SB-Mid-server-bbbb
         volumes:
             - mawaddah_api_public:/app/public
         networks:

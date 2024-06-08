@@ -10,4 +10,12 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
     @IsString()
     @IsOptional()
     avatar_md: string;
+
+    @IsString()
+    @IsOptional()
+    blurred_avatar: string;
+
+    @IsString()
+    @IsOptional()
+    blurred_avatar_md: string;
 }

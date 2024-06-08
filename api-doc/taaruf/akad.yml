@@ -1,0 +1,11 @@
+# ROLE MEMBER
+
+# AKAD
+# POST /akad/:taarufid
+# user melakukan request akad
+
+# PATCH /akad/:taarufid
+# user merubah data akad, (schedule, status, message)
+
+# PATCH /akad/approval/:taarufid
+# candidate melakukan approval akad, jika menolak, optional mengisi message

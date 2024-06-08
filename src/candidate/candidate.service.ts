@@ -1,5 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Biodata } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
+import { User } from 'src/users/user.interface';
+import { UsersService } from 'src/users/user.service';
 let select = {
     id: true,
     email: true,
@@ -13,10 +16,28 @@ let select = {
     taaruf_status: true,
     createdAt: true,
 };
+const hiddenSelect = {
+    id: true,
+    email: true,
+    firstname: true,
+    lastname: true,
+    active: true,
+    verified: true,
+    blurred_avatar: true,
+    blurred_avatar_md: true,
+    role: true,
+    taaruf_status: true,
+    createdAt: true,
+};
 @Injectable()
 export class CandidateService {
-    constructor(private Prisma: PrismaService) { }
-    async findNew(gender: any, page = '1', limit = '10') {
+    constructor(
+        private Prisma: PrismaService,
+        private User: UsersService,
+    ) { }
+    async findNew(gender: any, page: number = 1, limit: number = 10): Promise<Pagination<User[]>> {
+        const skip = (page - 1) * limit;
+
         const oppositeGender = this.getOppositeGender(gender);
         const newUsers = await this.Prisma.user.findMany({
             where: {
@@ -25,37 +46,58 @@ export class CandidateService {
                     gender: oppositeGender,
                 },
             },
-            select: { ...select, biodata: true },
+            select: { ...hiddenSelect, biodata: true },
             orderBy: {
                 biodata: {
                     createdAt: 'desc',
                 },
             },
-            take: Number(limit),
+            take: limit,
+            skip
         });
-        return newUsers;
+
+        return {
+            data: newUsers,
+            total: 0,
+            page: page,
+            maxPages: Math.ceil(0 / limit),
+            limit: limit
+        }
     }
-    findAll(gender: string) {
+    async findAll(gender: string) {
         const oppositeGender = this.getOppositeGender(gender);
-        return this.Prisma.biodata.findMany({
-            select: { ...select },
+        return await this.Prisma.biodata.findMany({
+            select: { ...hiddenSelect },
             where: { gender: oppositeGender },
         });
     }
-    findOne(id: string) {
-        return this.Prisma.biodata.findFirst({
+    async findOne(id: string) {
+        const user = await this.Prisma.user.findFirst({
             where: {
                 id,
             },
-            select: { ...select },
+            include: {
+                biodata: true,
+                Physic_character: true,
+                Education: true,
+                Skill: true,
+                Hobby: true,
+                Married_goal: true,
+                Life_goal: true,
+            }
         });
+        if (!user) throw new NotFoundException('User tidak ditemukan');
+        this.User.formatGray(user);
+        return user;
     }
+
     getOppositeGender(gender: any) {
         let oppositeGender: any;
         if (gender === 'PRIA') oppositeGender = 'WANITA';
         else if (gender === 'WANITA') oppositeGender = 'PRIA';
         return oppositeGender;
     }
+
     getSimiliar(user: any, suggest: Record<string, any>[]) {
         for (const data of suggest) {
             const s: Record<string, any> = data;
@@ -92,7 +134,62 @@ export class CandidateService {
         }
         return suggest;
     }
-    async findSuggestion(gender: any, page = '1', limit = '10') {
+
+    async getSimiliar2(userId: string, userBiodata: Biodata, minScore = 15, maxScore = 40): Promise<Pagination<User[]>> {
+        const oppositeGender = this.getOppositeGender(userBiodata.gender);
+        const candidates = await this.Prisma.user.findMany({
+            where: {
+                id: { not: userId },
+                biodata: {
+                    gender: oppositeGender
+                }
+            },
+            select: {
+                ...hiddenSelect,
+                biodata: true,
+                Skill: { select: { title: true } },
+                Hobby: { select: { title: true } },
+                Married_goal: { select: { title: true } },
+                Life_goal: { select: { title: true } },
+                Physic_character: { select: { title: true } },
+                Education: true,
+            }
+        });
+
+        const similarityScore = candidates.map(can => ({
+            can,
+            score: this.calculateSimilarity(userBiodata, can.biodata)
+        }))
+            .filter(c => c.score <= maxScore && c.score >= minScore)
+            .sort((a, b) => b.score - a.score)
+            .map(u => {
+                this.User.formatGray(u.can);
+                return u.can;
+            });
+
+        return {
+            data: similarityScore,
+            total: similarityScore.length,
+            page: 1,
+            maxPages: 1,
+            limit: similarityScore.length
+        }
+    }
+
+    calculateSimilarity(userBiodata: Biodata, candidateBiodata: Biodata) {
+        let score = 0;
+
+        if (userBiodata.domicile_town == candidateBiodata.domicile_town) score += 15;
+        if (userBiodata.domicile_province == candidateBiodata.domicile_province) score += 5;
+        if (userBiodata.hometown_province == candidateBiodata.hometown_province) score += 10;
+        if (userBiodata.ethnic == candidateBiodata.ethnic) score += 10;
+
+        return score;
+    }
+
+    async findSuggestion(gender: any, page: number = 1, limit: number = 10): Promise<Pagination<User[]>> {
+        const skip = (page - 1) * limit;
+
         const oppositeGender = this.getOppositeGender(gender);
         const suggestions = await this.Prisma.user.findMany({
             where: {
@@ -100,12 +197,47 @@ export class CandidateService {
                     gender: oppositeGender,
                 },
             },
-            include: {
+            select: {
+                ...hiddenSelect,
                 Skill: { select: { title: true } },
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },
                 Life_goal: { select: { title: true } },
-                biodata: true
+                biodata: true,
+            },
+            orderBy: {
+                biodata: {
+                    createdAt: 'desc',
+                },
+            },
+            take: limit,
+            skip
+        });
+        return {
+            data: suggestions,
+            total: 0,
+            page: page,
+            maxPages: Math.ceil(0 / limit),
+            limit: +limit
+        }
+    }
+    async findLike(gender: any, page = '3', limit = '10') {
+        const oppositeGender = this.getOppositeGender(gender);
+        const numberSkip = +page - 1;
+        const skip = +limit * numberSkip;
+        const mayLike = await this.Prisma.user.findMany({
+            where: {
+                biodata: {
+                    gender: oppositeGender,
+                },
+            },
+            select: {
+                ...hiddenSelect,
+                Skill: { select: { title: true } },
+                Hobby: { select: { title: true } },
+                Married_goal: { select: { title: true } },
+                Life_goal: { select: { title: true } },
+                biodata: true,
             },
             orderBy: {
                 biodata: {
@@ -113,11 +245,9 @@ export class CandidateService {
                 },
             },
             take: Number(limit),
+            skip,
         });
-        return suggestions;
+        return mayLike;
         // return `This action returns a #${id} candidate`;
-    }
-    findLike(id: string) {
-        return `This action returns a #${id} candidate`;
     }
 }

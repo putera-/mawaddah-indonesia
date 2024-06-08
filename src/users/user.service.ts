@@ -20,6 +20,20 @@ const select = {
     verified: true,
     avatar: true,
     avatar_md: true,
+    blurred_avatar: true,
+    blurred_avatar_md: true,
+    role: true,
+    taaruf_status: true,
+};
+const hiddenSelect = {
+    id: true,
+    email: true,
+    firstname: true,
+    lastname: true,
+    active: true,
+    verified: true,
+    blurred_avatar: true,
+    blurred_avatar_md: true,
     role: true,
     taaruf_status: true,
 };
@@ -40,10 +54,11 @@ export class UsersService {
 
     formatGray(data: User) {
         data.email = data.email.slice(0, 2) + '...';
-        data.firstname = data.firstname.slice(0, 2) + '...';
+        // data.firstname = data.firstname.slice(0, 2) + '...';
         data.lastname = data.lastname.slice(0, 2) + '...';
-        // delete data.avatar;
-        // delete data.avatar_md;
+        delete data.avatar;
+        delete data.avatar_md;
+        delete data.password;
     }
 
     async findAll(role: RoleStatus, query: Record<string, any>) {
@@ -51,7 +66,7 @@ export class UsersService {
         return await this.Prisma.user.findMany({
             where: { role, active: true },
             select: {
-                ...select,
+                ...hiddenSelect,
                 Education: true,
                 Skill: true,
                 Hobby: true,
@@ -64,19 +79,27 @@ export class UsersService {
 
     async findOne(id: string, role: RoleStatus): Promise<User> {
         const user = await this.Prisma.user.findFirst({
-            where: { id, role, active: true },
-            select: {
-                ...select,
-                Education: true,
-                Skill: true,
-                Hobby: true,
-                Married_goal: true,
-                Life_goal: true,
-            },
+            where: { id, role, active: true }
+            // FIXME ini global find user, klo butuh di hidden, hide di controller, atau buat service baru
+            // FIXME relasi data lain jgn di select / includ disini
+
+            // select: {
+            //     ...hiddenSelect,
+            //     avatar: true,
+            //     avatar_md: true,
+            //     biodata: true,
+            //     Physic_character: true,
+            //     Education: true,
+            //     Skill: true,
+            //     Hobby: true,
+            //     Married_goal: true,
+            //     Life_goal: true,
+            // },
         });
         if (!user) throw new NotFoundException(`User tidak ditemukan`);
         return user;
     }
+
     async findSuperUser(): Promise<User[]> {
         const users = await this.Prisma.user.findMany({
             where: { role: 'SUPERADMIN' },
@@ -194,6 +217,7 @@ export class UsersService {
         return this.Prisma.user.update({
             where: { id: userId },
             data: { active: true },
+            select: hiddenSelect,
         });
     }
     async deactivateUser(id: string): Promise<User> {
