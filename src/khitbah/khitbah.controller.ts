@@ -24,18 +24,18 @@ export class KhitbahController {
   }
 
   @Patch('cancel/:taarufid')
-  cancel(@Param('taarufid') id: string) {
-    return this.khitbahService.cancel(id);
+  cancel(@Param('taarufid') taarufid: string) {
+    return this.khitbahService.cancel(taarufid);
   }
 
   @Patch('approve/:taarufid')
-  approve(@Param('taarufid') id: string) {
-    return this.khitbahService.approve(id);
+  approve(@Param('taarufid') taarufid: string) {
+    return this.khitbahService.approve(taarufid);
   }
 
   @Patch('reject/:taarufid')
-  reject(@Param('taarufid') id: string) {
-    return this.khitbahService.reject(id);
+  reject(@Param('taarufid') taarufid: string) {
+    return this.khitbahService.reject(taarufid);
   }
 
 }

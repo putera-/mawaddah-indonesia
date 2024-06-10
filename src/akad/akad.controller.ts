@@ -24,17 +24,17 @@ export class AkadController {
   }
 
   @Patch('cancel/:taarufid')
-  cancel(@Param('taarufid') id: string) {
-    return this.akadService.cancel(id);
+  cancel(@Param('taarufid') taarufid: string) {
+    return this.akadService.cancel(taarufid);
   }
 
   @Patch('approve/:taarufid')
-  approve(@Param('taarufid') id: string) {
-    return this.akadService.approve(id);
+  approve(@Param('taarufid') taarufid: string) {
+    return this.akadService.approve(taarufid);
   }
 
   @Patch('reject/:taarufid')
-  reject(@Param('taarufid') id: string) {
-    return this.akadService.reject(id);
+  reject(@Param('taarufid') taarufid: string) {
+    return this.akadService.reject(taarufid);
   }
 }

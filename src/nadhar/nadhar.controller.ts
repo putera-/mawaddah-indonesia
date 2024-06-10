@@ -13,7 +13,7 @@ export class NadharController {
     //      const userId = req.user.id;
     //      return this.nadharService.getAll(userId);
     //  }
- 
+
     //  @Get('requests')
     //  async getAllRequests(@Request() req: any) {
     //      const userId = req.user.id;
@@ -37,17 +37,17 @@ export class NadharController {
     }
 
     @Patch('cancel/:taarufid')
-    cancel(@Param('taarufid') id: string) {
-        return this.nadharService.cancel(id);
+    cancel(@Param('taarufid') taarufid: string) {
+        return this.nadharService.cancel(taarufid);
     }
 
     @Patch('approve/:taarufid')
-    approve(@Param('taarufid') id: string) {
-        return this.nadharService.approve(id);
+    approve(@Param('taarufid') taarufid: string) {
+        return this.nadharService.approve(taarufid);
     }
 
     @Patch('reject/:taarufid')
-    reject(@Param('taarufid') id: string) {
-        return this.nadharService.reject(id);
+    reject(@Param('taarufid') taarufid: string) {
+        return this.nadharService.reject(taarufid);
     }
 }
