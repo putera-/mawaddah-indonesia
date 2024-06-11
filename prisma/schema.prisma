@@ -14,37 +14,36 @@ datasource db {
 }
 
 model User {
-    id                 String              @id @default(uuid())
-    email              String              @unique @db.VarChar(100)
-    firstname          String              @db.VarChar(100)
-    lastname           String              @db.VarChar(100)
-    password           String              @db.VarChar(100)
+    id                 String          @id @default(uuid())
+    email              String          @unique @db.VarChar(100)
+    firstname          String          @db.VarChar(100)
+    lastname           String          @db.VarChar(100)
+    password           String          @db.VarChar(100)
     Education          Education[]
     Hobby              Hobby[]
     Skill              Skill[]
     Married_goal       MarriedGoal[]
     Life_goal          LifeGoal[]
-    Physic_character   PhysicalCharacter[]
-    active             Boolean             @default(false)
-    verified           Boolean             @default(false)
-    avatar             String?             @db.VarChar(255)
-    avatar_md          String?             @db.VarChar(255)
-    blurred_avatar     String?             @db.VarChar(255)
-    blurred_avatar_md  String?             @db.VarChar(255)
-    role               RoleStatus          @default(MEMBER)
-    taaruf_status      TaarufStatus        @default(BLOCKED)
+    active             Boolean         @default(false)
+    verified           Boolean         @default(false)
+    avatar             String?         @db.VarChar(255)
+    avatar_md          String?         @db.VarChar(255)
+    blurred_avatar     String?         @db.VarChar(255)
+    blurred_avatar_md  String?         @db.VarChar(255)
+    role               RoleStatus      @default(MEMBER)
+    taaruf_status      TaarufStatus    @default(BLOCKED)
     auth               Auth[]
     Taaruf_gold        Taaruf_gold[]
     Payment            Payment[]
     reset_password     ResetPassword[]
     activations        Activation[]
     biodata            Biodata?
-    bookmarks          Bookmark[]          @relation("UserBookmarks")
-    bookmark_candidate Bookmark[]          @relation("UserCandidates")
-    createdAt          DateTime            @default(now())
-    updatedAt          DateTime            @default(now()) @updatedAt
-    Taaruf             Taaruf[]            @relation("TaarufUser")
-    Taaruf_candidate   Taaruf[]            @relation("TaarufCandidates")
+    bookmarks          Bookmark[]      @relation("UserBookmarks")
+    bookmark_candidate Bookmark[]      @relation("UserCandidates")
+    createdAt          DateTime        @default(now())
+    updatedAt          DateTime        @default(now()) @updatedAt
+    Taaruf             Taaruf[]        @relation("TaarufUser")
+    Taaruf_candidate   Taaruf[]        @relation("TaarufCandidates")
 
     @@map("user")
 }
@@ -157,24 +156,25 @@ model Activation {
 }
 
 model Biodata {
-    id                  String             @id @default(uuid())
-    user                User?              @relation(fields: [userId], references: [id])
-    userId              String?            @unique
-    bio                 String             @db.Text
-    phone               String             @db.VarChar(20)
+    id                  String              @id @default(uuid())
+    user                User?               @relation(fields: [userId], references: [id])
+    userId              String?             @unique
+    bio                 String              @db.Text
+    phone               String              @db.VarChar(20)
     manhaj              ManhajStatus
     gender              Gender
     marriage_status     MarriageStatus
     marriage_permission MarriagePermission
-    dob                 DateTime           @db.Date
-    birth_place         String             @db.VarChar(100)
-    birth_order         Int                @db.TinyInt
-    domicile_town       String             @db.VarChar(100)
-    domicile_province   String             @db.VarChar(100)
-    hometown_province   String             @db.VarChar(100)
-    ethnic              String             @db.VarChar(100)
-    createdAt           DateTime           @default(now())
-    updatedAt           DateTime           @default(now()) @updatedAt
+    Physic_character    PhysicalCharacter[]
+    dob                 DateTime            @db.Date
+    birth_place         String              @db.VarChar(100)
+    birth_order         Int                 @db.TinyInt
+    domicile_town       String              @db.VarChar(100)
+    domicile_province   String              @db.VarChar(100)
+    hometown_province   String              @db.VarChar(100)
+    ethnic              String              @db.VarChar(100)
+    createdAt           DateTime            @default(now())
+    updatedAt           DateTime            @default(now()) @updatedAt
 
     @@map("biodata")
 }
@@ -276,16 +276,65 @@ model LifeGoal {
 }
 
 model PhysicalCharacter {
-    id          String   @id @default(uuid())
-    User        User?    @relation(fields: [userId], references: [id])
-    userId      String?
-    title       String   @db.VarChar(100)
-    description String   @db.VarChar(255)
-    deleted     Boolean  @default(false)
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @default(now()) @updatedAt
+    id                     String     @id @default(uuid())
+    height                 Int        @default(170) @db.Int
+    weight                 Int        @default(60) @db.Int
+    body_shape             body_shape @default(normal)
+    skin_color             skin_color @default(putih)
+    hair_color             hair_color @default(hitam)
+    hair_type              hair_type  @default(lurus)
+    eye_color              eye_Color  @default(coklat)
+    characteristic         String?    @db.VarChar(255)
+    characteristic_detail  String?    @db.VarChar(255)
+    medical_history        String?    @db.VarChar(255)
+    medical_history_detail String?    @db.VarChar(255)
+    deleted                Boolean    @default(false)
+    createdAt              DateTime   @default(now())
+    updatedAt              DateTime   @default(now()) @updatedAt
+    Biodata                Biodata?   @relation(fields: [biodataId], references: [id])
+    biodataId              String?
 
     @@map("physical_character")
+}
+
+enum body_shape {
+    sangat_kurus
+    kurus
+    atletis
+    normal
+    gempal
+    gemuk
+    sangat_gemuk
+}
+
+enum skin_color {
+    sawo_matang
+    putih
+    putih_kemerahan
+    gelap
+    hitam
+}
+
+enum hair_color {
+    hitam
+    pirang
+    merah
+    putih
+}
+
+enum hair_type {
+    lurus
+    ikal
+    keriting
+    kribo
+    botak
+}
+
+enum eye_Color {
+    hitam
+    coklat
+    biru
+    hijau
 }
 
 model Taaruf_gold {

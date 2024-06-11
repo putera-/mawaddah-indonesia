@@ -54,11 +54,10 @@ export class UsersService {
 
     formatGray(data: User) {
         data.email = data.email.slice(0, 2) + '...';
-        // data.firstname = data.firstname.slice(0, 2) + '...';
+        data.firstname = data.firstname.slice(0, 2) + '...';
         data.lastname = data.lastname.slice(0, 2) + '...';
-        delete data.avatar;
-        delete data.avatar_md;
-        delete data.password;
+        // delete data.avatar;
+        // delete data.avatar_md;
     }
 
     async findAll(role: RoleStatus, query: Record<string, any>) {
@@ -79,27 +78,20 @@ export class UsersService {
 
     async findOne(id: string, role: RoleStatus): Promise<User> {
         const user = await this.Prisma.user.findFirst({
-            where: { id, role, active: true }
-            // FIXME ini global find user, klo butuh di hidden, hide di controller, atau buat service baru
-            // FIXME relasi data lain jgn di select / includ disini
-
-            // select: {
-            //     ...hiddenSelect,
-            //     avatar: true,
-            //     avatar_md: true,
-            //     biodata: true,
-            //     Physic_character: true,
-            //     Education: true,
-            //     Skill: true,
-            //     Hobby: true,
-            //     Married_goal: true,
-            //     Life_goal: true,
-            // },
+            where: { id, role, active: true },
+            select: {
+                ...hiddenSelect,
+                biodata: true,
+                Education: true,
+                Skill: true,
+                Hobby: true,
+                Married_goal: true,
+                Life_goal: true,
+            },
         });
         if (!user) throw new NotFoundException(`User tidak ditemukan`);
         return user;
     }
-
     async findSuperUser(): Promise<User[]> {
         const users = await this.Prisma.user.findMany({
             where: { role: 'SUPERADMIN' },

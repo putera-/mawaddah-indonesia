@@ -53,7 +53,6 @@ export class BookmarkService {
                     candidate: {
                         include: {
                             biodata: true,
-                            Physic_character: true,
                             Education: true,
                             Skill: true,
                             Hobby: true,
