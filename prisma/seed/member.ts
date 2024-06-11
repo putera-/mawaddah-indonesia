@@ -51,7 +51,7 @@ export async function memberSeed(prisma: PrismaClient) {
                         domicile_town: 'Jagakarsa',
                         domicile_province: 'jakarta',
                         hometown_province: 'jawa tengah',
-                        Physic_character: {
+                        physical_characters: {
                             create: {
                                 body_shape: 'normal',
                                 skin_color: 'putih',

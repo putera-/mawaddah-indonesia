@@ -165,7 +165,7 @@ model Biodata {
     gender              Gender
     marriage_status     MarriageStatus
     marriage_permission MarriagePermission
-    Physic_character    PhysicalCharacter[]
+    physical_characters PhysicalCharacter[]
     dob                 DateTime            @db.Date
     birth_place         String              @db.VarChar(100)
     birth_order         Int                 @db.TinyInt
