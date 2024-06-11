@@ -5,19 +5,19 @@ export class CreatePhysicalCharDto {
     @IsString()
     @MinLength(1)
     body_shape: body_shape
-    
+
     @IsString()
     @MinLength(1)
     skin_color: skin_color
-    
+
     @IsString()
     @MinLength(1)
     hair_color: hair_color
-    
+
     @IsString()
     @MinLength(1)
     hair_type: hair_type
-    
+
     @IsString()
     @MinLength(1)
     eye_color: eye_Color
