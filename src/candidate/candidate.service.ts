@@ -46,7 +46,16 @@ export class CandidateService {
                     gender: oppositeGender,
                 },
             },
-            select: { ...hiddenSelect, biodata: true },
+            select: {
+                ...select,
+                ...hiddenSelect,
+                biodata:
+                {
+                    include: {
+                        physical_characters: true
+                    }
+                }
+            },
             orderBy: {
                 biodata: {
                     createdAt: 'desc',
@@ -77,7 +86,11 @@ export class CandidateService {
                 id,
             },
             include: {
-                biodata: true,
+                biodata: {
+                    include: {
+                        physical_characters: true,
+                    }
+                },
                 Education: true,
                 Skill: true,
                 Hobby: true,
@@ -145,7 +158,7 @@ export class CandidateService {
             },
             select: {
                 ...hiddenSelect,
-                biodata: true,
+                biodata: { include: { physical_characters: true } },
                 Skill: { select: { title: true } },
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },
@@ -212,7 +225,7 @@ export class CandidateService {
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },
                 Life_goal: { select: { title: true } },
-                biodata: true,
+                biodata: { include: { physical_characters: true } },
             },
             orderBy: {
                 biodata: {
@@ -246,7 +259,7 @@ export class CandidateService {
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },
                 Life_goal: { select: { title: true } },
-                biodata: true,
+                biodata: { include: { physical_characters: true } },
             },
             orderBy: {
                 biodata: {
