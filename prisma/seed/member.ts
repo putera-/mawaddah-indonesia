@@ -4,13 +4,10 @@ import * as bcrypt from 'bcrypt';
 
 export async function memberSeed(prisma: PrismaClient) {
     const password = await bcrypt.hash('rahasia', 10);
-    const provinces = await prisma.province.findMany();
-
-    console.log('Seed: Member');
-
     // BOB
     {
         const bob = {
+            lastname: faker.person.lastName('male'),
             password,
             active: true,
             verified: true,
@@ -22,26 +19,20 @@ export async function memberSeed(prisma: PrismaClient) {
         };
 
         const randoms = [];
-        for (let i = 0; i < 1000; i++) {
+        for (let i = 0; i < 100; i++) {
             if (i % 2 == 0) randoms.push(i);
         }
 
         // create 100 Bob MEMBER
-        for (let i = 0; i < 1000; i++) {
-            process.stdout.write('.');
+        for (let i = 0; i < 100; i++) {
             const randomNumber = Math.floor(Math.random() * 10) + 1;
             const firstname = faker.person.firstName('male');
             const email = faker.internet.email({ firstName: firstname });
-
-            const randomProvinceIndex = Math.floor(Math.random() * provinces.length);
-            const randomProvinceIndex1 = Math.floor(Math.random() * provinces.length);
-            const randomProvinceIndex2 = Math.floor(Math.random() * provinces.length);
 
             const data: Prisma.UserCreateInput = {
                 ...bob,
                 email,
                 firstname,
-                lastname: faker.person.lastName('male'),
                 avatar: '/dummy/ikhwan_' + randomNumber + '_lg.png',
                 avatar_md: '/dummy/ikhwan_' + randomNumber + '_md.png',
                 blurred_avatar: '/dummy/ikhwan_blurred_' + randomNumber + '_lg.png',
@@ -55,11 +46,24 @@ export async function memberSeed(prisma: PrismaClient) {
                         bio: 'Assalamualaikum, ukhti.',
                         phone: '+628123456789',
                         dob: '2005-01-01T00:00:00.000Z',
-                        birth_place: provinces[randomProvinceIndex2].name,
+                        birth_place: 'Surakarta',
                         birth_order: 1,
-                        domicile_town: provinces[randomProvinceIndex1].name,
-                        domicile_province: provinces[randomProvinceIndex].name,
-                        hometown_province: provinces[randomProvinceIndex2].name,
+                        domicile_town: 'Jagakarsa',
+                        domicile_province: 'jakarta',
+                        hometown_province: 'jawa tengah',
+                        Physic_character: {
+                            create: {
+                                body_shape: 'normal',
+                                skin_color: 'putih',
+                                hair_type: 'lurus',
+                                hair_color: 'hitam',
+                                eye_color: 'coklat',
+                                characteristic: 'normal',
+                                characteristic_detail: 'normal',
+                                medical_history: 'normal',
+                                medical_history_detail: 'normal',
+                            },
+                        },
                         ethnic: 'Jawa',
                         manhaj: 'SALAF',
                         gender: 'PRIA',
@@ -138,32 +142,6 @@ export async function memberSeed(prisma: PrismaClient) {
                         ],
                     },
                 };
-                data.Physic_character = {
-                    createMany: {
-                        data: [
-                            {
-                                title: 'rambut',
-                                description: 'hitam',
-                            },
-                            {
-                                title: 'bentuk wajah',
-                                description: 'bulat',
-                            },
-                            {
-                                title: 'mata',
-                                description: 'hitam kecoklatan',
-                            },
-                            {
-                                title: 'tinggi',
-                                description: '170 cm',
-                            },
-                            {
-                                title: 'berat',
-                                description: '70 kg',
-                            },
-                        ],
-                    },
-                };
             }
             await prisma.user.upsert({
                 where: { email },
@@ -176,6 +154,7 @@ export async function memberSeed(prisma: PrismaClient) {
     // ALICE
     {
         const alice = {
+            lastname: faker.person.lastName('female'),
             password,
             active: true,
             verified: true,
@@ -186,17 +165,12 @@ export async function memberSeed(prisma: PrismaClient) {
             },
         };
         const randoms = [];
-        for (let i = 0; i < 1000; i++) {
+        for (let i = 0; i < 100; i++) {
             if (i % 2 == 1) randoms.push(i);
         }
         // create 100 Alice MEMBER
-        for (let i = 0; i < 1000; i++) {
-            process.stdout.write('.');
+        for (let i = 0; i < 100; i++) {
             const randomNumber = Math.floor(Math.random() * 10) + 1;
-
-            const randomProvinceIndex = Math.floor(Math.random() * provinces.length);
-            const randomProvinceIndex1 = Math.floor(Math.random() * provinces.length);
-            const randomProvinceIndex2 = Math.floor(Math.random() * provinces.length);
 
             const firstname = faker.person.firstName('female');
             const email = faker.internet.email({ firstName: firstname });
@@ -204,7 +178,6 @@ export async function memberSeed(prisma: PrismaClient) {
                 ...alice,
                 email,
                 firstname,
-                lastname: faker.person.lastName('female'),
                 avatar: '/dummy/akhwat_' + randomNumber + '_lg.png',
                 avatar_md: '/dummy/akhwat_' + randomNumber + '_md.png',
                 blurred_avatar: '/dummy/akhwat_blurred_' + randomNumber + '_lg.png',
@@ -218,11 +191,11 @@ export async function memberSeed(prisma: PrismaClient) {
                         bio: 'Assalamualaikum, akhi.',
                         phone: '+628987654321',
                         dob: '2005-01-01T00:00:00.000Z',
-                        birth_place: provinces[randomProvinceIndex2].name,
+                        birth_place: 'Bandar Lampung',
                         birth_order: 1,
-                        domicile_town: provinces[randomProvinceIndex1].name,
-                        domicile_province: provinces[randomProvinceIndex].name,
-                        hometown_province: provinces[randomProvinceIndex2].name,
+                        domicile_town: 'Pasar Minggu',
+                        domicile_province: 'jakarta',
+                        hometown_province: 'lampung',
                         ethnic: 'lampung',
                         manhaj: 'SALAF',
                         gender: 'WANITA',
@@ -298,32 +271,6 @@ export async function memberSeed(prisma: PrismaClient) {
                         ],
                     },
                 };
-                data.Physic_character = {
-                    createMany: {
-                        data: [
-                            {
-                                title: 'rambut',
-                                description: 'hitam kemerahan',
-                            },
-                            {
-                                title: 'bentuk wajah',
-                                description: 'lonjong',
-                            },
-                            {
-                                title: 'mata',
-                                description: 'hitam kecoklatan',
-                            },
-                            {
-                                title: 'tinggi',
-                                description: '165 cm',
-                            },
-                            {
-                                title: 'berat',
-                                description: '50 kg',
-                            },
-                        ],
-                    },
-                };
             }
             await prisma.user.upsert({
                 where: { email },
@@ -333,5 +280,5 @@ export async function memberSeed(prisma: PrismaClient) {
         }
     }
 
-    console.log('Seed: Member Done');
+    console.log('Seed: User');
 }

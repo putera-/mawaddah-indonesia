@@ -6,27 +6,31 @@ import { Prisma, TaarufStatus } from '@prisma/client';
 
 const select = {
     id: true,
-    userId: true,
-    title: true,
-    description: true,
-    createdAt: true,
-    updatedAt: true
+    body_shape: true,
+    skin_color: true,
+    hair_type: true,
+    hair_color: true,
+    eye_color: true,
+    characteristic: true,
+    characteristic_detail: true,
+    medical_history: true,
+    medical_history_detail: true,
 }
 
 @Injectable()
 export class PhysicalCharsService {
     constructor(private prisma: PrismaService, private userService: UsersService) { }
 
-    async create(id: string, data: Prisma.PhysicalCharacterCreateInput) {
+    async create(userId: string, data: Prisma.PhysicalCharacterCreateInput) {
         const user = await this.prisma.user.findUnique({
-            where: { id },
+            where: { id: userId },
             select: { id: true, taaruf_status: true },
         });
 
         if (user.taaruf_status !== TaarufStatus.OPEN) throw new ForbiddenException(`Taaruf is not open or pending`);
 
         return this.prisma.physicalCharacter.create({
-            data: { ...data, User: { connect: { id } } },
+            data: { ...data, Biodata: { connect: { userId } } },
             select
         });
     }
@@ -35,10 +39,10 @@ export class PhysicalCharsService {
         const skip = (page - 1) * limit;
         const [total, data] = await Promise.all([
             this.prisma.physicalCharacter.count({
-                where: { userId, deleted: false },
+                where: { Biodata: { userId }, deleted: false },
             }),
             this.prisma.physicalCharacter.findMany({
-                where: { userId, deleted: false },
+                where: { Biodata: { userId }, deleted: false },
                 orderBy: { createdAt: 'desc' },
                 select,
                 skip,
@@ -56,7 +60,7 @@ export class PhysicalCharsService {
     }
 
     async findOne(userId: string, id: string) {
-        const data = await this.prisma.physicalCharacter.findFirst({ where: { id, userId, deleted: false }, select });
+        const data = await this.prisma.physicalCharacter.findFirst({ where: { id, Biodata: { userId }, deleted: false }, select });
         if (!data) {
             // Check if the education record exists for any user
             const phyExist = await this.prisma.physicalCharacter.findUnique({ where: { id, deleted: false } });

@@ -78,7 +78,6 @@ export class CandidateService {
             },
             include: {
                 biodata: true,
-                Physic_character: true,
                 Education: true,
                 Skill: true,
                 Hobby: true,
@@ -151,7 +150,6 @@ export class CandidateService {
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },
                 Life_goal: { select: { title: true } },
-                Physic_character: { select: { title: true } },
                 Education: true,
             }
         });
