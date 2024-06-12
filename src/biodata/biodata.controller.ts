@@ -14,7 +14,7 @@ import { Role } from 'src/roles/role.enums';
 
 @Controller('biodata')
 export class BiodataController {
-    constructor(private readonly biodataService: BiodataService) {}
+    constructor(private readonly biodataService: BiodataService) { }
 
     @Roles(Role.Member)
     @Post()
@@ -34,6 +34,8 @@ export class BiodataController {
     async findMe(@Request() req: any) {
         try {
             const me = req.user.id;
+            // FIXME
+            // throw error if no biodata
             return await this.biodataService.findMe(me);
         } catch (error) {
             throw error;
