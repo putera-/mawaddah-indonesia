@@ -18,9 +18,10 @@ export class PhysicalCharsController {
         const userId = req.user.id
         try {
             const biodata = await this.biodataService.findMe(userId)
-            console.log(biodata)
+
             // check apakah biodata!= null > jika masih null throw error
-            if (biodata == null) throw new BadRequestException()
+            if (!biodata) throw new BadRequestException()
+
             return this.physicalCharsService.findOne(userId, biodata.id);
 
         } catch (error) {
@@ -34,11 +35,11 @@ export class PhysicalCharsController {
         const userId = req.user.id
         try {
             const biodata = await this.biodataService.findMe(userId)
+
             // check apakah biodata!= null > jika masih null throw error
-            if (biodata == null) throw new BadRequestException()
+            if (!biodata) throw new BadRequestException()
 
-
-            return this.physicalCharsService.upsert(userId, data, biodata.id);
+            return this.physicalCharsService.upsert(biodata.id, data);
 
         } catch (error) {
             throw error;
