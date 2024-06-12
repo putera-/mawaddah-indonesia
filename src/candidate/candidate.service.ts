@@ -158,19 +158,30 @@ export class CandidateService {
             can,
             score: this.calculateSimilarity(userBiodata, can.biodata)
         }))
-            .filter(c => c.score <= maxScore && c.score >= minScore)
-            .sort((a, b) => b.score - a.score)
+            .sort((a, b) => b.score - a.score);
+
+        // check if score range is empty
+        const highest_score = similarityScore.length ? similarityScore[0].score : 0;
+        if (highest_score <= minScore) {
+            maxScore = highest_score;
+            minScore = highest_score - 5;
+
+            // force min score 1 if min score is below 0
+            if (minScore <= 0) minScore = 1;
+        }
+
+        const suggestions = similarityScore.filter(c => c.score <= maxScore && c.score >= minScore)
             .map(u => {
                 this.User.formatGray(u.can);
                 return u.can;
             });
 
         return {
-            data: similarityScore,
-            total: similarityScore.length,
+            data: suggestions,
+            total: suggestions.length,
             page: 1,
             maxPages: 1,
-            limit: similarityScore.length
+            limit: suggestions.length
         }
     }
 
