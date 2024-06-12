@@ -34,6 +34,8 @@ export class PhysicalCharsController {
         const userId = req.user.id
         try {
             const biodata = await this.biodataService.findMe(userId)
+            // check apakah biodata!= null > jika masih null throw error
+            if (biodata == null) throw new BadRequestException()
 
 
             return this.physicalCharsService.upsert(userId, data, biodata.id);
