@@ -6,7 +6,7 @@ import { UsersService } from 'src/users/user.service';
 @Injectable()
 export class BiodataService {
     constructor(
-        private readonly userService: UsersService,
+        private readonly userService: UsersService, 
         private Prisma: PrismaService,
     ) { }
 

@@ -9,7 +9,6 @@ export interface Physical_char {
     characteristic_detail: string
     medical_history: string
     medical_history_detail: string
-    deleted: boolean
     createdAt: Date
     updatedAt: Date
     Biodata: string
