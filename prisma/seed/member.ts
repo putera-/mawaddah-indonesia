@@ -60,7 +60,7 @@ export async function memberSeed(prisma: PrismaClient) {
                         domicile_town: provinces[randomProvinceIndex1].name,
                         domicile_province: provinces[randomProvinceIndex].name,
                         hometown_province: provinces[randomProvinceIndex2].name,
-                        Physic_character: {
+                        physical_characters: {
                             create: {
                                 body_shape: 'normal',
                                 skin_color: 'putih',
@@ -210,7 +210,7 @@ export async function memberSeed(prisma: PrismaClient) {
                         domicile_town: provinces[randomProvinceIndex1].name,
                         domicile_province: provinces[randomProvinceIndex].name,
                         hometown_province: provinces[randomProvinceIndex2].name,
-                        Physic_character: {
+                        physical_characters: {
                             create: {
                                 body_shape: 'normal',
                                 skin_color: 'putih',

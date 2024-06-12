@@ -156,25 +156,25 @@ model Activation {
 }
 
 model Biodata {
-    id                  String              @id @default(uuid())
-    user                User?               @relation(fields: [userId], references: [id])
-    userId              String?             @unique
-    bio                 String              @db.Text
-    phone               String              @db.VarChar(20)
+    id                  String             @id @default(uuid())
+    user                User?              @relation(fields: [userId], references: [id])
+    userId              String?            @unique
+    bio                 String             @db.Text
+    phone               String             @db.VarChar(20)
     manhaj              ManhajStatus
     gender              Gender
     marriage_status     MarriageStatus
     marriage_permission MarriagePermission
-    Physic_character    PhysicalCharacter[]
-    dob                 DateTime            @db.Date
-    birth_place         String              @db.VarChar(100)
-    birth_order         Int                 @db.TinyInt
-    domicile_town       String              @db.VarChar(100)
-    domicile_province   String              @db.VarChar(100)
-    hometown_province   String              @db.VarChar(100)
-    ethnic              String              @db.VarChar(100)
-    createdAt           DateTime            @default(now())
-    updatedAt           DateTime            @default(now()) @updatedAt
+    physical_characters PhysicalCharacter?
+    dob                 DateTime           @db.Date
+    birth_place         String             @db.VarChar(100)
+    birth_order         Int                @db.TinyInt
+    domicile_town       String             @db.VarChar(100)
+    domicile_province   String             @db.VarChar(100)
+    hometown_province   String             @db.VarChar(100)
+    ethnic              String             @db.VarChar(100)
+    createdAt           DateTime           @default(now())
+    updatedAt           DateTime           @default(now()) @updatedAt
 
     @@map("biodata")
 }
@@ -288,11 +288,10 @@ model PhysicalCharacter {
     characteristic_detail  String?    @db.VarChar(255)
     medical_history        String?    @db.VarChar(255)
     medical_history_detail String?    @db.VarChar(255)
-    deleted                Boolean    @default(false)
     createdAt              DateTime   @default(now())
     updatedAt              DateTime   @default(now()) @updatedAt
     Biodata                Biodata?   @relation(fields: [biodataId], references: [id])
-    biodataId              String?
+    biodataId              String?    @unique
 
     @@map("physical_character")
 }
