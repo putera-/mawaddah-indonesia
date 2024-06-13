@@ -129,9 +129,13 @@ export class AuthController {
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('login')
-    signIn(@Body(new ValidationPipe()) signInDto: SignInDto): Promise<User> {
+    async signIn(@Body(new ValidationPipe()) signInDto: SignInDto) {
         try {
-            return this.authService.signIn(signInDto.email, signInDto.password);
+            const login_data = await this.authService.signIn(signInDto.email, signInDto.password);
+
+            login_data.user.biodata = await this.biodataService.findMe(login_data.user.id);
+
+            return login_data;
         } catch (error) {
             throw error;
         }
