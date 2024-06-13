@@ -1,21 +1,7 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { UpdatePhysicalCharDto } from './dto/update-physical_char.dto';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/user.service';
-import { PhysicalCharacter, Prisma, TaarufStatus, body_shape } from '@prisma/client';
-
-const select = {
-    id: true,
-    body_shape: true,
-    skin_color: true,
-    hair_type: true,
-    hair_color: true,
-    eye_color: true,
-    characteristic: true,
-    characteristic_detail: true,
-    medical_history: true,
-    medical_history_detail: true,
-}
+import { PhysicalCharacter, Prisma } from '@prisma/client';
 
 @Injectable()
 export class PhysicalCharsService {

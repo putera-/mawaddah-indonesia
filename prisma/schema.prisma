@@ -156,25 +156,26 @@ model Activation {
 }
 
 model Biodata {
-    id                  String             @id @default(uuid())
-    user                User?              @relation(fields: [userId], references: [id])
-    userId              String?            @unique
-    bio                 String             @db.Text
-    phone               String             @db.VarChar(20)
+    id                  String                @id @default(uuid())
+    user                User?                 @relation(fields: [userId], references: [id])
+    userId              String?               @unique
+    bio                 String                @db.Text
+    phone               String                @db.VarChar(20)
     manhaj              ManhajStatus
     gender              Gender
     marriage_status     MarriageStatus
     marriage_permission MarriagePermission
     physical_characters PhysicalCharacter?
-    dob                 DateTime           @db.Date
-    birth_place         String             @db.VarChar(100)
-    birth_order         Int                @db.TinyInt
-    domicile_town       String             @db.VarChar(100)
-    domicile_province   String             @db.VarChar(100)
-    hometown_province   String             @db.VarChar(100)
-    ethnic              String             @db.VarChar(100)
-    createdAt           DateTime           @default(now())
-    updatedAt           DateTime           @default(now()) @updatedAt
+    non_physical_chars  NonPhysicalCharacter?
+    dob                 DateTime              @db.Date
+    birth_place         String                @db.VarChar(100)
+    birth_order         Int                   @db.TinyInt
+    domicile_town       String                @db.VarChar(100)
+    domicile_province   String                @db.VarChar(100)
+    hometown_province   String                @db.VarChar(100)
+    ethnic              String                @db.VarChar(100)
+    createdAt           DateTime              @default(now())
+    updatedAt           DateTime              @default(now()) @updatedAt
 
     @@map("biodata")
 }
@@ -334,6 +335,24 @@ enum eye_Color {
     coklat
     biru
     hijau
+}
+
+model NonPhysicalCharacter {
+    id                  String   @id @default(uuid())
+    motto               String?  @db.Text()
+    life_goal           String?  @db.Text()
+    hobby               String?  @db.Text()
+    spare_time_activity String?  @db.Text()
+    positive_traits     String?  @db.Text()
+    negative_traits     String?  @db.Text()
+    liked_things        String?  @db.Text()
+    unliked_things      String?  @db.Text()
+    drink_alcohol       Boolean  @default(false)
+    smoking             Boolean  @default(false)
+    createdAt           DateTime @default(now())
+    updatedAt           DateTime @default(now()) @updatedAt
+    biodata             Biodata? @relation(fields: [biodataId], references: [id])
+    biodataId           String?  @unique
 }
 
 model Taaruf_gold {

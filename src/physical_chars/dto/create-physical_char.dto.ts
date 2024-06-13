@@ -22,4 +22,20 @@ export class CreatePhysicalCharDto {
     @MinLength(1)
     eye_color: eye_Color
 
+    @IsString()
+    @MinLength(1)
+    characteristic: string
+
+    @IsString()
+    @MinLength(1)
+    characteristic_detail: string
+
+    @IsString()
+    @MinLength(1)
+    medical_history: string
+
+    @IsString()
+    @MinLength(1)
+    medical_history_detail: string
+
 }

@@ -1,14 +1,14 @@
 import { Controller, Get, Body, Patch, ValidationPipe, Request, BadRequestException } from '@nestjs/common';
-import { PhysicalCharsService } from './physical_chars.service';
-import { UpdatePhysicalCharDto } from './dto/update-physical_char.dto';
+import { NonPhysicalCharsService } from './non_physical_characters.service';
+import { UpdateNonPhysicalCharacterDto } from './dto/update-non_physical_character.dto';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { BiodataService } from 'src/biodata/biodata.service';
 
-@Controller('physical_chars')
-export class PhysicalCharsController {
+@Controller('non_physical_characters')
+export class NonPhysicalCharsController {
     constructor(
-        private readonly physicalCharsService: PhysicalCharsService,
+        private readonly nonPhysicalService: NonPhysicalCharsService,
         private readonly biodataService: BiodataService
     ) { }
     @Roles(Role.Member)
@@ -21,7 +21,7 @@ export class PhysicalCharsController {
             // check apakah biodata!= null > jika masih null throw error
             if (!biodata) throw new BadRequestException()
 
-            return this.physicalCharsService.findOne(userId, biodata.id);
+            return this.nonPhysicalService.findOne(userId, biodata.id);
 
         } catch (error) {
             throw error;
@@ -30,7 +30,7 @@ export class PhysicalCharsController {
 
     @Roles(Role.Member)
     @Patch()
-    async update(@Request() req: any, @Body(new ValidationPipe()) data: UpdatePhysicalCharDto) {
+    async update(@Request() req: any, @Body(new ValidationPipe()) data: UpdateNonPhysicalCharacterDto) {
         const userId = req.user.id
         try {
             const biodata = await this.biodataService.findMe(userId)
@@ -38,11 +38,10 @@ export class PhysicalCharsController {
             // check apakah biodata!= null > jika masih null throw error
             if (!biodata) throw new BadRequestException()
 
-            return this.physicalCharsService.upsert(biodata.id, data);
+            return this.nonPhysicalService.upsert(biodata.id, data);
 
         } catch (error) {
             throw error;
         }
     }
-
 }
