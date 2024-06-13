@@ -53,7 +53,6 @@ export class PhysicalCharsService {
 
         }
 
-
         return data.physical_characters;
 
     }
