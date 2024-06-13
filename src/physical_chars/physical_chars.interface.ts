@@ -1,3 +1,5 @@
+import { Biodata } from "@prisma/client"
+
 export interface Physical_char {
     id: string
     body_shape: body_shape
@@ -11,7 +13,7 @@ export interface Physical_char {
     medical_history_detail: string
     createdAt: Date
     updatedAt: Date
-    Biodata: string
+    Biodata?: Biodata
     biodataId: string
 }
 

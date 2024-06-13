@@ -1,3 +1,5 @@
+import { Biodata } from "@prisma/client"
+
 export interface Non_physical_char {
     id: string
     motto: string
@@ -7,11 +9,11 @@ export interface Non_physical_char {
     positive_traits: string
     negative_traits: string
     liked_things: string
-    unliked_things: boolean
+    unliked_things: string
     drink_alcohol: boolean
-    smoking: string
+    smoking: boolean
     createdAt: Date
     updatedAt: Date
-    Biodata: string
+    Biodata?: Biodata
     biodataId: string
 }

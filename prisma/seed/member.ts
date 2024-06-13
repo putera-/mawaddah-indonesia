@@ -71,6 +71,86 @@ export async function memberSeed(prisma: PrismaClient) {
         "Pada usia 35 tahun, saya mengalami gangguan kecemasan yang membutuhkan terapi kognitif perilaku dan obat anti-kecemasan."
     ];
 
+    const mottos: string[] = [
+        'ah perubahan yang ingin kamu lihat di dunia.',
+        'Hidup adalah perjalanan, nikmati setiap langkahnya.',
+        'Belajar dari masa lalu, hidup di masa kini, dan harapkan masa depan.',
+        'Kegagalan adalah langkah menuju kesuksesan.',
+        'Selalu berbuat baik, karena kebaikan akan kembali padamu.',
+        'Hidup ini singkat, jadi buatlah setiap hari berarti.',
+        'Keberanian adalah kunci untuk membuka pintu peluang.',
+        'Kebahagiaan adalah pilihan, bukan tujuan.',
+        'Usaha keras tidak pernah mengkhianati hasil.',
+        'Jadilah dirimu sendiri, semua orang lain sudah ada yang memiliki.'
+    ]
+
+    const life_goals: string[] = [
+        'Tujuan hidup saya adalah mencapai keseimbangan antara karier dan kehidupan pribadi',
+        'Saya bercita-cita untuk mendirikan bisnis sendiri dan memberikan lapangan kerja bagi orang lain',
+        'Saya ingin terus belajar dan mengembangkan diri agar bisa menjadi ahli di bidang saya',
+        'Tujuan hidup saya adalah membangun keluarga yang bahagia dan harmonis',
+        'Saya ingin berkontribusi pada masyarakat dengan melakukan kegiatan sukarelawan',
+        'Tujuan saya adalah mengejar kebahagiaan sejati dan hidup dengan penuh makna'
+    ]
+
+    const hobbies: string[] = [
+        'membaca',
+        'menonton',
+        'menyanyi',
+        'menonton film',
+        'menonton anime',
+        'menonton game',
+        'mengaji',
+        'menggambar',
+    ]
+
+    const spare_time_activities: string[] = [
+        'Saat waktu luang, saya suka menghabiskannya dengan berjalan-jalan di taman.',
+        'Di waktu luang, saya sering mendengarkan musik atau bermain alat musik.',
+        'Ketika memiliki waktu luang, saya senang memasak dan mencoba resep-resep baru.',
+        'Pada waktu luang, saya suka menonton film atau serial televisi favorit.',
+        'Ketika memiliki waktu luang, saya sering menghabiskan waktu luang di tempat-tempat yang nyaman.',
+        'Di waktu luang, saya sering bermain game dan bermain permainan komputer.',
+    ]
+
+    const positive_traits: string[] = [
+        'Saya orangnya jujur dan pemaaf.',
+        'Saya sangat pintar dan suka berpikir positif.',
+        'Saya dikenal sebagai orang yang sabar dan penuh pengertian.',
+        'Saya selalu berusaha untuk menjadi orang yang ramah dan mudah bergaul',
+        'Saya orangnya pekerja keras dan bertanggung jawab',
+        'Saya selalu berusaha untuk menjadi orang yang setia dan dapat diandalkan'
+    ]
+
+    const negative_traits: string[] = [
+        'Saya orangnya sering terburu-buru dan kurang sabar',
+        'Saya cenderung keras kepala dan sulit menerima pendapat orang lain',
+        'Saya sering merasa iri hati terhadap kesuksesan orang lain',
+        'Saya orangnya mudah marah dan emosional',
+        'Saya sering menunda-nunda pekerjaan dan sulit menjaga disiplin',
+        'Saya kadang-kadang terlalu pesimis dan sulit melihat sisi positif dari situasi'
+    ]
+
+    const liked_things: string[] = [
+        'Saya suka membaca buku, terutama novel fiksi dan biografi',
+        'Saya sangat menikmati berjalan-jalan di alam dan menjelajahi tempat-tempat baru',
+        'Saya suka memasak dan mencoba resep-resep baru di waktu luang',
+        'Saya menikmati bermain olahraga seperti sepak bola dan bulu tangkis',
+        'Saya suka menonton film, terutama film-film dokumenter dan drama',
+        'Saya suka berkebun dan merawat tanaman di halaman rumah'
+    ]
+
+    const unliked_things: string[] = [
+        'Saya tidak suka menunggu terlalu lama, terutama dalam antrean yang panjang',
+        'Saya kurang menyukai makanan yang terlalu pedas',
+        'Saya tidak suka dengan kebisingan yang berlebihan, terutama saat mencoba untuk fokus',
+        'Saya tidak suka menonton film yang terlalu panjang',
+        'Saya tidak nyaman berada di tempat yang terlalu ramai dan padat',
+        'Saya tidak suka dengan orang yang suka menggosip atau membicarakan orang lain di belakang mereka'
+    ]
+
+
+
     console.log('Seed: Member');
 
     // BOB
@@ -127,6 +207,19 @@ export async function memberSeed(prisma: PrismaClient) {
                 characteristic_detail: characteristic ? characteristics[Math.floor(Math.random() * medical_histories.length)] : null,
                 medical_history,
                 medical_history_detail: medical_history ? medical_histories[Math.floor(Math.random() * medical_histories.length)] : null,
+            }
+
+            const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput = {
+                motto: mottos[Math.floor(Math.random() * mottos.length)],
+                life_goal: life_goals[Math.floor(Math.random() * life_goals.length)],
+                hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
+                spare_time_activity: spare_time_activities[Math.floor(Math.random() * spare_time_activities.length)],
+                positive_traits: positive_traits[Math.floor(Math.random() * positive_traits.length)],
+                negative_traits: negative_traits[Math.floor(Math.random() * negative_traits.length)],
+                liked_things: liked_things[Math.floor(Math.random() * liked_things.length)],
+                unliked_things: unliked_things[Math.floor(Math.random() * unliked_things.length)],
+                drink_alcohol: Math.random() < 0.5,
+                smoking: Math.random() < 0.5,
             }
 
             if (randoms.indexOf(i) != -1) {
@@ -285,6 +378,19 @@ export async function memberSeed(prisma: PrismaClient) {
                 medical_history_detail: medical_history ? medical_histories[Math.floor(Math.random() * medical_histories.length)] : null,
             }
 
+            const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput = {
+                motto: mottos[Math.floor(Math.random() * mottos.length)],
+                life_goal: life_goals[Math.floor(Math.random() * life_goals.length)],
+                hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
+                spare_time_activity: spare_time_activities[Math.floor(Math.random() * spare_time_activities.length)],
+                positive_traits: positive_traits[Math.floor(Math.random() * positive_traits.length)],
+                negative_traits: negative_traits[Math.floor(Math.random() * negative_traits.length)],
+                liked_things: liked_things[Math.floor(Math.random() * liked_things.length)],
+                unliked_things: unliked_things[Math.floor(Math.random() * unliked_things.length)],
+                drink_alcohol: Math.random() < 0.5,
+                smoking: Math.random() < 0.5,
+            }
+
 
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
@@ -300,6 +406,9 @@ export async function memberSeed(prisma: PrismaClient) {
                         hometown_province: provinces[randomProvinceIndex2].name,
                         physical_characters: {
                             create: data_physical_character,
+                        },
+                        non_physical_chars: {
+                            create: data_non_physical_character,
                         },
                         ethnic: 'lampung',
                         manhaj: 'SALAF',

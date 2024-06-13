@@ -1,4 +1,5 @@
 import { PhysicalCharacter } from '@prisma/client';
+import { Non_physical_char } from 'src/non_physical_characters/non_physical_charactrer.interface';
 import { User } from 'src/users/user.interface';
 
 export interface Biodata {
@@ -17,6 +18,7 @@ export interface Biodata {
     domicile_town: string;
     domicile_province: string;
     physical_characters?: PhysicalCharacter;
+    non_physical_characters?: Non_physical_char;
     hometown_province: string;
     ethnic: string;
     createdAt?: Date;
