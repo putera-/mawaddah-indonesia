@@ -284,9 +284,9 @@ model PhysicalCharacter {
     hair_color             hair_color @default(hitam)
     hair_type              hair_type  @default(lurus)
     eye_color              eye_Color  @default(coklat)
-    characteristic         String?    @db.VarChar(255)
+    characteristic         Boolean    @default(false)
     characteristic_detail  String?    @db.VarChar(255)
-    medical_history        String?    @db.VarChar(255)
+    medical_history        Boolean    @default(false)
     medical_history_detail String?    @db.VarChar(255)
     createdAt              DateTime   @default(now())
     updatedAt              DateTime   @default(now()) @updatedAt
