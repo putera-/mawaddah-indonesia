@@ -1,5 +1,5 @@
 import { body_shape, eye_Color, hair_color, hair_type, skin_color } from "@prisma/client";
-import { IsString, MinLength } from "class-validator";
+import { IsBoolean, IsString, MinLength } from "class-validator";
 
 export class CreatePhysicalCharDto {
     @IsString()
@@ -22,16 +22,14 @@ export class CreatePhysicalCharDto {
     @MinLength(1)
     eye_color: eye_Color
 
-    @IsString()
-    @MinLength(1)
+    @IsBoolean()
     characteristic: boolean
 
     @IsString()
     @MinLength(1)
     characteristic_detail: string
 
-    @IsString()
-    @MinLength(1)
+    @IsBoolean()
     medical_history: boolean
 
     @IsString()
