@@ -1,10 +1,10 @@
 export interface Physical_char {
     id: string
     body_shape: body_shape
-    skin_color: string
-    hair_type: string
-    hair_color: string
-    eye_color: string
+    skin_color: skin_color
+    hair_type: hair_type
+    hair_color: hair_color
+    eye_color: eye_Color
     characteristic: boolean
     characteristic_detail: string
     medical_history: boolean

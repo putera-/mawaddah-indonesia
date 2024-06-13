@@ -24,7 +24,7 @@ export class CreatePhysicalCharDto {
 
     @IsString()
     @MinLength(1)
-    characteristic: string
+    characteristic: boolean
 
     @IsString()
     @MinLength(1)
@@ -32,7 +32,7 @@ export class CreatePhysicalCharDto {
 
     @IsString()
     @MinLength(1)
-    medical_history: string
+    medical_history: boolean
 
     @IsString()
     @MinLength(1)
