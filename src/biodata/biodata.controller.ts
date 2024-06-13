@@ -6,6 +6,7 @@ import {
     Patch,
     ValidationPipe,
     Request,
+    NotFoundException,
 } from '@nestjs/common';
 import { BiodataService } from './biodata.service';
 import { CreateBiodatumDto } from './dto/create-biodatum.dto';
@@ -36,7 +37,11 @@ export class BiodataController {
             const me = req.user.id;
             // FIXME
             // throw error if no biodata
-            return await this.biodataService.findMe(me);
+            const biodata = await this.biodataService.findMe(me);
+
+            if (!biodata) throw new NotFoundException("Biodata Belum di buat");
+
+            return biodata;
         } catch (error) {
             throw error;
         }

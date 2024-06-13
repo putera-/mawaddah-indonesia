@@ -215,13 +215,22 @@ CREATE TABLE `life_goal` (
 -- CreateTable
 CREATE TABLE `physical_character` (
     `id` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NULL,
-    `title` VARCHAR(100) NOT NULL,
-    `description` VARCHAR(255) NOT NULL,
-    `deleted` BOOLEAN NOT NULL DEFAULT false,
+    `height` INTEGER NOT NULL DEFAULT 170,
+    `weight` INTEGER NOT NULL DEFAULT 60,
+    `body_shape` ENUM('sangat_kurus', 'kurus', 'atletis', 'normal', 'gempal', 'gemuk', 'sangat_gemuk') NOT NULL DEFAULT 'normal',
+    `skin_color` ENUM('sawo_matang', 'putih', 'putih_kemerahan', 'gelap', 'hitam') NOT NULL DEFAULT 'putih',
+    `hair_color` ENUM('hitam', 'pirang', 'merah', 'putih') NOT NULL DEFAULT 'hitam',
+    `hair_type` ENUM('lurus', 'ikal', 'keriting', 'kribo', 'botak') NOT NULL DEFAULT 'lurus',
+    `eye_color` ENUM('hitam', 'coklat', 'biru', 'hijau') NOT NULL DEFAULT 'coklat',
+    `characteristic` VARCHAR(255) NULL,
+    `characteristic_detail` VARCHAR(255) NULL,
+    `medical_history` VARCHAR(255) NULL,
+    `medical_history_detail` VARCHAR(255) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `biodataId` VARCHAR(191) NULL,
 
+    UNIQUE INDEX `physical_character_biodataId_key`(`biodataId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -382,7 +391,7 @@ ALTER TABLE `married_goal` ADD CONSTRAINT `married_goal_userId_fkey` FOREIGN KEY
 ALTER TABLE `life_goal` ADD CONSTRAINT `life_goal_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `physical_character` ADD CONSTRAINT `physical_character_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `physical_character` ADD CONSTRAINT `physical_character_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Taaruf_gold` ADD CONSTRAINT `Taaruf_gold_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

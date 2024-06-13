@@ -3,7 +3,7 @@ import { User } from 'src/users/user.interface';
 
 export interface Biodata {
     id: string;
-    user: User;
+    user?: User;
     userId: string;
     bio: string;
     phone: string;
@@ -13,10 +13,10 @@ export interface Biodata {
     marriage_permission: 'POLIGAMI' | 'NON_POLIGAMI';
     dob: Date;
     birth_place: string;
-    birth_order: string;
+    birth_order: number;
     domicile_town: string;
     domicile_province: string;
-    physical_characters?: PhysicalCharacter[];
+    physical_characters?: PhysicalCharacter;
     hometown_province: string;
     ethnic: string;
     createdAt?: Date;

@@ -12,6 +12,7 @@ import { ActivationService } from 'src/activation/activation.service';
 import { EmailService } from 'src/email.service';
 import { ConfigService } from '@nestjs/config';
 import { ResetPasswordService } from 'src/reset_password/reset_password.service';
+import { BiodataService } from 'src/biodata/biodata.service';
 
 @Module({
     imports: [
@@ -33,7 +34,8 @@ import { ResetPasswordService } from 'src/reset_password/reset_password.service'
         EmailService,
         ConfigService,
         ResetPasswordService,
+        BiodataService
     ],
     exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }

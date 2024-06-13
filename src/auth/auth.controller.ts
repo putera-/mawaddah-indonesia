@@ -33,14 +33,15 @@ import { ActivationService } from 'src/activation/activation.service';
 import { Response } from 'express';
 import { sendResetPassword } from './dto/send-reset-password.dto';
 import { ResetPasswordDto } from 'src/reset_password/dto/reset-password.dto';
+import { BiodataService } from 'src/biodata/biodata.service';
 @Controller('auth')
 export class AuthController {
     constructor(
         private authService: AuthService,
         private userService: UsersService,
         private photoService: PhotosService,
-        private activation: ActivationService,
-    ) {}
+        private biodataService: BiodataService
+    ) { }
 
     @Public()
     @HttpCode(HttpStatus.OK)
@@ -166,8 +167,13 @@ export class AuthController {
     @Get('profile')
     async getProfile(@Request() req) {
         try {
-            const user = req.user;
-            return await this.userService.findOne(user.id, user.role);
+            const userId = req.user.id;
+            const userRole = req.user.role;
+            const user: User = await this.userService.findOne(userId, userRole);
+
+            user.biodata = await this.biodataService.findMe(userId);
+
+            return user;
         } catch (error) {
             throw error;
         }
