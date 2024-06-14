@@ -353,6 +353,8 @@ model NonPhysicalCharacter {
     updatedAt           DateTime @default(now()) @updatedAt
     biodata             Biodata? @relation(fields: [biodataId], references: [id])
     biodataId           String?  @unique
+
+    @@map("non_physical_character")
 }
 
 model Taaruf_gold {
