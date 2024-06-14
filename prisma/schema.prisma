@@ -366,6 +366,8 @@ model Taaruf_gold {
     createdAt DateTime  @default(now())
     updatedAt DateTime  @default(now()) @updatedAt
     Payment   Payment?
+
+    @@map("taaruf_gold")
 }
 
 model Payment {
@@ -381,6 +383,8 @@ model Payment {
     updatedAt     DateTime           @default(now()) @updatedAt
     taaruf_gold   Taaruf_gold?       @relation(fields: [taaruf_goldId], references: [id])
     taaruf_goldId String?            @unique
+
+    @@map("payment")
 }
 
 model Midtrans_callback {
@@ -389,6 +393,8 @@ model Midtrans_callback {
     paymentId     String   @unique
     callback_data String   @db.LongText
     createdAt     DateTime @default(now())
+
+    @@map("midtrans_callback")
 }
 
 model Bookmark {
@@ -421,6 +427,8 @@ model Taaruf {
     akads       Akad[]
     createdAt   DateTime        @default(now())
     updatedAt   DateTime        @default(now()) @updatedAt
+
+    @@map("taaruf")
 }
 
 model TaarufApproval {
@@ -431,6 +439,8 @@ model TaarufApproval {
     message   String        @db.Text
     reply     String        @db.Text
     updatedAt DateTime      @default(now()) @updatedAt
+
+    @@map("taaruf_approval")
 }
 
 model Nadhar {
@@ -443,6 +453,8 @@ model Nadhar {
     reply     String        @db.Text
     createdAt DateTime      @default(now())
     updatedAt DateTime      @default(now()) @updatedAt
+
+    @@map("nadhar")
 }
 
 model Khitbah {
@@ -455,6 +467,8 @@ model Khitbah {
     reply     String        @db.Text
     createdAt DateTime      @default(now())
     updatedAt DateTime      @default(now()) @updatedAt
+
+    @@map("khitbah")
 }
 
 model Akad {
@@ -467,6 +481,8 @@ model Akad {
     reply     String        @db.Text
     createdAt DateTime      @default(now())
     updatedAt DateTime      @default(now()) @updatedAt
+
+    @@map("akad")
 }
 
 enum AprovalStatus {

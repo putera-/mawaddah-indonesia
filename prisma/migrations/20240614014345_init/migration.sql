@@ -235,7 +235,7 @@ CREATE TABLE `physical_character` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `NonPhysicalCharacter` (
+CREATE TABLE `non_physical_character` (
     `id` VARCHAR(191) NOT NULL,
     `motto` TEXT NULL,
     `life_goal` TEXT NULL,
@@ -251,12 +251,12 @@ CREATE TABLE `NonPhysicalCharacter` (
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `biodataId` VARCHAR(191) NULL,
 
-    UNIQUE INDEX `NonPhysicalCharacter_biodataId_key`(`biodataId`),
+    UNIQUE INDEX `non_physical_character_biodataId_key`(`biodataId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Taaruf_gold` (
+CREATE TABLE `taaruf_gold` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
     `startedAt` DATETIME(3) NULL,
@@ -264,12 +264,12 @@ CREATE TABLE `Taaruf_gold` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
-    UNIQUE INDEX `Taaruf_gold_id_key`(`id`),
+    UNIQUE INDEX `taaruf_gold_id_key`(`id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Payment` (
+CREATE TABLE `payment` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
     `gross_amount` INTEGER NOT NULL,
@@ -280,18 +280,18 @@ CREATE TABLE `Payment` (
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `taaruf_goldId` VARCHAR(191) NULL,
 
-    UNIQUE INDEX `Payment_taaruf_goldId_key`(`taaruf_goldId`),
+    UNIQUE INDEX `payment_taaruf_goldId_key`(`taaruf_goldId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Midtrans_callback` (
+CREATE TABLE `midtrans_callback` (
     `id` VARCHAR(191) NOT NULL,
     `paymentId` VARCHAR(191) NOT NULL,
     `callback_data` LONGTEXT NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
-    UNIQUE INDEX `Midtrans_callback_paymentId_key`(`paymentId`),
+    UNIQUE INDEX `midtrans_callback_paymentId_key`(`paymentId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -308,7 +308,7 @@ CREATE TABLE `bookmark` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Taaruf` (
+CREATE TABLE `taaruf` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
     `candidateId` VARCHAR(191) NOT NULL,
@@ -321,7 +321,7 @@ CREATE TABLE `Taaruf` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `TaarufApproval` (
+CREATE TABLE `taaruf_approval` (
     `id` VARCHAR(191) NOT NULL,
     `taarufId` VARCHAR(191) NOT NULL,
     `status` ENUM('Pending', 'Yes', 'No') NOT NULL DEFAULT 'Pending',
@@ -329,26 +329,12 @@ CREATE TABLE `TaarufApproval` (
     `reply` TEXT NOT NULL,
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
-    UNIQUE INDEX `TaarufApproval_taarufId_key`(`taarufId`),
+    UNIQUE INDEX `taaruf_approval_taarufId_key`(`taarufId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Nadhar` (
-    `id` VARCHAR(191) NOT NULL,
-    `taarufId` VARCHAR(191) NOT NULL,
-    `schedule` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `status` ENUM('Pending', 'Yes', 'No') NOT NULL DEFAULT 'Pending',
-    `message` TEXT NOT NULL,
-    `reply` TEXT NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `Khitbah` (
+CREATE TABLE `nadhar` (
     `id` VARCHAR(191) NOT NULL,
     `taarufId` VARCHAR(191) NOT NULL,
     `schedule` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -362,7 +348,21 @@ CREATE TABLE `Khitbah` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Akad` (
+CREATE TABLE `khitbah` (
+    `id` VARCHAR(191) NOT NULL,
+    `taarufId` VARCHAR(191) NOT NULL,
+    `schedule` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `status` ENUM('Pending', 'Yes', 'No') NOT NULL DEFAULT 'Pending',
+    `message` TEXT NOT NULL,
+    `reply` TEXT NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `akad` (
     `id` VARCHAR(191) NOT NULL,
     `taarufId` VARCHAR(191) NOT NULL,
     `schedule` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -415,19 +415,19 @@ ALTER TABLE `life_goal` ADD CONSTRAINT `life_goal_userId_fkey` FOREIGN KEY (`use
 ALTER TABLE `physical_character` ADD CONSTRAINT `physical_character_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `NonPhysicalCharacter` ADD CONSTRAINT `NonPhysicalCharacter_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `non_physical_character` ADD CONSTRAINT `non_physical_character_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Taaruf_gold` ADD CONSTRAINT `Taaruf_gold_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `taaruf_gold` ADD CONSTRAINT `taaruf_gold_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Payment` ADD CONSTRAINT `Payment_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `payment` ADD CONSTRAINT `payment_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Payment` ADD CONSTRAINT `Payment_taaruf_goldId_fkey` FOREIGN KEY (`taaruf_goldId`) REFERENCES `Taaruf_gold`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `payment` ADD CONSTRAINT `payment_taaruf_goldId_fkey` FOREIGN KEY (`taaruf_goldId`) REFERENCES `taaruf_gold`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Midtrans_callback` ADD CONSTRAINT `Midtrans_callback_paymentId_fkey` FOREIGN KEY (`paymentId`) REFERENCES `Payment`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `midtrans_callback` ADD CONSTRAINT `midtrans_callback_paymentId_fkey` FOREIGN KEY (`paymentId`) REFERENCES `payment`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `bookmark` ADD CONSTRAINT `bookmark_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -436,19 +436,19 @@ ALTER TABLE `bookmark` ADD CONSTRAINT `bookmark_userId_fkey` FOREIGN KEY (`userI
 ALTER TABLE `bookmark` ADD CONSTRAINT `bookmark_candidateId_fkey` FOREIGN KEY (`candidateId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Taaruf` ADD CONSTRAINT `Taaruf_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `taaruf` ADD CONSTRAINT `taaruf_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Taaruf` ADD CONSTRAINT `Taaruf_candidateId_fkey` FOREIGN KEY (`candidateId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `taaruf` ADD CONSTRAINT `taaruf_candidateId_fkey` FOREIGN KEY (`candidateId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `TaarufApproval` ADD CONSTRAINT `TaarufApproval_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `Taaruf`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `taaruf_approval` ADD CONSTRAINT `taaruf_approval_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `taaruf`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Nadhar` ADD CONSTRAINT `Nadhar_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `Taaruf`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `nadhar` ADD CONSTRAINT `nadhar_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `taaruf`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Khitbah` ADD CONSTRAINT `Khitbah_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `Taaruf`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `khitbah` ADD CONSTRAINT `khitbah_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `taaruf`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Akad` ADD CONSTRAINT `Akad_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `Taaruf`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `akad` ADD CONSTRAINT `akad_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `taaruf`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
