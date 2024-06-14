@@ -52,7 +52,8 @@ export class CandidateService {
                 biodata:
                 {
                     include: {
-                        physical_characters: true
+                        physical_characters: true,
+                        non_physical_chars: true
                     }
                 }
             },
@@ -89,6 +90,7 @@ export class CandidateService {
                 biodata: {
                     include: {
                         physical_characters: true,
+                        non_physical_chars: true
                     }
                 },
                 Education: true,
@@ -158,7 +160,12 @@ export class CandidateService {
             },
             select: {
                 ...hiddenSelect,
-                biodata: { include: { physical_characters: true } },
+                biodata: {
+                    include: {
+                        physical_characters: true,
+                        non_physical_chars: true
+                    }
+                },
                 Skill: { select: { title: true } },
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },
@@ -225,7 +232,12 @@ export class CandidateService {
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },
                 Life_goal: { select: { title: true } },
-                biodata: { include: { physical_characters: true } },
+                biodata: {
+                    include: {
+                        physical_characters: true,
+                        non_physical_chars: true
+                    }
+                },
             },
             orderBy: {
                 biodata: {
@@ -259,7 +271,12 @@ export class CandidateService {
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },
                 Life_goal: { select: { title: true } },
-                biodata: { include: { physical_characters: true } },
+                biodata: {
+                    include: {
+                        physical_characters: true,
+                        non_physical_chars: true
+                    }
+                },
             },
             orderBy: {
                 biodata: {

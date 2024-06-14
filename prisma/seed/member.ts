@@ -237,6 +237,9 @@ export async function memberSeed(prisma: PrismaClient) {
                         physical_characters: {
                             create: data_physical_character,
                         },
+                        non_physical_chars: {
+                            create: data_non_physical_character
+                        },
                         ethnic: 'Jawa',
                         manhaj: 'SALAF',
                         gender: 'PRIA',
