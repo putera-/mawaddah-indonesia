@@ -168,6 +168,7 @@ model Biodata {
     marriage_permission MarriagePermission
     physical_characters PhysicalCharacter?
     non_physical_chars  NonPhysicalCharacter?
+    family_member       family_member[]
     dob                 DateTime              @db.Date
     birth_place         String                @db.VarChar(100)
     birth_order         Int                   @db.TinyInt
@@ -181,6 +182,37 @@ model Biodata {
     updatedAt           DateTime              @default(now()) @updatedAt
 
     @@map("biodata")
+}
+
+model family_member {
+    id        String        @id @default(uuid())
+    Biodata   Biodata?      @relation(fields: [biodataId], references: [id])
+    biodataId String?
+    relation  relationship?
+    religion  religion?
+    dob       DateTime      @db.Date
+    education String        @db.Text
+    job       String        @db.Text
+    is_alive  Boolean       @default(true)
+    deleted   Boolean       @default(false)
+    createdAt DateTime      @default(now())
+    updatedAt DateTime      @default(now()) @updatedAt
+}
+
+enum relationship {
+    ayah
+    ibu
+    kakak_pria
+    kakak_wanita
+    adik_pria
+    adik_wanita
+    ipar_pria
+    ipar_wanita
+}
+
+enum religion {
+    islam
+    non_islam
 }
 
 enum ManhajStatus {
