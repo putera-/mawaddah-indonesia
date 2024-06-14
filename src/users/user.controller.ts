@@ -24,8 +24,9 @@ export class UsersController {
         private photoService: PhotosService,
     ) { }
 
+    // ONLY GET LIST OF MEMBER
     @Roles(Role.Superadmin, Role.Admin)
-    @Get('members')
+    @Get()
     async findAll(@Request() req: any, @Query('limit') limit: number, @Query('page') page: number) {
         try {
             const roles: RoleStatus[] = ['MEMBER'];
