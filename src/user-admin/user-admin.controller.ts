@@ -15,10 +15,11 @@ import { CreateUserAdminDto } from './dto/create-user-admin.dto';
 import { UsersService } from 'src/users/user.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
+import { RoleStatus } from '@prisma/client';
 
 @Controller('user-admin')
 export class UserAdminController {
-    constructor(private readonly usersService: UsersService) {}
+    constructor(private readonly usersService: UsersService) { }
 
     // create admin by superuser
     @Roles(Role.Superadmin, Role.Admin)
@@ -39,10 +40,15 @@ export class UserAdminController {
     // get all admin by super user
     @Roles(Role.Superadmin, Role.Admin)
     @Get()
-    findAll(@Request() req: any, @Query() query: Record<string, any>) {
+    findAll(@Request() req: any, @Query('limit') limit: number, @Query('page') page: number) {
         try {
-            const role = req.user.role;
-            return this.usersService.findAll(role, query);
+            // const roles: RoleStatus[] = req.user.role;
+            // // const'
+            const roles: RoleStatus[] = ['ADMIN'];
+            limit = limit ? +limit : 10;
+            page = page ? +page : 10;
+
+            return this.usersService.findAll(roles, limit);
         } catch (error) {
             throw error;
         }

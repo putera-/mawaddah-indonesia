@@ -1,3 +1,4 @@
+import { RoleStatus, TaarufStatus } from "@prisma/client";
 import { Biodata } from "src/biodata/biodata.interface";
 
 export interface User {
@@ -12,18 +13,9 @@ export interface User {
     avatar_md?: string;
     blurred_avatar?: string;
     blurred_avatar_md?: string;
-    role: 'MEMBER' | 'ADMIN' | 'SUPERADMIN';
-    taaruf_status: 'OPEN' | 'PENDING' | 'BLOCKED';
+    role: RoleStatus;
+    taaruf_status: TaarufStatus;
     biodata?: Biodata
     createdAt?: Date;
     updatedAt?: Date;
 }
-
-// export interface Candidate extends Omit<User, 'id' | 'email' | 'firstname' | 'lastname'> {
-//     id?: string;
-//     email?: string;
-//     firstname?: string;
-//     lastname?: string;
-//     active?: boolean;
-//     verified?: boolean;
-// }

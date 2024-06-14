@@ -24,12 +24,15 @@ export class UsersController {
         private photoService: PhotosService,
     ) { }
 
-    @Roles(Role.Superadmin, Role.Admin, Role.Member)
-    @Get()
-    async findAll(@Request() req: any, @Query() query: Record<string, any>) {
+    @Roles(Role.Superadmin, Role.Admin)
+    @Get('members')
+    async findAll(@Request() req: any, @Query('limit') limit: number, @Query('page') page: number) {
         try {
-            const role = req.user.role;
-            return await this.userService.findAll(role, query);
+            const roles: RoleStatus[] = ['MEMBER'];
+            limit = limit ? +limit : 10;
+            page = page ? +page : 10;
+
+            return await this.userService.findAll(roles, limit, page);
         } catch (error) {
             throw error;
         }

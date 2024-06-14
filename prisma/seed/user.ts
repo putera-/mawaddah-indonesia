@@ -24,7 +24,7 @@ export async function userSeed(prisma: PrismaClient) {
 
         // create 10 SUPERADMIN
         for (let i = 0; i < 10; i++) {
-            const email = `superadmin_${i}@prisma.io`;
+            const email = `superadmin${i}@prisma.io`;
             const firstname = 'Bob' + i;
             await prisma.user.upsert({
                 where: { email },
@@ -45,4 +45,44 @@ export async function userSeed(prisma: PrismaClient) {
     }
 
     console.log('Seed: User SuperAdmin');
+
+    // ADMIN
+    {
+        const admin = {
+            lastname: 'Admin',
+            password,
+            active: true,
+            verified: true,
+            avatar: '/dummy/abang.png',
+            avatar_md: '/dummy/abang.png',
+            activations: {
+                create: {
+                    expiredAt: new Date(),
+                },
+            },
+        };
+
+        // create 10 ADMIN
+        for (let i = 0; i < 10; i++) {
+            const email = `admin${i}@prisma.io`;
+            const firstname = 'Bob' + i;
+            await prisma.user.upsert({
+                where: { email },
+                update: {
+                    email,
+                    firstname,
+                    role: 'ADMIN',
+                    ...admin,
+                },
+                create: {
+                    email,
+                    firstname,
+                    role: 'ADMIN',
+                    ...admin,
+                },
+            });
+        }
+    }
+
+    console.log('Seed: User Admin');
 }

@@ -54,26 +54,49 @@ export class UsersService {
 
     formatGray(data: User) {
         data.email = data.email.slice(0, 2) + '...';
-        data.firstname = data.firstname.slice(0, 2) + '...';
+        // data.firstname = data.firstname.slice(0, 2) + '...';
         data.lastname = data.lastname.slice(0, 2) + '...';
-        // delete data.avatar;
-        // delete data.avatar_md;
+        delete data.avatar;
+        delete data.avatar_md;
+        delete data.password;
     }
 
-    async findAll(role: RoleStatus, query: Record<string, any>) {
-        const limit = parseInt(query.limit);
-        return await this.Prisma.user.findMany({
-            where: { role, active: true },
-            select: {
-                ...hiddenSelect,
-                Education: true,
-                Skill: true,
-                Hobby: true,
-                Married_goal: true,
-                Life_goal: true,
-            },
-            take: limit,
-        });
+    async findAll(roles: RoleStatus[], limit = 10, page = 1): Promise<Pagination<User[]>> {
+        const skip = (page - 1) * limit;
+
+        const [total, data] = await Promise.all([
+
+            this.Prisma.user.count({
+                where: {
+                    active: true,
+                    role: { in: roles }
+                }
+            }),
+            this.Prisma.user.findMany({
+                where: {
+                    active: true,
+                    role: { in: roles }
+                },
+                orderBy: { createdAt: 'desc' },
+                skip,
+                take: limit,
+            }),
+        ]);
+
+        for (const user of data) {
+            if (user.role == 'MEMBER') {
+                this.formatGray(user);
+            }
+        }
+
+        return {
+            data,
+            limit,
+            total,
+            page,
+            maxPages: Math.ceil(total / limit),
+        }
+
     }
 
     async findOne(id: string, role: RoleStatus): Promise<User> {
