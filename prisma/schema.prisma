@@ -277,22 +277,22 @@ model LifeGoal {
 }
 
 model PhysicalCharacter {
-    id                     String     @id @default(uuid())
-    height                 Int        @default(170) @db.Int
-    weight                 Int        @default(60) @db.Int
-    body_shape             body_shape @default(normal)
-    skin_color             skin_color @default(putih)
-    hair_color             hair_color @default(hitam)
-    hair_type              hair_type  @default(lurus)
-    eye_color              eye_Color  @default(coklat)
-    characteristic         Boolean    @default(false)
-    characteristic_detail  String?    @db.VarChar(255)
-    medical_history        Boolean    @default(false)
-    medical_history_detail String?    @db.VarChar(255)
-    createdAt              DateTime   @default(now())
-    updatedAt              DateTime   @default(now()) @updatedAt
-    Biodata                Biodata?   @relation(fields: [biodataId], references: [id])
-    biodataId              String?    @unique
+    id                     String      @id @default(uuid())
+    height                 Int         @default(0) @db.Int
+    weight                 Int         @default(0) @db.Int
+    body_shape             body_shape?
+    skin_color             skin_color?
+    hair_color             hair_color?
+    hair_type              hair_type?
+    eye_color              eye_Color?
+    characteristic         Boolean     @default(false)
+    characteristic_detail  String?     @db.VarChar(255)
+    medical_history        Boolean     @default(false)
+    medical_history_detail String?     @db.VarChar(255)
+    createdAt              DateTime    @default(now())
+    updatedAt              DateTime    @default(now()) @updatedAt
+    Biodata                Biodata?    @relation(fields: [biodataId], references: [id])
+    biodataId              String?     @unique
 
     @@map("physical_character")
 }

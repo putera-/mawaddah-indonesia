@@ -4,6 +4,7 @@ import { UpdatePhysicalCharDto } from './dto/update-physical_char.dto';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { BiodataService } from 'src/biodata/biodata.service';
+import { CreatePhysicalCharDto } from './dto/create-physical_char.dto';
 
 @Controller('physical_chars')
 export class PhysicalCharsController {
@@ -30,7 +31,7 @@ export class PhysicalCharsController {
 
     @Roles(Role.Member)
     @Patch()
-    async update(@Request() req: any, @Body(new ValidationPipe()) data: UpdatePhysicalCharDto) {
+    async update(@Request() req: any, @Body(new ValidationPipe()) data: CreatePhysicalCharDto) {
         const userId = req.user.id
         try {
             const biodata = await this.biodataService.findMe(userId)

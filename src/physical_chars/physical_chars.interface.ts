@@ -2,6 +2,8 @@ import { Biodata } from "@prisma/client"
 
 export interface Physical_char {
     id: string
+    weight: number
+    height: number
     body_shape: body_shape
     skin_color: skin_color
     hair_type: hair_type

@@ -6,6 +6,24 @@ export async function memberSeed(prisma: PrismaClient) {
     const password = await bcrypt.hash('rahasia', 10);
     const provinces = await prisma.province.findMany();
 
+    const biography = [
+        "Saya adalah seorang profesional di bidang teknologi informasi dengan pengalaman lebih dari 15 tahun. Karier saya dimulai sebagai seorang teknisi jaringan di perusahaan telekomunikasi terkemuka di Indonesia. Dari sana, saya belajar banyak tentang infrastruktur IT dan keamanan jaringan. Selama bertahun-tahun, saya telah berkembang menjadi seorang arsitek solusi IT dengan keahlian dalam merancang dan mengimplementasikan infrastruktur IT yang kompleks untuk organisasi besar. Saat ini, saya memimpin tim teknologi di sebuah perusahaan multinasional di mana saya bertanggung jawab atas strategi teknologi dan transformasi digital.",
+        "Pendidikan saya dimulai di universitas terkemuka di negara saya, di mana saya mengambil jurusan Teknik Informatika. Selama di perguruan tinggi, saya aktif dalam berbagai kegiatan akademis dan penelitian. Saya juga menjadi anggota dari beberapa organisasi mahasiswa yang membantu saya memperluas pengetahuan dan keterampilan saya di luar kurikulum. Saya lulus dengan gelar sarjana dengan penghargaan tertinggi dan kemudian melanjutkan untuk mendapatkan gelar magister dalam Manajemen Teknologi Informasi.",
+        "Di samping karier profesional saya, saya memiliki minat yang besar dalam pengajaran dan pendidikan. Saya telah menjadi pembicara di berbagai konferensi teknologi dan menyampaikan kuliah tamu di universitas lokal. Saya juga aktif sebagai mentor bagi para profesional muda di industri IT, membimbing mereka dalam pengembangan karier dan keahlian teknis. Saya percaya bahwa berbagi pengetahuan adalah kunci untuk mendorong inovasi dan pertumbuhan di komunitas teknologi.",
+        "Dalam hidup pribadi, saya adalah seorang pecinta alam dan petualang. Saya sering menghabiskan waktu luang saya untuk mendaki gunung dan menjelajahi tempat-tempat alam yang indah. Hobi ini membantu saya menjaga keseimbangan dan kedamaian dalam hidup yang sering kali sibuk. Selain itu, saya juga memiliki minat dalam seni dan fotografi. Saya menemukan bahwa fotografi adalah cara yang baik untuk mengekspresikan kreativitas dan mengabadikan momen-momen berharga dalam hidup.",
+        "Visi saya adalah untuk terus berkembang sebagai seorang profesional yang memberikan dampak positif dalam industri teknologi. Saya berkomitmen untuk terus belajar tentang teknologi terbaru dan berinovasi dalam menciptakan solusi yang bermanfaat bagi masyarakat dan lingkungan sekitar. Saya percaya bahwa dengan dedikasi dan kerja keras, kita dapat mencapai tujuan-tujuan besar dalam hidup dan memberikan kontribusi yang berarti bagi dunia.",
+        "Dalam perjalanan hidup saya, saya telah menghadapi banyak tantangan dan rintangan. Namun, saya percaya bahwa setiap tantangan adalah kesempatan untuk tumbuh dan belajar. Saya bersyukur atas dukungan dari keluarga, teman-teman, dan mentor yang selalu mendukung dan memotivasi saya dalam setiap langkah perjalanan saya. Pengalaman-pengalaman ini telah membentuk saya menjadi pribadi yang tangguh dan bersemangat untuk menghadapi masa depan yang cerah.",
+        "Saya selalu berusaha untuk hidup dengan integritas dan nilai-nilai yang kuat. Saya percaya bahwa integritas adalah pondasi dari segala hubungan yang baik, baik dalam konteks profesional maupun pribadi. Saya juga menghargai kolaborasi dan tim kerja yang efektif, di mana setiap anggota tim memiliki peran penting dalam mencapai tujuan bersama. Saya senang bekerja dalam lingkungan yang dinamis dan menantang di mana saya dapat terus berkembang dan memberikan kontribusi yang signifikan.",
+        "Kesimpulannya, saya adalah seseorang yang bersemangat dalam menjalani hidup dengan penuh dedikasi dan komitmen untuk memberikan yang terbaik dalam setiap aspek kehidupan saya. Saya yakin bahwa dengan semangat yang tinggi dan tekad yang kuat, kita dapat mencapai impian kita dan membawa perubahan positif bagi dunia di sekitar kita.",
+        "Saya telah belajar banyak dalam perjalanan hidup saya, terutama dalam konteks pengembangan pribadi dan profesional. Saya memulai karier saya sebagai seorang pengembang perangkat lunak dengan mengejar gelar teknik informatika dari universitas terkemuka. Selama belajar di perguruan tinggi, saya aktif dalam berbagai kegiatan ekstrakurikuler dan organisasi mahasiswa, yang membantu saya memperluas jaringan dan keterampilan interpersonal saya. Setelah lulus, saya bergabung dengan sebuah perusahaan teknologi global di mana saya belajar tentang pengembangan perangkat lunak skala besar dan manajemen proyek.",
+        "Sejak saat itu, saya telah mengambil peran yang berbeda-beda dalam industri IT, termasuk sebagai arsitek solusi dan manajer produk. Pada titik tertentu dalam karier saya, saya memutuskan untuk memulai perusahaan saya sendiri, fokus pada konsultasi IT untuk startup dan perusahaan kecil menengah. Pengalaman ini mengajarkan saya tentang kewirausahaan, manajemen bisnis, dan tantangan-tantangan yang terkait dengan membangun dan mempertahankan bisnis di pasar yang kompetitif.",
+        "Di samping karier dan bisnis, saya adalah seorang penggila teknologi yang selalu ingin mengikuti perkembangan terbaru dalam industri IT. Saya aktif dalam komunitas teknologi lokal dan sering berpartisipasi dalam acara-acara industri, baik sebagai peserta maupun pembicara. Saya juga menyukai pembelajaran kontinu dan terus meningkatkan keterampilan teknis saya melalui kursus online dan sertifikasi terkait.",
+        "Pendidikan adalah salah satu nilai yang saya pegang teguh. Saya percaya bahwa pendidikan bukan hanya tentang memperoleh gelar atau sertifikasi, tetapi juga tentang proses belajar sepanjang hidup. Saya terus mencari peluang untuk belajar hal-hal baru, baik dalam konteks profesional maupun pribadi. Saya percaya bahwa dengan pengetahuan yang mendalam dan keterampilan yang terus diperbarui, saya dapat memberikan nilai tambah yang signifikan dalam setiap peran yang saya ambil.",
+        "Selain dari dunia teknologi, saya memiliki minat dalam seni dan musik. Saya adalah seorang pecinta musik sejak kecil dan belajar bermain alat musik sejak usia dini. Saya menemukan bahwa musik adalah pelarian yang sempurna dari rutinitas sehari-hari dan memberikan saya inspirasi kreatif. Selain itu, saya juga senang berkeliling dan menjelajahi tempat-tempat baru. Saya percaya bahwa perjalanan adalah investasi terbaik untuk memperluas wawasan dan menghargai keanekaragaman budaya di dunia ini.",
+        "Pada akhirnya, saya berusaha untuk menjalani kehidupan yang seimbang antara karier, keluarga, dan kegiatan pribadi. Saya percaya bahwa keseimbangan ini adalah kunci untuk kebahagiaan dan keberhasilan jangka panjang. Saya berkomitmen untuk terus berinovasi dan menciptakan dampak positif di dunia sekitar saya, baik melalui pekerjaan saya maupun melalui kegiatan sosial dan sukarelawanisme.",
+    ];
+
+
     const body_shapes: body_shape[] = [
         body_shape.sangat_kurus,
         body_shape.kurus,
@@ -315,6 +333,23 @@ export async function memberSeed(prisma: PrismaClient) {
         return shuffledArray.slice(0, Math.floor(Math.random() * 10));
     }
 
+    function getRandomDateBetween1970And2005() {
+        // Tanggal awal: 1 Januari 1970
+        const start = new Date('1970-01-01T00:00:00.000Z').getTime();
+        // Tanggal akhir: 1 Januari 2005
+        const end = new Date('2005-01-01T00:00:00.000Z').getTime();
+
+        // Milidetik acak antara start dan end
+        const randomTime = Math.floor(Math.random() * (end - start + 1)) + start;
+
+        // Buat objek Date dari milidetik acak
+        const randomDate = new Date(randomTime);
+
+        // Kembalikan tanggal dalam format ISO 8601
+        return randomDate.toISOString();
+    }
+
+
     console.log('Seed: Member');
 
     // BOB
@@ -362,6 +397,8 @@ export async function memberSeed(prisma: PrismaClient) {
             const medical_history = Math.random() < 0.5
 
             const data_physical_character: Prisma.PhysicalCharacterCreateInput = {
+                height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
+                weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
                 body_shape: body_shapes[Math.floor(Math.random() * body_shapes.length)],
                 skin_color: skin_colors[Math.floor(Math.random() * skin_colors.length)],
                 hair_type: hair_types[Math.floor(Math.random() * hair_types.length)],
@@ -390,9 +427,9 @@ export async function memberSeed(prisma: PrismaClient) {
                 // create relasi biodata
                 data.biodata = {
                     create: {
-                        bio: 'Assalamualaikum, ukhti.',
+                        bio: 'Assalamualaikum, ukhti. ' + biography[Math.floor(Math.random() * biography.length)],
                         phone: '+628123456789',
-                        dob: '2005-01-01T00:00:00.000Z',
+                        dob: getRandomDateBetween1970And2005(),
                         birth_place: provinces[randomProvinceIndex2].name,
                         birth_order: 1,
                         domicile_town: provinces[randomProvinceIndex1].name,
@@ -506,6 +543,8 @@ export async function memberSeed(prisma: PrismaClient) {
             const medical_history = Math.random() < 0.5
 
             const data_physical_character: Prisma.PhysicalCharacterCreateInput = {
+                height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
+                weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
                 body_shape: body_shapes[Math.floor(Math.random() * body_shapes.length)],
                 skin_color: skin_colors[Math.floor(Math.random() * skin_colors.length)],
                 hair_type: hair_types[Math.floor(Math.random() * hair_types.length)],
@@ -535,9 +574,9 @@ export async function memberSeed(prisma: PrismaClient) {
                 // create relasi biodata
                 data.biodata = {
                     create: {
-                        bio: 'Assalamualaikum, akhi.',
+                        bio: 'Assalamualaikum, akhi. ' + biography[Math.floor(Math.random() * biography.length)],
                         phone: '+628987654321',
-                        dob: '2005-01-01T00:00:00.000Z',
+                        dob: getRandomDateBetween1970And2005(),
                         birth_place: provinces[randomProvinceIndex2].name,
                         birth_order: 1,
                         domicile_town: provinces[randomProvinceIndex1].name,
