@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { Prisma, PrismaClient, body_shape, eye_Color, hair_color, hair_type, skin_color } from '@prisma/client';
+import { ManhajStatus, MarriagePermission, MarriageStatus, Prisma, PrismaClient, Skill, body_shape, eye_Color, hair_color, hair_type, skin_color } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 export async function memberSeed(prisma: PrismaClient) {
@@ -149,7 +149,171 @@ export async function memberSeed(prisma: PrismaClient) {
         'Saya tidak suka dengan orang yang suka menggosip atau membicarakan orang lain di belakang mereka'
     ]
 
+    const sukuIndonesia = [
+        "Aceh",
+        "Batak",
+        "Minangkabau",
+        "Melayu",
+        "Sunda",
+        "Jawa",
+        "Madura",
+        "Betawi",
+        "Bali",
+        "Sasak",
+        "Bugis",
+        "Makassar",
+        "Toraja",
+        "Dayak",
+        "Banjar",
+        "Papua",
+        "Ambon",
+        "Flores",
+        "Timor",
+        "Sumbawa",
+        "Nias",
+        "Asmat",
+        "Mentawai",
+        "Tolaki",
+        "Minahasa",
+        "Sangir",
+        "Bajau",
+        "Torres Strait Islander"
+    ];
 
+    const manhaj: ManhajStatus[] = [
+        'SALAF',
+        'BARU_BELAJAR',
+        'NON_SALAF'
+    ];
+
+    const marriedStatus: MarriageStatus[] = [
+        'LAJANG',
+        'MENIKAH',
+        'DUDA',
+        'JANDA'
+    ]
+
+    const marriagePermissions: MarriagePermission[] = [
+        'POLIGAMI',
+        'NON_POLIGAMI',
+    ]
+
+    const skillSet = [
+        { title: "Saya adalah seorang programmer" },
+        { title: "Saya bisa berbicara dalam tiga bahasa: Indonesia, Inggris, dan Mandarin" },
+        { title: "Saya ahli dalam pengembangan aplikasi web dengan React dan Node.js" },
+        { title: "Saya memiliki pengalaman dalam analisis data menggunakan Python" },
+        { title: "Saya terampil dalam desain grafis menggunakan Adobe Photoshop dan Illustrator" },
+        { title: "Saya bisa mengelola server dan deployment menggunakan Docker dan Kubernetes" },
+        { title: "Saya mahir dalam menggunakan SQL untuk mengelola dan menganalisis database" },
+        { title: "Saya berpengalaman dalam mengembangkan aplikasi mobile dengan Flutter" },
+        { title: "Saya memiliki kemampuan dalam penulisan konten kreatif dan copywriting" },
+        { title: "Saya terampil dalam menggunakan alat analitik seperti Google Analytics" },
+        { title: "Saya dapat membuat dan mengelola kampanye pemasaran digital" },
+        { title: "Saya mampu memimpin tim dalam proyek pengembangan perangkat lunak" },
+        { title: "Saya memiliki pengetahuan dalam keamanan siber dan proteksi data" },
+        { title: "Saya bisa memainkan beberapa alat musik seperti gitar dan piano" },
+        { title: "Saya mahir dalam menggunakan alat-alat pengembangan Agile seperti JIRA" },
+        { title: "Saya memiliki keahlian dalam optimasi mesin pencari (SEO)" },
+        { title: "Saya bisa merancang dan mengembangkan game menggunakan Unity" },
+        { title: "Saya ahli dalam penggunaan alat DevOps dan Continuous Integration/Continuous Deployment (CI/CD)" },
+        { title: "Saya memiliki kemampuan dalam presentasi dan public speaking yang baik" },
+        { title: "Saya terampil dalam menulis dan mengembangkan dokumentasi teknis" },
+        { title: "Saya bisa membuat ilustrasi digital dan animasi 2D" },
+        { title: "Saya memiliki pengalaman dalam manajemen proyek dengan metodologi Scrum" },
+        { title: "Saya terampil dalam editing video menggunakan Adobe Premiere Pro" },
+        { title: "Saya mahir dalam penggunaan teknologi cloud seperti AWS dan Azure" },
+        { title: "Saya berpengalaman dalam pemasaran melalui media sosial" },
+        { title: "Saya dapat melakukan pemrograman sistem tertanam (embedded systems)" },
+        { title: "Saya memiliki keahlian dalam desain UX/UI untuk aplikasi mobile dan web" },
+        { title: "Saya bisa mengembangkan skrip automasi menggunakan Bash dan PowerShell" },
+        { title: "Saya terampil dalam menyusun laporan keuangan dan analisis akuntansi" },
+        { title: "Saya memiliki kemampuan dalam pengembangan bisnis dan strategi pemasaran" }
+    ];
+
+    const hobiList = [
+        { title: "Saya suka mendaki gunung" },
+        { title: "Saya senang bermain gitar" },
+        { title: "Saya menikmati membaca buku fiksi ilmiah" },
+        { title: "Saya hobi bersepeda di pagi hari" },
+        { title: "Saya suka memasak dan mencoba resep baru" },
+        { title: "Saya menikmati fotografi alam" },
+        { title: "Saya senang berenang di laut" },
+        { title: "Saya suka bermain sepak bola bersama teman-teman" },
+        { title: "Saya menikmati menonton film klasik" },
+        { title: "Saya suka berkebun dan merawat tanaman" },
+        { title: "Saya hobi menggambar dan melukis" },
+        { title: "Saya senang berkemah di alam terbuka" },
+        { title: "Saya suka bermain catur" },
+        { title: "Saya menikmati yoga dan meditasi" },
+        { title: "Saya hobi membuat kerajinan tangan" },
+        { title: "Saya senang bermain video game" },
+        { title: "Saya suka berlari di taman" },
+        { title: "Saya menikmati bermain tenis" },
+        { title: "Saya suka menyanyi dan mengikuti karaoke" },
+        { title: "Saya senang menulis puisi dan cerita pendek" }
+    ];
+
+    const married_goals = [
+        { title: "Kami ingin membangun komunikasi yang terbuka dan jujur setiap hari" },
+        { title: "Kami berencana untuk menabung untuk rumah pertama kami" },
+        { title: "Kami ingin merayakan setiap ulang tahun pernikahan dengan perjalanan khusus" },
+        { title: "Kami berkomitmen untuk menjaga keseimbangan antara pekerjaan dan kehidupan keluarga" },
+        { title: "Kami berharap bisa menghadiri kursus parenting untuk persiapan menjadi orang tua" },
+        { title: "Kami berencana untuk memiliki dua anak dalam lima tahun ke depan" },
+        { title: "Kami ingin merencanakan liburan keluarga setiap tahun" },
+        { title: "Kami ingin menjalani gaya hidup sehat dengan olahraga bersama secara teratur" },
+        { title: "Kami berkomitmen untuk mendukung satu sama lain dalam mencapai tujuan pribadi" },
+        { title: "Kami berharap bisa membeli mobil keluarga dalam dua tahun ke depan" },
+        { title: "Kami ingin merayakan setiap momen penting dengan keluarga besar" },
+        { title: "Kami berkomitmen untuk mengikuti sesi konseling pasangan secara berkala untuk menjaga hubungan tetap kuat" },
+        { title: "Kami berencana untuk mengadakan acara keluarga setiap bulan" },
+        { title: "Kami ingin meningkatkan kemampuan memasak bersama dan mencoba resep baru" },
+        { title: "Kami berkomitmen untuk saling memberikan waktu dan perhatian yang berkualitas" },
+        { title: "Kami berharap bisa merayakan ulang tahun pernikahan ke-50 dengan keluarga besar" },
+        { title: "Kami ingin memperbaiki dan mempercantik rumah kami setiap tahun" },
+        { title: "Kami berkomitmen untuk menjaga keuangan keluarga dengan bijak dan disiplin" },
+        { title: "Kami berharap bisa pensiun dengan nyaman dan menikmati waktu bersama" },
+        { title: "Kami ingin melakukan kegiatan sukarela bersama sebagai keluarga" }
+    ];
+
+    const tujuanHidup = [
+        { title: "Saya ingin mencapai keseimbangan antara kehidupan kerja dan pribadi yang harmonis" },
+        { title: "Saya berharap bisa menjalani kehidupan dengan penuh rasa syukur dan kebahagiaan" },
+        { title: "Saya bertekad untuk terus belajar dan mengembangkan diri sepanjang hidup" },
+        { title: "Saya ingin berkontribusi positif bagi masyarakat dan membantu mereka yang membutuhkan" },
+        { title: "Saya berharap bisa menjalani hidup dengan penuh kesehatan dan energi" },
+        { title: "Saya ingin membangun hubungan yang bermakna dan mendalam dengan keluarga dan teman" },
+        { title: "Saya berencana untuk mengeksplorasi dan memahami berbagai budaya dunia melalui perjalanan" },
+        { title: "Saya berharap bisa mencapai stabilitas finansial dan hidup tanpa beban hutang" },
+        { title: "Saya bertekad untuk mengejar dan mewujudkan impian karier saya" },
+        { title: "Saya ingin menciptakan sesuatu yang memiliki dampak positif dan tahan lama" },
+        { title: "Saya berharap bisa hidup secara mandiri dan otonom" },
+        { title: "Saya ingin membangun keluarga yang bahagia dan harmonis" },
+        { title: "Saya bertekad untuk menjaga lingkungan dan menjalani gaya hidup yang ramah lingkungan" },
+        { title: "Saya berharap bisa menjadi sumber inspirasi dan motivasi bagi orang lain" },
+        { title: "Saya ingin mengejar passion saya dan menjalani hidup dengan penuh semangat" },
+        { title: "Saya berharap bisa menikmati setiap momen dalam hidup dengan penuh kesadaran dan kehadiran" },
+        { title: "Saya berkomitmen untuk menjaga kesehatan mental dan emosional saya" },
+        { title: "Saya ingin terus mengejar pendidikan dan memperoleh pengetahuan baru" },
+        { title: "Saya berharap bisa mencapai perdamaian batin dan kesejahteraan spiritual" },
+        { title: "Saya ingin mengembangkan keterampilan baru dan terus tumbuh sebagai individu" }
+    ];
+
+
+    function getRandomOfObjectArray(dataArray: any) {
+        // Salin array untuk menghindari modifikasi array asli
+        let shuffledArray = [...dataArray];
+
+        // Algoritma Fisher-Yates untuk mengacak array
+        for (let i = shuffledArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+        }
+
+        // ambil maksimal 10 data
+        return shuffledArray.slice(0, Math.floor(Math.random() * 10));
+    }
 
     console.log('Seed: Member');
 
@@ -240,38 +404,21 @@ export async function memberSeed(prisma: PrismaClient) {
                         non_physical_chars: {
                             create: data_non_physical_character
                         },
-                        ethnic: 'Jawa',
-                        manhaj: 'SALAF',
+                        ethnic: sukuIndonesia[Math.floor(Math.random() * sukuIndonesia.length)],
+                        manhaj: manhaj[Math.floor(Math.random() * manhaj.length)],
                         gender: 'PRIA',
-                        marriage_status: 'LAJANG',
-                        marriage_permission: 'NON_POLIGAMI',
+                        marriage_status: marriedStatus[Math.floor(Math.random() * marriedStatus.length)],
+                        marriage_permission: marriagePermissions[Math.floor(Math.random() * marriagePermissions.length)],
                     },
                 };
                 data.Skill = {
                     createMany: {
-                        data: [
-                            {
-                                title: 'komunikasi',
-                            },
-                            {
-                                title: 'bela diri',
-                            },
-                            {
-                                title: 'mengelola keuangan',
-                            },
-                            {
-                                title: 'mengendalikan emosi',
-                            },
-                        ],
+                        data: getRandomOfObjectArray(skillSet)
                     },
                 };
                 data.Hobby = {
                     createMany: {
-                        data: [
-                            { title: 'membaca buku' },
-                            { title: 'bermain games' },
-                            { title: 'memasak' },
-                        ],
+                        data: getRandomOfObjectArray(hobiList)
                     },
                 };
                 data.Education = {
@@ -299,23 +446,12 @@ export async function memberSeed(prisma: PrismaClient) {
                 };
                 data.Married_goal = {
                     createMany: {
-                        data: [
-                            { title: 'rumah tangga islami dan sunnah' },
-                            { title: 'membawa keluarga ke surga' },
-                            { title: 'memiliki banyak keturunan' },
-                            { title: 'menyempurnakan satu sama lain' },
-                        ],
+                        data: getRandomOfObjectArray(married_goals)
                     },
                 };
                 data.Life_goal = {
                     createMany: {
-                        data: [
-                            { title: 'bekerja dengan passion yang dimiliki' },
-                            {
-                                title: 'menjalin hubungan pertemanan yang berkualitas',
-                            },
-                            { title: 'menjaga kesehatan tubuh' },
-                        ],
+                        data: getRandomOfObjectArray(tujuanHidup)
                     },
                 };
             }
@@ -413,38 +549,21 @@ export async function memberSeed(prisma: PrismaClient) {
                         non_physical_chars: {
                             create: data_non_physical_character,
                         },
-                        ethnic: 'lampung',
-                        manhaj: 'SALAF',
+                        ethnic: sukuIndonesia[Math.floor(Math.random() * sukuIndonesia.length)],
+                        manhaj: manhaj[Math.floor(Math.random() * manhaj.length)],
                         gender: 'WANITA',
-                        marriage_status: 'LAJANG',
-                        marriage_permission: 'NON_POLIGAMI',
+                        marriage_status: marriedStatus[Math.floor(Math.random() * marriedStatus.length)],
+                        marriage_permission: marriagePermissions[Math.floor(Math.random() * marriagePermissions.length)],
                     },
                 };
                 data.Skill = {
                     createMany: {
-                        data: [
-                            {
-                                title: 'public speaking bagus',
-                            },
-                            {
-                                title: 'mengendarai mobil',
-                            },
-                            {
-                                title: 'mengelola keuangan',
-                            },
-                            {
-                                title: 'mengendalikan emosi',
-                            },
-                        ],
+                        data: getRandomOfObjectArray(skillSet)
                     },
                 };
                 data.Hobby = {
                     createMany: {
-                        data: [
-                            { title: 'membaca buku' },
-                            { title: 'berkebun' },
-                            { title: 'memasak' },
-                        ],
+                        data: getRandomOfObjectArray(hobiList)
                     },
                 };
                 data.Education = {
@@ -472,20 +591,12 @@ export async function memberSeed(prisma: PrismaClient) {
                 };
                 data.Married_goal = {
                     createMany: {
-                        data: [
-                            { title: 'menyempurnakan satu sama lain' },
-                            { title: 'memiliki banyak keturunan' },
-                            { title: 'bersama hingga ujung usia' },
-                        ],
+                        data: getRandomOfObjectArray(married_goals)
                     },
                 };
                 data.Life_goal = {
                     createMany: {
-                        data: [
-                            { title: 'hidup tenang di hari tua' },
-                            { title: 'menjalin hubungan keluarga yang erat' },
-                            { title: 'menjaga kesehatan tubuh' },
-                        ],
+                        data: getRandomOfObjectArray(tujuanHidup)
                     },
                 };
             }
