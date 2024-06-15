@@ -1,26 +1,94 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateFamilyMemberDto } from './dto/create-family_member.dto';
 import { UpdateFamilyMemberDto } from './dto/update-family_member.dto';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class FamilyMembersService {
-  create(createFamilyMemberDto: CreateFamilyMemberDto) {
-    return 'This action adds a new familyMember';
+  constructor(private prisma: PrismaService) { }
+
+  async create(data: CreateFamilyMemberDto, userId: string) {
+    const bioadata = await this.prisma.biodata.findUnique({
+      where: {
+        userId: userId,
+      }
+    })
+
+    const result = await this.prisma.familyMember.create({
+      data: {
+        ...data,
+        Biodata: {
+          connect: { id: bioadata.id }
+        }
+      }
+    })
+
+    return result;
   }
 
-  findAll() {
-    return `This action returns all familyMembers`;
+  async findAll(userId: string) {
+    const data = await this.prisma.familyMember.findMany({
+      where: {
+        Biodata: {
+          userId: userId
+        },
+        deleted: false
+      }
+    })
+
+    return data;
+
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} familyMember`;
+  async findOne(id: string, userId: string) {
+    const data = await this.prisma.familyMember.findFirst({
+      where: {
+        id: id,
+        Biodata: {
+          userId: userId
+        },
+        deleted: false
+      }
+    })
+
+    if (!data) throw new NotFoundException();
+
+    return data;
   }
 
-  update(id: number, updateFamilyMemberDto: UpdateFamilyMemberDto) {
-    return `This action updates a #${id} familyMember`;
+  async update(id: string, data: UpdateFamilyMemberDto, userId: string) {
+    const biodata = await this.prisma.biodata.findUnique({
+      where: {
+        userId: userId
+      }
+    })
+
+    await this.prisma.familyMember.update({
+      where: {
+        id: id,
+        biodataId: biodata.id
+      },
+      data
+    })
+
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} familyMember`;
+  async remove(id: string, userId: string) {
+    const biodata = await this.prisma.biodata.findUnique({
+      where: {
+        userId: userId
+      }
+    })
+
+    await this.prisma.familyMember.update({
+      where: {
+        id: id,
+        biodataId: biodata.id
+      },
+      data: {
+        deleted: true
+      }
+    })
+
   }
 }

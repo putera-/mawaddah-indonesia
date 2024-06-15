@@ -6,7 +6,7 @@ export interface FamilyMember {
     biodataId: string
     relationship: relationship
     religion: religion
-    dob: Date
+    dob: string
     education: string
     job: string
     ia_alive: boolean

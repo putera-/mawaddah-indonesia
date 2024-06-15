@@ -168,7 +168,7 @@ model Biodata {
     marriage_permission MarriagePermission
     physical_characters PhysicalCharacter?
     non_physical_chars  NonPhysicalCharacter?
-    family_member       family_member[]
+    family_members      FamilyMember[]
     dob                 DateTime              @db.Date
     birth_place         String                @db.VarChar(100)
     birth_order         Int                   @db.TinyInt
@@ -184,19 +184,21 @@ model Biodata {
     @@map("biodata")
 }
 
-model family_member {
+model FamilyMember {
     id        String        @id @default(uuid())
     Biodata   Biodata?      @relation(fields: [biodataId], references: [id])
     biodataId String?
     relation  relationship?
     religion  religion?
-    dob       DateTime      @db.Date
+    dob       String        @db.VarChar(20)
     education String        @db.Text
     job       String        @db.Text
     is_alive  Boolean       @default(true)
     deleted   Boolean       @default(false)
     createdAt DateTime      @default(now())
     updatedAt DateTime      @default(now()) @updatedAt
+
+    @@map("family_member")
 }
 
 enum relationship {
