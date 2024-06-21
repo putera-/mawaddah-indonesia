@@ -16,6 +16,7 @@ import { TaarufService } from './taaruf.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { UsersService } from 'src/users/user.service';
+import { CreateTaarufDto } from './dto/create-taaruf.dto';
 
 @Controller('taaruf')
 export class TaarufController {
@@ -30,13 +31,13 @@ export class TaarufController {
     async create(
         @Param('id') id: string,
         @Req() req: any,
-        @Body() message: string,
+        @Body() data: CreateTaarufDto,
     ) {
         try {
             const user = await this.User.findOne(req.id, req.role);
-            return await this.taarufService.create(user.id, id, message);
+            return await this.taarufService.create(user.id, id, data.message);
         } catch (error) {
-            console.log(error);
+            throw error;
         }
     }
 
@@ -56,7 +57,7 @@ export class TaarufController {
                 limit,
             );
         } catch (error) {
-            console.log(error);
+            throw error;
         }
     }
 
@@ -76,32 +77,32 @@ export class TaarufController {
                 limit,
             );
         } catch (error) {
-            console.log(error);
+            throw error;
         }
     }
 
     @Roles(Role.Member)
     @HttpCode(HttpStatus.OK)
     @Get('incoming/:id')
-    async incoming(@Req() req: any, @Param() id: string) {
+    async incoming(@Req() req: any, @Param('id') id: string) {
         try {
             const user = await this.User.findOne(req.id, req.role);
             return await this.taarufService.findIncoming(user.id, id);
         } catch (error) {
-            console.log(error);
+            throw error;
         }
     }
 
     @Roles(Role.Member)
     @HttpCode(HttpStatus.OK)
     @Get('outgoing/:id')
-    async outgoing(@Req() req: any, @Param() id: string) {
+    async outgoing(@Req() req: any, @Param('id') id: string) {
         try {
             const user = await this.User.findOne(req.id, req.role);
             const userId = user.id;
             return this.taarufService.findOutgoing(user.id, id);
         } catch (error) {
-            console.log(error);
+            throw error;
         }
     }
 
@@ -110,14 +111,14 @@ export class TaarufController {
     @Patch('approve/:id')
     async approve(
         @Req() req: any,
-        @Param() id: string,
-        @Body(new ValidationPipe()) message: string,
+        @Param('id') id: string,
+        @Body(new ValidationPipe()) data: CreateTaarufDto,
     ) {
         try {
             const user = await this.User.findOne(req.id, req.role);
-            return this.taarufService.approve(user.id, id, message);
+            return this.taarufService.approve(user.id, id, data.message);
         } catch (error) {
-            console.log(error);
+            throw error;
         }
     }
 
@@ -126,14 +127,14 @@ export class TaarufController {
     @Patch('reject/:id')
     async reject(
         @Req() req: any,
-        @Param() id: string,
-        @Body(new ValidationPipe()) message: string,
+        @Param('id') id: string,
+        @Body(new ValidationPipe()) data: CreateTaarufDto,
     ) {
         try {
             const user = await this.User.findOne(req.id, req.role);
-            return this.taarufService.reject(user.id, id, message);
+            return this.taarufService.reject(user.id, id, data.message);
         } catch (error) {
-            console.log(error);
+            throw error;
         }
     }
 
@@ -142,14 +143,14 @@ export class TaarufController {
     @Patch('cancel/:id')
     async cancel(
         @Req() req: any,
-        @Param() id: string,
-        @Body(new ValidationPipe()) message: string,
+        @Param('id') id: string,
+        @Body(new ValidationPipe()) data: CreateTaarufDto,
     ) {
         try {
             const user = await this.User.findOne(req.id, req.role);
-            return this.taarufService.cancel(user.id, id, message);
+            return this.taarufService.cancel(user.id, id, data.message);
         } catch (error) {
-            console.log(error);
+            throw error;
         }
     }
 }

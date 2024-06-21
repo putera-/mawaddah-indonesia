@@ -214,7 +214,7 @@ export async function memberSeed(prisma: PrismaClient) {
     const manhaj: ManhajStatus[] = [
         ManhajStatus.BARU_BELAJAR,
         ManhajStatus.NON_SALAF,
-        ManhajStatus.SALAF
+        ManhajStatus.SALAF,
     ];
 
     const marriedStatus: MarriageStatus[] = [
@@ -226,9 +226,17 @@ export async function memberSeed(prisma: PrismaClient) {
 
     const marriagePermissions: MarriagePermission[] = [
         MarriagePermission.NON_POLIGAMI,
-        MarriagePermission.POLIGAMI
+        MarriagePermission.POLIGAMI,
     ];
 
+    const poligamiOpinions = [
+        'Saya sangat suka dengan poligami',
+        'Yang pasti hukum Islam tidak melarang poligami secara mutlak (haram) dan juga tidak menganjurkan secara mutlak (wajib).',
+        'Menurutku poligami itu sah-sah aja asal tujuan dan caranya baik-baik',
+        'Saya kurang suka dengan poligami',
+        'Saya tidak suka dengan poligami',
+        'Poligami itu tanda tidak setia dan tidak cinta',
+    ];
     const skillSet = [
         { title: 'Saya adalah seorang programmer' },
         {
@@ -541,46 +549,6 @@ export async function memberSeed(prisma: PrismaClient) {
 
             const characteristic = Math.random() < 0.5;
             const medical_history = Math.random() < 0.5;
-
-            // const data_physical_character: Prisma.PhysicalCharacterCreateInput =
-            //     {
-            //         body_shape:
-            //             body_shapes[
-            //                 Math.floor(Math.random() * body_shapes.length)
-            //             ],
-            //         skin_color:
-            //             skin_colors[
-            //                 Math.floor(Math.random() * skin_colors.length)
-            //             ],
-            //         hair_type:
-            //             hair_types[
-            //                 Math.floor(Math.random() * hair_types.length)
-            //             ],
-            //         hair_color:
-            //             hair_colors[
-            //                 Math.floor(Math.random() * hair_colors.length)
-            //             ],
-            //         eye_color:
-            //             eye_colors[
-            //                 Math.floor(Math.random() * eye_colors.length)
-            //             ],
-            //         characteristic,
-            //         characteristic_detail: characteristic
-            //             ? characteristics[
-            //                   Math.floor(
-            //                       Math.random() * medical_histories.length,
-            //                   )
-            //               ]
-            //             : null,
-            //         medical_history,
-            //         medical_history_detail: medical_history
-            //             ? medical_histories[
-            //                   Math.floor(
-            //                       Math.random() * medical_histories.length,
-            //                   )
-            //               ]
-            //             : null,
-            //     };
             const data_physical_character: Prisma.PhysicalCharacterCreateInput =
                 {
                     height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
@@ -687,9 +655,14 @@ export async function memberSeed(prisma: PrismaClient) {
                             Math.floor(Math.random() * manhaj.length)
                         ],
                         gender: 'PRIA',
-                        
+
                         address_zip_code: Math.floor(Math.random() * 100),
-                        poligami_opinion: '',
+                        poligami_opinion:
+                            poligamiOpinions[
+                                Math.floor(
+                                    Math.random() * poligamiOpinions.length,
+                                )
+                            ],
                         marriage_status:
                             marriedStatus[
                                 Math.floor(Math.random() * marriedStatus.length)
@@ -803,45 +776,6 @@ export async function memberSeed(prisma: PrismaClient) {
             const characteristic = Math.random() < 0.5;
             const medical_history = Math.random() < 0.5;
 
-            // const data_physical_character: Prisma.PhysicalCharacterCreateInput =
-            //     {
-            //         body_shape:
-            //             body_shapes[
-            //                 Math.floor(Math.random() * body_shapes.length)
-            //             ],
-            //         skin_color:
-            //             skin_colors[
-            //                 Math.floor(Math.random() * skin_colors.length)
-            //             ],
-            //         hair_type:
-            //             hair_types[
-            //                 Math.floor(Math.random() * hair_types.length)
-            //             ],
-            //         hair_color:
-            //             hair_colors[
-            //                 Math.floor(Math.random() * hair_colors.length)
-            //             ],
-            //         eye_color:
-            //             eye_colors[
-            //                 Math.floor(Math.random() * eye_colors.length)
-            //             ],
-            //         characteristic,
-            //         characteristic_detail: characteristic
-            //             ? characteristics[
-            //                   Math.floor(
-            //                       Math.random() * medical_histories.length,
-            //                   )
-            //               ]
-            //             : null,
-            //         medical_history,
-            //         medical_history_detail: medical_history
-            //             ? medical_histories[
-            //                   Math.floor(
-            //                       Math.random() * medical_histories.length,
-            //                   )
-            //               ]
-            //             : null,
-            //     };
             const data_physical_character: Prisma.PhysicalCharacterCreateInput =
                 {
                     height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
@@ -949,7 +883,12 @@ export async function memberSeed(prisma: PrismaClient) {
                         ],
                         gender: 'WANITA',
                         address_zip_code: Math.floor(Math.random() * 100),
-                        poligami_opinion: '',
+                        poligami_opinion:
+                            poligamiOpinions[
+                                Math.floor(
+                                    Math.random() * poligamiOpinions.length,
+                                )
+                            ],
                         marriage_status:
                             marriedStatus[
                                 Math.floor(Math.random() * marriedStatus.length)
@@ -1014,5 +953,5 @@ export async function memberSeed(prisma: PrismaClient) {
         }
     }
 
-    // console.log('Seed: Member Done');
+    console.log('Seed: Member Done');
 }

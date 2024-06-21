@@ -112,7 +112,10 @@ export class TaarufService {
 
     async cancel(userId: string, id: string, message: string) {
         return await this.PrismaService.taaruf.update({
-            where: { id, userId },
+            where: {
+                id,
+                userId,
+            },
             data: {
                 status: false,
                 message,
