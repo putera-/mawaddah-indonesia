@@ -184,39 +184,6 @@ model Biodata {
     @@map("biodata")
 }
 
-model FamilyMember {
-    id        String        @id @default(uuid())
-    Biodata   Biodata?      @relation(fields: [biodataId], references: [id])
-    biodataId String?
-    relationship  relationship?
-    religion  religion?
-    dob       String        @db.VarChar(20)
-    education String        @db.Text
-    job       String        @db.Text
-    is_alive  Boolean       @default(true)
-    deleted   Boolean       @default(false)
-    createdAt DateTime      @default(now())
-    updatedAt DateTime      @default(now()) @updatedAt
-
-    @@map("family_member")
-}
-
-enum relationship {
-    ayah
-    ibu
-    kakak_pria
-    kakak_wanita
-    adik_pria
-    adik_wanita
-    ipar_pria
-    ipar_wanita
-}
-
-enum religion {
-    islam
-    non_islam
-}
-
 enum ManhajStatus {
     SALAF
     BARU_BELAJAR
@@ -392,6 +359,39 @@ model NonPhysicalCharacter {
     biodataId           String?  @unique
 
     @@map("non_physical_character")
+}
+
+model FamilyMember {
+    id           String        @id @default(uuid())
+    Biodata      Biodata?      @relation(fields: [biodataId], references: [id])
+    biodataId    String?
+    relationship relationship?
+    religion     religion?
+    dob          String        @db.VarChar(20)
+    education    String        @db.Text
+    job          String        @db.Text
+    is_alive     Boolean       @default(true)
+    deleted      Boolean       @default(false)
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @default(now()) @updatedAt
+
+    @@map("family_member")
+}
+
+enum relationship {
+    ayah
+    ibu
+    kakak_pria
+    kakak_wanita
+    adik_pria
+    adik_wanita
+    ipar_pria
+    ipar_wanita
+}
+
+enum religion {
+    islam
+    non_islam
 }
 
 model Taaruf_gold {
