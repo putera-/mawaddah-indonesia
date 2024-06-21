@@ -28,6 +28,7 @@ export class FamilyMembersController {
     return this.familyMembersService.findOne(id, userId);
   }
 
+  @HttpCode(204)
   @Patch(':id')
   @HttpCode(204)
   update(@Request() req: any, @Param('id') id: string, @Body() data: UpdateFamilyMemberDto) {

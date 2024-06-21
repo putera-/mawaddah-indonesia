@@ -188,7 +188,7 @@ model FamilyMember {
     id        String        @id @default(uuid())
     Biodata   Biodata?      @relation(fields: [biodataId], references: [id])
     biodataId String?
-    relation  relationship?
+    relationship  relationship?
     religion  religion?
     dob       String        @db.VarChar(20)
     education String        @db.Text

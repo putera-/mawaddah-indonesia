@@ -56,17 +56,15 @@ export class FamilyMembersService {
     return data;
   }
 
+
+
   async update(id: string, data: UpdateFamilyMemberDto, userId: string) {
-    const biodata = await this.prisma.biodata.findUnique({
-      where: {
-        userId: userId
-      }
-    })
+    const famMember = await this.findOne(id, userId)
 
     await this.prisma.familyMember.update({
       where: {
-        id: id,
-        biodataId: biodata.id
+        id: famMember.id,
+        Biodata: { userId }
       },
       data
     })
@@ -74,21 +72,36 @@ export class FamilyMembersService {
   }
 
   async remove(id: string, userId: string) {
-    const biodata = await this.prisma.biodata.findUnique({
-      where: {
-        userId: userId
-      }
-    })
+    const famMember = await this.findOneDel(id, userId)
+
+    if (famMember.deleted) {
+      throw new NotFoundException();
+    }
 
     await this.prisma.familyMember.update({
       where: {
-        id: id,
-        biodataId: biodata.id
+        id: famMember.id,
+        Biodata: { userId }
       },
       data: {
         deleted: true
       }
     })
 
+  }
+
+  async findOneDel(id: string, userId: string) {
+    const data = await this.prisma.familyMember.findFirst({
+      where: {
+        id: id,
+        Biodata: {
+          userId: userId
+        }
+      }
+    })
+
+    if (!data) throw new NotFoundException();
+
+    return data;
   }
 }
