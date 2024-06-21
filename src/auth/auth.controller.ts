@@ -133,8 +133,6 @@ export class AuthController {
         try {
             const login_data = await this.authService.signIn(signInDto.email, signInDto.password);
 
-            login_data.user.biodata = await this.biodataService.findMe(login_data.user.id);
-
             return login_data;
         } catch (error) {
             throw error;
@@ -174,8 +172,6 @@ export class AuthController {
             const userId = req.user.id;
             const userRole = req.user.role;
             const user: User = await this.userService.findOne(userId, userRole);
-
-            user.biodata = await this.biodataService.findMe(userId);
 
             return user;
         } catch (error) {
