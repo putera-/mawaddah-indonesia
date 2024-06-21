@@ -1,5 +1,18 @@
 import { faker } from '@faker-js/faker';
-import { ManhajStatus, MarriagePermission, MarriageStatus, Prisma, PrismaClient, Skill, body_shape, eye_Color, hair_color, hair_type, skin_color } from '@prisma/client';
+
+import {
+    ManhajStatus,
+    MarriagePermission,
+    MarriageStatus,
+    Prisma,
+    PrismaClient,
+    Skill,
+    body_shape,
+    eye_Color,
+    hair_color,
+    hair_type,
+    skin_color,
+} from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 export async function memberSeed(prisma: PrismaClient) {
@@ -7,22 +20,21 @@ export async function memberSeed(prisma: PrismaClient) {
     const provinces = await prisma.province.findMany();
 
     const biography = [
-        "Saya adalah seorang profesional di bidang teknologi informasi dengan pengalaman lebih dari 15 tahun. Karier saya dimulai sebagai seorang teknisi jaringan di perusahaan telekomunikasi terkemuka di Indonesia. Dari sana, saya belajar banyak tentang infrastruktur IT dan keamanan jaringan. Selama bertahun-tahun, saya telah berkembang menjadi seorang arsitek solusi IT dengan keahlian dalam merancang dan mengimplementasikan infrastruktur IT yang kompleks untuk organisasi besar. Saat ini, saya memimpin tim teknologi di sebuah perusahaan multinasional di mana saya bertanggung jawab atas strategi teknologi dan transformasi digital.",
-        "Pendidikan saya dimulai di universitas terkemuka di negara saya, di mana saya mengambil jurusan Teknik Informatika. Selama di perguruan tinggi, saya aktif dalam berbagai kegiatan akademis dan penelitian. Saya juga menjadi anggota dari beberapa organisasi mahasiswa yang membantu saya memperluas pengetahuan dan keterampilan saya di luar kurikulum. Saya lulus dengan gelar sarjana dengan penghargaan tertinggi dan kemudian melanjutkan untuk mendapatkan gelar magister dalam Manajemen Teknologi Informasi.",
-        "Di samping karier profesional saya, saya memiliki minat yang besar dalam pengajaran dan pendidikan. Saya telah menjadi pembicara di berbagai konferensi teknologi dan menyampaikan kuliah tamu di universitas lokal. Saya juga aktif sebagai mentor bagi para profesional muda di industri IT, membimbing mereka dalam pengembangan karier dan keahlian teknis. Saya percaya bahwa berbagi pengetahuan adalah kunci untuk mendorong inovasi dan pertumbuhan di komunitas teknologi.",
-        "Dalam hidup pribadi, saya adalah seorang pecinta alam dan petualang. Saya sering menghabiskan waktu luang saya untuk mendaki gunung dan menjelajahi tempat-tempat alam yang indah. Hobi ini membantu saya menjaga keseimbangan dan kedamaian dalam hidup yang sering kali sibuk. Selain itu, saya juga memiliki minat dalam seni dan fotografi. Saya menemukan bahwa fotografi adalah cara yang baik untuk mengekspresikan kreativitas dan mengabadikan momen-momen berharga dalam hidup.",
-        "Visi saya adalah untuk terus berkembang sebagai seorang profesional yang memberikan dampak positif dalam industri teknologi. Saya berkomitmen untuk terus belajar tentang teknologi terbaru dan berinovasi dalam menciptakan solusi yang bermanfaat bagi masyarakat dan lingkungan sekitar. Saya percaya bahwa dengan dedikasi dan kerja keras, kita dapat mencapai tujuan-tujuan besar dalam hidup dan memberikan kontribusi yang berarti bagi dunia.",
-        "Dalam perjalanan hidup saya, saya telah menghadapi banyak tantangan dan rintangan. Namun, saya percaya bahwa setiap tantangan adalah kesempatan untuk tumbuh dan belajar. Saya bersyukur atas dukungan dari keluarga, teman-teman, dan mentor yang selalu mendukung dan memotivasi saya dalam setiap langkah perjalanan saya. Pengalaman-pengalaman ini telah membentuk saya menjadi pribadi yang tangguh dan bersemangat untuk menghadapi masa depan yang cerah.",
-        "Saya selalu berusaha untuk hidup dengan integritas dan nilai-nilai yang kuat. Saya percaya bahwa integritas adalah pondasi dari segala hubungan yang baik, baik dalam konteks profesional maupun pribadi. Saya juga menghargai kolaborasi dan tim kerja yang efektif, di mana setiap anggota tim memiliki peran penting dalam mencapai tujuan bersama. Saya senang bekerja dalam lingkungan yang dinamis dan menantang di mana saya dapat terus berkembang dan memberikan kontribusi yang signifikan.",
-        "Kesimpulannya, saya adalah seseorang yang bersemangat dalam menjalani hidup dengan penuh dedikasi dan komitmen untuk memberikan yang terbaik dalam setiap aspek kehidupan saya. Saya yakin bahwa dengan semangat yang tinggi dan tekad yang kuat, kita dapat mencapai impian kita dan membawa perubahan positif bagi dunia di sekitar kita.",
-        "Saya telah belajar banyak dalam perjalanan hidup saya, terutama dalam konteks pengembangan pribadi dan profesional. Saya memulai karier saya sebagai seorang pengembang perangkat lunak dengan mengejar gelar teknik informatika dari universitas terkemuka. Selama belajar di perguruan tinggi, saya aktif dalam berbagai kegiatan ekstrakurikuler dan organisasi mahasiswa, yang membantu saya memperluas jaringan dan keterampilan interpersonal saya. Setelah lulus, saya bergabung dengan sebuah perusahaan teknologi global di mana saya belajar tentang pengembangan perangkat lunak skala besar dan manajemen proyek.",
-        "Sejak saat itu, saya telah mengambil peran yang berbeda-beda dalam industri IT, termasuk sebagai arsitek solusi dan manajer produk. Pada titik tertentu dalam karier saya, saya memutuskan untuk memulai perusahaan saya sendiri, fokus pada konsultasi IT untuk startup dan perusahaan kecil menengah. Pengalaman ini mengajarkan saya tentang kewirausahaan, manajemen bisnis, dan tantangan-tantangan yang terkait dengan membangun dan mempertahankan bisnis di pasar yang kompetitif.",
-        "Di samping karier dan bisnis, saya adalah seorang penggila teknologi yang selalu ingin mengikuti perkembangan terbaru dalam industri IT. Saya aktif dalam komunitas teknologi lokal dan sering berpartisipasi dalam acara-acara industri, baik sebagai peserta maupun pembicara. Saya juga menyukai pembelajaran kontinu dan terus meningkatkan keterampilan teknis saya melalui kursus online dan sertifikasi terkait.",
-        "Pendidikan adalah salah satu nilai yang saya pegang teguh. Saya percaya bahwa pendidikan bukan hanya tentang memperoleh gelar atau sertifikasi, tetapi juga tentang proses belajar sepanjang hidup. Saya terus mencari peluang untuk belajar hal-hal baru, baik dalam konteks profesional maupun pribadi. Saya percaya bahwa dengan pengetahuan yang mendalam dan keterampilan yang terus diperbarui, saya dapat memberikan nilai tambah yang signifikan dalam setiap peran yang saya ambil.",
-        "Selain dari dunia teknologi, saya memiliki minat dalam seni dan musik. Saya adalah seorang pecinta musik sejak kecil dan belajar bermain alat musik sejak usia dini. Saya menemukan bahwa musik adalah pelarian yang sempurna dari rutinitas sehari-hari dan memberikan saya inspirasi kreatif. Selain itu, saya juga senang berkeliling dan menjelajahi tempat-tempat baru. Saya percaya bahwa perjalanan adalah investasi terbaik untuk memperluas wawasan dan menghargai keanekaragaman budaya di dunia ini.",
-        "Pada akhirnya, saya berusaha untuk menjalani kehidupan yang seimbang antara karier, keluarga, dan kegiatan pribadi. Saya percaya bahwa keseimbangan ini adalah kunci untuk kebahagiaan dan keberhasilan jangka panjang. Saya berkomitmen untuk terus berinovasi dan menciptakan dampak positif di dunia sekitar saya, baik melalui pekerjaan saya maupun melalui kegiatan sosial dan sukarelawanisme.",
+        'Saya adalah seorang profesional di bidang teknologi informasi dengan pengalaman lebih dari 15 tahun. Karier saya dimulai sebagai seorang teknisi jaringan di perusahaan telekomunikasi terkemuka di Indonesia. Dari sana, saya belajar banyak tentang infrastruktur IT dan keamanan jaringan. Selama bertahun-tahun, saya telah berkembang menjadi seorang arsitek solusi IT dengan keahlian dalam merancang dan mengimplementasikan infrastruktur IT yang kompleks untuk organisasi besar. Saat ini, saya memimpin tim teknologi di sebuah perusahaan multinasional di mana saya bertanggung jawab atas strategi teknologi dan transformasi digital.',
+        'Pendidikan saya dimulai di universitas terkemuka di negara saya, di mana saya mengambil jurusan Teknik Informatika. Selama di perguruan tinggi, saya aktif dalam berbagai kegiatan akademis dan penelitian. Saya juga menjadi anggota dari beberapa organisasi mahasiswa yang membantu saya memperluas pengetahuan dan keterampilan saya di luar kurikulum. Saya lulus dengan gelar sarjana dengan penghargaan tertinggi dan kemudian melanjutkan untuk mendapatkan gelar magister dalam Manajemen Teknologi Informasi.',
+        'Di samping karier profesional saya, saya memiliki minat yang besar dalam pengajaran dan pendidikan. Saya telah menjadi pembicara di berbagai konferensi teknologi dan menyampaikan kuliah tamu di universitas lokal. Saya juga aktif sebagai mentor bagi para profesional muda di industri IT, membimbing mereka dalam pengembangan karier dan keahlian teknis. Saya percaya bahwa berbagi pengetahuan adalah kunci untuk mendorong inovasi dan pertumbuhan di komunitas teknologi.',
+        'Dalam hidup pribadi, saya adalah seorang pecinta alam dan petualang. Saya sering menghabiskan waktu luang saya untuk mendaki gunung dan menjelajahi tempat-tempat alam yang indah. Hobi ini membantu saya menjaga keseimbangan dan kedamaian dalam hidup yang sering kali sibuk. Selain itu, saya juga memiliki minat dalam seni dan fotografi. Saya menemukan bahwa fotografi adalah cara yang baik untuk mengekspresikan kreativitas dan mengabadikan momen-momen berharga dalam hidup.',
+        'Visi saya adalah untuk terus berkembang sebagai seorang profesional yang memberikan dampak positif dalam industri teknologi. Saya berkomitmen untuk terus belajar tentang teknologi terbaru dan berinovasi dalam menciptakan solusi yang bermanfaat bagi masyarakat dan lingkungan sekitar. Saya percaya bahwa dengan dedikasi dan kerja keras, kita dapat mencapai tujuan-tujuan besar dalam hidup dan memberikan kontribusi yang berarti bagi dunia.',
+        'Dalam perjalanan hidup saya, saya telah menghadapi banyak tantangan dan rintangan. Namun, saya percaya bahwa setiap tantangan adalah kesempatan untuk tumbuh dan belajar. Saya bersyukur atas dukungan dari keluarga, teman-teman, dan mentor yang selalu mendukung dan memotivasi saya dalam setiap langkah perjalanan saya. Pengalaman-pengalaman ini telah membentuk saya menjadi pribadi yang tangguh dan bersemangat untuk menghadapi masa depan yang cerah.',
+        'Saya selalu berusaha untuk hidup dengan integritas dan nilai-nilai yang kuat. Saya percaya bahwa integritas adalah pondasi dari segala hubungan yang baik, baik dalam konteks profesional maupun pribadi. Saya juga menghargai kolaborasi dan tim kerja yang efektif, di mana setiap anggota tim memiliki peran penting dalam mencapai tujuan bersama. Saya senang bekerja dalam lingkungan yang dinamis dan menantang di mana saya dapat terus berkembang dan memberikan kontribusi yang signifikan.',
+        'Kesimpulannya, saya adalah seseorang yang bersemangat dalam menjalani hidup dengan penuh dedikasi dan komitmen untuk memberikan yang terbaik dalam setiap aspek kehidupan saya. Saya yakin bahwa dengan semangat yang tinggi dan tekad yang kuat, kita dapat mencapai impian kita dan membawa perubahan positif bagi dunia di sekitar kita.',
+        'Saya telah belajar banyak dalam perjalanan hidup saya, terutama dalam konteks pengembangan pribadi dan profesional. Saya memulai karier saya sebagai seorang pengembang perangkat lunak dengan mengejar gelar teknik informatika dari universitas terkemuka. Selama belajar di perguruan tinggi, saya aktif dalam berbagai kegiatan ekstrakurikuler dan organisasi mahasiswa, yang membantu saya memperluas jaringan dan keterampilan interpersonal saya. Setelah lulus, saya bergabung dengan sebuah perusahaan teknologi global di mana saya belajar tentang pengembangan perangkat lunak skala besar dan manajemen proyek.',
+        'Sejak saat itu, saya telah mengambil peran yang berbeda-beda dalam industri IT, termasuk sebagai arsitek solusi dan manajer produk. Pada titik tertentu dalam karier saya, saya memutuskan untuk memulai perusahaan saya sendiri, fokus pada konsultasi IT untuk startup dan perusahaan kecil menengah. Pengalaman ini mengajarkan saya tentang kewirausahaan, manajemen bisnis, dan tantangan-tantangan yang terkait dengan membangun dan mempertahankan bisnis di pasar yang kompetitif.',
+        'Di samping karier dan bisnis, saya adalah seorang penggila teknologi yang selalu ingin mengikuti perkembangan terbaru dalam industri IT. Saya aktif dalam komunitas teknologi lokal dan sering berpartisipasi dalam acara-acara industri, baik sebagai peserta maupun pembicara. Saya juga menyukai pembelajaran kontinu dan terus meningkatkan keterampilan teknis saya melalui kursus online dan sertifikasi terkait.',
+        'Pendidikan adalah salah satu nilai yang saya pegang teguh. Saya percaya bahwa pendidikan bukan hanya tentang memperoleh gelar atau sertifikasi, tetapi juga tentang proses belajar sepanjang hidup. Saya terus mencari peluang untuk belajar hal-hal baru, baik dalam konteks profesional maupun pribadi. Saya percaya bahwa dengan pengetahuan yang mendalam dan keterampilan yang terus diperbarui, saya dapat memberikan nilai tambah yang signifikan dalam setiap peran yang saya ambil.',
+        'Selain dari dunia teknologi, saya memiliki minat dalam seni dan musik. Saya adalah seorang pecinta musik sejak kecil dan belajar bermain alat musik sejak usia dini. Saya menemukan bahwa musik adalah pelarian yang sempurna dari rutinitas sehari-hari dan memberikan saya inspirasi kreatif. Selain itu, saya juga senang berkeliling dan menjelajahi tempat-tempat baru. Saya percaya bahwa perjalanan adalah investasi terbaik untuk memperluas wawasan dan menghargai keanekaragaman budaya di dunia ini.',
+        'Pada akhirnya, saya berusaha untuk menjalani kehidupan yang seimbang antara karier, keluarga, dan kegiatan pribadi. Saya percaya bahwa keseimbangan ini adalah kunci untuk kebahagiaan dan keberhasilan jangka panjang. Saya berkomitmen untuk terus berinovasi dan menciptakan dampak positif di dunia sekitar saya, baik melalui pekerjaan saya maupun melalui kegiatan sosial dan sukarelawanisme.',
     ];
-
 
     const body_shapes: body_shape[] = [
         body_shape.sangat_kurus,
@@ -46,7 +58,7 @@ export async function memberSeed(prisma: PrismaClient) {
         hair_color.hitam,
         hair_color.pirang,
         hair_color.merah,
-        hair_color.putih
+        hair_color.putih,
     ];
 
     const hair_types: hair_type[] = [
@@ -54,39 +66,39 @@ export async function memberSeed(prisma: PrismaClient) {
         hair_type.ikal,
         hair_type.keriting,
         hair_type.kribo,
-        hair_type.botak
+        hair_type.botak,
     ];
 
     const eye_colors: eye_Color[] = [
         eye_Color.hitam,
         eye_Color.coklat,
         eye_Color.biru,
-        eye_Color.hijau
+        eye_Color.hijau,
     ];
 
     const characteristics = [
-        "Saya selalu tertarik pada seni visual dan sering menghabiskan waktu luang dengan menggambar atau melukis.",
-        "Sebagai seorang introvert, saya menikmati waktu sendirian untuk merenung dan membaca buku favorit saya.",
-        "Saya dikenal oleh teman-teman sebagai seseorang yang sangat teliti dan selalu memastikan setiap detail dikerjakan dengan sempurna.",
-        "Saya punya semangat petualangan yang tinggi dan senang mencoba hal-hal baru, seperti belajar bahasa asing atau menjelajahi tempat-tempat baru.",
-        "Saya adalah seorang yang sangat empatik dan sering menjadi tempat curhat bagi teman-teman saya karena kemampuan saya untuk mendengarkan dengan baik.",
-        "Organisasi adalah kekuatan saya; saya suka membuat jadwal dan memastikan semuanya berjalan sesuai rencana.",
-        "Saya memiliki rasa humor yang baik dan selalu berusaha menemukan sisi lucu dari situasi sehari-hari.",
-        "Musik adalah bagian penting dalam hidup saya, dan saya suka bermain gitar dan bernyanyi untuk mengungkapkan perasaan saya.",
-        "Saya seorang yang tekun dan gigih; saya tidak mudah menyerah hingga mencapai tujuan yang saya tetapkan.",
-        "Sebagai pecinta alam, saya sering melakukan hiking dan berkemah untuk menikmati keindahan alam dan mencari kedamaian."
-    ]
+        'Saya selalu tertarik pada seni visual dan sering menghabiskan waktu luang dengan menggambar atau melukis.',
+        'Sebagai seorang introvert, saya menikmati waktu sendirian untuk merenung dan membaca buku favorit saya.',
+        'Saya dikenal oleh teman-teman sebagai seseorang yang sangat teliti dan selalu memastikan setiap detail dikerjakan dengan sempurna.',
+        'Saya punya semangat petualangan yang tinggi dan senang mencoba hal-hal baru, seperti belajar bahasa asing atau menjelajahi tempat-tempat baru.',
+        'Saya adalah seorang yang sangat empatik dan sering menjadi tempat curhat bagi teman-teman saya karena kemampuan saya untuk mendengarkan dengan baik.',
+        'Organisasi adalah kekuatan saya; saya suka membuat jadwal dan memastikan semuanya berjalan sesuai rencana.',
+        'Saya memiliki rasa humor yang baik dan selalu berusaha menemukan sisi lucu dari situasi sehari-hari.',
+        'Musik adalah bagian penting dalam hidup saya, dan saya suka bermain gitar dan bernyanyi untuk mengungkapkan perasaan saya.',
+        'Saya seorang yang tekun dan gigih; saya tidak mudah menyerah hingga mencapai tujuan yang saya tetapkan.',
+        'Sebagai pecinta alam, saya sering melakukan hiking dan berkemah untuk menikmati keindahan alam dan mencari kedamaian.',
+    ];
     const medical_histories = [
-        "Saya pernah didiagnosis dengan kolesterol tinggi pada usia 30 tahun dan kini rutin mengonsumsi obat statin.",
-        "Pada tahun 2021, saya menjalani operasi laparoskopi untuk mengangkat kantong empedu setelah serangkaian serangan batu empedu.",
-        "Riwayat alergi saya termasuk reaksi terhadap serbuk sari dan debu, yang menyebabkan rhinitis alergi musiman.",
-        "Ketika berusia 25 tahun, saya mengalami cedera lutut parah saat bermain sepak bola dan harus menjalani rehabilitasi selama 6 bulan.",
-        "Saya memiliki riwayat migrain kronis yang sering kambuh, terutama saat stres atau kurang tidur.",
-        "Pada usia 40 tahun, saya didiagnosis dengan diabetes tipe 2 dan sejak itu menjalani diet ketat serta pengobatan untuk mengontrol gula darah.",
-        "Saya lahir dengan asma dan telah belajar untuk mengelola gejalanya dengan inhaler dan obat pencegahan.",
-        "Saya menjalani operasi bypass jantung lima tahun lalu setelah serangan jantung dan sekarang menjalani pemeriksaan rutin kardiovaskular.",
-        "Dalam riwayat keluarga saya, ada beberapa anggota yang menderita kanker kolorektal, sehingga saya melakukan kolonoskopi rutin untuk deteksi dini.",
-        "Pada usia 35 tahun, saya mengalami gangguan kecemasan yang membutuhkan terapi kognitif perilaku dan obat anti-kecemasan."
+        'Saya pernah didiagnosis dengan kolesterol tinggi pada usia 30 tahun dan kini rutin mengonsumsi obat statin.',
+        'Pada tahun 2021, saya menjalani operasi laparoskopi untuk mengangkat kantong empedu setelah serangkaian serangan batu empedu.',
+        'Riwayat alergi saya termasuk reaksi terhadap serbuk sari dan debu, yang menyebabkan rhinitis alergi musiman.',
+        'Ketika berusia 25 tahun, saya mengalami cedera lutut parah saat bermain sepak bola dan harus menjalani rehabilitasi selama 6 bulan.',
+        'Saya memiliki riwayat migrain kronis yang sering kambuh, terutama saat stres atau kurang tidur.',
+        'Pada usia 40 tahun, saya didiagnosis dengan diabetes tipe 2 dan sejak itu menjalani diet ketat serta pengobatan untuk mengontrol gula darah.',
+        'Saya lahir dengan asma dan telah belajar untuk mengelola gejalanya dengan inhaler dan obat pencegahan.',
+        'Saya menjalani operasi bypass jantung lima tahun lalu setelah serangan jantung dan sekarang menjalani pemeriksaan rutin kardiovaskular.',
+        'Dalam riwayat keluarga saya, ada beberapa anggota yang menderita kanker kolorektal, sehingga saya melakukan kolonoskopi rutin untuk deteksi dini.',
+        'Pada usia 35 tahun, saya mengalami gangguan kecemasan yang membutuhkan terapi kognitif perilaku dan obat anti-kecemasan.',
     ];
 
     const mottos: string[] = [
@@ -99,8 +111,8 @@ export async function memberSeed(prisma: PrismaClient) {
         'Keberanian adalah kunci untuk membuka pintu peluang.',
         'Kebahagiaan adalah pilihan, bukan tujuan.',
         'Usaha keras tidak pernah mengkhianati hasil.',
-        'Jadilah dirimu sendiri, semua orang lain sudah ada yang memiliki.'
-    ]
+        'Jadilah dirimu sendiri, semua orang lain sudah ada yang memiliki.',
+    ];
 
     const life_goals: string[] = [
         'Tujuan hidup saya adalah mencapai keseimbangan antara karier dan kehidupan pribadi',
@@ -108,8 +120,8 @@ export async function memberSeed(prisma: PrismaClient) {
         'Saya ingin terus belajar dan mengembangkan diri agar bisa menjadi ahli di bidang saya',
         'Tujuan hidup saya adalah membangun keluarga yang bahagia dan harmonis',
         'Saya ingin berkontribusi pada masyarakat dengan melakukan kegiatan sukarelawan',
-        'Tujuan saya adalah mengejar kebahagiaan sejati dan hidup dengan penuh makna'
-    ]
+        'Tujuan saya adalah mengejar kebahagiaan sejati dan hidup dengan penuh makna',
+    ];
 
     const hobbies: string[] = [
         'membaca',
@@ -120,7 +132,7 @@ export async function memberSeed(prisma: PrismaClient) {
         'menonton game',
         'mengaji',
         'menggambar',
-    ]
+    ];
 
     const spare_time_activities: string[] = [
         'Saat waktu luang, saya suka menghabiskannya dengan berjalan-jalan di taman.',
@@ -129,7 +141,7 @@ export async function memberSeed(prisma: PrismaClient) {
         'Pada waktu luang, saya suka menonton film atau serial televisi favorit.',
         'Ketika memiliki waktu luang, saya sering menghabiskan waktu luang di tempat-tempat yang nyaman.',
         'Di waktu luang, saya sering bermain game dan bermain permainan komputer.',
-    ]
+    ];
 
     const positive_traits: string[] = [
         'Saya orangnya jujur dan pemaaf.',
@@ -137,8 +149,8 @@ export async function memberSeed(prisma: PrismaClient) {
         'Saya dikenal sebagai orang yang sabar dan penuh pengertian.',
         'Saya selalu berusaha untuk menjadi orang yang ramah dan mudah bergaul',
         'Saya orangnya pekerja keras dan bertanggung jawab',
-        'Saya selalu berusaha untuk menjadi orang yang setia dan dapat diandalkan'
-    ]
+        'Saya selalu berusaha untuk menjadi orang yang setia dan dapat diandalkan',
+    ];
 
     const negative_traits: string[] = [
         'Saya orangnya sering terburu-buru dan kurang sabar',
@@ -146,8 +158,8 @@ export async function memberSeed(prisma: PrismaClient) {
         'Saya sering merasa iri hati terhadap kesuksesan orang lain',
         'Saya orangnya mudah marah dan emosional',
         'Saya sering menunda-nunda pekerjaan dan sulit menjaga disiplin',
-        'Saya kadang-kadang terlalu pesimis dan sulit melihat sisi positif dari situasi'
-    ]
+        'Saya kadang-kadang terlalu pesimis dan sulit melihat sisi positif dari situasi',
+    ];
 
     const liked_things: string[] = [
         'Saya suka membaca buku, terutama novel fiksi dan biografi',
@@ -155,8 +167,8 @@ export async function memberSeed(prisma: PrismaClient) {
         'Saya suka memasak dan mencoba resep-resep baru di waktu luang',
         'Saya menikmati bermain olahraga seperti sepak bola dan bulu tangkis',
         'Saya suka menonton film, terutama film-film dokumenter dan drama',
-        'Saya suka berkebun dan merawat tanaman di halaman rumah'
-    ]
+        'Saya suka berkebun dan merawat tanaman di halaman rumah',
+    ];
 
     const unliked_things: string[] = [
         'Saya tidak suka menunggu terlalu lama, terutama dalam antrean yang panjang',
@@ -164,160 +176,284 @@ export async function memberSeed(prisma: PrismaClient) {
         'Saya tidak suka dengan kebisingan yang berlebihan, terutama saat mencoba untuk fokus',
         'Saya tidak suka menonton film yang terlalu panjang',
         'Saya tidak nyaman berada di tempat yang terlalu ramai dan padat',
-        'Saya tidak suka dengan orang yang suka menggosip atau membicarakan orang lain di belakang mereka'
-    ]
+        'Saya tidak suka dengan orang yang suka menggosip atau membicarakan orang lain di belakang mereka',
+    ];
+    ('Saya tidak suka dengan orang yang suka menggosip atau membicarakan orang lain di belakang mereka');
 
     const sukuIndonesia = [
-        "Aceh",
-        "Batak",
-        "Minangkabau",
-        "Melayu",
-        "Sunda",
-        "Jawa",
-        "Madura",
-        "Betawi",
-        "Bali",
-        "Sasak",
-        "Bugis",
-        "Makassar",
-        "Toraja",
-        "Dayak",
-        "Banjar",
-        "Papua",
-        "Ambon",
-        "Flores",
-        "Timor",
-        "Sumbawa",
-        "Nias",
-        "Asmat",
-        "Mentawai",
-        "Tolaki",
-        "Minahasa",
-        "Sangir",
-        "Bajau",
-        "Torres Strait Islander"
+        'Aceh',
+        'Batak',
+        'Minangkabau',
+        'Melayu',
+        'Sunda',
+        'Jawa',
+        'Madura',
+        'Betawi',
+        'Bali',
+        'Sasak',
+        'Bugis',
+        'Makassar',
+        'Toraja',
+        'Dayak',
+        'Banjar',
+        'Papua',
+        'Ambon',
+        'Flores',
+        'Timor',
+        'Sumbawa',
+        'Nias',
+        'Asmat',
+        'Mentawai',
+        'Tolaki',
+        'Minahasa',
+        'Sangir',
+        'Bajau',
+        'Torres Strait Islander',
     ];
 
     const manhaj: ManhajStatus[] = [
-        'SALAF',
-        'BARU_BELAJAR',
-        'NON_SALAF'
+        ManhajStatus.BARU_BELAJAR,
+        ManhajStatus.NON_SALAF,
+        ManhajStatus.SALAF
     ];
 
     const marriedStatus: MarriageStatus[] = [
-        'LAJANG',
-        'MENIKAH',
-        'DUDA',
-        'JANDA'
-    ]
+        MarriageStatus.CERAI_HIDUP,
+        MarriageStatus.CERAI_MATI,
+        MarriageStatus.LAJANG,
+        MarriageStatus.MENIKAH,
+    ];
 
     const marriagePermissions: MarriagePermission[] = [
-        'POLIGAMI',
-        'NON_POLIGAMI',
-    ]
+        MarriagePermission.NON_POLIGAMI,
+        MarriagePermission.POLIGAMI
+    ];
 
     const skillSet = [
-        { title: "Saya adalah seorang programmer" },
-        { title: "Saya bisa berbicara dalam tiga bahasa: Indonesia, Inggris, dan Mandarin" },
-        { title: "Saya ahli dalam pengembangan aplikasi web dengan React dan Node.js" },
-        { title: "Saya memiliki pengalaman dalam analisis data menggunakan Python" },
-        { title: "Saya terampil dalam desain grafis menggunakan Adobe Photoshop dan Illustrator" },
-        { title: "Saya bisa mengelola server dan deployment menggunakan Docker dan Kubernetes" },
-        { title: "Saya mahir dalam menggunakan SQL untuk mengelola dan menganalisis database" },
-        { title: "Saya berpengalaman dalam mengembangkan aplikasi mobile dengan Flutter" },
-        { title: "Saya memiliki kemampuan dalam penulisan konten kreatif dan copywriting" },
-        { title: "Saya terampil dalam menggunakan alat analitik seperti Google Analytics" },
-        { title: "Saya dapat membuat dan mengelola kampanye pemasaran digital" },
-        { title: "Saya mampu memimpin tim dalam proyek pengembangan perangkat lunak" },
-        { title: "Saya memiliki pengetahuan dalam keamanan siber dan proteksi data" },
-        { title: "Saya bisa memainkan beberapa alat musik seperti gitar dan piano" },
-        { title: "Saya mahir dalam menggunakan alat-alat pengembangan Agile seperti JIRA" },
-        { title: "Saya memiliki keahlian dalam optimasi mesin pencari (SEO)" },
-        { title: "Saya bisa merancang dan mengembangkan game menggunakan Unity" },
-        { title: "Saya ahli dalam penggunaan alat DevOps dan Continuous Integration/Continuous Deployment (CI/CD)" },
-        { title: "Saya memiliki kemampuan dalam presentasi dan public speaking yang baik" },
-        { title: "Saya terampil dalam menulis dan mengembangkan dokumentasi teknis" },
-        { title: "Saya bisa membuat ilustrasi digital dan animasi 2D" },
-        { title: "Saya memiliki pengalaman dalam manajemen proyek dengan metodologi Scrum" },
-        { title: "Saya terampil dalam editing video menggunakan Adobe Premiere Pro" },
-        { title: "Saya mahir dalam penggunaan teknologi cloud seperti AWS dan Azure" },
-        { title: "Saya berpengalaman dalam pemasaran melalui media sosial" },
-        { title: "Saya dapat melakukan pemrograman sistem tertanam (embedded systems)" },
-        { title: "Saya memiliki keahlian dalam desain UX/UI untuk aplikasi mobile dan web" },
-        { title: "Saya bisa mengembangkan skrip automasi menggunakan Bash dan PowerShell" },
-        { title: "Saya terampil dalam menyusun laporan keuangan dan analisis akuntansi" },
-        { title: "Saya memiliki kemampuan dalam pengembangan bisnis dan strategi pemasaran" }
+        { title: 'Saya adalah seorang programmer' },
+        {
+            title: 'Saya bisa berbicara dalam tiga bahasa: Indonesia, Inggris, dan Mandarin',
+        },
+        {
+            title: 'Saya ahli dalam pengembangan aplikasi web dengan React dan Node.js',
+        },
+        {
+            title: 'Saya memiliki pengalaman dalam analisis data menggunakan Python',
+        },
+        {
+            title: 'Saya terampil dalam desain grafis menggunakan Adobe Photoshop dan Illustrator',
+        },
+        {
+            title: 'Saya bisa mengelola server dan deployment menggunakan Docker dan Kubernetes',
+        },
+        {
+            title: 'Saya mahir dalam menggunakan SQL untuk mengelola dan menganalisis database',
+        },
+        {
+            title: 'Saya berpengalaman dalam mengembangkan aplikasi mobile dengan Flutter',
+        },
+        {
+            title: 'Saya memiliki kemampuan dalam penulisan konten kreatif dan copywriting',
+        },
+        {
+            title: 'Saya terampil dalam menggunakan alat analitik seperti Google Analytics',
+        },
+        {
+            title: 'Saya dapat membuat dan mengelola kampanye pemasaran digital',
+        },
+        {
+            title: 'Saya mampu memimpin tim dalam proyek pengembangan perangkat lunak',
+        },
+        {
+            title: 'Saya memiliki pengetahuan dalam keamanan siber dan proteksi data',
+        },
+        {
+            title: 'Saya bisa memainkan beberapa alat musik seperti gitar dan piano',
+        },
+        {
+            title: 'Saya mahir dalam menggunakan alat-alat pengembangan Agile seperti JIRA',
+        },
+        { title: 'Saya memiliki keahlian dalam optimasi mesin pencari (SEO)' },
+        {
+            title: 'Saya bisa merancang dan mengembangkan game menggunakan Unity',
+        },
+        {
+            title: 'Saya ahli dalam penggunaan alat DevOps dan Continuous Integration/Continuous Deployment (CI/CD)',
+        },
+        {
+            title: 'Saya memiliki kemampuan dalam presentasi dan public speaking yang baik',
+        },
+        {
+            title: 'Saya terampil dalam menulis dan mengembangkan dokumentasi teknis',
+        },
+        { title: 'Saya bisa membuat ilustrasi digital dan animasi 2D' },
+        {
+            title: 'Saya memiliki pengalaman dalam manajemen proyek dengan metodologi Scrum',
+        },
+        {
+            title: 'Saya terampil dalam editing video menggunakan Adobe Premiere Pro',
+        },
+        {
+            title: 'Saya mahir dalam penggunaan teknologi cloud seperti AWS dan Azure',
+        },
+        { title: 'Saya berpengalaman dalam pemasaran melalui media sosial' },
+        {
+            title: 'Saya dapat melakukan pemrograman sistem tertanam (embedded systems)',
+        },
+        {
+            title: 'Saya memiliki keahlian dalam desain UX/UI untuk aplikasi mobile dan web',
+        },
+        {
+            title: 'Saya bisa mengembangkan skrip automasi menggunakan Bash dan PowerShell',
+        },
+        {
+            title: 'Saya terampil dalam menyusun laporan keuangan dan analisis akuntansi',
+        },
+        {
+            title: 'Saya memiliki kemampuan dalam pengembangan bisnis dan strategi pemasaran',
+        },
     ];
 
     const hobiList = [
-        { title: "Saya suka mendaki gunung" },
-        { title: "Saya senang bermain gitar" },
-        { title: "Saya menikmati membaca buku fiksi ilmiah" },
-        { title: "Saya hobi bersepeda di pagi hari" },
-        { title: "Saya suka memasak dan mencoba resep baru" },
-        { title: "Saya menikmati fotografi alam" },
-        { title: "Saya senang berenang di laut" },
-        { title: "Saya suka bermain sepak bola bersama teman-teman" },
-        { title: "Saya menikmati menonton film klasik" },
-        { title: "Saya suka berkebun dan merawat tanaman" },
-        { title: "Saya hobi menggambar dan melukis" },
-        { title: "Saya senang berkemah di alam terbuka" },
-        { title: "Saya suka bermain catur" },
-        { title: "Saya menikmati yoga dan meditasi" },
-        { title: "Saya hobi membuat kerajinan tangan" },
-        { title: "Saya senang bermain video game" },
-        { title: "Saya suka berlari di taman" },
-        { title: "Saya menikmati bermain tenis" },
-        { title: "Saya suka menyanyi dan mengikuti karaoke" },
-        { title: "Saya senang menulis puisi dan cerita pendek" }
+        { title: 'Saya suka mendaki gunung' },
+        { title: 'Saya senang bermain gitar' },
+        { title: 'Saya menikmati membaca buku fiksi ilmiah' },
+        { title: 'Saya hobi bersepeda di pagi hari' },
+        { title: 'Saya suka memasak dan mencoba resep baru' },
+        { title: 'Saya menikmati fotografi alam' },
+        { title: 'Saya senang berenang di laut' },
+        { title: 'Saya suka bermain sepak bola bersama teman-teman' },
+        { title: 'Saya menikmati menonton film klasik' },
+        { title: 'Saya suka berkebun dan merawat tanaman' },
+        { title: 'Saya hobi menggambar dan melukis' },
+        { title: 'Saya senang berkemah di alam terbuka' },
+        { title: 'Saya suka bermain catur' },
+        { title: 'Saya menikmati yoga dan meditasi' },
+        { title: 'Saya hobi membuat kerajinan tangan' },
+        { title: 'Saya senang bermain video game' },
+        { title: 'Saya suka berlari di taman' },
+        { title: 'Saya menikmati bermain tenis' },
+        { title: 'Saya suka menyanyi dan mengikuti karaoke' },
+        { title: 'Saya senang menulis puisi dan cerita pendek' },
     ];
 
     const married_goals = [
-        { title: "Kami ingin membangun komunikasi yang terbuka dan jujur setiap hari" },
-        { title: "Kami berencana untuk menabung untuk rumah pertama kami" },
-        { title: "Kami ingin merayakan setiap ulang tahun pernikahan dengan perjalanan khusus" },
-        { title: "Kami berkomitmen untuk menjaga keseimbangan antara pekerjaan dan kehidupan keluarga" },
-        { title: "Kami berharap bisa menghadiri kursus parenting untuk persiapan menjadi orang tua" },
-        { title: "Kami berencana untuk memiliki dua anak dalam lima tahun ke depan" },
-        { title: "Kami ingin merencanakan liburan keluarga setiap tahun" },
-        { title: "Kami ingin menjalani gaya hidup sehat dengan olahraga bersama secara teratur" },
-        { title: "Kami berkomitmen untuk mendukung satu sama lain dalam mencapai tujuan pribadi" },
-        { title: "Kami berharap bisa membeli mobil keluarga dalam dua tahun ke depan" },
-        { title: "Kami ingin merayakan setiap momen penting dengan keluarga besar" },
-        { title: "Kami berkomitmen untuk mengikuti sesi konseling pasangan secara berkala untuk menjaga hubungan tetap kuat" },
-        { title: "Kami berencana untuk mengadakan acara keluarga setiap bulan" },
-        { title: "Kami ingin meningkatkan kemampuan memasak bersama dan mencoba resep baru" },
-        { title: "Kami berkomitmen untuk saling memberikan waktu dan perhatian yang berkualitas" },
-        { title: "Kami berharap bisa merayakan ulang tahun pernikahan ke-50 dengan keluarga besar" },
-        { title: "Kami ingin memperbaiki dan mempercantik rumah kami setiap tahun" },
-        { title: "Kami berkomitmen untuk menjaga keuangan keluarga dengan bijak dan disiplin" },
-        { title: "Kami berharap bisa pensiun dengan nyaman dan menikmati waktu bersama" },
-        { title: "Kami ingin melakukan kegiatan sukarela bersama sebagai keluarga" }
+        {
+            title: 'Kami ingin membangun komunikasi yang terbuka dan jujur setiap hari',
+        },
+        { title: 'Kami berencana untuk menabung untuk rumah pertama kami' },
+        {
+            title: 'Kami ingin merayakan setiap ulang tahun pernikahan dengan perjalanan khusus',
+        },
+        {
+            title: 'Kami berkomitmen untuk menjaga keseimbangan antara pekerjaan dan kehidupan keluarga',
+        },
+        {
+            title: 'Kami berharap bisa menghadiri kursus parenting untuk persiapan menjadi orang tua',
+        },
+        {
+            title: 'Kami berencana untuk memiliki dua anak dalam lima tahun ke depan',
+        },
+        { title: 'Kami ingin merencanakan liburan keluarga setiap tahun' },
+        {
+            title: 'Kami ingin menjalani gaya hidup sehat dengan olahraga bersama secara teratur',
+        },
+        {
+            title: 'Kami berkomitmen untuk mendukung satu sama lain dalam mencapai tujuan pribadi',
+        },
+        {
+            title: 'Kami berharap bisa membeli mobil keluarga dalam dua tahun ke depan',
+        },
+        {
+            title: 'Kami ingin merayakan setiap momen penting dengan keluarga besar',
+        },
+        {
+            title: 'Kami berkomitmen untuk mengikuti sesi konseling pasangan secara berkala untuk menjaga hubungan tetap kuat',
+        },
+        {
+            title: 'Kami berencana untuk mengadakan acara keluarga setiap bulan',
+        },
+        {
+            title: 'Kami ingin meningkatkan kemampuan memasak bersama dan mencoba resep baru',
+        },
+        {
+            title: 'Kami berkomitmen untuk saling memberikan waktu dan perhatian yang berkualitas',
+        },
+        {
+            title: 'Kami berharap bisa merayakan ulang tahun pernikahan ke-50 dengan keluarga besar',
+        },
+        {
+            title: 'Kami ingin memperbaiki dan mempercantik rumah kami setiap tahun',
+        },
+        {
+            title: 'Kami berkomitmen untuk menjaga keuangan keluarga dengan bijak dan disiplin',
+        },
+        {
+            title: 'Kami berharap bisa pensiun dengan nyaman dan menikmati waktu bersama',
+        },
+        {
+            title: 'Kami ingin melakukan kegiatan sukarela bersama sebagai keluarga',
+        },
     ];
 
     const tujuanHidup = [
-        { title: "Saya ingin mencapai keseimbangan antara kehidupan kerja dan pribadi yang harmonis" },
-        { title: "Saya berharap bisa menjalani kehidupan dengan penuh rasa syukur dan kebahagiaan" },
-        { title: "Saya bertekad untuk terus belajar dan mengembangkan diri sepanjang hidup" },
-        { title: "Saya ingin berkontribusi positif bagi masyarakat dan membantu mereka yang membutuhkan" },
-        { title: "Saya berharap bisa menjalani hidup dengan penuh kesehatan dan energi" },
-        { title: "Saya ingin membangun hubungan yang bermakna dan mendalam dengan keluarga dan teman" },
-        { title: "Saya berencana untuk mengeksplorasi dan memahami berbagai budaya dunia melalui perjalanan" },
-        { title: "Saya berharap bisa mencapai stabilitas finansial dan hidup tanpa beban hutang" },
-        { title: "Saya bertekad untuk mengejar dan mewujudkan impian karier saya" },
-        { title: "Saya ingin menciptakan sesuatu yang memiliki dampak positif dan tahan lama" },
-        { title: "Saya berharap bisa hidup secara mandiri dan otonom" },
-        { title: "Saya ingin membangun keluarga yang bahagia dan harmonis" },
-        { title: "Saya bertekad untuk menjaga lingkungan dan menjalani gaya hidup yang ramah lingkungan" },
-        { title: "Saya berharap bisa menjadi sumber inspirasi dan motivasi bagi orang lain" },
-        { title: "Saya ingin mengejar passion saya dan menjalani hidup dengan penuh semangat" },
-        { title: "Saya berharap bisa menikmati setiap momen dalam hidup dengan penuh kesadaran dan kehadiran" },
-        { title: "Saya berkomitmen untuk menjaga kesehatan mental dan emosional saya" },
-        { title: "Saya ingin terus mengejar pendidikan dan memperoleh pengetahuan baru" },
-        { title: "Saya berharap bisa mencapai perdamaian batin dan kesejahteraan spiritual" },
-        { title: "Saya ingin mengembangkan keterampilan baru dan terus tumbuh sebagai individu" }
+        {
+            title: 'Saya ingin mencapai keseimbangan antara kehidupan kerja dan pribadi yang harmonis',
+        },
+        {
+            title: 'Saya berharap bisa menjalani kehidupan dengan penuh rasa syukur dan kebahagiaan',
+        },
+        {
+            title: 'Saya bertekad untuk terus belajar dan mengembangkan diri sepanjang hidup',
+        },
+        {
+            title: 'Saya ingin berkontribusi positif bagi masyarakat dan membantu mereka yang membutuhkan',
+        },
+        {
+            title: 'Saya berharap bisa menjalani hidup dengan penuh kesehatan dan energi',
+        },
+        {
+            title: 'Saya ingin membangun hubungan yang bermakna dan mendalam dengan keluarga dan teman',
+        },
+        {
+            title: 'Saya berencana untuk mengeksplorasi dan memahami berbagai budaya dunia melalui perjalanan',
+        },
+        {
+            title: 'Saya berharap bisa mencapai stabilitas finansial dan hidup tanpa beban hutang',
+        },
+        {
+            title: 'Saya bertekad untuk mengejar dan mewujudkan impian karier saya',
+        },
+        {
+            title: 'Saya ingin menciptakan sesuatu yang memiliki dampak positif dan tahan lama',
+        },
+        { title: 'Saya berharap bisa hidup secara mandiri dan otonom' },
+        { title: 'Saya ingin membangun keluarga yang bahagia dan harmonis' },
+        {
+            title: 'Saya bertekad untuk menjaga lingkungan dan menjalani gaya hidup yang ramah lingkungan',
+        },
+        {
+            title: 'Saya berharap bisa menjadi sumber inspirasi dan motivasi bagi orang lain',
+        },
+        {
+            title: 'Saya ingin mengejar passion saya dan menjalani hidup dengan penuh semangat',
+        },
+        {
+            title: 'Saya berharap bisa menikmati setiap momen dalam hidup dengan penuh kesadaran dan kehadiran',
+        },
+        {
+            title: 'Saya berkomitmen untuk menjaga kesehatan mental dan emosional saya',
+        },
+        {
+            title: 'Saya ingin terus mengejar pendidikan dan memperoleh pengetahuan baru',
+        },
+        {
+            title: 'Saya berharap bisa mencapai perdamaian batin dan kesejahteraan spiritual',
+        },
+        {
+            title: 'Saya ingin mengembangkan keterampilan baru dan terus tumbuh sebagai individu',
+        },
     ];
-
 
     function getRandomOfObjectArray(dataArray: any) {
         // Salin array untuk menghindari modifikasi array asli
@@ -326,7 +462,10 @@ export async function memberSeed(prisma: PrismaClient) {
         // Algoritma Fisher-Yates untuk mengacak array
         for (let i = shuffledArray.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+            [shuffledArray[i], shuffledArray[j]] = [
+                shuffledArray[j],
+                shuffledArray[i],
+            ];
         }
 
         // ambil maksimal 10 data
@@ -340,7 +479,8 @@ export async function memberSeed(prisma: PrismaClient) {
         const end = new Date('2005-01-01T00:00:00.000Z').getTime();
 
         // Milidetik acak antara start dan end
-        const randomTime = Math.floor(Math.random() * (end - start + 1)) + start;
+        const randomTime =
+            Math.floor(Math.random() * (end - start + 1)) + start;
 
         // Buat objek Date dari milidetik acak
         const randomDate = new Date(randomTime);
@@ -349,8 +489,7 @@ export async function memberSeed(prisma: PrismaClient) {
         return randomDate.toISOString();
     }
 
-
-    console.log('Seed: Member');
+    // console.log('Seed: Member');
 
     // BOB
     {
@@ -366,20 +505,26 @@ export async function memberSeed(prisma: PrismaClient) {
         };
 
         const randoms = [];
-        for (let i = 0; i < 1000; i++) {
+        for (let i = 0; i < 100; i++) {
             if (i % 2 == 0) randoms.push(i);
         }
 
         // create 100 Bob MEMBER
-        for (let i = 0; i < 1000; i++) {
+        for (let i = 0; i < 100; i++) {
             process.stdout.write('.');
             const randomNumber = Math.floor(Math.random() * 10) + 1;
             const firstname = faker.person.firstName('male');
             const email = faker.internet.email({ firstName: firstname });
 
-            const randomProvinceIndex = Math.floor(Math.random() * provinces.length);
-            const randomProvinceIndex1 = Math.floor(Math.random() * provinces.length);
-            const randomProvinceIndex2 = Math.floor(Math.random() * provinces.length);
+            const randomProvinceIndex = Math.floor(
+                Math.random() * provinces.length,
+            );
+            const randomProvinceIndex1 = Math.floor(
+                Math.random() * provinces.length,
+            );
+            const randomProvinceIndex2 = Math.floor(
+                Math.random() * provinces.length,
+            );
 
             const data: Prisma.UserCreateInput = {
                 ...bob,
@@ -388,74 +533,183 @@ export async function memberSeed(prisma: PrismaClient) {
                 lastname: faker.person.lastName('male'),
                 avatar: '/dummy/ikhwan_' + randomNumber + '_lg.png',
                 avatar_md: '/dummy/ikhwan_' + randomNumber + '_md.png',
-                blurred_avatar: '/dummy/ikhwan_blurred_' + randomNumber + '_lg.png',
+                blurred_avatar:
+                    '/dummy/ikhwan_blurred_' + randomNumber + '_lg.png',
                 blurred_avatar_md:
                     '/dummy/ikhwan_blurred_' + randomNumber + '_md.png',
             };
 
-            const characteristic = Math.random() < 0.5
-            const medical_history = Math.random() < 0.5
+            const characteristic = Math.random() < 0.5;
+            const medical_history = Math.random() < 0.5;
 
-            const data_physical_character: Prisma.PhysicalCharacterCreateInput = {
-                height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
-                weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
-                body_shape: body_shapes[Math.floor(Math.random() * body_shapes.length)],
-                skin_color: skin_colors[Math.floor(Math.random() * skin_colors.length)],
-                hair_type: hair_types[Math.floor(Math.random() * hair_types.length)],
-                hair_color: hair_colors[Math.floor(Math.random() * hair_colors.length)],
-                eye_color: eye_colors[Math.floor(Math.random() * eye_colors.length)],
-                characteristic,
-                characteristic_detail: characteristic ? characteristics[Math.floor(Math.random() * medical_histories.length)] : null,
-                medical_history,
-                medical_history_detail: medical_history ? medical_histories[Math.floor(Math.random() * medical_histories.length)] : null,
-            }
+            // const data_physical_character: Prisma.PhysicalCharacterCreateInput =
+            //     {
+            //         body_shape:
+            //             body_shapes[
+            //                 Math.floor(Math.random() * body_shapes.length)
+            //             ],
+            //         skin_color:
+            //             skin_colors[
+            //                 Math.floor(Math.random() * skin_colors.length)
+            //             ],
+            //         hair_type:
+            //             hair_types[
+            //                 Math.floor(Math.random() * hair_types.length)
+            //             ],
+            //         hair_color:
+            //             hair_colors[
+            //                 Math.floor(Math.random() * hair_colors.length)
+            //             ],
+            //         eye_color:
+            //             eye_colors[
+            //                 Math.floor(Math.random() * eye_colors.length)
+            //             ],
+            //         characteristic,
+            //         characteristic_detail: characteristic
+            //             ? characteristics[
+            //                   Math.floor(
+            //                       Math.random() * medical_histories.length,
+            //                   )
+            //               ]
+            //             : null,
+            //         medical_history,
+            //         medical_history_detail: medical_history
+            //             ? medical_histories[
+            //                   Math.floor(
+            //                       Math.random() * medical_histories.length,
+            //                   )
+            //               ]
+            //             : null,
+            //     };
+            const data_physical_character: Prisma.PhysicalCharacterCreateInput =
+                {
+                    height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
+                    weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
+                    body_shape:
+                        body_shapes[
+                            Math.floor(Math.random() * body_shapes.length)
+                        ],
+                    skin_color:
+                        skin_colors[
+                            Math.floor(Math.random() * skin_colors.length)
+                        ],
+                    hair_type:
+                        hair_types[
+                            Math.floor(Math.random() * hair_types.length)
+                        ],
+                    hair_color:
+                        hair_colors[
+                            Math.floor(Math.random() * hair_colors.length)
+                        ],
+                    eye_color:
+                        eye_colors[
+                            Math.floor(Math.random() * eye_colors.length)
+                        ],
+                    characteristic,
+                    characteristic_detail: characteristic
+                        ? characteristics[
+                              Math.floor(
+                                  Math.random() * medical_histories.length,
+                              )
+                          ]
+                        : null,
+                    medical_history,
+                    medical_history_detail: medical_history
+                        ? medical_histories[
+                              Math.floor(
+                                  Math.random() * medical_histories.length,
+                              )
+                          ]
+                        : null,
+                };
 
-            const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput = {
-                motto: mottos[Math.floor(Math.random() * mottos.length)],
-                life_goal: life_goals[Math.floor(Math.random() * life_goals.length)],
-                hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
-                spare_time_activity: spare_time_activities[Math.floor(Math.random() * spare_time_activities.length)],
-                positive_traits: positive_traits[Math.floor(Math.random() * positive_traits.length)],
-                negative_traits: negative_traits[Math.floor(Math.random() * negative_traits.length)],
-                liked_things: liked_things[Math.floor(Math.random() * liked_things.length)],
-                unliked_things: unliked_things[Math.floor(Math.random() * unliked_things.length)],
-                drink_alcohol: Math.random() < 0.5,
-                smoking: Math.random() < 0.5,
-            }
+            const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
+                {
+                    motto: mottos[Math.floor(Math.random() * mottos.length)],
+                    life_goal:
+                        life_goals[
+                            Math.floor(Math.random() * life_goals.length)
+                        ],
+                    hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
+                    spare_time_activity:
+                        spare_time_activities[
+                            Math.floor(
+                                Math.random() * spare_time_activities.length,
+                            )
+                        ],
+                    positive_traits:
+                        positive_traits[
+                            Math.floor(Math.random() * positive_traits.length)
+                        ],
+                    negative_traits:
+                        negative_traits[
+                            Math.floor(Math.random() * negative_traits.length)
+                        ],
+                    liked_things:
+                        liked_things[
+                            Math.floor(Math.random() * liked_things.length)
+                        ],
+                    unliked_things:
+                        unliked_things[
+                            Math.floor(Math.random() * unliked_things.length)
+                        ],
+                    drink_alcohol: Math.random() < 0.5,
+                    smoking: Math.random() < 0.5,
+                };
 
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
                 data.biodata = {
                     create: {
-                        bio: 'Assalamualaikum, ukhti. ' + biography[Math.floor(Math.random() * biography.length)],
+                        bio:
+                            'Assalamualaikum, ukhti. ' +
+                            biography[
+                                Math.floor(Math.random() * biography.length)
+                            ],
                         phone: '+628123456789',
+                        company: 'Al Bashiroh Corp',
                         dob: getRandomDateBetween1970And2005(),
                         birth_place: provinces[randomProvinceIndex2].name,
                         birth_order: 1,
-                        domicile_town: provinces[randomProvinceIndex1].name,
-                        domicile_province: provinces[randomProvinceIndex].name,
+                        address_town: provinces[randomProvinceIndex1].name,
+                        address_province: provinces[randomProvinceIndex].name,
                         hometown_province: provinces[randomProvinceIndex2].name,
                         physical_characters: {
                             create: data_physical_character,
                         },
                         non_physical_chars: {
-                            create: data_non_physical_character
+                            create: data_non_physical_character,
                         },
-                        ethnic: sukuIndonesia[Math.floor(Math.random() * sukuIndonesia.length)],
-                        manhaj: manhaj[Math.floor(Math.random() * manhaj.length)],
+                        ethnic: sukuIndonesia[
+                            Math.floor(Math.random() * sukuIndonesia.length)
+                        ],
+                        manhaj: manhaj[
+                            Math.floor(Math.random() * manhaj.length)
+                        ],
                         gender: 'PRIA',
-                        marriage_status: marriedStatus[Math.floor(Math.random() * marriedStatus.length)],
-                        marriage_permission: marriagePermissions[Math.floor(Math.random() * marriagePermissions.length)],
+                        
+                        address_zip_code: Math.floor(Math.random() * 100),
+                        poligami_opinion: '',
+                        marriage_status:
+                            marriedStatus[
+                                Math.floor(Math.random() * marriedStatus.length)
+                            ],
+                        marriage_permission:
+                            marriagePermissions[
+                                Math.floor(
+                                    Math.random() * marriagePermissions.length,
+                                )
+                            ],
                     },
                 };
                 data.Skill = {
                     createMany: {
-                        data: getRandomOfObjectArray(skillSet)
+                        data: getRandomOfObjectArray(skillSet),
                     },
                 };
                 data.Hobby = {
                     createMany: {
-                        data: getRandomOfObjectArray(hobiList)
+                        data: getRandomOfObjectArray(hobiList),
                     },
                 };
                 data.Education = {
@@ -483,16 +737,16 @@ export async function memberSeed(prisma: PrismaClient) {
                 };
                 data.Married_goal = {
                     createMany: {
-                        data: getRandomOfObjectArray(married_goals)
+                        data: getRandomOfObjectArray(married_goals),
                     },
                 };
                 data.Life_goal = {
                     createMany: {
-                        data: getRandomOfObjectArray(tujuanHidup)
+                        data: getRandomOfObjectArray(tujuanHidup),
                     },
                 };
             }
-            await prisma.user.upsert({
+            const post = await prisma.user.upsert({
                 where: { email },
                 update: data,
                 create: data,
@@ -513,17 +767,23 @@ export async function memberSeed(prisma: PrismaClient) {
             },
         };
         const randoms = [];
-        for (let i = 0; i < 1000; i++) {
+        for (let i = 0; i < 100; i++) {
             if (i % 2 == 1) randoms.push(i);
         }
         // create 100 Alice MEMBER
-        for (let i = 0; i < 1000; i++) {
+        for (let i = 0; i < 100; i++) {
             process.stdout.write('.');
             const randomNumber = Math.floor(Math.random() * 10) + 1;
 
-            const randomProvinceIndex = Math.floor(Math.random() * provinces.length);
-            const randomProvinceIndex1 = Math.floor(Math.random() * provinces.length);
-            const randomProvinceIndex2 = Math.floor(Math.random() * provinces.length);
+            const randomProvinceIndex = Math.floor(
+                Math.random() * provinces.length,
+            );
+            const randomProvinceIndex1 = Math.floor(
+                Math.random() * provinces.length,
+            );
+            const randomProvinceIndex2 = Math.floor(
+                Math.random() * provinces.length,
+            );
 
             const firstname = faker.person.firstName('female');
             const email = faker.internet.email({ firstName: firstname });
@@ -534,53 +794,146 @@ export async function memberSeed(prisma: PrismaClient) {
                 lastname: faker.person.lastName('female'),
                 avatar: '/dummy/akhwat_' + randomNumber + '_lg.png',
                 avatar_md: '/dummy/akhwat_' + randomNumber + '_md.png',
-                blurred_avatar: '/dummy/akhwat_blurred_' + randomNumber + '_lg.png',
+                blurred_avatar:
+                    '/dummy/akhwat_blurred_' + randomNumber + '_lg.png',
                 blurred_avatar_md:
                     '/dummy/akhwat_blurred_' + randomNumber + '_md.png',
             };
 
-            const characteristic = Math.random() < 0.5
-            const medical_history = Math.random() < 0.5
+            const characteristic = Math.random() < 0.5;
+            const medical_history = Math.random() < 0.5;
 
-            const data_physical_character: Prisma.PhysicalCharacterCreateInput = {
-                height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
-                weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
-                body_shape: body_shapes[Math.floor(Math.random() * body_shapes.length)],
-                skin_color: skin_colors[Math.floor(Math.random() * skin_colors.length)],
-                hair_type: hair_types[Math.floor(Math.random() * hair_types.length)],
-                hair_color: hair_colors[Math.floor(Math.random() * hair_colors.length)],
-                eye_color: eye_colors[Math.floor(Math.random() * eye_colors.length)],
-                characteristic,
-                characteristic_detail: characteristic ? characteristics[Math.floor(Math.random() * medical_histories.length)] : null,
-                medical_history,
-                medical_history_detail: medical_history ? medical_histories[Math.floor(Math.random() * medical_histories.length)] : null,
-            }
+            // const data_physical_character: Prisma.PhysicalCharacterCreateInput =
+            //     {
+            //         body_shape:
+            //             body_shapes[
+            //                 Math.floor(Math.random() * body_shapes.length)
+            //             ],
+            //         skin_color:
+            //             skin_colors[
+            //                 Math.floor(Math.random() * skin_colors.length)
+            //             ],
+            //         hair_type:
+            //             hair_types[
+            //                 Math.floor(Math.random() * hair_types.length)
+            //             ],
+            //         hair_color:
+            //             hair_colors[
+            //                 Math.floor(Math.random() * hair_colors.length)
+            //             ],
+            //         eye_color:
+            //             eye_colors[
+            //                 Math.floor(Math.random() * eye_colors.length)
+            //             ],
+            //         characteristic,
+            //         characteristic_detail: characteristic
+            //             ? characteristics[
+            //                   Math.floor(
+            //                       Math.random() * medical_histories.length,
+            //                   )
+            //               ]
+            //             : null,
+            //         medical_history,
+            //         medical_history_detail: medical_history
+            //             ? medical_histories[
+            //                   Math.floor(
+            //                       Math.random() * medical_histories.length,
+            //                   )
+            //               ]
+            //             : null,
+            //     };
+            const data_physical_character: Prisma.PhysicalCharacterCreateInput =
+                {
+                    height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
+                    weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
+                    body_shape:
+                        body_shapes[
+                            Math.floor(Math.random() * body_shapes.length)
+                        ],
+                    skin_color:
+                        skin_colors[
+                            Math.floor(Math.random() * skin_colors.length)
+                        ],
+                    hair_type:
+                        hair_types[
+                            Math.floor(Math.random() * hair_types.length)
+                        ],
+                    hair_color:
+                        hair_colors[
+                            Math.floor(Math.random() * hair_colors.length)
+                        ],
+                    eye_color:
+                        eye_colors[
+                            Math.floor(Math.random() * eye_colors.length)
+                        ],
+                    characteristic,
+                    characteristic_detail: characteristic
+                        ? characteristics[
+                              Math.floor(
+                                  Math.random() * medical_histories.length,
+                              )
+                          ]
+                        : null,
+                    medical_history,
+                    medical_history_detail: medical_history
+                        ? medical_histories[
+                              Math.floor(
+                                  Math.random() * medical_histories.length,
+                              )
+                          ]
+                        : null,
+                };
 
-            const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput = {
-                motto: mottos[Math.floor(Math.random() * mottos.length)],
-                life_goal: life_goals[Math.floor(Math.random() * life_goals.length)],
-                hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
-                spare_time_activity: spare_time_activities[Math.floor(Math.random() * spare_time_activities.length)],
-                positive_traits: positive_traits[Math.floor(Math.random() * positive_traits.length)],
-                negative_traits: negative_traits[Math.floor(Math.random() * negative_traits.length)],
-                liked_things: liked_things[Math.floor(Math.random() * liked_things.length)],
-                unliked_things: unliked_things[Math.floor(Math.random() * unliked_things.length)],
-                drink_alcohol: Math.random() < 0.5,
-                smoking: Math.random() < 0.5,
-            }
-
+            const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
+                {
+                    motto: mottos[Math.floor(Math.random() * mottos.length)],
+                    life_goal:
+                        life_goals[
+                            Math.floor(Math.random() * life_goals.length)
+                        ],
+                    hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
+                    spare_time_activity:
+                        spare_time_activities[
+                            Math.floor(
+                                Math.random() * spare_time_activities.length,
+                            )
+                        ],
+                    positive_traits:
+                        positive_traits[
+                            Math.floor(Math.random() * positive_traits.length)
+                        ],
+                    negative_traits:
+                        negative_traits[
+                            Math.floor(Math.random() * negative_traits.length)
+                        ],
+                    liked_things:
+                        liked_things[
+                            Math.floor(Math.random() * liked_things.length)
+                        ],
+                    unliked_things:
+                        unliked_things[
+                            Math.floor(Math.random() * unliked_things.length)
+                        ],
+                    drink_alcohol: Math.random() < 0.5,
+                    smoking: Math.random() < 0.5,
+                };
 
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
                 data.biodata = {
                     create: {
-                        bio: 'Assalamualaikum, akhi. ' + biography[Math.floor(Math.random() * biography.length)],
+                        bio:
+                            'Assalamualaikum, akhi. ' +
+                            biography[
+                                Math.floor(Math.random() * biography.length)
+                            ],
                         phone: '+628987654321',
+                        company: 'Al Bashiroh Corp',
                         dob: getRandomDateBetween1970And2005(),
                         birth_place: provinces[randomProvinceIndex2].name,
                         birth_order: 1,
-                        domicile_town: provinces[randomProvinceIndex1].name,
-                        domicile_province: provinces[randomProvinceIndex].name,
+                        address_town: provinces[randomProvinceIndex1].name,
+                        address_province: provinces[randomProvinceIndex].name,
                         hometown_province: provinces[randomProvinceIndex2].name,
                         physical_characters: {
                             create: data_physical_character,
@@ -588,21 +941,35 @@ export async function memberSeed(prisma: PrismaClient) {
                         non_physical_chars: {
                             create: data_non_physical_character,
                         },
-                        ethnic: sukuIndonesia[Math.floor(Math.random() * sukuIndonesia.length)],
-                        manhaj: manhaj[Math.floor(Math.random() * manhaj.length)],
+                        ethnic: sukuIndonesia[
+                            Math.floor(Math.random() * sukuIndonesia.length)
+                        ],
+                        manhaj: manhaj[
+                            Math.floor(Math.random() * manhaj.length)
+                        ],
                         gender: 'WANITA',
-                        marriage_status: marriedStatus[Math.floor(Math.random() * marriedStatus.length)],
-                        marriage_permission: marriagePermissions[Math.floor(Math.random() * marriagePermissions.length)],
+                        address_zip_code: Math.floor(Math.random() * 100),
+                        poligami_opinion: '',
+                        marriage_status:
+                            marriedStatus[
+                                Math.floor(Math.random() * marriedStatus.length)
+                            ],
+                        marriage_permission:
+                            marriagePermissions[
+                                Math.floor(
+                                    Math.random() * marriagePermissions.length,
+                                )
+                            ],
                     },
                 };
                 data.Skill = {
                     createMany: {
-                        data: getRandomOfObjectArray(skillSet)
+                        data: getRandomOfObjectArray(skillSet),
                     },
                 };
                 data.Hobby = {
                     createMany: {
-                        data: getRandomOfObjectArray(hobiList)
+                        data: getRandomOfObjectArray(hobiList),
                     },
                 };
                 data.Education = {
@@ -630,12 +997,12 @@ export async function memberSeed(prisma: PrismaClient) {
                 };
                 data.Married_goal = {
                     createMany: {
-                        data: getRandomOfObjectArray(married_goals)
+                        data: getRandomOfObjectArray(married_goals),
                     },
                 };
                 data.Life_goal = {
                     createMany: {
-                        data: getRandomOfObjectArray(tujuanHidup)
+                        data: getRandomOfObjectArray(tujuanHidup),
                     },
                 };
             }
@@ -647,5 +1014,5 @@ export async function memberSeed(prisma: PrismaClient) {
         }
     }
 
-    console.log('Seed: Member Done');
+    // console.log('Seed: Member Done');
 }

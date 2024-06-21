@@ -1,4 +1,10 @@
-import { PhysicalCharacter } from '@prisma/client';
+import {
+    Gender,
+    ManhajStatus,
+    MarriagePermission,
+    MarriageStatus,
+    PhysicalCharacter,
+} from '@prisma/client';
 import { Non_physical_char } from 'src/non_physical_characters/non_physical_charactrer.interface';
 import { User } from 'src/users/user.interface';
 
@@ -8,19 +14,22 @@ export interface Biodata {
     userId: string;
     bio: string;
     phone: string;
-    manhaj: 'SALAF' | 'BARU_BELAJAR' | 'NON_SALAF';
-    gender: 'PRIA' | 'WANITA';
-    marriage_status: 'LAJANG' | 'MENIKAH' | 'DUDA' | 'JANDA';
-    marriage_permission: 'POLIGAMI' | 'NON_POLIGAMI';
+    company?: string;
+    manhaj: ManhajStatus;
+    gender: Gender;
+    marriage_status: MarriageStatus;
+    marriage_permission: MarriagePermission;
+    physical_characters?: PhysicalCharacter;
+    non_physical_characters?: Non_physical_char;
     dob: Date;
     birth_place: string;
     birth_order: number;
-    domicile_town: string;
-    domicile_province: string;
-    physical_characters?: PhysicalCharacter;
-    non_physical_characters?: Non_physical_char;
+    address_town: string;
+    address_province: string;
     hometown_province: string;
+    address_zip_code: number;
     ethnic: string;
+    poligami_opinion?: string;
     createdAt?: Date;
     updatedAt?: Date;
 }

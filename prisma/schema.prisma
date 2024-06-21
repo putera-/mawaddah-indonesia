@@ -40,10 +40,10 @@ model User {
     biodata            Biodata?
     bookmarks          Bookmark[]      @relation("UserBookmarks")
     bookmark_candidate Bookmark[]      @relation("UserCandidates")
-    createdAt          DateTime        @default(now())
-    updatedAt          DateTime        @default(now()) @updatedAt
     Taaruf             Taaruf[]        @relation("TaarufUser")
     Taaruf_candidate   Taaruf[]        @relation("TaarufCandidates")
+    createdAt          DateTime        @default(now())
+    updatedAt          DateTime        @default(now()) @updatedAt
 
     @@map("user")
 }
@@ -161,6 +161,7 @@ model Biodata {
     userId              String?               @unique
     bio                 String                @db.Text
     phone               String                @db.VarChar(20)
+    company             String?               @db.VarChar(100)
     manhaj              ManhajStatus
     gender              Gender
     marriage_status     MarriageStatus
@@ -170,10 +171,12 @@ model Biodata {
     dob                 DateTime              @db.Date
     birth_place         String                @db.VarChar(100)
     birth_order         Int                   @db.TinyInt
-    domicile_town       String                @db.VarChar(100)
-    domicile_province   String                @db.VarChar(100)
+    address_town        String                @db.VarChar(100)
+    address_province    String                @db.VarChar(100)
     hometown_province   String                @db.VarChar(100)
+    address_zip_code    Int                   @db.Int
     ethnic              String                @db.VarChar(100)
+    poligami_opinion    String                @db.Text
     createdAt           DateTime              @default(now())
     updatedAt           DateTime              @default(now()) @updatedAt
 
@@ -194,8 +197,8 @@ enum Gender {
 enum MarriageStatus {
     LAJANG
     MENIKAH
-    DUDA
-    JANDA
+    CERAI_HIDUP
+    CERAI_MATI
 }
 
 enum MarriagePermission {

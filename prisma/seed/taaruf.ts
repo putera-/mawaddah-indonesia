@@ -10,75 +10,50 @@ export async function taarufSeed(prisma: PrismaClient) {
             biodata: true,
         },
     });
-
     for (let i = 0; i < users.length; i++) {
         process.stdout.write('.');
 
         const user = users[i];
         const biodata = user.biodata;
-
-        const candidate = await prisma.user.findFirst({
+        const opposite = await prisma.user.findFirst({
             where: {
-                role: 'MEMBER',
-                // biodata: { id: { not: undefined } },
                 // TODO FIX THIS
-                biodata: { NOT: null, gender: { not: biodata.gender } },
-                // biodata: {AND : {}},
-                AND: {
-                    Taaruf: {
-                        some: {
-                            OR: [
-                                {
-                                    status: false,
-                                },
-                                {
-                                    status: true,
-                                    approval: {
-                                        status: {
-                                            not: 'Yes',
-                                        },
-                                    },
-                                },
-                            ],
-                        },
+                biodata: { gender: { not: biodata.gender } },
+            },
+            include: {
+                biodata: true,
+                Taaruf_candidate: {
+                    where: {
+                        status: false,
                     },
-                    Taaruf_candidate: {
-                        some: {
-                            OR: [
-                                {
-                                    status: false,
-                                },
-                                {
-                                    status: true,
-                                    approval: {
-                                        status: {
-                                            not: 'Yes',
-                                        },
-                                    },
-                                },
-                            ],
-                        },
+                },
+                Taaruf: {
+                    where: {
+                        status: false,
                     },
                 },
             },
-            // select: {
-            //     Taaruf: true,
-            // },
         });
-        const data: Prisma.TaarufCreateInput = {
-            message: 'Mari bertaaruf',
-            user: { connect: { id: user.id } },
-            candidate: { connect: { id: candidate.id } },
-            approval: {
-                create: {
-                    message: 'Saya terima taarufnya',
-                    reply: '',
+        if (
+            opposite.Taaruf.length == 0 ||
+            opposite.Taaruf_candidate.length == 0
+        ) {
+            const data: Prisma.TaarufCreateInput = {
+                message: 'Mari bertaaruf',
+                user: { connect: { id: user.id } },
+                candidate: { connect: { id: opposite.id } },
+                approval: {
+                    create: {
+                        message: '',
+                        reply: '',
+                    },
                 },
-            },
-        };
-        await prisma.taaruf.create({
-            data,
-        });
+            };
+            const result = await prisma.taaruf.create({
+                data,
+            });
+            console.log(result);
+        }
     }
     console.log('Seed: Taaruf');
 

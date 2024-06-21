@@ -5,10 +5,7 @@ import { UsersService } from 'src/users/user.service';
 
 @Injectable()
 export class BiodataService {
-    constructor(
-        private readonly userService: UsersService,
-        private Prisma: PrismaService,
-    ) { }
+    constructor(private Prisma: PrismaService) {}
 
     async create(id: string, data: Prisma.BiodataCreateInput) {
         const result = await this.Prisma.biodata.create({
@@ -28,7 +25,7 @@ export class BiodataService {
 
     async findMe(userId: string): Promise<Biodata> {
         return await this.Prisma.biodata.findFirst({
-            where: { userId }
+            where: { userId },
         });
     }
 

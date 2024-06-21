@@ -5,6 +5,7 @@ export async function bookmarksSeed(prisma: PrismaClient) {
     const users = await prisma.user.findMany({
         where: {
             role: 'MEMBER',
+            biodata: { isNot: null },
         },
         include: {
             biodata: true,
@@ -19,7 +20,9 @@ export async function bookmarksSeed(prisma: PrismaClient) {
 
         //filter user yang berbeda kelamin
         const candidates = users.filter((u) => {
-            if (u.biodata) return u.biodata.gender != user.biodata.gender;
+            if (u.biodata) {
+                return u.biodata.gender != user.biodata.gender;
+            }
         });
 
         const randomMaxBookmarks = Math.floor(Math.random() * 20);
@@ -33,7 +36,6 @@ export async function bookmarksSeed(prisma: PrismaClient) {
 
             // Create bookmarks
             await prisma.bookmark.create({
-                
                 data: {
                     user: {
                         connect: {

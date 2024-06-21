@@ -1,32 +1,17 @@
 import {
+    Gender,
+    ManhajStatus,
+    MarriagePermission,
+    MarriageStatus,
+} from '@prisma/client';
+import {
     IsISO8601,
     IsNumber,
+    IsOptional,
     IsPhoneNumber,
     IsString,
     Length,
 } from 'class-validator';
-
-export enum Manhaj {
-    SALAF = 'SALAF',
-    BARU_BELAJAR = 'BARU_BELAJAR',
-    NON_SALAF = 'NON_SALAF',
-}
-export enum Gender {
-    PRIA = 'PRIA',
-    WANITA = 'WANITA',
-}
-
-export enum MarriageStatus {
-    LAJANG = 'LAJANG',
-    MENIKAH = 'MENIKAH',
-    DUDA = 'DUDA',
-    JANDA = 'JANDA',
-}
-
-export enum MarriagePermission {
-    POLIGAMI = 'POLIGAMI',
-    NON_POLIGAMI = 'NON_POLIGAMI',
-}
 
 export class CreateBiodatumDto {
     @IsString()
@@ -37,7 +22,11 @@ export class CreateBiodatumDto {
     phone: string;
 
     @IsString()
-    manhaj: Manhaj;
+    @IsOptional()
+    company: string;
+
+    @IsString()
+    manhaj: ManhajStatus;
 
     @IsString()
     gender: Gender;
@@ -60,15 +49,22 @@ export class CreateBiodatumDto {
 
     @IsString()
     @Length(1, 100)
-    domicile_town: string;
+    address_town: string;
 
     @IsString()
     @Length(1, 100)
-    domicile_province: string;
+    address_province: string;
 
     @IsString()
     @Length(1, 100)
     hometown_province: string;
+
+    @IsNumber()
+    address_zip_code: number;
+
+    @IsString()
+    @IsOptional()
+    poligami_opinion: string;
 
     @IsString()
     @Length(1, 100)
