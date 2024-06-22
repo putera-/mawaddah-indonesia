@@ -9,6 +9,7 @@ import { provinceSeed } from './seed/province';
 import { taaruf_goldSeed } from './seed/taaruf_gold';
 import { bookmarksSeed } from './seed/bookmark';
 import { taarufSeed } from './seed/taaruf';
+import { familyMembersSeed } from './seed/family_members';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -24,6 +25,7 @@ async function main() {
     await taaruf_goldSeed(prisma);
     await bookmarksSeed(prisma);
     await taarufSeed(prisma);
+    await familyMembersSeed(prisma);
 }
 
 main()

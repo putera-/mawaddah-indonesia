@@ -290,9 +290,9 @@ model PhysicalCharacter {
     hair_type              hair_type?
     eye_color              eye_Color?
     characteristic         Boolean     @default(false)
-    characteristic_detail  String?     @db.VarChar(255)
+    characteristic_detail  String?     @db.Text
     medical_history        Boolean     @default(false)
-    medical_history_detail String?     @db.VarChar(255)
+    medical_history_detail String?     @db.Text
     createdAt              DateTime    @default(now())
     updatedAt              DateTime    @default(now()) @updatedAt
     Biodata                Biodata?    @relation(fields: [biodataId], references: [id])
@@ -387,6 +387,8 @@ enum relationship {
     adik_wanita
     ipar_pria
     ipar_wanita
+    anak_kandung
+    anak_angkat
 }
 
 enum religion {
