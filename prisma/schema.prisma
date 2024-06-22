@@ -156,30 +156,31 @@ model Activation {
 }
 
 model Biodata {
-    id                  String                @id @default(uuid())
-    user                User?                 @relation(fields: [userId], references: [id])
-    userId              String?               @unique
-    bio                 String                @db.Text
-    phone               String                @db.VarChar(20)
-    company             String?               @db.VarChar(100)
-    manhaj              ManhajStatus
-    gender              Gender
-    marriage_status     MarriageStatus
-    marriage_permission MarriagePermission
-    physical_characters PhysicalCharacter?
-    non_physical_chars  NonPhysicalCharacter?
-    family_members      FamilyMember[]
-    dob                 DateTime              @db.Date
-    birth_place         String                @db.VarChar(100)
-    birth_order         Int                   @db.TinyInt
-    address_town        String                @db.VarChar(100)
-    address_province    String                @db.VarChar(100)
-    hometown_province   String                @db.VarChar(100)
-    address_zip_code    Int                   @db.Int
-    ethnic              String                @db.VarChar(100)
-    poligami_opinion    String                @db.Text
-    createdAt           DateTime              @default(now())
-    updatedAt           DateTime              @default(now()) @updatedAt
+    id                    String                @id @default(uuid())
+    user                  User?                 @relation(fields: [userId], references: [id])
+    userId                String?               @unique
+    bio                   String                @db.Text
+    phone                 String                @db.VarChar(20)
+    company               String?               @db.VarChar(100)
+    manhaj                ManhajStatus
+    gender                Gender
+    marriage_status       MarriageStatus
+    marriage_permission   MarriagePermission
+    physical_characters   PhysicalCharacter?
+    non_physical_chars    NonPhysicalCharacter?
+    marriage_preparations MarriagePreparation?
+    family_members        FamilyMember[]
+    dob                   DateTime              @db.Date
+    birth_place           String                @db.VarChar(100)
+    birth_order           Int                   @db.TinyInt
+    address_town          String                @db.VarChar(100)
+    address_province      String                @db.VarChar(100)
+    hometown_province     String                @db.VarChar(100)
+    address_zip_code      Int                   @db.Int
+    ethnic                String                @db.VarChar(100)
+    poligami_opinion      String                @db.Text
+    createdAt             DateTime              @default(now())
+    updatedAt             DateTime              @default(now()) @updatedAt
 
     @@map("biodata")
 }
@@ -528,4 +529,20 @@ enum AprovalStatus {
     Pending
     Yes
     No
+}
+
+model MarriagePreparation {
+    id        String   @id @default(uuid())
+    Biodata   Biodata? @relation(fields: [biodataId], references: [id])
+    biodataId String?  @unique
+    visi      String?  @db.Text
+    misi      String?  @db.Text
+    mental    String?  @db.Text
+    mahar     String?  @db.Text
+    cost      String?  @db.Text
+    span_time String?  @db.Text
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
+
+    @@map("marriage_preparation")
 }
