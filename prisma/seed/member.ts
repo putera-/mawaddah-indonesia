@@ -718,6 +718,7 @@ export async function memberSeed(prisma: PrismaClient) {
                         data: getRandomOfObjectArray(tujuanHidup),
                     },
                 };
+                data.taaruf_status = "OPEN";
             }
             const post = await prisma.user.upsert({
                 where: { email },
@@ -944,6 +945,8 @@ export async function memberSeed(prisma: PrismaClient) {
                         data: getRandomOfObjectArray(tujuanHidup),
                     },
                 };
+
+                data.taaruf_status = "OPEN";
             }
             await prisma.user.upsert({
                 where: { email },

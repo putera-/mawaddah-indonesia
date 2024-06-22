@@ -77,16 +77,48 @@ export class UsersService {
                     active: true,
                     role: { in: roles }
                 },
+                include: {
+                    biodata: true,
+                    Taaruf_gold: {
+                        where: {
+                            startedAt: { gt: new Date() },
+                            endingAt: { lt: new Date() }
+                        }
+                    },
+                    Taaruf: {
+                        where: { status: true },
+                        orderBy: { createdAt: 'desc' },
+                        take: 1
+                    },
+                    Taaruf_candidate: {
+                        where: { status: true },
+                        orderBy: { createdAt: 'desc' },
+                        take: 1
+                    },
+                },
                 orderBy: { createdAt: 'desc' },
                 skip,
                 take: limit,
             }),
         ]);
 
-        for (const user of data) {
+        const users: User[] = data;
+
+        for (const user of users) {
             if (user.role == 'MEMBER') {
                 this.formatGray(user);
+
+                user.isTaarufGold = user.Taaruf_gold.length ? true : false;
+                user.hasBiodata = user.biodata ? true : false;
+
+                user.inTaaruf = (user.Taaruf.length || user.Taaruf_candidate.length) ? true : false;
+
             }
+
+            delete user.Taaruf_gold;
+            delete user.biodata
+            delete user.Taaruf;
+            delete user.Taaruf_candidate;
         }
 
         return {

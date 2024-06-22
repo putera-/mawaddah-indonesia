@@ -1,4 +1,4 @@
-import { RoleStatus, TaarufStatus } from '@prisma/client';
+import { Biodata, RoleStatus, Taaruf, TaarufStatus, Taaruf_gold } from '@prisma/client';
 
 export interface User {
     id: string;
@@ -16,4 +16,11 @@ export interface User {
     taaruf_status: TaarufStatus;
     createdAt?: Date;
     updatedAt?: Date;
+    Taaruf_gold?: Taaruf_gold[]
+    isTaarufGold?: boolean
+    biodata?: Biodata
+    hasBiodata?: boolean
+    Taaruf?: Taaruf[]
+    Taaruf_candidate?: Taaruf[]
+    inTaaruf?: boolean
 }
