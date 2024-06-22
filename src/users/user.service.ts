@@ -43,7 +43,7 @@ export class UsersService {
         private Prisma: PrismaService,
         private appService: AppService,
         // private activation: ActivationService,
-    ) { }
+    ) {}
 
     create(data: Prisma.UserCreateInput) {
         return this.Prisma.user.create({
@@ -61,61 +61,30 @@ export class UsersService {
         delete data.password;
     }
 
-    async findAll(roles: RoleStatus[], limit = 10, page = 1): Promise<Pagination<User[]>> {
-        const skip = (page - 1) * limit;
-
-        const [total, data] = await Promise.all([
-
-            this.Prisma.user.count({
-                where: {
-                    active: true,
-                    role: { in: roles }
-                }
-            }),
-            this.Prisma.user.findMany({
-                where: {
-                    active: true,
-                    role: { in: roles }
-                },
-                orderBy: { createdAt: 'desc' },
-                skip,
-                take: limit,
-            }),
-        ]);
-
-        for (const user of data) {
-            if (user.role == 'MEMBER') {
-                this.formatGray(user);
-            }
-        }
-
-        return {
-            data,
-            limit,
-            total,
-            page,
-            maxPages: Math.ceil(total / limit),
-        }
-
+    async findAll(role: RoleStatus, query: Record<string, any>) {
+        const limit = parseInt(query.limit);
+        return await this.Prisma.user.findMany({
+            where: { role, active: true },
+            select: {
+                ...hiddenSelect,
+                Education: true,
+                Skill: true,
+                Hobby: true,
+                Married_goal: true,
+                Life_goal: true,
+            },
+            take: limit,
+        });
     }
 
     async findOne(id: string, role: RoleStatus): Promise<User> {
         const user = await this.Prisma.user.findFirst({
             where: { id, role, active: true },
-            // DONT DO THIS HERE
-            // select: {
-            //     ...hiddenSelect,
-            //     biodata: true,
-            //     Education: true,
-            //     Skill: true,
-            //     Hobby: true,
-            //     Married_goal: true,
-            //     Life_goal: true,
-            // },
         });
         if (!user) throw new NotFoundException(`User tidak ditemukan`);
         return user;
     }
+
     async findSuperUser(): Promise<User[]> {
         const users = await this.Prisma.user.findMany({
             where: { role: 'SUPERADMIN' },

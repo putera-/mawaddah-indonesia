@@ -1,5 +1,4 @@
-import { RoleStatus, TaarufStatus } from "@prisma/client";
-import { Biodata } from "src/biodata/biodata.interface";
+import { RoleStatus, TaarufStatus } from '@prisma/client';
 
 export interface User {
     id: string;
@@ -15,7 +14,6 @@ export interface User {
     blurred_avatar_md?: string;
     role: RoleStatus;
     taaruf_status: TaarufStatus;
-    biodata?: Biodata
     createdAt?: Date;
     updatedAt?: Date;
 }

@@ -1,6 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateTaarufDto } from './dto/create-taaruf.dto';
-import { UpdateTaarufDto } from './dto/update-taaruf.dto';
+import {
+    BadRequestException,
+    ConflictException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/user.service';
 import { Prisma } from '@prisma/client';
@@ -10,20 +13,32 @@ import { Taaruf } from './taaruf.interface';
 export class TaarufService {
     constructor(
         private PrismaService: PrismaService,
-        private User: UsersService,
+        private userService: UsersService,
     ) {}
-    async create(userId: string, id: string, message: string): Promise<void> {
-        const user = await this.User.findOne(userId, 'MEMBER');
-        if (!user) throw new NotFoundException('Pengguna tidak ditemukan');
-
+    async create(
+        userId: string,
+        candidateId: string,
+        message: string,
+    ): Promise<void> {
+        // check if candidate is not exist
         const candidate = await this.PrismaService.user.findFirst({
-            where: { id },
+            where: { id: candidateId },
         });
-
         if (!candidate) throw new NotFoundException('Pengguna tidak ditemukan');
+
+        // check if connection already created
+        const exist = await this.PrismaService.taaruf.findFirst({
+            where: { userId, candidateId },
+        });
+        if (exist)
+            throw new ConflictException(
+                'Anda telah mengajukan taaaruf dengan kandidat ini',
+            );
+
+        // data input
         const data: Prisma.TaarufCreateInput = {
             message,
-            user: { connect: { id: user.id } },
+            user: { connect: { id: userId } },
             candidate: { connect: { id: candidate.id } },
             approval: {
                 create: {
@@ -32,8 +47,9 @@ export class TaarufService {
                 },
             },
         };
-        data.message = message;
-        const result = await this.PrismaService.taaruf.create({
+
+        // create data
+        await this.PrismaService.taaruf.create({
             data,
             include: {
                 approval: true,
@@ -42,7 +58,6 @@ export class TaarufService {
                 akads: true,
             },
         });
-        console.log(result);
     }
 
     async findAllIncoming(userId: string, page = '1', limit = '10') {
@@ -71,18 +86,37 @@ export class TaarufService {
     }
 
     async findIncoming(candidateId: string, id: string): Promise<Taaruf> {
-        return await this.PrismaService.taaruf.findFirst({
+        const result = await this.PrismaService.taaruf.findFirst({
             where: { id, candidateId },
         });
+        if (!result) throw new NotFoundException('Data tidak ditemukan');
+        return result;
     }
 
     async findOutgoing(userId: string, id: string): Promise<Taaruf> {
-        return await this.PrismaService.taaruf.findFirst({
+        const result = await this.PrismaService.taaruf.findFirst({
             where: { id, userId },
+            include: {
+                candidate: {
+                    include: {
+                        biodata: true,
+                    },
+                },
+            },
         });
+
+        if (!result) throw new NotFoundException('Data tidak ditemukan');
+        this.userService.formatGray(result.candidate);
+
+        return result;
     }
 
     async approve(candidateId: string, id: string, message: string) {
+        const result = await this.PrismaService.taaruf.findFirst({
+            where: { id, candidateId },
+        });
+        if (!result) throw new NotFoundException('Data tidak valid');
+
         return await this.PrismaService.taaruf.update({
             where: { id, candidateId },
             data: {
@@ -94,9 +128,15 @@ export class TaarufService {
                 },
             },
         });
+        return result;
     }
 
     async reject(candidateId: string, id: string, message: string) {
+        const result = await this.PrismaService.taaruf.findFirst({
+            where: { id, candidateId },
+        });
+        if (!result) throw new NotFoundException('Data tidak valid');
+
         return await this.PrismaService.taaruf.update({
             where: { id, candidateId },
             data: {
@@ -111,6 +151,10 @@ export class TaarufService {
     }
 
     async cancel(userId: string, id: string, message: string) {
+        const result = await this.PrismaService.taaruf.findFirst({
+            where: { id, userId },
+        });
+        if (!result) throw new NotFoundException('Data tidak valid');
         return await this.PrismaService.taaruf.update({
             where: { id, userId },
             data: {

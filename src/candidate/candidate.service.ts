@@ -208,8 +208,8 @@ export class CandidateService {
     calculateSimilarity(userBiodata: Biodata, candidateBiodata: Biodata) {
         let score = 0;
 
-        if (userBiodata.domicile_town == candidateBiodata.domicile_town) score += 15;
-        if (userBiodata.domicile_province == candidateBiodata.domicile_province) score += 5;
+        if (userBiodata.address_town == candidateBiodata.address_town) score += 15;
+        if (userBiodata.address_province == candidateBiodata.address_province) score += 5;
         if (userBiodata.hometown_province == candidateBiodata.hometown_province) score += 10;
         if (userBiodata.ethnic == candidateBiodata.ethnic) score += 10;
 

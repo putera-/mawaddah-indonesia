@@ -23,7 +23,7 @@ async function main() {
     await memberSeed(prisma);
     await taaruf_goldSeed(prisma);
     await bookmarksSeed(prisma);
-    // await taarufSeed(prisma);
+    await taarufSeed(prisma);
 }
 
 main()
