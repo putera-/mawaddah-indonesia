@@ -5,7 +5,6 @@ import {
     Body,
     Patch,
     Param,
-    Delete,
     HttpCode,
     HttpStatus,
     Req,
@@ -15,27 +14,26 @@ import {
 import { TaarufService } from './taaruf.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
-import { UsersService } from 'src/users/user.service';
-import { CreateTaarufDto } from './dto/create-taaruf.dto';
+import { TaarufMessageDto } from './dto/taaruf-message.dto';
 
 @Controller('taaruf')
 export class TaarufController {
-    constructor(
-        private readonly taarufService: TaarufService,
-        private readonly User: UsersService,
-    ) {}
+    constructor(private readonly taarufService: TaarufService) {}
 
     @Roles(Role.Member)
     @HttpCode(HttpStatus.OK)
     @Post(':candidateId')
     async create(
-        @Param('id') id: string,
+        @Param('candidateId') candidateId: string,
         @Req() req: any,
-        @Body() data: CreateTaarufDto,
+        @Body(new ValidationPipe()) data: TaarufMessageDto,
     ) {
         try {
-            const user = await this.User.findOne(req.id, req.role);
-            return await this.taarufService.create(user.id, id, data.message);
+            return await this.taarufService.create(
+                req.user.id,
+                candidateId,
+                data.message,
+            );
         } catch (error) {
             throw error;
         }
@@ -50,9 +48,8 @@ export class TaarufController {
         @Query('limit') limit: string,
     ) {
         try {
-            const user = await this.User.findOne(req.id, req.role);
             return await this.taarufService.findAllIncoming(
-                user.id,
+                req.user.id,
                 page,
                 limit,
             );
@@ -70,9 +67,8 @@ export class TaarufController {
         @Query('limit') limit: string,
     ) {
         try {
-            const user = await this.User.findOne(req.id, req.role);
             return await this.taarufService.findAllOutgoing(
-                user.id,
+                req.user.id,
                 page,
                 limit,
             );
@@ -86,8 +82,7 @@ export class TaarufController {
     @Get('incoming/:id')
     async incoming(@Req() req: any, @Param('id') id: string) {
         try {
-            const user = await this.User.findOne(req.id, req.role);
-            return await this.taarufService.findIncoming(user.id, id);
+            return await this.taarufService.findIncoming(req.user.id, id);
         } catch (error) {
             throw error;
         }
@@ -98,9 +93,7 @@ export class TaarufController {
     @Get('outgoing/:id')
     async outgoing(@Req() req: any, @Param('id') id: string) {
         try {
-            const user = await this.User.findOne(req.id, req.role);
-            const userId = user.id;
-            return this.taarufService.findOutgoing(user.id, id);
+            return this.taarufService.findOutgoing(req.user.id, id);
         } catch (error) {
             throw error;
         }
@@ -112,11 +105,10 @@ export class TaarufController {
     async approve(
         @Req() req: any,
         @Param('id') id: string,
-        @Body(new ValidationPipe()) data: CreateTaarufDto,
+        @Body(new ValidationPipe()) data: TaarufMessageDto,
     ) {
         try {
-            const user = await this.User.findOne(req.id, req.role);
-            return this.taarufService.approve(user.id, id, data.message);
+            return this.taarufService.approve(req.user.id, id, data.message);
         } catch (error) {
             throw error;
         }
@@ -128,11 +120,10 @@ export class TaarufController {
     async reject(
         @Req() req: any,
         @Param('id') id: string,
-        @Body(new ValidationPipe()) data: CreateTaarufDto,
+        @Body(new ValidationPipe()) data: TaarufMessageDto,
     ) {
         try {
-            const user = await this.User.findOne(req.id, req.role);
-            return this.taarufService.reject(user.id, id, data.message);
+            return this.taarufService.reject(req.user.id, id, data.message);
         } catch (error) {
             throw error;
         }
@@ -144,11 +135,10 @@ export class TaarufController {
     async cancel(
         @Req() req: any,
         @Param('id') id: string,
-        @Body(new ValidationPipe()) data: CreateTaarufDto,
+        @Body(new ValidationPipe()) data: TaarufMessageDto,
     ) {
         try {
-            const user = await this.User.findOne(req.id, req.role);
-            return this.taarufService.cancel(user.id, id, data.message);
+            return this.taarufService.cancel(req.user.id, id, data.message);
         } catch (error) {
             throw error;
         }
