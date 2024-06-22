@@ -168,6 +168,7 @@ model Biodata {
     marriage_permission MarriagePermission
     physical_characters PhysicalCharacter?
     non_physical_chars  NonPhysicalCharacter?
+    family_members      FamilyMember[]
     dob                 DateTime              @db.Date
     birth_place         String                @db.VarChar(100)
     birth_order         Int                   @db.TinyInt
@@ -289,9 +290,9 @@ model PhysicalCharacter {
     hair_type              hair_type?
     eye_color              eye_Color?
     characteristic         Boolean     @default(false)
-    characteristic_detail  String?     @db.VarChar(255)
+    characteristic_detail  String?     @db.Text
     medical_history        Boolean     @default(false)
-    medical_history_detail String?     @db.VarChar(255)
+    medical_history_detail String?     @db.Text
     createdAt              DateTime    @default(now())
     updatedAt              DateTime    @default(now()) @updatedAt
     Biodata                Biodata?    @relation(fields: [biodataId], references: [id])
@@ -358,6 +359,41 @@ model NonPhysicalCharacter {
     biodataId           String?  @unique
 
     @@map("non_physical_character")
+}
+
+model FamilyMember {
+    id           String        @id @default(uuid())
+    Biodata      Biodata?      @relation(fields: [biodataId], references: [id])
+    biodataId    String?
+    relationship relationship?
+    religion     religion?
+    dob          String        @db.VarChar(20)
+    education    String        @db.Text
+    job          String        @db.Text
+    is_alive     Boolean       @default(true)
+    deleted      Boolean       @default(false)
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @default(now()) @updatedAt
+
+    @@map("family_member")
+}
+
+enum relationship {
+    ayah
+    ibu
+    kakak_pria
+    kakak_wanita
+    adik_pria
+    adik_wanita
+    ipar_pria
+    ipar_wanita
+    anak_kandung
+    anak_angkat
+}
+
+enum religion {
+    islam
+    non_islam
 }
 
 model Taaruf_gold {

@@ -31,7 +31,7 @@ export class PhysicalCharsController {
 
     @Roles(Role.Member)
     @Patch()
-    async update(@Request() req: any, @Body(new ValidationPipe()) data: CreatePhysicalCharDto) {
+    async update(@Request() req: any, @Body(new ValidationPipe()) data: UpdatePhysicalCharDto) {
         const userId = req.user.id
         try {
             const biodata = await this.biodataService.findMe(userId)

@@ -497,7 +497,7 @@ export async function memberSeed(prisma: PrismaClient) {
         return randomDate.toISOString();
     }
 
-    // console.log('Seed: Member');
+    console.log('Seed: Member');
 
     // BOB
     {
@@ -513,12 +513,12 @@ export async function memberSeed(prisma: PrismaClient) {
         };
 
         const randoms = [];
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 1000; i++) {
             if (i % 2 == 0) randoms.push(i);
         }
 
         // create 100 Bob MEMBER
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 1000; i++) {
             process.stdout.write('.');
             const randomNumber = Math.floor(Math.random() * 10) + 1;
             const firstname = faker.person.firstName('male');
@@ -550,80 +550,80 @@ export async function memberSeed(prisma: PrismaClient) {
             const characteristic = Math.random() < 0.5;
             const medical_history = Math.random() < 0.5;
             const data_physical_character: Prisma.PhysicalCharacterCreateInput =
-                {
-                    height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
-                    weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
-                    body_shape:
-                        body_shapes[
-                            Math.floor(Math.random() * body_shapes.length)
-                        ],
-                    skin_color:
-                        skin_colors[
-                            Math.floor(Math.random() * skin_colors.length)
-                        ],
-                    hair_type:
-                        hair_types[
-                            Math.floor(Math.random() * hair_types.length)
-                        ],
-                    hair_color:
-                        hair_colors[
-                            Math.floor(Math.random() * hair_colors.length)
-                        ],
-                    eye_color:
-                        eye_colors[
-                            Math.floor(Math.random() * eye_colors.length)
-                        ],
-                    characteristic,
-                    characteristic_detail: characteristic
-                        ? characteristics[
-                              Math.floor(
-                                  Math.random() * medical_histories.length,
-                              )
-                          ]
-                        : null,
-                    medical_history,
-                    medical_history_detail: medical_history
-                        ? medical_histories[
-                              Math.floor(
-                                  Math.random() * medical_histories.length,
-                              )
-                          ]
-                        : null,
-                };
+            {
+                height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
+                weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
+                body_shape:
+                    body_shapes[
+                    Math.floor(Math.random() * body_shapes.length)
+                    ],
+                skin_color:
+                    skin_colors[
+                    Math.floor(Math.random() * skin_colors.length)
+                    ],
+                hair_type:
+                    hair_types[
+                    Math.floor(Math.random() * hair_types.length)
+                    ],
+                hair_color:
+                    hair_colors[
+                    Math.floor(Math.random() * hair_colors.length)
+                    ],
+                eye_color:
+                    eye_colors[
+                    Math.floor(Math.random() * eye_colors.length)
+                    ],
+                characteristic,
+                characteristic_detail: characteristic
+                    ? characteristics[
+                    Math.floor(
+                        Math.random() * medical_histories.length,
+                    )
+                    ]
+                    : null,
+                medical_history,
+                medical_history_detail: medical_history
+                    ? medical_histories[
+                    Math.floor(
+                        Math.random() * medical_histories.length,
+                    )
+                    ]
+                    : null,
+            };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
-                {
-                    motto: mottos[Math.floor(Math.random() * mottos.length)],
-                    life_goal:
-                        life_goals[
-                            Math.floor(Math.random() * life_goals.length)
-                        ],
-                    hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
-                    spare_time_activity:
-                        spare_time_activities[
-                            Math.floor(
-                                Math.random() * spare_time_activities.length,
-                            )
-                        ],
-                    positive_traits:
-                        positive_traits[
-                            Math.floor(Math.random() * positive_traits.length)
-                        ],
-                    negative_traits:
-                        negative_traits[
-                            Math.floor(Math.random() * negative_traits.length)
-                        ],
-                    liked_things:
-                        liked_things[
-                            Math.floor(Math.random() * liked_things.length)
-                        ],
-                    unliked_things:
-                        unliked_things[
-                            Math.floor(Math.random() * unliked_things.length)
-                        ],
-                    drink_alcohol: Math.random() < 0.5,
-                    smoking: Math.random() < 0.5,
-                };
+            {
+                motto: mottos[Math.floor(Math.random() * mottos.length)],
+                life_goal:
+                    life_goals[
+                    Math.floor(Math.random() * life_goals.length)
+                    ],
+                hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
+                spare_time_activity:
+                    spare_time_activities[
+                    Math.floor(
+                        Math.random() * spare_time_activities.length,
+                    )
+                    ],
+                positive_traits:
+                    positive_traits[
+                    Math.floor(Math.random() * positive_traits.length)
+                    ],
+                negative_traits:
+                    negative_traits[
+                    Math.floor(Math.random() * negative_traits.length)
+                    ],
+                liked_things:
+                    liked_things[
+                    Math.floor(Math.random() * liked_things.length)
+                    ],
+                unliked_things:
+                    unliked_things[
+                    Math.floor(Math.random() * unliked_things.length)
+                    ],
+                drink_alcohol: Math.random() < 0.5,
+                smoking: Math.random() < 0.5,
+            };
 
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
@@ -632,7 +632,7 @@ export async function memberSeed(prisma: PrismaClient) {
                         bio:
                             'Assalamualaikum, ukhti. ' +
                             biography[
-                                Math.floor(Math.random() * biography.length)
+                            Math.floor(Math.random() * biography.length)
                             ],
                         phone: '+628123456789',
                         company: 'Al Bashiroh Corp',
@@ -659,19 +659,19 @@ export async function memberSeed(prisma: PrismaClient) {
                         address_zip_code: Math.floor(Math.random() * 100),
                         poligami_opinion:
                             poligamiOpinions[
-                                Math.floor(
-                                    Math.random() * poligamiOpinions.length,
-                                )
+                            Math.floor(
+                                Math.random() * poligamiOpinions.length,
+                            )
                             ],
                         marriage_status:
                             marriedStatus[
-                                Math.floor(Math.random() * marriedStatus.length)
+                            Math.floor(Math.random() * marriedStatus.length)
                             ],
                         marriage_permission:
                             marriagePermissions[
-                                Math.floor(
-                                    Math.random() * marriagePermissions.length,
-                                )
+                            Math.floor(
+                                Math.random() * marriagePermissions.length,
+                            )
                             ],
                     },
                 };
@@ -740,11 +740,11 @@ export async function memberSeed(prisma: PrismaClient) {
             },
         };
         const randoms = [];
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 1000; i++) {
             if (i % 2 == 1) randoms.push(i);
         }
         // create 100 Alice MEMBER
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 1000; i++) {
             process.stdout.write('.');
             const randomNumber = Math.floor(Math.random() * 10) + 1;
 
@@ -777,80 +777,80 @@ export async function memberSeed(prisma: PrismaClient) {
             const medical_history = Math.random() < 0.5;
 
             const data_physical_character: Prisma.PhysicalCharacterCreateInput =
-                {
-                    height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
-                    weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
-                    body_shape:
-                        body_shapes[
-                            Math.floor(Math.random() * body_shapes.length)
-                        ],
-                    skin_color:
-                        skin_colors[
-                            Math.floor(Math.random() * skin_colors.length)
-                        ],
-                    hair_type:
-                        hair_types[
-                            Math.floor(Math.random() * hair_types.length)
-                        ],
-                    hair_color:
-                        hair_colors[
-                            Math.floor(Math.random() * hair_colors.length)
-                        ],
-                    eye_color:
-                        eye_colors[
-                            Math.floor(Math.random() * eye_colors.length)
-                        ],
-                    characteristic,
-                    characteristic_detail: characteristic
-                        ? characteristics[
-                              Math.floor(
-                                  Math.random() * medical_histories.length,
-                              )
-                          ]
-                        : null,
-                    medical_history,
-                    medical_history_detail: medical_history
-                        ? medical_histories[
-                              Math.floor(
-                                  Math.random() * medical_histories.length,
-                              )
-                          ]
-                        : null,
-                };
+            {
+                height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
+                weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
+                body_shape:
+                    body_shapes[
+                    Math.floor(Math.random() * body_shapes.length)
+                    ],
+                skin_color:
+                    skin_colors[
+                    Math.floor(Math.random() * skin_colors.length)
+                    ],
+                hair_type:
+                    hair_types[
+                    Math.floor(Math.random() * hair_types.length)
+                    ],
+                hair_color:
+                    hair_colors[
+                    Math.floor(Math.random() * hair_colors.length)
+                    ],
+                eye_color:
+                    eye_colors[
+                    Math.floor(Math.random() * eye_colors.length)
+                    ],
+                characteristic,
+                characteristic_detail: characteristic
+                    ? characteristics[
+                    Math.floor(
+                        Math.random() * medical_histories.length,
+                    )
+                    ]
+                    : null,
+                medical_history,
+                medical_history_detail: medical_history
+                    ? medical_histories[
+                    Math.floor(
+                        Math.random() * medical_histories.length,
+                    )
+                    ]
+                    : null,
+            };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
-                {
-                    motto: mottos[Math.floor(Math.random() * mottos.length)],
-                    life_goal:
-                        life_goals[
-                            Math.floor(Math.random() * life_goals.length)
-                        ],
-                    hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
-                    spare_time_activity:
-                        spare_time_activities[
-                            Math.floor(
-                                Math.random() * spare_time_activities.length,
-                            )
-                        ],
-                    positive_traits:
-                        positive_traits[
-                            Math.floor(Math.random() * positive_traits.length)
-                        ],
-                    negative_traits:
-                        negative_traits[
-                            Math.floor(Math.random() * negative_traits.length)
-                        ],
-                    liked_things:
-                        liked_things[
-                            Math.floor(Math.random() * liked_things.length)
-                        ],
-                    unliked_things:
-                        unliked_things[
-                            Math.floor(Math.random() * unliked_things.length)
-                        ],
-                    drink_alcohol: Math.random() < 0.5,
-                    smoking: Math.random() < 0.5,
-                };
+            {
+                motto: mottos[Math.floor(Math.random() * mottos.length)],
+                life_goal:
+                    life_goals[
+                    Math.floor(Math.random() * life_goals.length)
+                    ],
+                hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
+                spare_time_activity:
+                    spare_time_activities[
+                    Math.floor(
+                        Math.random() * spare_time_activities.length,
+                    )
+                    ],
+                positive_traits:
+                    positive_traits[
+                    Math.floor(Math.random() * positive_traits.length)
+                    ],
+                negative_traits:
+                    negative_traits[
+                    Math.floor(Math.random() * negative_traits.length)
+                    ],
+                liked_things:
+                    liked_things[
+                    Math.floor(Math.random() * liked_things.length)
+                    ],
+                unliked_things:
+                    unliked_things[
+                    Math.floor(Math.random() * unliked_things.length)
+                    ],
+                drink_alcohol: Math.random() < 0.5,
+                smoking: Math.random() < 0.5,
+            };
 
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
@@ -859,7 +859,7 @@ export async function memberSeed(prisma: PrismaClient) {
                         bio:
                             'Assalamualaikum, akhi. ' +
                             biography[
-                                Math.floor(Math.random() * biography.length)
+                            Math.floor(Math.random() * biography.length)
                             ],
                         phone: '+628987654321',
                         company: 'Al Bashiroh Corp',
@@ -885,19 +885,19 @@ export async function memberSeed(prisma: PrismaClient) {
                         address_zip_code: Math.floor(Math.random() * 100),
                         poligami_opinion:
                             poligamiOpinions[
-                                Math.floor(
-                                    Math.random() * poligamiOpinions.length,
-                                )
+                            Math.floor(
+                                Math.random() * poligamiOpinions.length,
+                            )
                             ],
                         marriage_status:
                             marriedStatus[
-                                Math.floor(Math.random() * marriedStatus.length)
+                            Math.floor(Math.random() * marriedStatus.length)
                             ],
                         marriage_permission:
                             marriagePermissions[
-                                Math.floor(
-                                    Math.random() * marriagePermissions.length,
-                                )
+                            Math.floor(
+                                Math.random() * marriagePermissions.length,
+                            )
                             ],
                     },
                 };

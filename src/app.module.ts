@@ -34,6 +34,7 @@ import { KhitbahModule } from './khitbah/khitbah.module';
 import { NadharModule } from './nadhar/nadhar.module';
 import { TaarufApprovalModule } from './taaruf_approval/taaruf_approval.module';
 import { NonPhysicalCharactersModule } from './non_physical_characters/non_physical_characters.module';
+import { FamilyMembersModule } from './family_members/family_members.module';
 
 @Module({
     imports: [
@@ -68,6 +69,7 @@ import { NonPhysicalCharactersModule } from './non_physical_characters/non_physi
         KhitbahModule,
         AkadModule,
         NonPhysicalCharactersModule,
+        FamilyMembersModule,
     ],
 
     controllers: [AppController],

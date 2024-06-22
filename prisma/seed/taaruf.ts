@@ -52,7 +52,7 @@ export async function taarufSeed(prisma: PrismaClient) {
             const result = await prisma.taaruf.create({
                 data,
             });
-            console.log(result);
+            // console.log(result);
         }
     }
     console.log('Seed: Taaruf');

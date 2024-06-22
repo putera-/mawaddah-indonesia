@@ -23,7 +23,7 @@ const select = {
 
 @Injectable()
 export class EducationsService {
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService) { }
     async create(
         id: string,
         data: Prisma.EducationCreateInput,

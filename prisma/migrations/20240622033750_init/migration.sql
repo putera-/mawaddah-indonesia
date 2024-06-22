@@ -226,9 +226,9 @@ CREATE TABLE `physical_character` (
     `hair_type` ENUM('lurus', 'ikal', 'keriting', 'kribo', 'botak') NULL,
     `eye_color` ENUM('hitam', 'coklat', 'biru', 'hijau') NULL,
     `characteristic` BOOLEAN NOT NULL DEFAULT false,
-    `characteristic_detail` VARCHAR(255) NULL,
+    `characteristic_detail` TEXT NULL,
     `medical_history` BOOLEAN NOT NULL DEFAULT false,
-    `medical_history_detail` VARCHAR(255) NULL,
+    `medical_history_detail` TEXT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `biodataId` VARCHAR(191) NULL,
@@ -255,6 +255,23 @@ CREATE TABLE `non_physical_character` (
     `biodataId` VARCHAR(191) NULL,
 
     UNIQUE INDEX `non_physical_character_biodataId_key`(`biodataId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `family_member` (
+    `id` VARCHAR(191) NOT NULL,
+    `biodataId` VARCHAR(191) NULL,
+    `relationship` ENUM('ayah', 'ibu', 'kakak_pria', 'kakak_wanita', 'adik_pria', 'adik_wanita', 'ipar_pria', 'ipar_wanita', 'anak_kandung', 'anak_angkat') NULL,
+    `religion` ENUM('islam', 'non_islam') NULL,
+    `dob` VARCHAR(20) NOT NULL,
+    `education` TEXT NOT NULL,
+    `job` TEXT NOT NULL,
+    `is_alive` BOOLEAN NOT NULL DEFAULT true,
+    `deleted` BOOLEAN NOT NULL DEFAULT false,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -419,6 +436,9 @@ ALTER TABLE `physical_character` ADD CONSTRAINT `physical_character_biodataId_fk
 
 -- AddForeignKey
 ALTER TABLE `non_physical_character` ADD CONSTRAINT `non_physical_character_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `family_member` ADD CONSTRAINT `family_member_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `taaruf_gold` ADD CONSTRAINT `taaruf_gold_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
