@@ -95,6 +95,11 @@ export class UsersService {
                         orderBy: { createdAt: 'desc' },
                         take: 1
                     },
+                    auth: {
+                        select: { createdAt: true },
+                        orderBy: { createdAt: 'desc' },
+                        take: 1
+                    }
                 },
                 orderBy: { createdAt: 'desc' },
                 skip,
