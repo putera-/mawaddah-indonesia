@@ -1,34 +1,60 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    Request,
+    BadRequestException,
+    ValidationPipe,
+} from '@nestjs/common';
+import { BiodataService } from 'src/biodata/biodata.service';
+import { Roles } from 'src/roles/roles.decorator';
+import { Role } from 'src/roles/role.enums';
 import { IbadahService } from './ibadah.service';
-import { CreateIbadahDto } from './dto/create-ibadah.dto';
 import { UpdateIbadahDto } from './dto/update-ibadah.dto';
 
 @Controller('ibadah')
 export class IbadahController {
-  constructor(private readonly ibadahService: IbadahService) {}
+    constructor(
+        private readonly ibadahService: IbadahService,
+        private readonly biodataService: BiodataService,
+    ) {}
 
-  @Post()
-  create(@Body() createIbadahDto: CreateIbadahDto) {
-    return this.ibadahService.create(createIbadahDto);
-  }
+    @Roles(Role.Member)
+    @Get()
+    async findOne(@Request() req: any) {
+        const userId = req.user.id;
+        try {
+            const biodata = await this.biodataService.findMe(userId);
 
-  @Get()
-  findAll() {
-    return this.ibadahService.findAll();
-  }
+            // check apakah biodata!= null > jika masih null throw error
+            if (!biodata) throw new BadRequestException();
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ibadahService.findOne(+id);
-  }
+            return this.ibadahService.findOne(userId, biodata.id);
+        } catch (error) {
+            throw error;
+        }
+    }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateIbadahDto: UpdateIbadahDto) {
-    return this.ibadahService.update(+id, updateIbadahDto);
-  }
+    @Roles(Role.Member)
+    @Patch()
+    async update(
+        @Request() req: any,
+        @Body(new ValidationPipe()) data: UpdateIbadahDto,
+    ) {
+        const userId = req.user.id;
+        try {
+            const biodata = await this.biodataService.findMe(userId);
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ibadahService.remove(+id);
-  }
+            // check apakah biodata!= null > jika masih null throw error
+            if (!biodata) throw new BadRequestException();
+
+            return this.ibadahService.upsert(biodata.id, data);
+        } catch (error) {
+            throw error;
+        }
+    }
 }
