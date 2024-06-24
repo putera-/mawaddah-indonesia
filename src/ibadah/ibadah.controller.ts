@@ -1,11 +1,8 @@
 import {
     Controller,
     Get,
-    Post,
     Body,
     Patch,
-    Param,
-    Delete,
     Request,
     BadRequestException,
     ValidationPipe,
@@ -31,7 +28,10 @@ export class IbadahController {
             const biodata = await this.biodataService.findMe(userId);
 
             // check apakah biodata!= null > jika masih null throw error
-            if (!biodata) throw new BadRequestException();
+            if (!biodata)
+                throw new BadRequestException(
+                    'Harap isi biodata terlebih dahulu',
+                );
 
             return this.ibadahService.findOne(userId, biodata.id);
         } catch (error) {
@@ -50,7 +50,10 @@ export class IbadahController {
             const biodata = await this.biodataService.findMe(userId);
 
             // check apakah biodata!= null > jika masih null throw error
-            if (!biodata) throw new BadRequestException();
+            if (!biodata)
+                throw new BadRequestException(
+                    'Harap isi biodata terlebih dahulu',
+                );
 
             return this.ibadahService.upsert(biodata.id, data);
         } catch (error) {

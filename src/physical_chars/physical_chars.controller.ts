@@ -1,4 +1,12 @@
-import { Controller, Get, Body, Patch, ValidationPipe, Request, BadRequestException } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Body,
+    Patch,
+    ValidationPipe,
+    Request,
+    BadRequestException,
+} from '@nestjs/common';
 import { PhysicalCharsService } from './physical_chars.service';
 import { UpdatePhysicalCharDto } from './dto/update-physical_char.dto';
 import { Roles } from 'src/roles/roles.decorator';
@@ -10,21 +18,20 @@ import { CreatePhysicalCharDto } from './dto/create-physical_char.dto';
 export class PhysicalCharsController {
     constructor(
         private readonly physicalCharsService: PhysicalCharsService,
-        private readonly biodataService: BiodataService
-    ) { }
-    
+        private readonly biodataService: BiodataService,
+    ) {}
+
     @Roles(Role.Member)
     @Get()
     async findOne(@Request() req: any) {
-        const userId = req.user.id
+        const userId = req.user.id;
         try {
-            const biodata = await this.biodataService.findMe(userId)
+            const biodata = await this.biodataService.findMe(userId);
 
             // check apakah biodata!= null > jika masih null throw error
-            if (!biodata) throw new BadRequestException()
+            if (!biodata) throw new BadRequestException();
 
             return this.physicalCharsService.findOne(userId, biodata.id);
-
         } catch (error) {
             throw error;
         }
@@ -32,19 +39,20 @@ export class PhysicalCharsController {
 
     @Roles(Role.Member)
     @Patch()
-    async update(@Request() req: any, @Body(new ValidationPipe()) data: UpdatePhysicalCharDto) {
-        const userId = req.user.id
+    async update(
+        @Request() req: any,
+        @Body(new ValidationPipe()) data: UpdatePhysicalCharDto,
+    ) {
+        const userId = req.user.id;
         try {
-            const biodata = await this.biodataService.findMe(userId)
+            const biodata = await this.biodataService.findMe(userId);
 
             // check apakah biodata!= null > jika masih null throw error
-            if (!biodata) throw new BadRequestException()
+            if (!biodata) throw new BadRequestException();
 
             return this.physicalCharsService.upsert(biodata.id, data);
-
         } catch (error) {
             throw error;
         }
     }
-
 }
