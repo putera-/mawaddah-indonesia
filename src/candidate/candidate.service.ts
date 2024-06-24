@@ -3,20 +3,8 @@ import { Biodata } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { User } from 'src/users/user.interface';
 import { UsersService } from 'src/users/user.service';
-let select = {
-    id: true,
-    email: true,
-    firstname: true,
-    lastname: true,
-    active: true,
-    verified: true,
-    avatar: true,
-    avatar_md: true,
-    role: true,
-    taaruf_status: true,
-    createdAt: true,
-};
-const hiddenSelect = {
+
+const select = {
     id: true,
     email: true,
     firstname: true,
@@ -29,6 +17,7 @@ const hiddenSelect = {
     taaruf_status: true,
     createdAt: true,
 };
+
 @Injectable()
 export class CandidateService {
     constructor(
@@ -46,15 +35,22 @@ export class CandidateService {
                     gender: oppositeGender,
                 },
             },
-            select: {
-                ...select,
-                ...hiddenSelect,
-                biodata:
-                {
+            include: {
+                biodata: {
                     include: {
                         physical_characters: true,
                         non_physical_chars: true
                     }
+                },
+                Education: true,
+                Skill: true,
+                Hobby: true,
+                Married_goal: true,
+                Life_goal: true,
+                auth: {
+                    select: { createdAt: true },
+                    orderBy: { createdAt: 'desc' },
+                    take: 1
                 }
             },
             orderBy: {
@@ -77,7 +73,7 @@ export class CandidateService {
     async findAll(gender: string) {
         const oppositeGender = this.getOppositeGender(gender);
         return await this.Prisma.biodata.findMany({
-            select: { ...hiddenSelect },
+            select: { ...select },
             where: { gender: oppositeGender },
         });
     }
@@ -98,6 +94,11 @@ export class CandidateService {
                 Hobby: true,
                 Married_goal: true,
                 Life_goal: true,
+                auth: {
+                    select: { createdAt: true },
+                    orderBy: { createdAt: 'desc' },
+                    take: 1
+                }
             }
         });
         if (!user) throw new NotFoundException('User tidak ditemukan');
@@ -158,19 +159,23 @@ export class CandidateService {
                     gender: oppositeGender
                 }
             },
-            select: {
-                ...hiddenSelect,
+            include: {
                 biodata: {
                     include: {
                         physical_characters: true,
                         non_physical_chars: true
                     }
                 },
+                Education: true,
                 Skill: { select: { title: true } },
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },
                 Life_goal: { select: { title: true } },
-                Education: true,
+                auth: {
+                    select: { createdAt: true },
+                    orderBy: { createdAt: 'desc' },
+                    take: 1
+                }
             }
         });
 
@@ -227,7 +232,7 @@ export class CandidateService {
                 },
             },
             select: {
-                ...hiddenSelect,
+                ...select,
                 Skill: { select: { title: true } },
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },
@@ -266,7 +271,7 @@ export class CandidateService {
                 },
             },
             select: {
-                ...hiddenSelect,
+                ...select,
                 Skill: { select: { title: true } },
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },

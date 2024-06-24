@@ -497,6 +497,27 @@ export async function memberSeed(prisma: PrismaClient) {
         return randomDate.toISOString();
     }
 
+    function getRandomAuths() {
+        const authEntries = [];
+        for (let i = 0; i < Math.floor(Math.random() * 20); i++) {
+            // Randomly select a user
+            // const user = users[Math.floor(Math.random() * users.length)];
+
+            // Create a random Auth entry
+            const authEntry = {
+                // userId: user.id,
+                access_token: faker.internet.password(), // Generates a random string
+                expiredAt: faker.date.future(), // Generates a future date
+                path: faker.internet.url(), // Generates a random URL
+                method: faker.helpers.arrayElement(['GET', 'POST', 'PUT', 'DELETE']), // Random HTTP method
+                createdAt: faker.date.past(), // Generates a past date
+            };
+
+            authEntries.push(authEntry);
+        }
+        return authEntries;
+    }
+
     console.log('Seed: Member');
 
     // BOB
@@ -718,6 +739,12 @@ export async function memberSeed(prisma: PrismaClient) {
                         data: getRandomOfObjectArray(tujuanHidup),
                     },
                 };
+                data.auth = {
+                    createMany: {
+                        data: getRandomAuths()
+                    }
+                };
+
                 data.taaruf_status = "OPEN";
             }
             const post = await prisma.user.upsert({
@@ -944,6 +971,11 @@ export async function memberSeed(prisma: PrismaClient) {
                     createMany: {
                         data: getRandomOfObjectArray(tujuanHidup),
                     },
+                };
+                data.auth = {
+                    createMany: {
+                        data: getRandomAuths()
+                    }
                 };
 
                 data.taaruf_status = "OPEN";

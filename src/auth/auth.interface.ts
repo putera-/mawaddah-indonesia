@@ -10,3 +10,5 @@ export interface Auth {
     method: string;
     createdAt?: Date;
 }
+
+export interface AuthPartial extends Partial<Auth> { }

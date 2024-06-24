@@ -1,4 +1,5 @@
 import { Biodata, RoleStatus, Taaruf, TaarufStatus, Taaruf_gold } from '@prisma/client';
+import { Auth, AuthPartial } from 'src/auth/auth.interface';
 
 export interface User {
     id: string;
@@ -23,4 +24,5 @@ export interface User {
     Taaruf?: Taaruf[]
     Taaruf_candidate?: Taaruf[]
     inTaaruf?: boolean
+    auth?: AuthPartial[]
 }
