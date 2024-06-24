@@ -156,31 +156,33 @@ model Activation {
 }
 
 model Biodata {
-    id                    String                @id @default(uuid())
-    user                  User?                 @relation(fields: [userId], references: [id])
-    userId                String?               @unique
-    bio                   String                @db.Text
-    phone                 String                @db.VarChar(20)
-    company               String?               @db.VarChar(100)
-    manhaj                ManhajStatus
-    gender                Gender
-    marriage_status       MarriageStatus
-    marriage_permission   MarriagePermission
-    physical_characters   PhysicalCharacter?
-    non_physical_chars    NonPhysicalCharacter?
+    id                  String                @id @default(uuid())
+    user                User?                 @relation(fields: [userId], references: [id])
+    userId              String?               @unique
+    bio                 String                @db.Text
+    phone               String                @db.VarChar(20)
+    company             String?               @db.VarChar(100)
+    manhaj              ManhajStatus
+    gender              Gender
+    marriage_status     MarriageStatus
+    marriage_permission MarriagePermission
+    physical_characters PhysicalCharacter?
+    non_physical_chars  NonPhysicalCharacter?
     marriage_preparations MarriagePreparation?
-    family_members        FamilyMember[]
-    dob                   DateTime              @db.Date
-    birth_place           String                @db.VarChar(100)
-    birth_order           Int                   @db.TinyInt
-    address_town          String                @db.VarChar(100)
-    address_province      String                @db.VarChar(100)
-    hometown_province     String                @db.VarChar(100)
-    address_zip_code      Int                   @db.Int
-    ethnic                String                @db.VarChar(100)
-    poligami_opinion      String                @db.Text
-    createdAt             DateTime              @default(now())
-    updatedAt             DateTime              @default(now()) @updatedAt
+    family_members      FamilyMember[]
+    ibadah              Ibadah?
+
+    dob                 DateTime              @db.Date
+    birth_place         String                @db.VarChar(100)
+    birth_order         Int                   @db.TinyInt
+    address_town        String                @db.VarChar(100)
+    address_province    String                @db.VarChar(100)
+    hometown_province   String                @db.VarChar(100)
+    address_zip_code    Int                   @db.Int
+    ethnic              String                @db.VarChar(100)
+    poligami_opinion    String                @db.Text
+    createdAt           DateTime              @default(now())
+    updatedAt           DateTime              @default(now()) @updatedAt
 
     @@map("biodata")
 }
@@ -545,4 +547,46 @@ model MarriagePreparation {
     updatedAt DateTime @default(now()) @updatedAt
 
     @@map("marriage_preparation")
+}
+
+model Ibadah {
+    id              String         @id @default(uuid())
+    ShalatFardu     ShalatFardu?
+    ShalatRawatib   IbadahRawatib?
+    ShalatDhuha     IbadahRawatib?
+    ShalatTahajud   IbadahRawatib?
+    PuasaRamadhan   IbadahRawatib?
+    PuasaSeninKamis IbadahRawatib?
+    PuasaDaud       IbadahRawatib?
+    PuasaAyamulBid  IbadahRawatib?
+    Zakat           IbadahRawatib?
+    Sedekah         IbadahRawatib?
+    Umrah           IbadahRawatib?
+    Haji            StatusHaji?
+    biodata         Biodata?       @relation(fields: [biodataId], references: [id])
+    biodataId       String         @unique
+    createdAt       DateTime       @default(now())
+    updatedAt       DateTime       @default(now()) @updatedAt
+
+    @@map("ibadah")
+}
+
+enum ShalatFardu {
+    Rutin_di_masjid
+    Kadang_di_masjid
+    Bolong_bolong
+    Pernah_sekali
+    Belum_pernah
+}
+
+enum IbadahRawatib {
+    Rutin
+    Kadang_kadang
+    Pernah_sekali
+    Belum_pernah
+}
+
+enum StatusHaji {
+    Pernah
+    Belum
 }

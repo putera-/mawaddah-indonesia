@@ -36,6 +36,7 @@ import { TaarufApprovalModule } from './taaruf_approval/taaruf_approval.module';
 import { NonPhysicalCharactersModule } from './non_physical_characters/non_physical_characters.module';
 import { FamilyMembersModule } from './family_members/family_members.module';
 import { MarriagePreparationModule } from './marriage_preparation/marriage_preparation.module';
+import { IbadahModule } from './ibadah/ibadah.module';
 
 @Module({
     imports: [
@@ -72,6 +73,7 @@ import { MarriagePreparationModule } from './marriage_preparation/marriage_prepa
         NonPhysicalCharactersModule,
         FamilyMembersModule,
         MarriagePreparationModule,
+        IbadahModule,
     ],
 
     controllers: [AppController],
