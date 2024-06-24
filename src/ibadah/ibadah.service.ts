@@ -1,26 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { CreateIbadahDto } from './dto/create-ibadah.dto';
-import { UpdateIbadahDto } from './dto/update-ibadah.dto';
+import { PrismaService } from 'src/prisma.service';
+import { Ibadah, Prisma } from '@prisma/client';
 
 @Injectable()
 export class IbadahService {
-  create(createIbadahDto: CreateIbadahDto) {
-    return 'This action adds a new ibadah';
-  }
+    constructor(private prisma: PrismaService) {}
 
-  findAll() {
-    return `This action returns all ibadah`;
-  }
+    async upsert(biodataId: string, data: Prisma.IbadahCreateInput) {
+        return this.prisma.ibadah.upsert({
+            where: { biodataId },
+            update: data,
+            create: data,
+        });
+    }
+    async findOne(userId: string, biodataId: string): Promise<Ibadah> {
+        const data = await this.prisma.biodata.findFirst({
+            where: {
+                userId,
+            },
+            select: {
+                id: true,
+                ibadah: true,
+            },
+        });
 
-  findOne(id: number) {
-    return `This action returns a #${id} ibadah`;
-  }
+        if (!data.ibadah) {
+            return this.prisma.ibadah.create({
+                data: {
+                    biodata: { connect: { id: biodataId } },
+                },
+            });
+        }
 
-  update(id: number, updateIbadahDto: UpdateIbadahDto) {
-    return `This action updates a #${id} ibadah`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} ibadah`;
-  }
+        return data.ibadah;
+    }
 }

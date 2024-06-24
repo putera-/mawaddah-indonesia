@@ -12,6 +12,7 @@ export class PhysicalCharsController {
         private readonly physicalCharsService: PhysicalCharsService,
         private readonly biodataService: BiodataService
     ) { }
+    
     @Roles(Role.Member)
     @Get()
     async findOne(@Request() req: any) {
