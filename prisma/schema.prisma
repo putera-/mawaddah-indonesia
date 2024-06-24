@@ -169,6 +169,7 @@ model Biodata {
     physical_characters PhysicalCharacter?
     non_physical_chars  NonPhysicalCharacter?
     family_members      FamilyMember[]
+    ibadah              Ibadah?
     dob                 DateTime              @db.Date
     birth_place         String                @db.VarChar(100)
     birth_order         Int                   @db.TinyInt
@@ -528,4 +529,46 @@ enum AprovalStatus {
     Pending
     Yes
     No
+}
+
+model Ibadah {
+    id              String         @id @default(uuid())
+    ShalatFardu     ShalatFardu?
+    ShalatRawatib   IbadahRawatib?
+    ShalatDhuha     IbadahRawatib?
+    ShalatTahajud   IbadahRawatib?
+    PuasaRamadhan   IbadahRawatib?
+    PuasaSeninKamis IbadahRawatib?
+    PuasaDaud       IbadahRawatib?
+    PuasaAyamulBid  IbadahRawatib?
+    Zakat           IbadahRawatib?
+    Sedekah         IbadahRawatib?
+    Umrah           IbadahRawatib?
+    Haji            StatusHaji?
+    biodata         Biodata?       @relation(fields: [biodataId], references: [id])
+    biodataId       String         @unique
+    createdAt       DateTime       @default(now())
+    updatedAt       DateTime       @default(now()) @updatedAt
+
+    @@map("ibadah")
+}
+
+enum ShalatFardu {
+    Rutin_di_masjid
+    Kadang_di_masjid
+    Bolong_bolong
+    Pernah_sekali
+    Belum_pernah
+}
+
+enum IbadahRawatib {
+    Rutin
+    Kadang_kadang
+    Pernah_sekali
+    Belum_pernah
+}
+
+enum StatusHaji {
+    Pernah
+    Belum
 }
