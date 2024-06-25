@@ -173,6 +173,7 @@ model Biodata {
     dob                 DateTime              @db.Date
     birth_place         String                @db.VarChar(100)
     birth_order         Int                   @db.TinyInt
+    address             String                @db.VarChar(100)
     address_town        String                @db.VarChar(100)
     address_province    String                @db.VarChar(100)
     hometown_province   String                @db.VarChar(100)

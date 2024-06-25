@@ -127,6 +127,7 @@ CREATE TABLE `biodata` (
     `dob` DATE NOT NULL,
     `birth_place` VARCHAR(100) NOT NULL,
     `birth_order` TINYINT NOT NULL,
+    `address` VARCHAR(100) NOT NULL,
     `address_town` VARCHAR(100) NOT NULL,
     `address_province` VARCHAR(100) NOT NULL,
     `hometown_province` VARCHAR(100) NOT NULL,
@@ -395,6 +396,29 @@ CREATE TABLE `akad` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `ibadah` (
+    `id` VARCHAR(191) NOT NULL,
+    `ShalatFardu` ENUM('rutin_di_masjid', 'kadang_di_masjid', 'bolong_bolong', 'pernah_sekali', 'belum_pernah') NULL,
+    `ShalatRawatib` ENUM('rutin', 'kadang_kadang', 'pernah_sekali', 'belum_pernah') NULL,
+    `ShalatDhuha` ENUM('rutin', 'kadang_kadang', 'pernah_sekali', 'belum_pernah') NULL,
+    `ShalatTahajud` ENUM('rutin', 'kadang_kadang', 'pernah_sekali', 'belum_pernah') NULL,
+    `PuasaRamadhan` ENUM('rutin', 'kadang_kadang', 'pernah_sekali', 'belum_pernah') NULL,
+    `PuasaSeninKamis` ENUM('rutin', 'kadang_kadang', 'pernah_sekali', 'belum_pernah') NULL,
+    `PuasaDaud` ENUM('rutin', 'kadang_kadang', 'pernah_sekali', 'belum_pernah') NULL,
+    `PuasaAyamulBid` ENUM('rutin', 'kadang_kadang', 'pernah_sekali', 'belum_pernah') NULL,
+    `Zakat` ENUM('rutin', 'kadang_kadang', 'pernah_sekali', 'belum_pernah') NULL,
+    `Sedekah` ENUM('rutin', 'kadang_kadang', 'pernah_sekali', 'belum_pernah') NULL,
+    `Umrah` ENUM('rutin', 'kadang_kadang', 'pernah_sekali', 'belum_pernah') NULL,
+    `Haji` BOOLEAN NOT NULL DEFAULT false,
+    `biodataId` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    UNIQUE INDEX `ibadah_biodataId_key`(`biodataId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `auth` ADD CONSTRAINT `auth_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
@@ -475,3 +499,6 @@ ALTER TABLE `khitbah` ADD CONSTRAINT `khitbah_taarufId_fkey` FOREIGN KEY (`taaru
 
 -- AddForeignKey
 ALTER TABLE `akad` ADD CONSTRAINT `akad_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `taaruf`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ibadah` ADD CONSTRAINT `ibadah_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
