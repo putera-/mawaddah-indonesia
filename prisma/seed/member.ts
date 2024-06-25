@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 
 import {
-    IbadahRawatib,
+    Cycle,
     ManhajStatus,
     MarriagePermission,
     MarriagePreparation,
@@ -9,7 +9,6 @@ import {
     Prisma,
     PrismaClient,
     ShalatFardu,
-    StatusHaji,
     body_shape,
     eye_Color,
     hair_color,
@@ -609,21 +608,21 @@ export async function memberSeed(prisma: PrismaClient) {
     ];
 
     const shalatFardu: ShalatFardu[] = [
-        ShalatFardu.Rutin_di_masjid,
-        ShalatFardu.Kadang_di_masjid,
-        ShalatFardu.Bolong_bolong,
-        ShalatFardu.Pernah_sekali,
-        ShalatFardu.Belum_pernah,
+        ShalatFardu.belum_pernah,
+        ShalatFardu.bolong_bolong,
+        ShalatFardu.kadang_di_masjid,
+        ShalatFardu.pernah_sekali,
+        ShalatFardu.rutin_di_masjid,
     ];
 
-    const ibadahRawatib: IbadahRawatib[] = [
-        IbadahRawatib.Rutin,
-        IbadahRawatib.Kadang_kadang,
-        IbadahRawatib.Pernah_sekali,
-        IbadahRawatib.Belum_pernah,
+    const ibadahRawatib: Cycle[] = [
+        Cycle.rutin,
+        Cycle.belum_pernah,
+        Cycle.kadang_kadang,
+        Cycle.pernah_sekali,
     ];
 
-    const statusHaji: StatusHaji[] = [StatusHaji.Pernah, StatusHaji.Belum];
+    // const statusHaji: StatusHaji[] = [StatusHaji.Pernah, StatusHaji.Belum];
 
     function getRandomOfObjectArray(dataArray: any) {
         // Salin array untuk menghindari modifikasi array asli
@@ -671,7 +670,12 @@ export async function memberSeed(prisma: PrismaClient) {
                 access_token: faker.internet.password(), // Generates a random string
                 expiredAt: faker.date.future(), // Generates a future date
                 path: faker.internet.url(), // Generates a random URL
-                method: faker.helpers.arrayElement(['GET', 'POST', 'PUT', 'DELETE']), // Random HTTP method
+                method: faker.helpers.arrayElement([
+                    'GET',
+                    'POST',
+                    'PUT',
+                    'DELETE',
+                ]), // Random HTTP method
                 createdAt: faker.date.past(), // Generates a past date
             };
 
@@ -849,7 +853,6 @@ export async function memberSeed(prisma: PrismaClient) {
                 Umrah: ibadahRawatib[
                     Math.floor(Math.random() * ibadahRawatib.length)
                 ],
-                Haji: statusHaji[Math.floor(Math.random() * statusHaji.length)],
             };
 
             const data_marriage_preparation: Prisma.MarriagePreparationCreateInput = {
@@ -962,11 +965,11 @@ export async function memberSeed(prisma: PrismaClient) {
                 };
                 data.auth = {
                     createMany: {
-                        data: getRandomAuths()
-                    }
+                        data: getRandomAuths(),
+                    },
                 };
 
-                data.taaruf_status = "OPEN";
+                data.taaruf_status = 'OPEN';
             }
             const post = await prisma.user.upsert({
                 where: { email },
@@ -1142,7 +1145,6 @@ export async function memberSeed(prisma: PrismaClient) {
                 Umrah: ibadahRawatib[
                     Math.floor(Math.random() * ibadahRawatib.length)
                 ],
-                Haji: statusHaji[Math.floor(Math.random() * statusHaji.length)],
             };
 
             const data_marriage_preparation: Prisma.MarriagePreparationCreateInput = {
@@ -1254,11 +1256,11 @@ export async function memberSeed(prisma: PrismaClient) {
                 };
                 data.auth = {
                     createMany: {
-                        data: getRandomAuths()
-                    }
+                        data: getRandomAuths(),
+                    },
                 };
 
-                data.taaruf_status = "OPEN";
+                data.taaruf_status = 'OPEN';
             }
             await prisma.user.upsert({
                 where: { email },
