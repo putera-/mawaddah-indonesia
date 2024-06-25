@@ -3,6 +3,7 @@ import { faker } from '@faker-js/faker';
 import {
     ManhajStatus,
     MarriagePermission,
+    MarriagePreparation,
     MarriageStatus,
     Prisma,
     PrismaClient,
@@ -211,7 +212,7 @@ export async function memberSeed(prisma: PrismaClient) {
         'Torres Strait Islander',
     ];
 
-    const visi: string[] = [
+    const visi2: string[] = [
         "Menjadi individu yang berkarakter dan berintegritas.",
         "Menjadi teladan dalam kehidupan bermasyarakat.",
         "Mencapai keseimbangan antara karir dan kehidupan pribadi.",
@@ -233,7 +234,7 @@ export async function memberSeed(prisma: PrismaClient) {
         "Mewujudkan keluarga yang selalu bersyukur dan berterima kasih.",
         "Menjalani kehidupan pernikahan yang penuh makna dan kebahagiaan."
     ];
-    const misi: string[] = [
+    const misi2: string[] = [
         "Selalu belajar dan mengembangkan diri melalui pendidikan dan pengalaman.",
         "Menjaga hubungan baik dengan keluarga, teman, dan rekan kerja.",
         "Menghadapi setiap tantangan dengan sikap positif dan semangat juang.",
@@ -256,7 +257,7 @@ export async function memberSeed(prisma: PrismaClient) {
         "Menghargai setiap kontribusi dan usaha pasangan dalam kehidupan sehari-hari."
     ];
 
-    const mental: string[] = [
+    const mental2: string[] = [
         "Siap",
         "Ragu-ragu",
         "Tidak siap",
@@ -299,7 +300,7 @@ export async function memberSeed(prisma: PrismaClient) {
         "Siap menghadapi tantangan"
     ];
 
-    const mahar: string[] = [
+    const mahar2: string[] = [
         "Emas 50 gram",
         "Uang tunai Rp 10.000.000",
         "Perhiasan berlian",
@@ -322,7 +323,7 @@ export async function memberSeed(prisma: PrismaClient) {
         "Emas 75 gram"
     ];
 
-    const span_time: string[] = [
+    const span_times: string[] = [
         "1 bulan",
         "2 bulan",
         "3 bulan",
@@ -786,6 +787,15 @@ export async function memberSeed(prisma: PrismaClient) {
                 smoking: Math.random() < 0.5,
             };
 
+            const data_marriage_preparation: Prisma.MarriagePreparationCreateInput = {
+                visi: visi2[Math.floor(Math.random() * visi2.length)],
+                misi: misi2[Math.floor(Math.random() * misi2.length)],
+                mental: mental2[Math.floor(Math.random() * mental2.length)],
+                mahar: mahar2[Math.floor(Math.random() * mahar2.length)],
+                cost: costString,
+                span_time: span_times[Math.floor(Math.random() * span_times.length)]
+            }
+
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
                 data.biodata = {
@@ -808,6 +818,9 @@ export async function memberSeed(prisma: PrismaClient) {
                         },
                         non_physical_chars: {
                             create: data_non_physical_character,
+                        },
+                        marriage_preparations: {
+                            create: data_marriage_preparation
                         },
                         ethnic: sukuIndonesia[
                             Math.floor(Math.random() * sukuIndonesia.length)
@@ -1020,6 +1033,15 @@ export async function memberSeed(prisma: PrismaClient) {
                 smoking: Math.random() < 0.5,
             };
 
+            const data_marriage_preparation: Prisma.MarriagePreparationCreateInput = {
+                visi: visi2[Math.floor(Math.random() * visi2.length)],
+                misi: misi2[Math.floor(Math.random() * misi2.length)],
+                mental: mental2[Math.floor(Math.random() * mental2.length)],
+                mahar: mahar2[Math.floor(Math.random() * mahar2.length)],
+                cost: costString,
+                span_time: span_times[Math.floor(Math.random() * span_times.length)]
+            }
+
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
                 data.biodata = {
@@ -1042,6 +1064,9 @@ export async function memberSeed(prisma: PrismaClient) {
                         },
                         non_physical_chars: {
                             create: data_non_physical_character,
+                        },
+                        marriage_preparations: {
+                            create: data_marriage_preparation
                         },
                         ethnic: sukuIndonesia[
                             Math.floor(Math.random() * sukuIndonesia.length)
