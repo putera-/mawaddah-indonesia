@@ -622,8 +622,6 @@ export async function memberSeed(prisma: PrismaClient) {
         Cycle.pernah_sekali,
     ];
 
-    // const statusHaji: StatusHaji[] = [StatusHaji.Pernah, StatusHaji.Belum];
-
     function getRandomOfObjectArray(dataArray: any) {
         // Salin array untuk menghindari modifikasi array asli
         let shuffledArray = [...dataArray];
@@ -878,6 +876,7 @@ export async function memberSeed(prisma: PrismaClient) {
                         dob: getRandomDateBetween1970And2005(),
                         birth_place: provinces[randomProvinceIndex2].name,
                         birth_order: 1,
+                        address: faker.location.streetAddress(true),
                         address_town: provinces[randomProvinceIndex1].name,
                         address_province: provinces[randomProvinceIndex].name,
                         hometown_province: provinces[randomProvinceIndex2].name,
@@ -1170,6 +1169,8 @@ export async function memberSeed(prisma: PrismaClient) {
                         dob: getRandomDateBetween1970And2005(),
                         birth_place: provinces[randomProvinceIndex2].name,
                         birth_order: 1,
+                        address: faker.location.streetAddress(true),
+
                         address_town: provinces[randomProvinceIndex1].name,
                         address_province: provinces[randomProvinceIndex].name,
                         hometown_province: provinces[randomProvinceIndex2].name,
