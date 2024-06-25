@@ -1,40 +1,40 @@
-import { IbadahRawatib, ShalatFardu, StatusHaji } from '@prisma/client';
-import { IsString } from 'class-validator';
+import { Cycle, ShalatFardu } from '@prisma/client';
+import { IsBoolean, IsString } from 'class-validator';
 
 export class CreateIbadahDto {
     @IsString()
     ShalatFardu: ShalatFardu;
 
     @IsString()
-    ShalatRawatib: IbadahRawatib;
+    ShalatRawatib: Cycle;
 
     @IsString()
-    ShalatDhuha: IbadahRawatib;
+    ShalatDhuha: Cycle;
 
     @IsString()
-    ShalatTahajud: IbadahRawatib;
+    ShalatTahajud: Cycle;
 
     @IsString()
-    PuasaRamadhan: IbadahRawatib;
+    PuasaRamadhan: Cycle;
 
     @IsString()
-    PuasaSeninKamis: IbadahRawatib;
+    PuasaSeninKamis: Cycle;
 
     @IsString()
-    PuasaDaud: IbadahRawatib;
+    PuasaDaud: Cycle;
 
     @IsString()
-    PuasaAyamulBid: IbadahRawatib;
+    PuasaAyamulBid: Cycle;
 
     @IsString()
-    Zakat: IbadahRawatib;
+    Zakat: Cycle;
 
     @IsString()
-    Sedekah: IbadahRawatib;
+    Sedekah: Cycle;
 
     @IsString()
-    Umrah: IbadahRawatib;
+    Umrah: Cycle;
 
-    @IsString()
-    Haji: StatusHaji;
+    @IsBoolean()
+    Haji: boolean;
 }
