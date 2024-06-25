@@ -39,7 +39,8 @@ export class CandidateService {
                 biodata: {
                     include: {
                         physical_characters: true,
-                        non_physical_chars: true
+                        non_physical_chars: true,
+                        marriage_preparations: true,
                     }
                 },
                 Education: true,
@@ -86,7 +87,8 @@ export class CandidateService {
                 biodata: {
                     include: {
                         physical_characters: true,
-                        non_physical_chars: true
+                        non_physical_chars: true,
+                        marriage_preparations: true,
                     }
                 },
                 Education: true,
@@ -163,7 +165,8 @@ export class CandidateService {
                 biodata: {
                     include: {
                         physical_characters: true,
-                        non_physical_chars: true
+                        non_physical_chars: true,
+                        marriage_preparations: true,
                     }
                 },
                 Education: true,
