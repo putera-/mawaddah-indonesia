@@ -543,21 +543,6 @@ export async function memberSeed(prisma: PrismaClient) {
         },
     ];
 
-    const shalatFardu: ShalatFardu[] = [
-        ShalatFardu.belum_pernah,
-        ShalatFardu.bolong_bolong,
-        ShalatFardu.kadang_di_masjid,
-        ShalatFardu.pernah_sekali,
-        ShalatFardu.rutin_di_masjid,
-    ];
-
-    const ibadahRawatib: Cycle[] = [
-        Cycle.rutin,
-        Cycle.belum_pernah,
-        Cycle.kadang_kadang,
-        Cycle.pernah_sekali,
-    ];
-
     function getRandomOfObjectArray(dataArray: any) {
         // Salin array untuk menghindari modifikasi array asli
         let shuffledArray = [...dataArray];
@@ -700,49 +685,6 @@ export async function memberSeed(prisma: PrismaClient) {
                 smoking: Math.random() < 0.5,
             };
 
-            const data_ibadah: Prisma.IbadahCreateInput = {
-                ShalatFardu:
-                    shalatFardu[Math.floor(Math.random() * shalatFardu.length)],
-                ShalatRawatib:
-                    ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                    ],
-                ShalatDhuha:
-                    ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                    ],
-                ShalatTahajud:
-                    ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                    ],
-                PuasaRamadhan:
-                    ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                    ],
-                PuasaSeninKamis:
-                    ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                    ],
-                PuasaDaud:
-                    ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                    ],
-                PuasaAyamulBid:
-                    ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                    ],
-                Zakat: ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                ],
-                Sedekah:
-                    ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                    ],
-                Umrah: ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                ],
-            };
-
             const data_marriage_preparation: Prisma.MarriagePreparationCreateInput = {
                 visi: visi2[Math.floor(Math.random() * visi2.length)],
                 misi: misi2[Math.floor(Math.random() * misi2.length)],
@@ -770,9 +712,6 @@ export async function memberSeed(prisma: PrismaClient) {
                         address_town: provinces[randomProvinceIndex1].name,
                         address_province: provinces[randomProvinceIndex].name,
                         hometown_province: provinces[randomProvinceIndex2].name,
-                        // physical_characters: {
-                        //     create: data_physical_character,
-                        // },
                         non_physical_chars: {
                             create: data_non_physical_character,
                         },
@@ -942,49 +881,6 @@ export async function memberSeed(prisma: PrismaClient) {
                 smoking: Math.random() < 0.5,
             };
 
-            const data_ibadah: Prisma.IbadahCreateInput = {
-                ShalatFardu:
-                    shalatFardu[Math.floor(Math.random() * shalatFardu.length)],
-                ShalatRawatib:
-                    ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                    ],
-                ShalatDhuha:
-                    ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                    ],
-                ShalatTahajud:
-                    ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                    ],
-                PuasaRamadhan:
-                    ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                    ],
-                PuasaSeninKamis:
-                    ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                    ],
-                PuasaDaud:
-                    ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                    ],
-                PuasaAyamulBid:
-                    ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                    ],
-                Zakat: ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                ],
-                Sedekah:
-                    ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                    ],
-                Umrah: ibadahRawatib[
-                    Math.floor(Math.random() * ibadahRawatib.length)
-                ],
-            };
-
             const data_marriage_preparation: Prisma.MarriagePreparationCreateInput = {
                 visi: visi2[Math.floor(Math.random() * visi2.length)],
                 misi: misi2[Math.floor(Math.random() * misi2.length)],
@@ -1015,9 +911,6 @@ export async function memberSeed(prisma: PrismaClient) {
                         hometown_province: provinces[randomProvinceIndex2].name,
                         non_physical_chars: {
                             create: data_non_physical_character,
-                        },
-                        ibadah: {
-                            create: data_ibadah,
                         },
                         marriage_preparations: {
                             create: data_marriage_preparation
