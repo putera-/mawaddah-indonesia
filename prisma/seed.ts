@@ -10,6 +10,7 @@ import { taaruf_goldSeed } from './seed/taaruf_gold';
 import { bookmarksSeed } from './seed/bookmark';
 import { taarufSeed } from './seed/taaruf';
 import { familyMembersSeed } from './seed/family_members';
+import { member_physical_character_seed } from './seed/member_physical_character';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -22,6 +23,7 @@ async function main() {
     await faqSeed(prisma, clientid);
     await provinceSeed(prisma);
     await memberSeed(prisma);
+    await member_physical_character_seed(prisma);
     await taaruf_goldSeed(prisma);
     await bookmarksSeed(prisma);
     await taarufSeed(prisma);
