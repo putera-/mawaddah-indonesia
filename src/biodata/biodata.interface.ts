@@ -5,7 +5,8 @@ import {
     MarriageStatus,
     PhysicalCharacter,
     FamilyMember,
-    NonPhysicalCharacter
+    NonPhysicalCharacter,
+    MarriagePreparation
 } from '@prisma/client';
 import { User } from 'src/users/user.interface';
 
@@ -23,6 +24,7 @@ export interface Biodata {
     physical_characters?: PhysicalCharacter;
     non_physical_characters?: NonPhysicalCharacter;
     family_members?: FamilyMember[];
+    marriage_preparations?: MarriagePreparation
     dob: Date;
     birth_place: string;
     birth_order: number;
