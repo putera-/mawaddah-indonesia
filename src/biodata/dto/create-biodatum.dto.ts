@@ -49,6 +49,10 @@ export class CreateBiodatumDto {
 
     @IsString()
     @Length(1, 100)
+    address: string;
+
+    @IsString()
+    @Length(1, 100)
     address_town: string;
 
     @IsString()

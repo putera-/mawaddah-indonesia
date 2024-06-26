@@ -1,13 +1,14 @@
 import { faker } from '@faker-js/faker';
 
 import {
+    Cycle,
     ManhajStatus,
     MarriagePermission,
     MarriagePreparation,
     MarriageStatus,
     Prisma,
     PrismaClient,
-    Skill,
+    ShalatFardu,
     body_shape,
     eye_Color,
     hair_color,
@@ -91,6 +92,7 @@ export async function memberSeed(prisma: PrismaClient) {
         'Saya seorang yang tekun dan gigih; saya tidak mudah menyerah hingga mencapai tujuan yang saya tetapkan.',
         'Sebagai pecinta alam, saya sering melakukan hiking dan berkemah untuk menikmati keindahan alam dan mencari kedamaian.',
     ];
+
     const medical_histories = [
         'Saya pernah didiagnosis dengan kolesterol tinggi pada usia 30 tahun dan kini rutin mengonsumsi obat statin.',
         'Pada tahun 2021, saya menjalani operasi laparoskopi untuk mengangkat kantong empedu setelah serangkaian serangan batu empedu.',
@@ -380,6 +382,7 @@ export async function memberSeed(prisma: PrismaClient) {
         'Saya tidak suka dengan poligami',
         'Poligami itu tanda tidak setia dan tidak cinta',
     ];
+
     const skillSet = [
         { title: 'Saya adalah seorang programmer' },
         {
@@ -606,6 +609,21 @@ export async function memberSeed(prisma: PrismaClient) {
         },
     ];
 
+    const shalatFardu: ShalatFardu[] = [
+        ShalatFardu.belum_pernah,
+        ShalatFardu.bolong_bolong,
+        ShalatFardu.kadang_di_masjid,
+        ShalatFardu.pernah_sekali,
+        ShalatFardu.rutin_di_masjid,
+    ];
+
+    const ibadahRawatib: Cycle[] = [
+        Cycle.rutin,
+        Cycle.belum_pernah,
+        Cycle.kadang_kadang,
+        Cycle.pernah_sekali,
+    ];
+
     function getRandomOfObjectArray(dataArray: any) {
         // Salin array untuk menghindari modifikasi array asli
         let shuffledArray = [...dataArray];
@@ -652,7 +670,12 @@ export async function memberSeed(prisma: PrismaClient) {
                 access_token: faker.internet.password(), // Generates a random string
                 expiredAt: faker.date.future(), // Generates a future date
                 path: faker.internet.url(), // Generates a random URL
-                method: faker.helpers.arrayElement(['GET', 'POST', 'PUT', 'DELETE']), // Random HTTP method
+                method: faker.helpers.arrayElement([
+                    'GET',
+                    'POST',
+                    'PUT',
+                    'DELETE',
+                ]), // Random HTTP method
                 createdAt: faker.date.past(), // Generates a past date
             };
 
@@ -712,46 +735,46 @@ export async function memberSeed(prisma: PrismaClient) {
             const characteristic = Math.random() < 0.5;
             const medical_history = Math.random() < 0.5;
             const data_physical_character: Prisma.PhysicalCharacterCreateInput =
-            {
-                height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
-                weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
-                body_shape:
-                    body_shapes[
-                    Math.floor(Math.random() * body_shapes.length)
-                    ],
-                skin_color:
-                    skin_colors[
-                    Math.floor(Math.random() * skin_colors.length)
-                    ],
-                hair_type:
-                    hair_types[
-                    Math.floor(Math.random() * hair_types.length)
-                    ],
-                hair_color:
-                    hair_colors[
-                    Math.floor(Math.random() * hair_colors.length)
-                    ],
-                eye_color:
-                    eye_colors[
-                    Math.floor(Math.random() * eye_colors.length)
-                    ],
-                characteristic,
-                characteristic_detail: characteristic
-                    ? characteristics[
-                    Math.floor(
-                        Math.random() * medical_histories.length,
-                    )
-                    ]
-                    : null,
-                medical_history,
-                medical_history_detail: medical_history
-                    ? medical_histories[
-                    Math.floor(
-                        Math.random() * medical_histories.length,
-                    )
-                    ]
-                    : null,
-            };
+                {
+                    height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
+                    weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
+                    body_shape:
+                        body_shapes[
+                            Math.floor(Math.random() * body_shapes.length)
+                        ],
+                    skin_color:
+                        skin_colors[
+                            Math.floor(Math.random() * skin_colors.length)
+                        ],
+                    hair_type:
+                        hair_types[
+                            Math.floor(Math.random() * hair_types.length)
+                        ],
+                    hair_color:
+                        hair_colors[
+                            Math.floor(Math.random() * hair_colors.length)
+                        ],
+                    eye_color:
+                        eye_colors[
+                            Math.floor(Math.random() * eye_colors.length)
+                        ],
+                    characteristic,
+                    characteristic_detail: characteristic
+                        ? characteristics[
+                              Math.floor(
+                                  Math.random() * medical_histories.length,
+                              )
+                          ]
+                        : null,
+                    medical_history,
+                    medical_history_detail: medical_history
+                        ? medical_histories[
+                              Math.floor(
+                                  Math.random() * medical_histories.length,
+                              )
+                          ]
+                        : null,
+                };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
             {
@@ -787,6 +810,49 @@ export async function memberSeed(prisma: PrismaClient) {
                 smoking: Math.random() < 0.5,
             };
 
+            const data_ibadah: Prisma.IbadahCreateInput = {
+                ShalatFardu:
+                    shalatFardu[Math.floor(Math.random() * shalatFardu.length)],
+                ShalatRawatib:
+                    ibadahRawatib[
+                        Math.floor(Math.random() * ibadahRawatib.length)
+                    ],
+                ShalatDhuha:
+                    ibadahRawatib[
+                        Math.floor(Math.random() * ibadahRawatib.length)
+                    ],
+                ShalatTahajud:
+                    ibadahRawatib[
+                        Math.floor(Math.random() * ibadahRawatib.length)
+                    ],
+                PuasaRamadhan:
+                    ibadahRawatib[
+                        Math.floor(Math.random() * ibadahRawatib.length)
+                    ],
+                PuasaSeninKamis:
+                    ibadahRawatib[
+                        Math.floor(Math.random() * ibadahRawatib.length)
+                    ],
+                PuasaDaud:
+                    ibadahRawatib[
+                        Math.floor(Math.random() * ibadahRawatib.length)
+                    ],
+                PuasaAyamulBid:
+                    ibadahRawatib[
+                        Math.floor(Math.random() * ibadahRawatib.length)
+                    ],
+                Zakat: ibadahRawatib[
+                    Math.floor(Math.random() * ibadahRawatib.length)
+                ],
+                Sedekah:
+                    ibadahRawatib[
+                        Math.floor(Math.random() * ibadahRawatib.length)
+                    ],
+                Umrah: ibadahRawatib[
+                    Math.floor(Math.random() * ibadahRawatib.length)
+                ],
+            };
+
             const data_marriage_preparation: Prisma.MarriagePreparationCreateInput = {
                 visi: visi2[Math.floor(Math.random() * visi2.length)],
                 misi: misi2[Math.floor(Math.random() * misi2.length)],
@@ -803,13 +869,14 @@ export async function memberSeed(prisma: PrismaClient) {
                         bio:
                             'Assalamualaikum, ukhti. ' +
                             biography[
-                            Math.floor(Math.random() * biography.length)
+                                Math.floor(Math.random() * biography.length)
                             ],
                         phone: '+628123456789',
                         company: 'Al Bashiroh Corp',
                         dob: getRandomDateBetween1970And2005(),
                         birth_place: provinces[randomProvinceIndex2].name,
                         birth_order: 1,
+                        address: faker.location.streetAddress(true),
                         address_town: provinces[randomProvinceIndex1].name,
                         address_province: provinces[randomProvinceIndex].name,
                         hometown_province: provinces[randomProvinceIndex2].name,
@@ -818,9 +885,6 @@ export async function memberSeed(prisma: PrismaClient) {
                         },
                         non_physical_chars: {
                             create: data_non_physical_character,
-                        },
-                        marriage_preparations: {
-                            create: data_marriage_preparation
                         },
                         ethnic: sukuIndonesia[
                             Math.floor(Math.random() * sukuIndonesia.length)
@@ -833,19 +897,19 @@ export async function memberSeed(prisma: PrismaClient) {
                         address_zip_code: Math.floor(Math.random() * 100),
                         poligami_opinion:
                             poligamiOpinions[
-                            Math.floor(
-                                Math.random() * poligamiOpinions.length,
-                            )
+                                Math.floor(
+                                    Math.random() * poligamiOpinions.length,
+                                )
                             ],
                         marriage_status:
                             marriedStatus[
-                            Math.floor(Math.random() * marriedStatus.length)
+                                Math.floor(Math.random() * marriedStatus.length)
                             ],
                         marriage_permission:
                             marriagePermissions[
-                            Math.floor(
-                                Math.random() * marriagePermissions.length,
-                            )
+                                Math.floor(
+                                    Math.random() * marriagePermissions.length,
+                                )
                             ],
                     },
                 };
@@ -894,11 +958,11 @@ export async function memberSeed(prisma: PrismaClient) {
                 };
                 data.auth = {
                     createMany: {
-                        data: getRandomAuths()
-                    }
+                        data: getRandomAuths(),
+                    },
                 };
 
-                data.taaruf_status = "OPEN";
+                data.taaruf_status = 'OPEN';
             }
             const post = await prisma.user.upsert({
                 where: { email },
@@ -958,46 +1022,46 @@ export async function memberSeed(prisma: PrismaClient) {
             const medical_history = Math.random() < 0.5;
 
             const data_physical_character: Prisma.PhysicalCharacterCreateInput =
-            {
-                height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
-                weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
-                body_shape:
-                    body_shapes[
-                    Math.floor(Math.random() * body_shapes.length)
-                    ],
-                skin_color:
-                    skin_colors[
-                    Math.floor(Math.random() * skin_colors.length)
-                    ],
-                hair_type:
-                    hair_types[
-                    Math.floor(Math.random() * hair_types.length)
-                    ],
-                hair_color:
-                    hair_colors[
-                    Math.floor(Math.random() * hair_colors.length)
-                    ],
-                eye_color:
-                    eye_colors[
-                    Math.floor(Math.random() * eye_colors.length)
-                    ],
-                characteristic,
-                characteristic_detail: characteristic
-                    ? characteristics[
-                    Math.floor(
-                        Math.random() * medical_histories.length,
-                    )
-                    ]
-                    : null,
-                medical_history,
-                medical_history_detail: medical_history
-                    ? medical_histories[
-                    Math.floor(
-                        Math.random() * medical_histories.length,
-                    )
-                    ]
-                    : null,
-            };
+                {
+                    height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
+                    weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
+                    body_shape:
+                        body_shapes[
+                            Math.floor(Math.random() * body_shapes.length)
+                        ],
+                    skin_color:
+                        skin_colors[
+                            Math.floor(Math.random() * skin_colors.length)
+                        ],
+                    hair_type:
+                        hair_types[
+                            Math.floor(Math.random() * hair_types.length)
+                        ],
+                    hair_color:
+                        hair_colors[
+                            Math.floor(Math.random() * hair_colors.length)
+                        ],
+                    eye_color:
+                        eye_colors[
+                            Math.floor(Math.random() * eye_colors.length)
+                        ],
+                    characteristic,
+                    characteristic_detail: characteristic
+                        ? characteristics[
+                              Math.floor(
+                                  Math.random() * medical_histories.length,
+                              )
+                          ]
+                        : null,
+                    medical_history,
+                    medical_history_detail: medical_history
+                        ? medical_histories[
+                              Math.floor(
+                                  Math.random() * medical_histories.length,
+                              )
+                          ]
+                        : null,
+                };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
             {
@@ -1033,6 +1097,49 @@ export async function memberSeed(prisma: PrismaClient) {
                 smoking: Math.random() < 0.5,
             };
 
+            const data_ibadah: Prisma.IbadahCreateInput = {
+                ShalatFardu:
+                    shalatFardu[Math.floor(Math.random() * shalatFardu.length)],
+                ShalatRawatib:
+                    ibadahRawatib[
+                        Math.floor(Math.random() * ibadahRawatib.length)
+                    ],
+                ShalatDhuha:
+                    ibadahRawatib[
+                        Math.floor(Math.random() * ibadahRawatib.length)
+                    ],
+                ShalatTahajud:
+                    ibadahRawatib[
+                        Math.floor(Math.random() * ibadahRawatib.length)
+                    ],
+                PuasaRamadhan:
+                    ibadahRawatib[
+                        Math.floor(Math.random() * ibadahRawatib.length)
+                    ],
+                PuasaSeninKamis:
+                    ibadahRawatib[
+                        Math.floor(Math.random() * ibadahRawatib.length)
+                    ],
+                PuasaDaud:
+                    ibadahRawatib[
+                        Math.floor(Math.random() * ibadahRawatib.length)
+                    ],
+                PuasaAyamulBid:
+                    ibadahRawatib[
+                        Math.floor(Math.random() * ibadahRawatib.length)
+                    ],
+                Zakat: ibadahRawatib[
+                    Math.floor(Math.random() * ibadahRawatib.length)
+                ],
+                Sedekah:
+                    ibadahRawatib[
+                        Math.floor(Math.random() * ibadahRawatib.length)
+                    ],
+                Umrah: ibadahRawatib[
+                    Math.floor(Math.random() * ibadahRawatib.length)
+                ],
+            };
+
             const data_marriage_preparation: Prisma.MarriagePreparationCreateInput = {
                 visi: visi2[Math.floor(Math.random() * visi2.length)],
                 misi: misi2[Math.floor(Math.random() * misi2.length)],
@@ -1049,13 +1156,15 @@ export async function memberSeed(prisma: PrismaClient) {
                         bio:
                             'Assalamualaikum, akhi. ' +
                             biography[
-                            Math.floor(Math.random() * biography.length)
+                                Math.floor(Math.random() * biography.length)
                             ],
                         phone: '+628987654321',
                         company: 'Al Bashiroh Corp',
                         dob: getRandomDateBetween1970And2005(),
                         birth_place: provinces[randomProvinceIndex2].name,
                         birth_order: 1,
+                        address: faker.location.streetAddress(true),
+
                         address_town: provinces[randomProvinceIndex1].name,
                         address_province: provinces[randomProvinceIndex].name,
                         hometown_province: provinces[randomProvinceIndex2].name,
@@ -1064,6 +1173,9 @@ export async function memberSeed(prisma: PrismaClient) {
                         },
                         non_physical_chars: {
                             create: data_non_physical_character,
+                        },
+                        ibadah: {
+                            create: data_ibadah,
                         },
                         marriage_preparations: {
                             create: data_marriage_preparation
@@ -1078,19 +1190,19 @@ export async function memberSeed(prisma: PrismaClient) {
                         address_zip_code: Math.floor(Math.random() * 100),
                         poligami_opinion:
                             poligamiOpinions[
-                            Math.floor(
-                                Math.random() * poligamiOpinions.length,
-                            )
+                                Math.floor(
+                                    Math.random() * poligamiOpinions.length,
+                                )
                             ],
                         marriage_status:
                             marriedStatus[
-                            Math.floor(Math.random() * marriedStatus.length)
+                                Math.floor(Math.random() * marriedStatus.length)
                             ],
                         marriage_permission:
                             marriagePermissions[
-                            Math.floor(
-                                Math.random() * marriagePermissions.length,
-                            )
+                                Math.floor(
+                                    Math.random() * marriagePermissions.length,
+                                )
                             ],
                     },
                 };
@@ -1139,11 +1251,11 @@ export async function memberSeed(prisma: PrismaClient) {
                 };
                 data.auth = {
                     createMany: {
-                        data: getRandomAuths()
-                    }
+                        data: getRandomAuths(),
+                    },
                 };
 
-                data.taaruf_status = "OPEN";
+                data.taaruf_status = 'OPEN';
             }
             await prisma.user.upsert({
                 where: { email },
