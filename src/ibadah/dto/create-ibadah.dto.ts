@@ -3,38 +3,38 @@ import { IsBoolean, IsString } from 'class-validator';
 
 export class CreateIbadahDto {
     @IsString()
-    ShalatFardu: ShalatFardu;
+    shalat_fardu: ShalatFardu;
 
     @IsString()
-    ShalatRawatib: Cycle;
+    shalat_rawatib: Cycle;
 
     @IsString()
-    ShalatDhuha: Cycle;
+    shalat_dhuha: Cycle;
 
     @IsString()
-    ShalatTahajud: Cycle;
+    shalat_tahajud: Cycle;
 
     @IsString()
-    PuasaRamadhan: Cycle;
+    puasa_ramadhan: Cycle;
 
     @IsString()
-    PuasaSeninKamis: Cycle;
+    puasa_senin_kamis: Cycle;
 
     @IsString()
-    PuasaDaud: Cycle;
+    puasa_daud: Cycle;
 
     @IsString()
-    PuasaAyamulBid: Cycle;
+    puasa_ayamul_bid: Cycle;
 
     @IsString()
-    Zakat: Cycle;
+    zakat: Cycle;
 
     @IsString()
-    Sedekah: Cycle;
+    sedekah: Cycle;
 
     @IsString()
-    Umrah: Cycle;
+    umrah: Cycle;
 
     @IsBoolean()
-    Haji: boolean;
+    haji: boolean;
 }
