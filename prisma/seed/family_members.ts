@@ -1,8 +1,11 @@
 import { PrismaClient, relationship, religion } from '@prisma/client';
 import { faker } from '@faker-js/faker';
+import dayjs from 'dayjs';
 
 
 export async function familyMembersSeed(prisma: PrismaClient) {
+    console.log('\nSeeder Start: Family Members')
+
     const biodata = await prisma.biodata.findMany({
         where: {
             user: {
@@ -11,10 +14,10 @@ export async function familyMembersSeed(prisma: PrismaClient) {
         }
     });
 
-    const selectedBiodata = [];
-    for (let i = 0; i < 100; i++) {
-        if (i % 2 == 0) selectedBiodata.push(i);
-    }
+    // const selectedBiodata = [];
+    // for (let i = 0; i < 100; i++) {
+    //     if (i % 2 == 0) selectedBiodata.push(i);
+    // }
 
     const relations: relationship[] = [
         relationship.ayah,
@@ -64,18 +67,17 @@ export async function familyMembersSeed(prisma: PrismaClient) {
         false
     ]
 
-    const dob = faker.date.birthdate({ min: 1940, max: 2014, mode: 'year' });
-
-
     for (let i = 0; i < biodata.length; i++) {
         process.stdout.write('.');
-        if (selectedBiodata.indexOf(i) != -1) {
-            const bio = biodata[i];
+        // if (selectedBiodata.indexOf(i) != -1) {
+        const bio = biodata[i];
+        for (let i = 0; i < Math.floor(Math.random() * relations.length); i++) {
+            const dob = faker.date.birthdate({ min: 1940, max: 2014, mode: 'year' });
             await prisma.familyMember.create({
                 data: {
                     relationship: faker.helpers.arrayElement(relations),
                     religion: faker.helpers.arrayElement(religions),
-                    dob: dob.toDateString(),
+                    dob: dayjs(dob).format('YYYY-MM-DD'),
                     job: faker.helpers.arrayElement(jobs),
                     education: faker.helpers.arrayElement(education),
                     is_alive: faker.helpers.arrayElement(is_alive),
@@ -87,9 +89,10 @@ export async function familyMembersSeed(prisma: PrismaClient) {
                 }
             })
         }
+        // }
     }
 
 
-    console.log('Seeder: Family Members')
+    console.log('\nSeeder Finish: Family Members')
 
 }

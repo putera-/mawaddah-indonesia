@@ -17,6 +17,8 @@ import {
 import * as bcrypt from 'bcrypt';
 
 export async function memberSeed(prisma: PrismaClient) {
+    console.log('\nSeed Start: Member');
+
     const password = await bcrypt.hash('rahasia', 10);
     const provinces = await prisma.province.findMany();
 
@@ -659,8 +661,6 @@ export async function memberSeed(prisma: PrismaClient) {
         return authEntries;
     }
 
-    console.log('Seed: Member');
-
     // BOB
     {
         const bob = {
@@ -1153,5 +1153,5 @@ export async function memberSeed(prisma: PrismaClient) {
         }
     }
 
-    console.log('Seed: Member Done');
+    console.log('\nSeed Finish: Member Done');
 }

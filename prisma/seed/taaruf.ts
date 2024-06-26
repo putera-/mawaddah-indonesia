@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 
 export async function taarufSeed(prisma: PrismaClient) {
+    console.log('\nSeed Start: Taaruf');
     const users = await prisma.user.findMany({
         where: {
             role: 'MEMBER',
@@ -55,7 +56,7 @@ export async function taarufSeed(prisma: PrismaClient) {
             // console.log(result);
         }
     }
-    console.log('Seed: Taaruf');
+    console.log('\nSeed Finish: Taaruf');
 
     // randomize user
     // find user with opposite gender + taaruf & taaruf candidate null

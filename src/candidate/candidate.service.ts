@@ -41,6 +41,7 @@ export class CandidateService {
                         physical_characters: true,
                         non_physical_chars: true,
                         marriage_preparations: true,
+                        family_members: true
                     }
                 },
                 Education: true,
@@ -89,6 +90,7 @@ export class CandidateService {
                         physical_characters: true,
                         non_physical_chars: true,
                         marriage_preparations: true,
+                        family_members: true
                     }
                 },
                 Education: true,
@@ -167,6 +169,7 @@ export class CandidateService {
                         physical_characters: true,
                         non_physical_chars: true,
                         marriage_preparations: true,
+                        family_members: true
                     }
                 },
                 Education: true,

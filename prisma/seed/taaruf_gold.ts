@@ -7,6 +7,7 @@ import { PrismaClient } from '@prisma/client';
 import dayjs from 'dayjs';
 
 export async function taaruf_goldSeed(prisma: PrismaClient) {
+    console.log('\nSeed Start: Taaruf Gold & Payment');
     //cari user dengan role member
     const users = await prisma.user.findMany({
         where: {
@@ -77,5 +78,5 @@ export async function taaruf_goldSeed(prisma: PrismaClient) {
         }
     }
 
-    console.log('Seed: Taaruf Gold & Payment');
+    console.log('\nSeed Finish: Taaruf Gold & Payment');
 }

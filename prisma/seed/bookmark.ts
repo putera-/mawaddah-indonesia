@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
 export async function bookmarksSeed(prisma: PrismaClient) {
+    console.log('\nSeed Start: Bookmarks');
     // Fetch users with the role 'MEMBER'
     const users = await prisma.user.findMany({
         where: {
@@ -51,5 +52,5 @@ export async function bookmarksSeed(prisma: PrismaClient) {
             });
         }
     }
-    console.log('Seed: Bookmarks');
+    console.log('\nSeed Finish: Bookmarks');
 }
