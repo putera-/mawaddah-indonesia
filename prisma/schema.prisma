@@ -156,34 +156,34 @@ model Activation {
 }
 
 model Biodata {
-    id                  String                @id @default(uuid())
-    user                User?                 @relation(fields: [userId], references: [id])
-    userId              String?               @unique
-    bio                 String                @db.Text
-    phone               String                @db.VarChar(20)
-    company             String?               @db.VarChar(100)
-    manhaj              ManhajStatus
-    gender              Gender
-    marriage_status     MarriageStatus
-    marriage_permission MarriagePermission
-    physical_characters PhysicalCharacter?
-    non_physical_chars  NonPhysicalCharacter?
+    id                    String                @id @default(uuid())
+    user                  User?                 @relation(fields: [userId], references: [id])
+    userId                String?               @unique
+    bio                   String                @db.Text
+    phone                 String                @db.VarChar(20)
+    company               String?               @db.VarChar(100)
+    manhaj                ManhajStatus
+    gender                Gender
+    marriage_status       MarriageStatus
+    marriage_permission   MarriagePermission
+    physical_characters   PhysicalCharacter?
+    non_physical_chars    NonPhysicalCharacter?
     marriage_preparations MarriagePreparation?
-    family_members      FamilyMember[]
-    ibadah              Ibadah?
-
-    dob                 DateTime              @db.Date
-    birth_place         String                @db.VarChar(100)
-    birth_order         Int                   @db.TinyInt
-    address             String                @db.VarChar(100)
-    address_town        String                @db.VarChar(100)
-    address_province    String                @db.VarChar(100)
-    hometown_province   String                @db.VarChar(100)
-    address_zip_code    Int                   @db.Int
-    ethnic              String                @db.VarChar(100)
-    poligami_opinion    String                @db.Text
-    createdAt           DateTime              @default(now())
-    updatedAt           DateTime              @default(now()) @updatedAt
+    family_members        FamilyMember[]
+    ibadah                Ibadah?
+    dob                   DateTime              @db.Date
+    birth_place           String                @db.VarChar(100)
+    birth_order           Int                   @db.TinyInt
+    address               String                @db.VarChar(100)
+    address_town          String                @db.VarChar(100)
+    address_province      String                @db.VarChar(100)
+    hometown_province     String                @db.VarChar(100)
+    address_zip_code      Int                   @db.Int
+    ethnic                String                @db.VarChar(100)
+    poligami_opinion      String                @db.Text
+    physical_criteria     PhysicalCriteria?
+    createdAt             DateTime              @default(now())
+    updatedAt             DateTime              @default(now()) @updatedAt
 
     @@map("biodata")
 }
@@ -585,4 +585,25 @@ enum Cycle {
     kadang_kadang
     pernah_sekali
     belum_pernah
+}
+
+model PhysicalCriteria {
+    id                     String      @id @default(uuid())
+    height                 Int         @default(0) @db.Int
+    weight                 Int         @default(0) @db.Int
+    body_shape             body_shape?
+    skin_color             skin_color?
+    hair_color             hair_color?
+    hair_type              hair_type?
+    eye_color              eye_Color?
+    characteristic         Boolean     @default(false)
+    characteristic_detail  String?     @db.Text
+    medical_history        Boolean     @default(false)
+    medical_history_detail String?     @db.Text
+    Biodata                Biodata?    @relation(fields: [biodataId], references: [id])
+    biodataId              String?     @unique
+    createdAt              DateTime    @default(now())
+    updatedAt              DateTime    @default(now()) @updatedAt
+
+    @@map("physical_criteria")
 }

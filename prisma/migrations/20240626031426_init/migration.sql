@@ -436,6 +436,28 @@ CREATE TABLE `ibadah` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `physical_criteria` (
+    `id` VARCHAR(191) NOT NULL,
+    `height` INTEGER NOT NULL DEFAULT 0,
+    `weight` INTEGER NOT NULL DEFAULT 0,
+    `body_shape` ENUM('sangat_kurus', 'kurus', 'atletis', 'normal', 'gempal', 'gemuk', 'sangat_gemuk') NULL,
+    `skin_color` ENUM('sawo_matang', 'putih', 'putih_kemerahan', 'gelap', 'hitam') NULL,
+    `hair_color` ENUM('hitam', 'pirang', 'merah', 'putih') NULL,
+    `hair_type` ENUM('lurus', 'ikal', 'keriting', 'kribo', 'botak') NULL,
+    `eye_color` ENUM('hitam', 'coklat', 'biru', 'hijau') NULL,
+    `characteristic` BOOLEAN NOT NULL DEFAULT false,
+    `characteristic_detail` TEXT NULL,
+    `medical_history` BOOLEAN NOT NULL DEFAULT false,
+    `medical_history_detail` TEXT NULL,
+    `biodataId` VARCHAR(191) NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    UNIQUE INDEX `physical_criteria_biodataId_key`(`biodataId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `auth` ADD CONSTRAINT `auth_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
@@ -522,3 +544,6 @@ ALTER TABLE `marriage_preparation` ADD CONSTRAINT `marriage_preparation_biodataI
 
 -- AddForeignKey
 ALTER TABLE `ibadah` ADD CONSTRAINT `ibadah_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `physical_criteria` ADD CONSTRAINT `physical_criteria_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
