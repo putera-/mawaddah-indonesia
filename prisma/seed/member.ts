@@ -217,144 +217,143 @@ export async function memberSeed(prisma: PrismaClient) {
     ];
 
     const visi2: string[] = [
-        "Menjadi individu yang berkarakter dan berintegritas.",
-        "Menjadi teladan dalam kehidupan bermasyarakat.",
-        "Mencapai keseimbangan antara karir dan kehidupan pribadi.",
-        "Menjadi inspirasi bagi generasi muda.",
-        "Mengembangkan potensi diri secara maksimal.",
-        "Menjadi sumber kebahagiaan bagi keluarga dan orang-orang terdekat.",
-        "Menjalani hidup dengan penuh makna dan tujuan.",
-        "Menjadi pemimpin yang bijaksana dan adil.",
-        "Menciptakan kehidupan yang seimbang dan harmonis.",
-        "Menjadi individu yang berkontribusi positif bagi lingkungan.",
-        "Membangun keluarga yang harmonis dan bahagia.",
-        "Menjadi pasangan yang saling mendukung dan menghargai.",
-        "Menciptakan rumah tangga yang penuh cinta dan kasih sayang.",
-        "Menjadi contoh positif bagi anak-anak dan masyarakat.",
-        "Membangun keluarga yang kuat dalam iman dan nilai-nilai kebaikan.",
-        "Mencapai keseimbangan antara kehidupan keluarga dan karir.",
-        "Membangun kehidupan bersama yang sejahtera dan berkecukupan.",
-        "Menjadi pasangan yang selalu bersama dalam suka dan duka.",
-        "Mewujudkan keluarga yang selalu bersyukur dan berterima kasih.",
-        "Menjalani kehidupan pernikahan yang penuh makna dan kebahagiaan."
+        'Menjadi individu yang berkarakter dan berintegritas.',
+        'Menjadi teladan dalam kehidupan bermasyarakat.',
+        'Mencapai keseimbangan antara karir dan kehidupan pribadi.',
+        'Menjadi inspirasi bagi generasi muda.',
+        'Mengembangkan potensi diri secara maksimal.',
+        'Menjadi sumber kebahagiaan bagi keluarga dan orang-orang terdekat.',
+        'Menjalani hidup dengan penuh makna dan tujuan.',
+        'Menjadi pemimpin yang bijaksana dan adil.',
+        'Menciptakan kehidupan yang seimbang dan harmonis.',
+        'Menjadi individu yang berkontribusi positif bagi lingkungan.',
+        'Membangun keluarga yang harmonis dan bahagia.',
+        'Menjadi pasangan yang saling mendukung dan menghargai.',
+        'Menciptakan rumah tangga yang penuh cinta dan kasih sayang.',
+        'Menjadi contoh positif bagi anak-anak dan masyarakat.',
+        'Membangun keluarga yang kuat dalam iman dan nilai-nilai kebaikan.',
+        'Mencapai keseimbangan antara kehidupan keluarga dan karir.',
+        'Membangun kehidupan bersama yang sejahtera dan berkecukupan.',
+        'Menjadi pasangan yang selalu bersama dalam suka dan duka.',
+        'Mewujudkan keluarga yang selalu bersyukur dan berterima kasih.',
+        'Menjalani kehidupan pernikahan yang penuh makna dan kebahagiaan.',
     ];
     const misi2: string[] = [
-        "Selalu belajar dan mengembangkan diri melalui pendidikan dan pengalaman.",
-        "Menjaga hubungan baik dengan keluarga, teman, dan rekan kerja.",
-        "Menghadapi setiap tantangan dengan sikap positif dan semangat juang.",
-        "Mendukung dan memotivasi orang lain untuk mencapai potensi terbaik mereka.",
-        "Menjalani gaya hidup sehat dan aktif.",
-        "Mengelola waktu dengan bijaksana untuk mencapai keseimbangan hidup.",
-        "Berpartisipasi aktif dalam kegiatan sosial dan kemasyarakatan.",
-        "Menjalankan prinsip-prinsip moral dan etika dalam setiap tindakan.",
-        "Membangun karir yang sukses dan bermakna.",
-        "Menghargai dan menikmati setiap momen dalam hidup.",
-        "Membina komunikasi yang terbuka dan jujur dengan pasangan.",
-        "Selalu memberikan dukungan emosional dan moral satu sama lain.",
-        "Menghormati perbedaan dan mencari solusi bersama dalam setiap permasalahan.",
-        "Menjaga komitmen dan kesetiaan dalam hubungan pernikahan.",
-        "Menciptakan waktu berkualitas untuk keluarga dan pasangan.",
-        "Mengajarkan dan menanamkan nilai-nilai moral kepada anak-anak.",
-        "Bekerja sama dalam mencapai tujuan bersama dan pribadi.",
-        "Menjalankan tanggung jawab rumah tangga dengan adil dan seimbang.",
-        "Selalu berusaha untuk memperbaiki diri dan hubungan pernikahan.",
-        "Menghargai setiap kontribusi dan usaha pasangan dalam kehidupan sehari-hari."
+        'Selalu belajar dan mengembangkan diri melalui pendidikan dan pengalaman.',
+        'Menjaga hubungan baik dengan keluarga, teman, dan rekan kerja.',
+        'Menghadapi setiap tantangan dengan sikap positif dan semangat juang.',
+        'Mendukung dan memotivasi orang lain untuk mencapai potensi terbaik mereka.',
+        'Menjalani gaya hidup sehat dan aktif.',
+        'Mengelola waktu dengan bijaksana untuk mencapai keseimbangan hidup.',
+        'Berpartisipasi aktif dalam kegiatan sosial dan kemasyarakatan.',
+        'Menjalankan prinsip-prinsip moral dan etika dalam setiap tindakan.',
+        'Membangun karir yang sukses dan bermakna.',
+        'Menghargai dan menikmati setiap momen dalam hidup.',
+        'Membina komunikasi yang terbuka dan jujur dengan pasangan.',
+        'Selalu memberikan dukungan emosional dan moral satu sama lain.',
+        'Menghormati perbedaan dan mencari solusi bersama dalam setiap permasalahan.',
+        'Menjaga komitmen dan kesetiaan dalam hubungan pernikahan.',
+        'Menciptakan waktu berkualitas untuk keluarga dan pasangan.',
+        'Mengajarkan dan menanamkan nilai-nilai moral kepada anak-anak.',
+        'Bekerja sama dalam mencapai tujuan bersama dan pribadi.',
+        'Menjalankan tanggung jawab rumah tangga dengan adil dan seimbang.',
+        'Selalu berusaha untuk memperbaiki diri dan hubungan pernikahan.',
+        'Menghargai setiap kontribusi dan usaha pasangan dalam kehidupan sehari-hari.',
     ];
 
     const mental2: string[] = [
-        "Siap",
-        "Ragu-ragu",
-        "Tidak siap",
-        "Sangat siap",
-        "Cemas",
-        "Optimis",
-        "Pesimis",
-        "Bersemangat",
-        "Tenang",
-        "Gelisah",
-        "Percaya diri",
-        "Takut",
-        "Bingung",
-        "Tertekan",
-        "Santai",
-        "Penuh harapan",
-        "Kecewa",
-        "Bahagia",
-        "Fokus",
-        "Tidak fokus",
-        "Berani",
-        "Malas",
-        "Termotivasi",
-        "Tidak termotivasi",
-        "Berduka",
-        "Tegas",
-        "Tidak tegas",
-        "Yakin",
-        "Bimbang",
-        "Terbuka",
-        "Tertutup",
-        "Stres",
-        "Euforia",
-        "Apatis",
-        "Khawatir",
-        "Puas",
-        "Lelah",
-        "Semangat tinggi",
-        "Putus asa",
-        "Siap menghadapi tantangan"
+        'Siap',
+        'Ragu-ragu',
+        'Tidak siap',
+        'Sangat siap',
+        'Cemas',
+        'Optimis',
+        'Pesimis',
+        'Bersemangat',
+        'Tenang',
+        'Gelisah',
+        'Percaya diri',
+        'Takut',
+        'Bingung',
+        'Tertekan',
+        'Santai',
+        'Penuh harapan',
+        'Kecewa',
+        'Bahagia',
+        'Fokus',
+        'Tidak fokus',
+        'Berani',
+        'Malas',
+        'Termotivasi',
+        'Tidak termotivasi',
+        'Berduka',
+        'Tegas',
+        'Tidak tegas',
+        'Yakin',
+        'Bimbang',
+        'Terbuka',
+        'Tertutup',
+        'Stres',
+        'Euforia',
+        'Apatis',
+        'Khawatir',
+        'Puas',
+        'Lelah',
+        'Semangat tinggi',
+        'Putus asa',
+        'Siap menghadapi tantangan',
     ];
 
     const mahar2: string[] = [
-        "Emas 50 gram",
-        "Uang tunai Rp 10.000.000",
-        "Perhiasan berlian",
-        "Rumah",
-        "Mobil",
-        "Emas 100 gram",
-        "Al-Quran dan seperangkat alat sholat",
-        "Tanah 1 hektar",
-        "Perhiasan emas",
-        "Uang tunai Rp 5.000.000",
-        "Emas 25 gram",
-        "Uang tunai Rp 20.000.000",
-        "Sepasang kalung dan cincin",
-        "Motor",
-        "Emas 200 gram",
-        "Uang tunai Rp 50.000.000",
-        "Sapi",
-        "Kambing 5 ekor",
-        "Perlengkapan rumah tangga",
-        "Emas 75 gram"
+        'Emas 50 gram',
+        'Uang tunai Rp 10.000.000',
+        'Perhiasan berlian',
+        'Rumah',
+        'Mobil',
+        'Emas 100 gram',
+        'Al-Quran dan seperangkat alat sholat',
+        'Tanah 1 hektar',
+        'Perhiasan emas',
+        'Uang tunai Rp 5.000.000',
+        'Emas 25 gram',
+        'Uang tunai Rp 20.000.000',
+        'Sepasang kalung dan cincin',
+        'Motor',
+        'Emas 200 gram',
+        'Uang tunai Rp 50.000.000',
+        'Sapi',
+        'Kambing 5 ekor',
+        'Perlengkapan rumah tangga',
+        'Emas 75 gram',
     ];
 
     const span_times: string[] = [
-        "1 bulan",
-        "2 bulan",
-        "3 bulan",
-        "4 bulan",
-        "5 bulan",
-        "6 bulan",
-        "7 bulan",
-        "8 bulan",
-        "9 bulan",
-        "10 bulan",
-        "11 bulan",
-        "12 bulan",
-        "1 tahun",
-        "2 tahun",
-        "3 tahun",
-        "4 tahun",
-        "5 tahun",
-        "6 tahun",
-        "7 tahun",
-        "8 tahun",
-        "9 tahun",
-        "10 tahun"
+        '1 bulan',
+        '2 bulan',
+        '3 bulan',
+        '4 bulan',
+        '5 bulan',
+        '6 bulan',
+        '7 bulan',
+        '8 bulan',
+        '9 bulan',
+        '10 bulan',
+        '11 bulan',
+        '12 bulan',
+        '1 tahun',
+        '2 tahun',
+        '3 tahun',
+        '4 tahun',
+        '5 tahun',
+        '6 tahun',
+        '7 tahun',
+        '8 tahun',
+        '9 tahun',
+        '10 tahun',
     ];
 
-    let cost = Math.floor(Math.random() * 10000000) + 1000000
-    const costString = `${cost}`
-
+    let cost = Math.floor(Math.random() * 10000000) + 1000000;
+    const costString = `${cost}`;
 
     const manhaj: ManhajStatus[] = [
         ManhajStatus.BARU_BELAJAR,
@@ -777,38 +776,38 @@ export async function memberSeed(prisma: PrismaClient) {
                 };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
-            {
-                motto: mottos[Math.floor(Math.random() * mottos.length)],
-                life_goal:
-                    life_goals[
-                    Math.floor(Math.random() * life_goals.length)
-                    ],
-                hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
-                spare_time_activity:
-                    spare_time_activities[
-                    Math.floor(
-                        Math.random() * spare_time_activities.length,
-                    )
-                    ],
-                positive_traits:
-                    positive_traits[
-                    Math.floor(Math.random() * positive_traits.length)
-                    ],
-                negative_traits:
-                    negative_traits[
-                    Math.floor(Math.random() * negative_traits.length)
-                    ],
-                liked_things:
-                    liked_things[
-                    Math.floor(Math.random() * liked_things.length)
-                    ],
-                unliked_things:
-                    unliked_things[
-                    Math.floor(Math.random() * unliked_things.length)
-                    ],
-                drink_alcohol: Math.random() < 0.5,
-                smoking: Math.random() < 0.5,
-            };
+                {
+                    motto: mottos[Math.floor(Math.random() * mottos.length)],
+                    life_goal:
+                        life_goals[
+                            Math.floor(Math.random() * life_goals.length)
+                        ],
+                    hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
+                    spare_time_activity:
+                        spare_time_activities[
+                            Math.floor(
+                                Math.random() * spare_time_activities.length,
+                            )
+                        ],
+                    positive_traits:
+                        positive_traits[
+                            Math.floor(Math.random() * positive_traits.length)
+                        ],
+                    negative_traits:
+                        negative_traits[
+                            Math.floor(Math.random() * negative_traits.length)
+                        ],
+                    liked_things:
+                        liked_things[
+                            Math.floor(Math.random() * liked_things.length)
+                        ],
+                    unliked_things:
+                        unliked_things[
+                            Math.floor(Math.random() * unliked_things.length)
+                        ],
+                    drink_alcohol: Math.random() < 0.5,
+                    smoking: Math.random() < 0.5,
+                };
 
             const data_ibadah: Prisma.IbadahCreateInput = {
                 ShalatFardu:
@@ -853,15 +852,44 @@ export async function memberSeed(prisma: PrismaClient) {
                 ],
             };
 
-            const data_marriage_preparation: Prisma.MarriagePreparationCreateInput = {
-                visi: visi2[Math.floor(Math.random() * visi2.length)],
-                misi: misi2[Math.floor(Math.random() * misi2.length)],
-                mental: mental2[Math.floor(Math.random() * mental2.length)],
-                mahar: mahar2[Math.floor(Math.random() * mahar2.length)],
-                cost: costString,
-                span_time: span_times[Math.floor(Math.random() * span_times.length)]
-            }
-
+            const data_marriage_preparation: Prisma.MarriagePreparationCreateInput =
+                {
+                    visi: visi2[Math.floor(Math.random() * visi2.length)],
+                    misi: misi2[Math.floor(Math.random() * misi2.length)],
+                    mental: mental2[Math.floor(Math.random() * mental2.length)],
+                    mahar: mahar2[Math.floor(Math.random() * mahar2.length)],
+                    cost: costString,
+                    span_time:
+                        span_times[
+                            Math.floor(Math.random() * span_times.length)
+                        ],
+                };
+            const data_physical_criteria: Prisma.PhysicalCriteriaCreateInput = {
+                height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
+                weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
+                body_shape:
+                    body_shapes[Math.floor(Math.random() * body_shapes.length)],
+                skin_color:
+                    skin_colors[Math.floor(Math.random() * skin_colors.length)],
+                hair_type:
+                    hair_types[Math.floor(Math.random() * hair_types.length)],
+                hair_color:
+                    hair_colors[Math.floor(Math.random() * hair_colors.length)],
+                eye_color:
+                    eye_colors[Math.floor(Math.random() * eye_colors.length)],
+                characteristic,
+                characteristic_detail: characteristic
+                    ? characteristics[
+                          Math.floor(Math.random() * medical_histories.length)
+                      ]
+                    : null,
+                medical_history,
+                medical_history_detail: medical_history
+                    ? medical_histories[
+                          Math.floor(Math.random() * medical_histories.length)
+                      ]
+                    : null,
+            };
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
                 data.biodata = {
@@ -885,6 +913,9 @@ export async function memberSeed(prisma: PrismaClient) {
                         },
                         non_physical_chars: {
                             create: data_non_physical_character,
+                        },
+                        physical_criteria: {
+                            create: data_physical_criteria,
                         },
                         ethnic: sukuIndonesia[
                             Math.floor(Math.random() * sukuIndonesia.length)
@@ -1064,38 +1095,38 @@ export async function memberSeed(prisma: PrismaClient) {
                 };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
-            {
-                motto: mottos[Math.floor(Math.random() * mottos.length)],
-                life_goal:
-                    life_goals[
-                    Math.floor(Math.random() * life_goals.length)
-                    ],
-                hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
-                spare_time_activity:
-                    spare_time_activities[
-                    Math.floor(
-                        Math.random() * spare_time_activities.length,
-                    )
-                    ],
-                positive_traits:
-                    positive_traits[
-                    Math.floor(Math.random() * positive_traits.length)
-                    ],
-                negative_traits:
-                    negative_traits[
-                    Math.floor(Math.random() * negative_traits.length)
-                    ],
-                liked_things:
-                    liked_things[
-                    Math.floor(Math.random() * liked_things.length)
-                    ],
-                unliked_things:
-                    unliked_things[
-                    Math.floor(Math.random() * unliked_things.length)
-                    ],
-                drink_alcohol: Math.random() < 0.5,
-                smoking: Math.random() < 0.5,
-            };
+                {
+                    motto: mottos[Math.floor(Math.random() * mottos.length)],
+                    life_goal:
+                        life_goals[
+                            Math.floor(Math.random() * life_goals.length)
+                        ],
+                    hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
+                    spare_time_activity:
+                        spare_time_activities[
+                            Math.floor(
+                                Math.random() * spare_time_activities.length,
+                            )
+                        ],
+                    positive_traits:
+                        positive_traits[
+                            Math.floor(Math.random() * positive_traits.length)
+                        ],
+                    negative_traits:
+                        negative_traits[
+                            Math.floor(Math.random() * negative_traits.length)
+                        ],
+                    liked_things:
+                        liked_things[
+                            Math.floor(Math.random() * liked_things.length)
+                        ],
+                    unliked_things:
+                        unliked_things[
+                            Math.floor(Math.random() * unliked_things.length)
+                        ],
+                    drink_alcohol: Math.random() < 0.5,
+                    smoking: Math.random() < 0.5,
+                };
 
             const data_ibadah: Prisma.IbadahCreateInput = {
                 ShalatFardu:
@@ -1140,14 +1171,45 @@ export async function memberSeed(prisma: PrismaClient) {
                 ],
             };
 
-            const data_marriage_preparation: Prisma.MarriagePreparationCreateInput = {
-                visi: visi2[Math.floor(Math.random() * visi2.length)],
-                misi: misi2[Math.floor(Math.random() * misi2.length)],
-                mental: mental2[Math.floor(Math.random() * mental2.length)],
-                mahar: mahar2[Math.floor(Math.random() * mahar2.length)],
-                cost: costString,
-                span_time: span_times[Math.floor(Math.random() * span_times.length)]
-            }
+            const data_marriage_preparation: Prisma.MarriagePreparationCreateInput =
+                {
+                    visi: visi2[Math.floor(Math.random() * visi2.length)],
+                    misi: misi2[Math.floor(Math.random() * misi2.length)],
+                    mental: mental2[Math.floor(Math.random() * mental2.length)],
+                    mahar: mahar2[Math.floor(Math.random() * mahar2.length)],
+                    cost: costString,
+                    span_time:
+                        span_times[
+                            Math.floor(Math.random() * span_times.length)
+                        ],
+                };
+
+            const data_physical_criteria: Prisma.PhysicalCriteriaCreateInput = {
+                height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
+                weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
+                body_shape:
+                    body_shapes[Math.floor(Math.random() * body_shapes.length)],
+                skin_color:
+                    skin_colors[Math.floor(Math.random() * skin_colors.length)],
+                hair_type:
+                    hair_types[Math.floor(Math.random() * hair_types.length)],
+                hair_color:
+                    hair_colors[Math.floor(Math.random() * hair_colors.length)],
+                eye_color:
+                    eye_colors[Math.floor(Math.random() * eye_colors.length)],
+                characteristic,
+                characteristic_detail: characteristic
+                    ? characteristics[
+                          Math.floor(Math.random() * medical_histories.length)
+                      ]
+                    : null,
+                medical_history,
+                medical_history_detail: medical_history
+                    ? medical_histories[
+                          Math.floor(Math.random() * medical_histories.length)
+                      ]
+                    : null,
+            };
 
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
@@ -1178,7 +1240,10 @@ export async function memberSeed(prisma: PrismaClient) {
                             create: data_ibadah,
                         },
                         marriage_preparations: {
-                            create: data_marriage_preparation
+                            create: data_marriage_preparation,
+                        },
+                        physical_criteria: {
+                            create: data_physical_criteria,
                         },
                         ethnic: sukuIndonesia[
                             Math.floor(Math.random() * sukuIndonesia.length)
