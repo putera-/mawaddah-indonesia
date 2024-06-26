@@ -543,6 +543,69 @@ export async function memberSeed(prisma: PrismaClient) {
         },
     ];
 
+    const financial_arrangement = faker.helpers.arrayElement([
+        'suami',
+        'istri',
+        'belum ditentukan'
+    ]);
+    const knowledge_upgrade = faker.helpers.arrayElement([
+        'Memanah',
+        'Memasak',
+        'Berkuda',
+        'Menjahit',
+        'Bertani',
+        'Menulis',
+        'Membaca',
+        'Berbicara di depan umum',
+        'Memancing',
+        'Menyelam',
+        'Menyanyi',
+        'Menari',
+        'Melukis',
+        'Menggambar',
+        'Memahat',
+        'Merancang',
+        'Membuat kerajinan tangan',
+        'Mengemudi',
+        'Merawat hewan',
+        'Berkebun',
+        'Menyelesaikan masalah',
+        'Berpikir kritis',
+        'Komunikasi interpersonal',
+        'Kepemimpinan',
+        'Kerja tim',
+        'Manajemen waktu',
+        'Adaptabilitas',
+        'Pemrograman komputer',
+        'Analisis data',
+        'Desain grafis',
+        'Fotografi',
+        'Videografi',
+        'Pemasaran digital',
+        'SEO',
+        'Manajemen proyek',
+        'Negosiasi',
+        'Menyusun strategi',
+        'Pengelolaan keuangan',
+        'Pelayanan pelanggan',
+        'Konseling',
+        'Psikologi',
+        'Mengajar',
+        'Bahasa asing',
+        'Jurnalisme',
+        'Penelitian',
+        'Musik',
+        'Drama',
+        'Olahraga',
+        'Yoga',
+        'Meditasi'
+    ])
+
+    let child_count = faker.number.int({ min: 0, max: 10 });
+    const child_count_string = child_count.toString()
+
+
+>>>>>>> a590032 (finished liofe_goals)
     function getRandomOfObjectArray(dataArray: any) {
         // Salin array untuk menghindari modifikasi array asli
         let shuffledArray = [...dataArray];
@@ -651,6 +714,7 @@ export async function memberSeed(prisma: PrismaClient) {
                     '/dummy/ikhwan_blurred_' + randomNumber + '_md.png',
             };
 
+>>>>>>> a590032 (finished liofe_goals)
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
             {
                 motto: mottos[Math.floor(Math.random() * mottos.length)],
@@ -685,6 +749,7 @@ export async function memberSeed(prisma: PrismaClient) {
                 smoking: Math.random() < 0.5,
             };
 
+>>>>>>> a590032 (finished liofe_goals)
             const data_marriage_preparation: Prisma.MarriagePreparationCreateInput = {
                 visi: visi2[Math.floor(Math.random() * visi2.length)],
                 misi: misi2[Math.floor(Math.random() * misi2.length)],
@@ -693,6 +758,15 @@ export async function memberSeed(prisma: PrismaClient) {
                 cost: costString,
                 span_time: span_times[Math.floor(Math.random() * span_times.length)]
             }
+
+            const data_life_goal: Prisma.LifeGoalCreateInput = {
+                career: faker.person.jobTitle(),
+                domicile: faker.location.city(),
+                child_count: child_count_string,
+                child_education: faker.person.jobTitle(),
+                financial_arrangement: financial_arrangement,
+                knowledge_upgrade: knowledge_upgrade
+            };
 
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
@@ -714,6 +788,15 @@ export async function memberSeed(prisma: PrismaClient) {
                         hometown_province: provinces[randomProvinceIndex2].name,
                         non_physical_chars: {
                             create: data_non_physical_character,
+                        },
+                        marriage_preparations: {
+                            create: data_marriage_preparation
+                        },
+                        ibadah: {
+                            create: data_ibadah
+                        },
+                        Life_goals: {
+                            create: data_life_goal
                         },
                         ethnic: sukuIndonesia[
                             Math.floor(Math.random() * sukuIndonesia.length)
@@ -780,11 +863,7 @@ export async function memberSeed(prisma: PrismaClient) {
                         data: getRandomOfObjectArray(married_goals),
                     },
                 };
-                data.Life_goal = {
-                    createMany: {
-                        data: getRandomOfObjectArray(tujuanHidup),
-                    },
-                };
+
                 data.auth = {
                     createMany: {
                         data: getRandomAuths(),
@@ -847,6 +926,7 @@ export async function memberSeed(prisma: PrismaClient) {
                     '/dummy/akhwat_blurred_' + randomNumber + '_md.png',
             };
 
+>>>>>>> a590032 (finished liofe_goals)
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
             {
                 motto: mottos[Math.floor(Math.random() * mottos.length)],
@@ -881,6 +961,7 @@ export async function memberSeed(prisma: PrismaClient) {
                 smoking: Math.random() < 0.5,
             };
 
+>>>>>>> a590032 (finished liofe_goals)
             const data_marriage_preparation: Prisma.MarriagePreparationCreateInput = {
                 visi: visi2[Math.floor(Math.random() * visi2.length)],
                 misi: misi2[Math.floor(Math.random() * misi2.length)],
@@ -889,6 +970,15 @@ export async function memberSeed(prisma: PrismaClient) {
                 cost: costString,
                 span_time: span_times[Math.floor(Math.random() * span_times.length)]
             }
+
+            const data_life_goal: Prisma.LifeGoalCreateInput = {
+                career: faker.person.jobTitle(),
+                domicile: faker.location.city(),
+                child_count: child_count_string,
+                child_education: faker.person.jobTitle(),
+                financial_arrangement: financial_arrangement,
+                knowledge_upgrade: knowledge_upgrade
+            };
 
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
@@ -914,6 +1004,9 @@ export async function memberSeed(prisma: PrismaClient) {
                         },
                         marriage_preparations: {
                             create: data_marriage_preparation
+                        },
+                        Life_goals: {
+                            create: data_life_goal
                         },
                         ethnic: sukuIndonesia[
                             Math.floor(Math.random() * sukuIndonesia.length)
@@ -977,11 +1070,6 @@ export async function memberSeed(prisma: PrismaClient) {
                 data.Married_goal = {
                     createMany: {
                         data: getRandomOfObjectArray(married_goals),
-                    },
-                };
-                data.Life_goal = {
-                    createMany: {
-                        data: getRandomOfObjectArray(tujuanHidup),
                     },
                 };
                 data.auth = {

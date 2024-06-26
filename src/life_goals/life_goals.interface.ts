@@ -1,9 +1,16 @@
+import { Biodata } from "@prisma/client"
+
 export interface Life_goal {
     id: string
-    User?: string
-    userId: string
-    title: string
-    deleted?: boolean
+    career?: string
+    domicile?: string
+    child_count?: string
+    child_education?: string
+    financial_arrangement?: string
+    knowledge_upgrade?: string
     createdAt: Date
     updatedAt: Date
+    Biodata?: Biodata
+    biodataId: string
+
 }

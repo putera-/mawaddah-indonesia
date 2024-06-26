@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
-import { LifeGoalsService } from './life_goals.service';
-import { LifeGoalsController } from './life_goals.controller';
 import { UsersService } from 'src/users/user.service';
 import { AppService } from 'src/app.service';
 import { PrismaService } from 'src/prisma.service';
+import { life_goalService } from './life_goals.service';
+import { LifeGoalsController } from './life_goals.controller';
+import { BiodataService } from 'src/biodata/biodata.service';
 
 @Module({
   controllers: [LifeGoalsController],
-  providers: [LifeGoalsService, UsersService, AppService, PrismaService],
+  providers: [life_goalService, UsersService, AppService, PrismaService, BiodataService],
 })
-export class LifeGoalsModule {}
+export class LifeGoalsModule { }

@@ -42,6 +42,7 @@ export class CandidateService {
                         non_physical_chars: true,
                         marriage_preparations: true,
                         family_members: true,
+                        Life_goals: true,
                         ibadah: true,
                     }
                 },
@@ -49,7 +50,6 @@ export class CandidateService {
                 Skill: true,
                 Hobby: true,
                 Married_goal: true,
-                Life_goal: true,
                 auth: {
                     select: { createdAt: true },
                     orderBy: { createdAt: 'desc' },
@@ -91,6 +91,7 @@ export class CandidateService {
                         physical_characters: true,
                         non_physical_chars: true,
                         marriage_preparations: true,
+                        Life_goals: true,
                         family_members: true,
                         ibadah: true
                     }
@@ -99,7 +100,6 @@ export class CandidateService {
                 Skill: true,
                 Hobby: true,
                 Married_goal: true,
-                Life_goal: true,
                 auth: {
                     select: { createdAt: true },
                     orderBy: { createdAt: 'desc' },
@@ -172,6 +172,7 @@ export class CandidateService {
                         non_physical_chars: true,
                         marriage_preparations: true,
                         family_members: true,
+                        Life_goals: true,
                         ibadah: true
                     }
                 },
@@ -179,7 +180,6 @@ export class CandidateService {
                 Skill: { select: { title: true } },
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },
-                Life_goal: { select: { title: true } },
                 auth: {
                     select: { createdAt: true },
                     orderBy: { createdAt: 'desc' },
@@ -245,11 +245,11 @@ export class CandidateService {
                 Skill: { select: { title: true } },
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },
-                Life_goal: { select: { title: true } },
                 biodata: {
                     include: {
                         physical_characters: true,
-                        non_physical_chars: true
+                        non_physical_chars: true,
+                        Life_goals: true,
                     }
                 },
             },
@@ -284,11 +284,11 @@ export class CandidateService {
                 Skill: { select: { title: true } },
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },
-                Life_goal: { select: { title: true } },
                 biodata: {
                     include: {
                         physical_characters: true,
-                        non_physical_chars: true
+                        non_physical_chars: true,
+                        Life_goals: true,
                     }
                 },
             },

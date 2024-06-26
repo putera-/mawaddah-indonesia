@@ -57,7 +57,6 @@ export class BookmarkService {
                             Skill: true,
                             Hobby: true,
                             Married_goal: true,
-                            Life_goal: true,
                         }
                     }
                 }

@@ -80,7 +80,6 @@ export class CandidateController {
                     Skill: { select: { title: true } },
                     Hobby: { select: { title: true } },
                     Married_goal: { select: { title: true } },
-                    Life_goal: { select: { title: true } },
                 },
             });
             const suggest = await this.candidateService.findSuggestion(
@@ -159,7 +158,6 @@ export class CandidateController {
                     Skill: { select: { title: true } },
                     Hobby: { select: { title: true } },
                     Married_goal: { select: { title: true } },
-                    Life_goal: { select: { title: true } },
                 },
             });
 

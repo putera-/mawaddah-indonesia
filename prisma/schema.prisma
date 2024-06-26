@@ -23,7 +23,6 @@ model User {
     Hobby              Hobby[]
     Skill              Skill[]
     Married_goal       MarriedGoal[]
-    Life_goal          LifeGoal[]
     active             Boolean         @default(false)
     verified           Boolean         @default(false)
     avatar             String?         @db.VarChar(255)
@@ -168,9 +167,22 @@ model Biodata {
     marriage_permission   MarriagePermission
     physical_characters   PhysicalCharacter?
     non_physical_chars    NonPhysicalCharacter?
+    id                    String                @id @default(uuid())
+    user                  User?                 @relation(fields: [userId], references: [id])
+    userId                String?               @unique
+    bio                   String                @db.Text
+    phone                 String                @db.VarChar(20)
+    company               String?               @db.VarChar(100)
+    manhaj                ManhajStatus
+    gender                Gender
+    marriage_status       MarriageStatus
+    marriage_permission   MarriagePermission
+    physical_characters   PhysicalCharacter?
+    non_physical_chars    NonPhysicalCharacter?
     marriage_preparations MarriagePreparation?
     family_members        FamilyMember[]
     ibadah                Ibadah?
+    Life_goals            LifeGoal?
     dob                   DateTime              @db.Date
     birth_place           String                @db.VarChar(100)
     birth_order           Int                   @db.TinyInt
@@ -272,13 +284,17 @@ model MarriedGoal {
 }
 
 model LifeGoal {
-    id        String   @id @default(uuid())
-    User      User?    @relation(fields: [userId], references: [id])
-    userId    String?
-    title     String   @db.VarChar(255)
-    deleted   Boolean  @default(false)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now()) @updatedAt
+    id                    String   @id @default(uuid())
+    career                String?  @db.Text
+    domicile              String?  @db.Text
+    child_count           String?  @db.Text
+    child_education       String?  @db.Text
+    financial_arrangement String?  @db.Text
+    knowledge_upgrade     String?  @db.Text
+    createdAt             DateTime @default(now())
+    updatedAt             DateTime @default(now()) @updatedAt
+    Biodata               Biodata? @relation(fields: [biodataId], references: [id])
+    biodataId             String?  @unique
 
     @@map("life_goal")
 }
