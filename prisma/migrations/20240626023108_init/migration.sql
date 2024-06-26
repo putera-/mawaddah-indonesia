@@ -397,8 +397,6 @@ CREATE TABLE `akad` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-<<<<<<< HEAD
-<<<<<<<< HEAD:prisma/migrations/20240625023552_init/migration.sql
 CREATE TABLE `marriage_preparation` (
     `id` VARCHAR(191) NOT NULL,
     `biodataId` VARCHAR(191) NULL,
@@ -412,9 +410,10 @@ CREATE TABLE `marriage_preparation` (
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     UNIQUE INDEX `marriage_preparation_biodataId_key`(`biodataId`),
-========
-=======
->>>>>>> a712b0e934486923ca4a3e79f708acad2493291a
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `ibadah` (
     `id` VARCHAR(191) NOT NULL,
     `ShalatFardu` ENUM('rutin_di_masjid', 'kadang_di_masjid', 'bolong_bolong', 'pernah_sekali', 'belum_pernah') NULL,
@@ -434,10 +433,6 @@ CREATE TABLE `ibadah` (
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     UNIQUE INDEX `ibadah_biodataId_key`(`biodataId`),
-<<<<<<< HEAD
->>>>>>>> a712b0e (add address to  biodata and seeder):prisma/migrations/20240625023515_init/migration.sql
-=======
->>>>>>> a712b0e934486923ca4a3e79f708acad2493291a
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -523,12 +518,7 @@ ALTER TABLE `khitbah` ADD CONSTRAINT `khitbah_taarufId_fkey` FOREIGN KEY (`taaru
 ALTER TABLE `akad` ADD CONSTRAINT `akad_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `taaruf`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-<<<<<<< HEAD
-<<<<<<<< HEAD:prisma/migrations/20240625023552_init/migration.sql
 ALTER TABLE `marriage_preparation` ADD CONSTRAINT `marriage_preparation_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-========
+
+-- AddForeignKey
 ALTER TABLE `ibadah` ADD CONSTRAINT `ibadah_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
->>>>>>>> a712b0e (add address to  biodata and seeder):prisma/migrations/20240625023515_init/migration.sql
-=======
-ALTER TABLE `ibadah` ADD CONSTRAINT `ibadah_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
->>>>>>> a712b0e934486923ca4a3e79f708acad2493291a
