@@ -777,38 +777,38 @@ export async function memberSeed(prisma: PrismaClient) {
                 };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
-                {
-                    motto: mottos[Math.floor(Math.random() * mottos.length)],
-                    life_goal:
-                        life_goals[
-                            Math.floor(Math.random() * life_goals.length)
-                        ],
-                    hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
-                    spare_time_activity:
-                        spare_time_activities[
-                            Math.floor(
-                                Math.random() * spare_time_activities.length,
-                            )
-                        ],
-                    positive_traits:
-                        positive_traits[
-                            Math.floor(Math.random() * positive_traits.length)
-                        ],
-                    negative_traits:
-                        negative_traits[
-                            Math.floor(Math.random() * negative_traits.length)
-                        ],
-                    liked_things:
-                        liked_things[
-                            Math.floor(Math.random() * liked_things.length)
-                        ],
-                    unliked_things:
-                        unliked_things[
-                            Math.floor(Math.random() * unliked_things.length)
-                        ],
-                    drink_alcohol: Math.random() < 0.5,
-                    smoking: Math.random() < 0.5,
-                };
+            {
+                motto: mottos[Math.floor(Math.random() * mottos.length)],
+                life_goal:
+                    life_goals[
+                    Math.floor(Math.random() * life_goals.length)
+                    ],
+                hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
+                spare_time_activity:
+                    spare_time_activities[
+                    Math.floor(
+                        Math.random() * spare_time_activities.length,
+                    )
+                    ],
+                positive_traits:
+                    positive_traits[
+                    Math.floor(Math.random() * positive_traits.length)
+                    ],
+                negative_traits:
+                    negative_traits[
+                    Math.floor(Math.random() * negative_traits.length)
+                    ],
+                liked_things:
+                    liked_things[
+                    Math.floor(Math.random() * liked_things.length)
+                    ],
+                unliked_things:
+                    unliked_things[
+                    Math.floor(Math.random() * unliked_things.length)
+                    ],
+                drink_alcohol: Math.random() < 0.5,
+                smoking: Math.random() < 0.5,
+            };
 
             const data_ibadah: Prisma.IbadahCreateInput = {
                 ShalatFardu:
@@ -885,12 +885,6 @@ export async function memberSeed(prisma: PrismaClient) {
                         },
                         non_physical_chars: {
                             create: data_non_physical_character,
-                        },
-                        marriage_preparations: {
-                            create: data_marriage_preparation
-                        },
-                        ibadah: {
-                            create: data_ibadah,
                         },
                         ethnic: sukuIndonesia[
                             Math.floor(Math.random() * sukuIndonesia.length)
@@ -1070,38 +1064,38 @@ export async function memberSeed(prisma: PrismaClient) {
                 };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
-                {
-                    motto: mottos[Math.floor(Math.random() * mottos.length)],
-                    life_goal:
-                        life_goals[
-                            Math.floor(Math.random() * life_goals.length)
-                        ],
-                    hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
-                    spare_time_activity:
-                        spare_time_activities[
-                            Math.floor(
-                                Math.random() * spare_time_activities.length,
-                            )
-                        ],
-                    positive_traits:
-                        positive_traits[
-                            Math.floor(Math.random() * positive_traits.length)
-                        ],
-                    negative_traits:
-                        negative_traits[
-                            Math.floor(Math.random() * negative_traits.length)
-                        ],
-                    liked_things:
-                        liked_things[
-                            Math.floor(Math.random() * liked_things.length)
-                        ],
-                    unliked_things:
-                        unliked_things[
-                            Math.floor(Math.random() * unliked_things.length)
-                        ],
-                    drink_alcohol: Math.random() < 0.5,
-                    smoking: Math.random() < 0.5,
-                };
+            {
+                motto: mottos[Math.floor(Math.random() * mottos.length)],
+                life_goal:
+                    life_goals[
+                    Math.floor(Math.random() * life_goals.length)
+                    ],
+                hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
+                spare_time_activity:
+                    spare_time_activities[
+                    Math.floor(
+                        Math.random() * spare_time_activities.length,
+                    )
+                    ],
+                positive_traits:
+                    positive_traits[
+                    Math.floor(Math.random() * positive_traits.length)
+                    ],
+                negative_traits:
+                    negative_traits[
+                    Math.floor(Math.random() * negative_traits.length)
+                    ],
+                liked_things:
+                    liked_things[
+                    Math.floor(Math.random() * liked_things.length)
+                    ],
+                unliked_things:
+                    unliked_things[
+                    Math.floor(Math.random() * unliked_things.length)
+                    ],
+                drink_alcohol: Math.random() < 0.5,
+                smoking: Math.random() < 0.5,
+            };
 
             const data_ibadah: Prisma.IbadahCreateInput = {
                 ShalatFardu:
