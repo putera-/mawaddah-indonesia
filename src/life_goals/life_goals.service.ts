@@ -6,7 +6,7 @@ import { LifeGoal, Prisma } from '@prisma/client';
 import { UsersService } from 'src/users/user.service';
 
 @Injectable()
-export class life_goalService {
+export class LifeGoalsService {
     constructor(private prisma: PrismaService, private userService: UsersService) { }
 
     async upsert(biodataId: string, data: Prisma.LifeGoalCreateInput) {

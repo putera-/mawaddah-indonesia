@@ -3,18 +3,19 @@ import { LifeGoalsController } from './life_goals.controller';
 import { LifeGoalsService } from './life_goals.service';
 
 describe('LifeGoalsController', () => {
-  let controller: LifeGoalsController;
+    let controller: LifeGoalsController;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [LifeGoalsController],
-      providers: [LifeGoalsService],
-    }).compile();
+    beforeEach(async () => {
+        const module: TestingModule = await Test.createTestingModule({
+            controllers: [LifeGoalsController],
+            providers: [LifeGoalsService],
+        }).compile();
 
-    controller = module.get<LifeGoalsController>(LifeGoalsController);
-  });
+        controller = module.get<LifeGoalsController>(LifeGoalsController);
+    });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
+    it('should be defined', () => {
+        expect(controller).toBeDefined();
+    });
 });
+/*  */
