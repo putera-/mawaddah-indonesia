@@ -9,7 +9,7 @@ import { provinceSeed } from './seed/province';
 import { taaruf_goldSeed } from './seed/taaruf_gold';
 import { bookmarksSeed } from './seed/bookmark';
 import { taarufSeed } from './seed/taaruf';
-import { familyMembersSeed } from './seed/family_members';
+import { familyMembersSeed } from './seed/member_family';
 import { member_physical_character_seed } from './seed/member_physical_character';
 import { member_ibadah_seed } from './seed/member_ibadah';
 const prisma = new PrismaClient();
