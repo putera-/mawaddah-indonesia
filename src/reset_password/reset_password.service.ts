@@ -6,7 +6,7 @@ import {
 
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/user.service';
-import { Prisma, ResetPassword } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 import dayjs from 'dayjs';
 import { ChangePasswordDto } from 'src/auth/dto/change-password.dto';
@@ -18,9 +18,9 @@ export class ResetPasswordService {
         private prisma: PrismaService,
         private userService: UsersService,
         private emailService: EmailService,
-    ) {}
+    ) { }
 
-    async create(email: string): Promise<ResetPassword> {
+    async create(email: string): Promise<void> {
         // cek user by email
 
         const user = await this.prisma.user.findFirst({
@@ -46,7 +46,7 @@ export class ResetPasswordService {
             data,
         });
         await this.emailService.sendResetPassword(result.id, email);
-        return result;
+        return;
     }
 
     async update(id: string, data: ChangePasswordDto): Promise<void> {

@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import dayjs from 'dayjs';
-import { Activation } from './entities/activation.entity';
 import { EmailService } from 'src/email.service';
 import { Prisma } from '@prisma/client';
 
@@ -14,8 +13,8 @@ export class ActivationService {
     constructor(
         private Prisma: PrismaService,
         private emailService: EmailService,
-    ) {}
-    async create(email: string): Promise<Activation> {
+    ) { }
+    async create(email: string): Promise<void> {
         // cek user by email
         const user = await this.Prisma.user.findFirst({
             where: { email },
@@ -47,7 +46,7 @@ export class ActivationService {
                 },
             });
         await this.emailService.sendActivation(result.id, email);
-        return result;
+        return;
     }
 
     findAll() {

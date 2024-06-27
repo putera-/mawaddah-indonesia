@@ -25,7 +25,7 @@ export class AuthService {
         private prisma: PrismaService,
         private activationService: ActivationService,
         private resetPasswordService: ResetPasswordService,
-    ) {}
+    ) { }
     private blacklistedTokens: Set<string> = new Set();
 
     async signIn(email: string, pass: string): Promise<any> {
@@ -89,16 +89,18 @@ export class AuthService {
         }
     }
 
-    async sendActivation(email: string) {
+    async sendActivation(email: string): Promise<void> {
         const user = await this.usersService.findByEmail(email);
         if (!user) throw new NotFoundException('Email salah.');
-        return await this.activationService.create(email);
+        await this.activationService.create(email);
+        return;
     }
 
-    async sendResetPassword(email: string) {
+    async sendResetPassword(email: string): Promise<void> {
         const user = await this.usersService.findByEmail(email);
         if (!user) throw new NotFoundException('Email salah.');
-        return await this.resetPasswordService.create(email);
+        await this.resetPasswordService.create(email);
+        return
     }
 
     async resetPassword(id: string, data: ResetPasswordDto): Promise<void> {
