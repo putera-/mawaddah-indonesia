@@ -7,7 +7,7 @@ import { UsersService } from 'src/users/user.service';
 import { AppService } from 'src/app.service';
 
 @Module({
-  controllers: [MarriagePreparationController],
-  providers: [MarriagePreparationService, PrismaService, BiodataService, UsersService, AppService],
+    controllers: [MarriagePreparationController],
+    providers: [MarriagePreparationService, PrismaService, BiodataService, UsersService, AppService],
 })
-export class MarriagePreparationModule {}
+export class MarriagePreparationModule { }

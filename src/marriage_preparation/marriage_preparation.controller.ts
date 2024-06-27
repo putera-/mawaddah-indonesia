@@ -8,43 +8,43 @@ import { Role } from 'src/roles/role.enums';
 
 @Controller('marriage_preparation')
 export class MarriagePreparationController {
-  constructor(
-    private readonly marriagePreparationService: MarriagePreparationService,
-    private readonly biodataService: BiodataService
-  ) { }
+    constructor(
+        private readonly marriagePreparationService: MarriagePreparationService,
+        private readonly biodataService: BiodataService
+    ) { }
 
-  @Roles(Role.Member)
-  @Get()
-  async findOne(@Request() req: any) {
-    const userId = req.user.id
-    try {
-      const biodata = await this.biodataService.findMe(userId)
+    @Roles(Role.Member)
+    @Get()
+    async findOne(@Request() req: any) {
+        const userId = req.user.id
+        try {
+            const biodata = await this.biodataService.findMe(userId)
 
-      // check apakah biodata!= null > jika masih null throw error
-      if (!biodata) throw new BadRequestException()
+            // check apakah biodata!= null > jika masih null throw error
+            if (!biodata) throw new BadRequestException()
 
-      return this.marriagePreparationService.findOne(userId, biodata.id);
+            return this.marriagePreparationService.findOne(userId, biodata.id);
 
-    } catch (error) {
-      throw error;
+        } catch (error) {
+            throw error;
+        }
     }
-  }
 
-  @Roles(Role.Member)
-  @Patch()
-  async update(@Request() req: any, @Body(new ValidationPipe()) data: UpdateMarriagePreparationDto) {
-    const userId = req.user.id
-    try {
-      const biodata = await this.biodataService.findMe(userId)
+    @Roles(Role.Member)
+    @Patch()
+    async update(@Request() req: any, @Body(new ValidationPipe()) data: UpdateMarriagePreparationDto) {
+        const userId = req.user.id
+        try {
+            const biodata = await this.biodataService.findMe(userId)
 
-      // check apakah biodata!= null > jika masih null throw error
-      if (!biodata) throw new BadRequestException()
+            // check apakah biodata!= null > jika masih null throw error
+            if (!biodata) throw new BadRequestException()
 
-      return this.marriagePreparationService.upsert(biodata.id, data);
+            return this.marriagePreparationService.upsert(biodata.id, data);
 
-    } catch (error) {
-      throw error;
+        } catch (error) {
+            throw error;
+        }
     }
-  }
 
 }
