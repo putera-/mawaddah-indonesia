@@ -549,11 +549,17 @@ ALTER TABLE `akad` ADD CONSTRAINT `akad_taarufId_fkey` FOREIGN KEY (`taarufId`) 
 ALTER TABLE `marriage_preparation` ADD CONSTRAINT `marriage_preparation_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `Biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+<<<<<<< HEAD
 <<<<<<<< HEAD:prisma/migrations/20240627044033_init/migration.sql
 ALTER TABLE `ibadah` ADD CONSTRAINT `ibadah_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `Biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 ========
+=======
+>>>>>>> 6304119848cca52228bb3d783f933d70dc0c73d3
 ALTER TABLE `ibadah` ADD CONSTRAINT `ibadah_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `non_physical_criteria` ADD CONSTRAINT `non_physical_criteria_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+<<<<<<< HEAD
 >>>>>>>> ea3e5c2 (-handle non physical criteria prisma table):prisma/migrations/20240627042448_init/migration.sql
+=======
+>>>>>>> 6304119848cca52228bb3d783f933d70dc0c73d3

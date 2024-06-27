@@ -183,10 +183,8 @@ export class CandidateService {
                         non_physical_chars: true,
                         marriage_preparations: true,
                         family_members: true,
-                        life_goals: true,
-                        ibadah: true,
-                        non_physical_criteria: true,
-                    },
+                        ibadah: true
+                    }
                 },
                 Education: true,
                 Skill: { select: { title: true } },
@@ -271,8 +269,8 @@ export class CandidateService {
                 biodata: {
                     include: {
                         physical_characters: true,
-                        non_physical_chars: true
-                    }
+                        non_physical_chars: true,
+                    },
                 },
             },
             orderBy: {
@@ -309,8 +307,8 @@ export class CandidateService {
                 biodata: {
                     include: {
                         physical_characters: true,
-                        non_physical_chars: true
-                    }
+                        non_physical_chars: true,
+                    },
                 },
             },
             orderBy: {
