@@ -428,11 +428,30 @@ CREATE TABLE `ibadah` (
     `sedekah` ENUM('rutin', 'kadang_kadang', 'pernah_sekali', 'belum_pernah') NULL,
     `umrah` ENUM('rutin', 'kadang_kadang', 'pernah_sekali', 'belum_pernah') NULL,
     `haji` BOOLEAN NOT NULL DEFAULT false,
-    `biodataId` VARCHAR(191) NOT NULL,
+    `biodataId` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     UNIQUE INDEX `ibadah_biodataId_key`(`biodataId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `non_physical_criteria` (
+    `id` VARCHAR(191) NOT NULL,
+    `age` INTEGER NULL,
+    `domicile` VARCHAR(100) NULL,
+    `education` VARCHAR(100) NULL,
+    `married_status` ENUM('LAJANG', 'MENIKAH', 'CERAI_HIDUP', 'CERAI_MATI') NULL,
+    `sport` TEXT NULL,
+    `hobby` TEXT NULL,
+    `traits` VARCHAR(100) NULL,
+    `ethnic` VARCHAR(100) NULL,
+    `job` VARCHAR(100) NULL,
+    `other` TEXT NULL,
+    `biodataId` VARCHAR(191) NULL,
+
+    UNIQUE INDEX `non_physical_criteria_biodataId_key`(`biodataId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -521,4 +540,7 @@ ALTER TABLE `akad` ADD CONSTRAINT `akad_taarufId_fkey` FOREIGN KEY (`taarufId`) 
 ALTER TABLE `marriage_preparation` ADD CONSTRAINT `marriage_preparation_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ibadah` ADD CONSTRAINT `ibadah_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ibadah` ADD CONSTRAINT `ibadah_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `non_physical_criteria` ADD CONSTRAINT `non_physical_criteria_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

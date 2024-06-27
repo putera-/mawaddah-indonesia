@@ -171,6 +171,7 @@ model Biodata {
     marriage_preparations MarriagePreparation?
     family_members        FamilyMember[]
     ibadah                Ibadah?
+    non_physical_criteria NonPhysicalCriteria?
     dob                   DateTime              @db.Date
     birth_place           String                @db.VarChar(100)
     birth_order           Int                   @db.TinyInt
@@ -564,7 +565,7 @@ model Ibadah {
     umrah             Cycle?
     haji              Boolean      @default(false)
     biodata           Biodata?     @relation(fields: [biodataId], references: [id])
-    biodataId         String       @unique
+    biodataId         String?      @unique
     createdAt         DateTime     @default(now())
     updatedAt         DateTime     @default(now()) @updatedAt
 
@@ -584,4 +585,22 @@ enum Cycle {
     kadang_kadang
     pernah_sekali
     belum_pernah
+}
+
+model NonPhysicalCriteria {
+    id             String          @id @default(uuid())
+    age            Int?            @db.Int
+    domicile       String?         @db.VarChar(100)
+    education      String?         @db.VarChar(100)
+    married_status MarriageStatus?
+    sport          String?         @db.Text
+    hobby          String?         @db.Text
+    traits         String?         @db.VarChar(100)
+    ethnic         String?         @db.VarChar(100)
+    job            String?         @db.VarChar(100)
+    other          String?         @db.Text
+    biodata        Biodata?        @relation(fields: [biodataId], references: [id])
+    biodataId      String?         @unique
+
+    @@map("non_physical_criteria")
 }

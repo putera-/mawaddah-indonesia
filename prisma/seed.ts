@@ -12,6 +12,7 @@ import { taarufSeed } from './seed/taaruf';
 import { familyMembersSeed } from './seed/family_members';
 import { member_physical_character_seed } from './seed/member_physical_character';
 import { member_ibadah_seed } from './seed/member_ibadah';
+import { member_non_physical_criteria_seed } from './seed/member_non_physical_criteria';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -26,6 +27,7 @@ async function main() {
     await memberSeed(prisma);
     await member_physical_character_seed(prisma);
     await member_ibadah_seed(prisma);
+    await member_non_physical_criteria_seed(prisma);
     await taaruf_goldSeed(prisma);
     await bookmarksSeed(prisma);
     await taarufSeed(prisma);

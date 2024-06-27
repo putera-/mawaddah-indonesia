@@ -37,6 +37,7 @@ import { NonPhysicalCharactersModule } from './non_physical_characters/non_physi
 import { FamilyMembersModule } from './family_members/family_members.module';
 import { MarriagePreparationModule } from './marriage_preparation/marriage_preparation.module';
 import { IbadahModule } from './ibadah/ibadah.module';
+import { NonPhysicalCriteriaModule } from './non_physical_criteria/non_physical_criteria.module';
 
 @Module({
     imports: [
@@ -74,6 +75,7 @@ import { IbadahModule } from './ibadah/ibadah.module';
         FamilyMembersModule,
         MarriagePreparationModule,
         IbadahModule,
+        NonPhysicalCriteriaModule,
     ],
 
     controllers: [AppController],
