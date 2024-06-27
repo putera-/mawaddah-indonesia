@@ -1,14 +1,14 @@
 import { Controller, Get, Body, Patch, ValidationPipe, Request, BadRequestException } from '@nestjs/common';
-import { NonPhysicalCharsService } from './non_physical_characters.service';
+import { NonPhysicalCharactersService } from './non_physical_characters.service';
 import { UpdateNonPhysicalCharacterDto } from './dto/update-non_physical_character.dto';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { BiodataService } from 'src/biodata/biodata.service';
 
 @Controller('non_physical_characters')
-export class NonPhysicalCharsController {
+export class NonPhysicalCharactersController {
     constructor(
-        private readonly nonPhysicalService: NonPhysicalCharsService,
+        private readonly nonPhysicalService: NonPhysicalCharactersService,
         private readonly biodataService: BiodataService
     ) { }
     @Roles(Role.Member)
