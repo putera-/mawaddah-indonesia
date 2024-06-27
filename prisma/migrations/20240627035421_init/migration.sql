@@ -114,7 +114,7 @@ CREATE TABLE `activation` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `biodata` (
+CREATE TABLE `Biodata` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NULL,
     `bio` TEXT NOT NULL,
@@ -137,7 +137,7 @@ CREATE TABLE `biodata` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
-    UNIQUE INDEX `biodata_userId_key`(`userId`),
+    UNIQUE INDEX `Biodata_userId_key`(`userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -207,12 +207,21 @@ CREATE TABLE `married_goal` (
 -- CreateTable
 CREATE TABLE `life_goal` (
     `id` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NULL,
-    `title` VARCHAR(255) NOT NULL,
-    `deleted` BOOLEAN NOT NULL DEFAULT false,
+    `career` TEXT NULL,
+    `domicile` TEXT NULL,
+    `child_count` TEXT NULL,
+    `child_education` TEXT NULL,
+    `financial_arrangement` TEXT NULL,
+    `knowledge_upgrade` TEXT NULL,
+    `short_term_achievement` TEXT NULL,
+    `long_term_achievement` TEXT NULL,
+    `wife_work_permit` BOOLEAN NOT NULL DEFAULT false,
+    `wife_work_permit_desc` TEXT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `biodataId` VARCHAR(191) NULL,
 
+    UNIQUE INDEX `life_goal_biodataId_key`(`biodataId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -455,7 +464,7 @@ ALTER TABLE `faq` ADD CONSTRAINT `faq_clientId_fkey` FOREIGN KEY (`clientId`) RE
 ALTER TABLE `activation` ADD CONSTRAINT `activation_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `biodata` ADD CONSTRAINT `biodata_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Biodata` ADD CONSTRAINT `Biodata_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `education` ADD CONSTRAINT `education_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
@@ -470,16 +479,16 @@ ALTER TABLE `skill` ADD CONSTRAINT `skill_userId_fkey` FOREIGN KEY (`userId`) RE
 ALTER TABLE `married_goal` ADD CONSTRAINT `married_goal_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `life_goal` ADD CONSTRAINT `life_goal_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `life_goal` ADD CONSTRAINT `life_goal_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `Biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `physical_character` ADD CONSTRAINT `physical_character_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `physical_character` ADD CONSTRAINT `physical_character_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `Biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `non_physical_character` ADD CONSTRAINT `non_physical_character_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `non_physical_character` ADD CONSTRAINT `non_physical_character_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `Biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `family_member` ADD CONSTRAINT `family_member_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `family_member` ADD CONSTRAINT `family_member_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `Biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `taaruf_gold` ADD CONSTRAINT `taaruf_gold_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -518,7 +527,7 @@ ALTER TABLE `khitbah` ADD CONSTRAINT `khitbah_taarufId_fkey` FOREIGN KEY (`taaru
 ALTER TABLE `akad` ADD CONSTRAINT `akad_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `taaruf`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `marriage_preparation` ADD CONSTRAINT `marriage_preparation_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `marriage_preparation` ADD CONSTRAINT `marriage_preparation_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `Biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ibadah` ADD CONSTRAINT `ibadah_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ibadah` ADD CONSTRAINT `ibadah_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `Biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

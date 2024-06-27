@@ -167,22 +167,10 @@ model Biodata {
     marriage_permission   MarriagePermission
     physical_characters   PhysicalCharacter?
     non_physical_chars    NonPhysicalCharacter?
-    id                    String                @id @default(uuid())
-    user                  User?                 @relation(fields: [userId], references: [id])
-    userId                String?               @unique
-    bio                   String                @db.Text
-    phone                 String                @db.VarChar(20)
-    company               String?               @db.VarChar(100)
-    manhaj                ManhajStatus
-    gender                Gender
-    marriage_status       MarriageStatus
-    marriage_permission   MarriagePermission
-    physical_characters   PhysicalCharacter?
-    non_physical_chars    NonPhysicalCharacter?
     marriage_preparations MarriagePreparation?
     family_members        FamilyMember[]
+    life_goal             LifeGoal?
     ibadah                Ibadah?
-    Life_goals            LifeGoal?
     dob                   DateTime              @db.Date
     birth_place           String                @db.VarChar(100)
     birth_order           Int                   @db.TinyInt
@@ -195,8 +183,6 @@ model Biodata {
     poligami_opinion      String                @db.Text
     createdAt             DateTime              @default(now())
     updatedAt             DateTime              @default(now()) @updatedAt
-
-    @@map("biodata")
 }
 
 enum ManhajStatus {
@@ -294,7 +280,7 @@ model LifeGoal {
     short_term_achievement String?  @db.Text
     long_term_achievement  String?  @db.Text
     wife_work_permit       Boolean  @default(false)
-    wife_work_permit_desc  String?   @db.Text
+    wife_work_permit_desc  String?  @db.Text
     createdAt              DateTime @default(now())
     updatedAt              DateTime @default(now()) @updatedAt
     Biodata                Biodata? @relation(fields: [biodataId], references: [id])
