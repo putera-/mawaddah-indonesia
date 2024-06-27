@@ -23,8 +23,12 @@ export class CandidateService {
     constructor(
         private Prisma: PrismaService,
         private User: UsersService,
-    ) { }
-    async findNew(gender: any, page: number = 1, limit: number = 10): Promise<Pagination<User[]>> {
+    ) {}
+    async findNew(
+        gender: any,
+        page: number = 1,
+        limit: number = 10,
+    ): Promise<Pagination<User[]>> {
         const skip = (page - 1) * limit;
 
         const oppositeGender = this.getOppositeGender(gender);
@@ -43,7 +47,8 @@ export class CandidateService {
                         marriage_preparations: true,
                         family_members: true,
                         ibadah: true,
-                    }
+                        non_physical_criteria: true,
+                    },
                 },
                 Education: true,
                 Skill: true,
@@ -53,8 +58,8 @@ export class CandidateService {
                 auth: {
                     select: { createdAt: true },
                     orderBy: { createdAt: 'desc' },
-                    take: 1
-                }
+                    take: 1,
+                },
             },
             orderBy: {
                 biodata: {
@@ -62,7 +67,7 @@ export class CandidateService {
                 },
             },
             take: limit,
-            skip
+            skip,
         });
 
         return {
@@ -70,8 +75,8 @@ export class CandidateService {
             total: 0,
             page: page,
             maxPages: Math.ceil(0 / limit),
-            limit: limit
-        }
+            limit: limit,
+        };
     }
     async findAll(gender: string) {
         const oppositeGender = this.getOppositeGender(gender);
@@ -92,8 +97,9 @@ export class CandidateService {
                         non_physical_chars: true,
                         marriage_preparations: true,
                         family_members: true,
-                        ibadah: true
-                    }
+                        ibadah: true,
+                        non_physical_criteria: true,
+                    },
                 },
                 Education: true,
                 Skill: true,
@@ -103,9 +109,9 @@ export class CandidateService {
                 auth: {
                     select: { createdAt: true },
                     orderBy: { createdAt: 'desc' },
-                    take: 1
-                }
-            }
+                    take: 1,
+                },
+            },
         });
         if (!user) throw new NotFoundException('User tidak ditemukan');
         this.User.formatGray(user);
@@ -156,14 +162,19 @@ export class CandidateService {
         return suggest;
     }
 
-    async getSimiliar2(userId: string, userBiodata: Biodata, minScore = 15, maxScore = 40): Promise<Pagination<User[]>> {
+    async getSimiliar2(
+        userId: string,
+        userBiodata: Biodata,
+        minScore = 15,
+        maxScore = 40,
+    ): Promise<Pagination<User[]>> {
         const oppositeGender = this.getOppositeGender(userBiodata.gender);
         const candidates = await this.Prisma.user.findMany({
             where: {
                 id: { not: userId },
                 biodata: {
-                    gender: oppositeGender
-                }
+                    gender: oppositeGender,
+                },
             },
             include: {
                 biodata: {
@@ -172,8 +183,9 @@ export class CandidateService {
                         non_physical_chars: true,
                         marriage_preparations: true,
                         family_members: true,
-                        ibadah: true
-                    }
+                        ibadah: true,
+                        non_physical_criteria: true,
+                    },
                 },
                 Education: true,
                 Skill: { select: { title: true } },
@@ -183,19 +195,22 @@ export class CandidateService {
                 auth: {
                     select: { createdAt: true },
                     orderBy: { createdAt: 'desc' },
-                    take: 1
-                }
-            }
+                    take: 1,
+                },
+            },
         });
 
-        const similarityScore = candidates.map(can => ({
-            can,
-            score: this.calculateSimilarity(userBiodata, can.biodata)
-        }))
+        const similarityScore = candidates
+            .map((can) => ({
+                can,
+                score: this.calculateSimilarity(userBiodata, can.biodata),
+            }))
             .sort((a, b) => b.score - a.score);
 
         // check if score range is empty
-        const highest_score = similarityScore.length ? similarityScore[0].score : 0;
+        const highest_score = similarityScore.length
+            ? similarityScore[0].score
+            : 0;
         if (highest_score <= minScore) {
             maxScore = highest_score;
             minScore = highest_score - 5;
@@ -204,8 +219,9 @@ export class CandidateService {
             if (minScore <= 0) minScore = 1;
         }
 
-        const suggestions = similarityScore.filter(c => c.score <= maxScore && c.score >= minScore)
-            .map(u => {
+        const suggestions = similarityScore
+            .filter((c) => c.score <= maxScore && c.score >= minScore)
+            .map((u) => {
                 this.User.formatGray(u.can);
                 return u.can;
             });
@@ -215,22 +231,29 @@ export class CandidateService {
             total: suggestions.length,
             page: 1,
             maxPages: 1,
-            limit: suggestions.length
-        }
+            limit: suggestions.length,
+        };
     }
 
     calculateSimilarity(userBiodata: Biodata, candidateBiodata: Biodata) {
         let score = 0;
 
-        if (userBiodata.address_town == candidateBiodata.address_town) score += 15;
-        if (userBiodata.address_province == candidateBiodata.address_province) score += 5;
-        if (userBiodata.hometown_province == candidateBiodata.hometown_province) score += 10;
+        if (userBiodata.address_town == candidateBiodata.address_town)
+            score += 15;
+        if (userBiodata.address_province == candidateBiodata.address_province)
+            score += 5;
+        if (userBiodata.hometown_province == candidateBiodata.hometown_province)
+            score += 10;
         if (userBiodata.ethnic == candidateBiodata.ethnic) score += 10;
 
         return score;
     }
 
-    async findSuggestion(gender: any, page: number = 1, limit: number = 10): Promise<Pagination<User[]>> {
+    async findSuggestion(
+        gender: any,
+        page: number = 1,
+        limit: number = 10,
+    ): Promise<Pagination<User[]>> {
         const skip = (page - 1) * limit;
 
         const oppositeGender = this.getOppositeGender(gender);
@@ -249,8 +272,8 @@ export class CandidateService {
                 biodata: {
                     include: {
                         physical_characters: true,
-                        non_physical_chars: true
-                    }
+                        non_physical_chars: true,
+                    },
                 },
             },
             orderBy: {
@@ -259,15 +282,15 @@ export class CandidateService {
                 },
             },
             take: limit,
-            skip
+            skip,
         });
         return {
             data: suggestions,
             total: 0,
             page: page,
             maxPages: Math.ceil(0 / limit),
-            limit: +limit
-        }
+            limit: +limit,
+        };
     }
     async findLike(gender: any, page = '3', limit = '10') {
         const oppositeGender = this.getOppositeGender(gender);
@@ -288,8 +311,8 @@ export class CandidateService {
                 biodata: {
                     include: {
                         physical_characters: true,
-                        non_physical_chars: true
-                    }
+                        non_physical_chars: true,
+                    },
                 },
             },
             orderBy: {
