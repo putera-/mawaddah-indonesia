@@ -12,6 +12,7 @@ import { taarufSeed } from './seed/taaruf';
 import { familyMembersSeed } from './seed/member_family';
 import { member_physical_character_seed } from './seed/member_physical_character';
 import { member_ibadah_seed } from './seed/member_ibadah';
+import { member_life_goals_seed } from './seed/member_life_goals';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -30,6 +31,7 @@ async function main() {
     await bookmarksSeed(prisma);
     await taarufSeed(prisma);
     await familyMembersSeed(prisma);
+    await member_life_goals_seed(prisma);
 }
 
 main()

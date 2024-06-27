@@ -169,7 +169,7 @@ model Biodata {
     non_physical_chars    NonPhysicalCharacter?
     marriage_preparations MarriagePreparation?
     family_members        FamilyMember[]
-    life_goal             LifeGoal?
+    Life_goals             LifeGoal?
     ibadah                Ibadah?
     dob                   DateTime              @db.Date
     birth_place           String                @db.VarChar(100)
