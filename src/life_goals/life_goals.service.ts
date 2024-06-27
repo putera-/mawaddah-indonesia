@@ -28,11 +28,11 @@ export class LifeGoalsService {
             },
             select: {
                 id: true,
-                Life_goals: true
+                life_goals: true
             }
         })
 
-        if (!data.Life_goals) {
+        if (!data.life_goals) {
             return this.prisma.lifeGoal.create({
                 data: {
                     Biodata: { connect: { id: biodataId } }
@@ -41,7 +41,7 @@ export class LifeGoalsService {
 
         }
 
-        return data.Life_goals;
+        return data.life_goals;
 
     }
 

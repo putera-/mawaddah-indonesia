@@ -42,7 +42,7 @@ export class CandidateService {
                         non_physical_chars: true,
                         marriage_preparations: true,
                         family_members: true,
-                        Life_goals: true,
+                        life_goals: true,
                         ibadah: true,
                     }
                 },
@@ -91,7 +91,7 @@ export class CandidateService {
                         physical_characters: true,
                         non_physical_chars: true,
                         marriage_preparations: true,
-                        Life_goals: true,
+                        life_goals: true,
                         family_members: true,
                         ibadah: true
                     }
@@ -172,7 +172,7 @@ export class CandidateService {
                         non_physical_chars: true,
                         marriage_preparations: true,
                         family_members: true,
-                        Life_goals: true,
+                        life_goals: true,
                         ibadah: true
                     }
                 },
@@ -249,7 +249,7 @@ export class CandidateService {
                     include: {
                         physical_characters: true,
                         non_physical_chars: true,
-                        Life_goals: true,
+                        life_goals: true,
                     }
                 },
             },
@@ -288,7 +288,7 @@ export class CandidateService {
                     include: {
                         physical_characters: true,
                         non_physical_chars: true,
-                        Life_goals: true,
+                        life_goals: true,
                     }
                 },
             },
