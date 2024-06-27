@@ -601,6 +601,39 @@ export async function memberSeed(prisma: PrismaClient) {
         'Meditasi'
     ])
 
+    const short_term_achievement = faker.helpers.arrayElement([
+        'Berhasil mendapatkan promosi di karir',
+        'Berhasil menyelesaikan proyek besar',
+        'Berhasil mencapai omset 1 milyar',
+        'Menyelesaikan kursus bahasa asing',
+        'Membeli rumah pertama',
+        'Menabung untuk liburan besar',
+        'Menyelesaikan marathon pertama',
+        'Menjalin hubungan baru yang bermakna',
+        'Mendapatkan sertifikasi profesional',
+        'Mengurangi berat badan sesuai target'
+    ]);
+
+    const long_term_achievement = faker.helpers.arrayElement([
+        'Dapat mengendalikan emosi lebih baik',
+        'Membangun bisnis yang sukses',
+        'Mencapai kemandirian finansial',
+        'Memiliki keluarga yang harmonis',
+        'Menjadi ahli dalam bidang profesional',
+        'Berpartisipasi dalam kegiatan sosial secara rutin',
+        'Memiliki portofolio investasi yang kuat',
+        'Menulis dan menerbitkan buku',
+        'Memiliki kesehatan fisik dan mental yang prima',
+        'Meninggalkan warisan yang berarti untuk generasi berikutnya'
+    ]);
+
+    const wife_work_permit = faker.helpers.arrayElement([true, false]);
+    const wife_work_permit_desc = faker.helpers.arrayElement([
+        'boleh',
+        'tidak boleh',
+        'belum dibicarakan',
+    ]);
+
     let child_count = faker.number.int({ min: 0, max: 10 });
     const child_count_string = child_count.toString()
 
@@ -977,7 +1010,11 @@ export async function memberSeed(prisma: PrismaClient) {
                 child_count: child_count_string,
                 child_education: faker.person.jobTitle(),
                 financial_arrangement: financial_arrangement,
-                knowledge_upgrade: knowledge_upgrade
+                knowledge_upgrade: knowledge_upgrade,
+                short_term_achievement: short_term_achievement,
+                long_term_achievement: long_term_achievement,
+                wife_work_permit: wife_work_permit,
+                wife_work_permit_desc: wife_work_permit_desc
             };
 
             if (randoms.indexOf(i) != -1) {

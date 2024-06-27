@@ -284,17 +284,21 @@ model MarriedGoal {
 }
 
 model LifeGoal {
-    id                    String   @id @default(uuid())
-    career                String?  @db.Text
-    domicile              String?  @db.Text
-    child_count           String?  @db.Text
-    child_education       String?  @db.Text
-    financial_arrangement String?  @db.Text
-    knowledge_upgrade     String?  @db.Text
-    createdAt             DateTime @default(now())
-    updatedAt             DateTime @default(now()) @updatedAt
-    Biodata               Biodata? @relation(fields: [biodataId], references: [id])
-    biodataId             String?  @unique
+    id                     String   @id @default(uuid())
+    career                 String?  @db.Text
+    domicile               String?  @db.Text
+    child_count            String?  @db.Text
+    child_education        String?  @db.Text
+    financial_arrangement  String?  @db.Text
+    knowledge_upgrade      String?  @db.Text
+    short_term_achievement String?  @db.Text
+    long_term_achievement  String?  @db.Text
+    wife_work_permit       Boolean  @default(false)
+    wife_work_permit_desc  String?   @db.Text
+    createdAt              DateTime @default(now())
+    updatedAt              DateTime @default(now()) @updatedAt
+    Biodata                Biodata? @relation(fields: [biodataId], references: [id])
+    biodataId              String?  @unique
 
     @@map("life_goal")
 }
