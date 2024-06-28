@@ -1,8 +1,15 @@
-import { Prisma, PrismaClient, body_shape, eye_Color, hair_color, hair_type, skin_color } from '@prisma/client';
-
+import {
+    Prisma,
+    PrismaClient,
+    body_shape,
+    eye_Color,
+    hair_color,
+    hair_type,
+    skin_color,
+} from '@prisma/client';
 
 export async function member_physical_character_seed(prisma: PrismaClient) {
-    console.log('\nSeeder Start: Physical Character & Criteria')
+    console.log('\nSeeder Start: Physical Character & Criteria');
 
     const body_shapes: body_shape[] = [
         body_shape.sangat_kurus,
@@ -70,16 +77,13 @@ export async function member_physical_character_seed(prisma: PrismaClient) {
         'Pada usia 35 tahun, saya mengalami gangguan kecemasan yang membutuhkan terapi kognitif perilaku dan obat anti-kecemasan.',
     ];
 
-
     const biodata = await prisma.biodata.findMany({
         where: {
             user: {
                 role: 'MEMBER',
-            }
-        }
+            },
+        },
     });
-
-
 
     for (let i = 0; i < biodata.length; i++) {
         process.stdout.write('.');
@@ -93,41 +97,15 @@ export async function member_physical_character_seed(prisma: PrismaClient) {
             height: Math.floor(Math.random() * (200 - 150 + 1)) + 150,
             weight: Math.floor(Math.random() * (120 - 40 + 1)) + 40,
             body_shape:
-                body_shapes[
-                Math.floor(Math.random() * body_shapes.length)
-                ],
+                body_shapes[Math.floor(Math.random() * body_shapes.length)],
             skin_color:
-                skin_colors[
-                Math.floor(Math.random() * skin_colors.length)
-                ],
+                skin_colors[Math.floor(Math.random() * skin_colors.length)],
             hair_type:
-                hair_types[
-                Math.floor(Math.random() * hair_types.length)
-                ],
+                hair_types[Math.floor(Math.random() * hair_types.length)],
             hair_color:
-                hair_colors[
-                Math.floor(Math.random() * hair_colors.length)
-                ],
+                hair_colors[Math.floor(Math.random() * hair_colors.length)],
             eye_color:
-                eye_colors[
-                Math.floor(Math.random() * eye_colors.length)
-                ],
-            characteristic,
-            characteristic_detail: characteristic
-                ? characteristics[
-                Math.floor(
-                    Math.random() * medical_histories.length,
-                )
-                ]
-                : null,
-            medical_history,
-            medical_history_detail: medical_history
-                ? medical_histories[
-                Math.floor(
-                    Math.random() * medical_histories.length,
-                )
-                ]
-                : null,
+                eye_colors[Math.floor(Math.random() * eye_colors.length)],
         };
 
         const data_physical_criteria: Prisma.PhysicalCriteriaCreateInput = {
@@ -144,32 +122,17 @@ export async function member_physical_character_seed(prisma: PrismaClient) {
                 hair_colors[Math.floor(Math.random() * hair_colors.length)],
             eye_color:
                 eye_colors[Math.floor(Math.random() * eye_colors.length)],
-            characteristic,
-            characteristic_detail: characteristic
-                ? characteristics[
-                Math.floor(Math.random() * medical_histories.length)
-                ]
-                : null,
-            medical_history,
-            medical_history_detail: medical_history
-                ? medical_histories[
-                Math.floor(Math.random() * medical_histories.length)
-                ]
-                : null,
         };
 
         await Promise.all([
             prisma.physicalCharacter.create({
-                data
+                data,
             }),
             prisma.physicalCriteria.create({
-                data: data_physical_criteria
-            })
-        ])
-
+                data: data_physical_criteria,
+            }),
+        ]);
     }
 
-
-    console.log('\nSeeder Finish: Physical Character & Criteria')
-
+    console.log('\nSeeder Finish: Physical Character & Criteria');
 }

@@ -28,16 +28,4 @@ export class CreatePhysicalCriteriaDto {
 
     @IsString()
     eye_color: eye_Color;
-
-    @IsBoolean()
-    characteristic: boolean;
-
-    @IsString()
-    characteristic_detail: string;
-
-    @IsBoolean()
-    medical_history: boolean;
-
-    @IsString()
-    medical_history_detail: string;
 }
