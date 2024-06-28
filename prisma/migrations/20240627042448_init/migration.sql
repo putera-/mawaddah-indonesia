@@ -114,7 +114,7 @@ CREATE TABLE `activation` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `biodata` (
+CREATE TABLE `Biodata` (
     `id` VARCHAR(191) NOT NULL,
     `userId` VARCHAR(191) NULL,
     `bio` TEXT NOT NULL,
@@ -137,7 +137,7 @@ CREATE TABLE `biodata` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
-    UNIQUE INDEX `biodata_userId_key`(`userId`),
+    UNIQUE INDEX `Biodata_userId_key`(`userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -219,7 +219,7 @@ CREATE TABLE `life_goal` (
     `wife_work_permit_desc` TEXT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `biodataId` VARCHAR(191) NOT NULL,
+    `biodataId` VARCHAR(191) NULL,
 
     UNIQUE INDEX `life_goal_biodataId_key`(`biodataId`),
     PRIMARY KEY (`id`)
@@ -241,7 +241,7 @@ CREATE TABLE `physical_character` (
     `medical_history_detail` TEXT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `biodataId` VARCHAR(191) NOT NULL,
+    `biodataId` VARCHAR(191) NULL,
 
     UNIQUE INDEX `physical_character_biodataId_key`(`biodataId`),
     PRIMARY KEY (`id`)
@@ -262,7 +262,7 @@ CREATE TABLE `non_physical_character` (
     `smoking` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `biodataId` VARCHAR(191) NOT NULL,
+    `biodataId` VARCHAR(191) NULL,
 
     UNIQUE INDEX `non_physical_character_biodataId_key`(`biodataId`),
     PRIMARY KEY (`id`)
@@ -271,7 +271,7 @@ CREATE TABLE `non_physical_character` (
 -- CreateTable
 CREATE TABLE `family_member` (
     `id` VARCHAR(191) NOT NULL,
-    `biodataId` VARCHAR(191) NOT NULL,
+    `biodataId` VARCHAR(191) NULL,
     `relationship` ENUM('ayah', 'ibu', 'kakak_pria', 'kakak_wanita', 'adik_pria', 'adik_wanita', 'ipar_pria', 'ipar_wanita', 'anak_kandung', 'anak_angkat') NULL,
     `religion` ENUM('islam', 'non_islam') NULL,
     `dob` VARCHAR(20) NOT NULL,
@@ -408,7 +408,7 @@ CREATE TABLE `akad` (
 -- CreateTable
 CREATE TABLE `marriage_preparation` (
     `id` VARCHAR(191) NOT NULL,
-    `biodataId` VARCHAR(191) NOT NULL,
+    `biodataId` VARCHAR(191) NULL,
     `visi` TEXT NULL,
     `misi` TEXT NULL,
     `mental` TEXT NULL,
@@ -442,28 +442,6 @@ CREATE TABLE `ibadah` (
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     UNIQUE INDEX `ibadah_biodataId_key`(`biodataId`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `physical_criteria` (
-    `id` VARCHAR(191) NOT NULL,
-    `height` INTEGER NOT NULL DEFAULT 0,
-    `weight` INTEGER NOT NULL DEFAULT 0,
-    `body_shape` ENUM('sangat_kurus', 'kurus', 'atletis', 'normal', 'gempal', 'gemuk', 'sangat_gemuk') NULL,
-    `skin_color` ENUM('sawo_matang', 'putih', 'putih_kemerahan', 'gelap', 'hitam') NULL,
-    `hair_color` ENUM('hitam', 'pirang', 'merah', 'putih') NULL,
-    `hair_type` ENUM('lurus', 'ikal', 'keriting', 'kribo', 'botak') NULL,
-    `eye_color` ENUM('hitam', 'coklat', 'biru', 'hijau') NULL,
-    `characteristic` BOOLEAN NOT NULL DEFAULT false,
-    `characteristic_detail` TEXT NULL,
-    `medical_history` BOOLEAN NOT NULL DEFAULT false,
-    `medical_history_detail` TEXT NULL,
-    `biodataId` VARCHAR(191) NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-
-    UNIQUE INDEX `physical_criteria_biodataId_key`(`biodataId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -505,7 +483,7 @@ ALTER TABLE `faq` ADD CONSTRAINT `faq_clientId_fkey` FOREIGN KEY (`clientId`) RE
 ALTER TABLE `activation` ADD CONSTRAINT `activation_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `biodata` ADD CONSTRAINT `biodata_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Biodata` ADD CONSTRAINT `Biodata_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `education` ADD CONSTRAINT `education_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
@@ -520,16 +498,16 @@ ALTER TABLE `skill` ADD CONSTRAINT `skill_userId_fkey` FOREIGN KEY (`userId`) RE
 ALTER TABLE `married_goal` ADD CONSTRAINT `married_goal_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `life_goal` ADD CONSTRAINT `life_goal_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `life_goal` ADD CONSTRAINT `life_goal_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `Biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `physical_character` ADD CONSTRAINT `physical_character_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `physical_character` ADD CONSTRAINT `physical_character_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `Biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `non_physical_character` ADD CONSTRAINT `non_physical_character_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `non_physical_character` ADD CONSTRAINT `non_physical_character_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `Biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `family_member` ADD CONSTRAINT `family_member_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `family_member` ADD CONSTRAINT `family_member_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `Biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `taaruf_gold` ADD CONSTRAINT `taaruf_gold_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -568,12 +546,20 @@ ALTER TABLE `khitbah` ADD CONSTRAINT `khitbah_taarufId_fkey` FOREIGN KEY (`taaru
 ALTER TABLE `akad` ADD CONSTRAINT `akad_taarufId_fkey` FOREIGN KEY (`taarufId`) REFERENCES `taaruf`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `marriage_preparation` ADD CONSTRAINT `marriage_preparation_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `marriage_preparation` ADD CONSTRAINT `marriage_preparation_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `Biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `physical_criteria` ADD CONSTRAINT `physical_criteria_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
+<<<<<<< HEAD
+<<<<<<<< HEAD:prisma/migrations/20240627044033_init/migration.sql
+ALTER TABLE `ibadah` ADD CONSTRAINT `ibadah_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `Biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+========
+=======
+>>>>>>> 6304119848cca52228bb3d783f933d70dc0c73d3
 ALTER TABLE `ibadah` ADD CONSTRAINT `ibadah_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `non_physical_criteria` ADD CONSTRAINT `non_physical_criteria_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+<<<<<<< HEAD
+>>>>>>>> ea3e5c2 (-handle non physical criteria prisma table):prisma/migrations/20240627042448_init/migration.sql
+=======
+>>>>>>> 6304119848cca52228bb3d783f933d70dc0c73d3

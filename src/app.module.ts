@@ -38,6 +38,7 @@ import { FamilyMembersModule } from './family_members/family_members.module';
 import { MarriagePreparationModule } from './marriage_preparation/marriage_preparation.module';
 import { IbadahModule } from './ibadah/ibadah.module';
 import { PhysicalCriteriaModule } from './physical_criteria/physical_criteria.module';
+import { NonPhysicalCriteriaModule } from './non_physical_criteria/non_physical_criteria.module';
 
 @Module({
     imports: [
@@ -76,6 +77,7 @@ import { PhysicalCriteriaModule } from './physical_criteria/physical_criteria.mo
         MarriagePreparationModule,
         IbadahModule,
         PhysicalCriteriaModule,
+        NonPhysicalCriteriaModule,
     ],
 
     controllers: [AppController],
