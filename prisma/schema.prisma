@@ -169,8 +169,9 @@ model Biodata {
     non_physical_chars    NonPhysicalCharacter?
     marriage_preparations MarriagePreparation?
     family_members        FamilyMember[]
-    life_goals            LifeGoal?
     ibadah                Ibadah?
+    life_goals            LifeGoal?
+    PhysicalCriteria      PhysicalCriteria?
     dob                   DateTime              @db.Date
     birth_place           String                @db.VarChar(100)
     birth_order           Int                   @db.TinyInt
@@ -183,6 +184,8 @@ model Biodata {
     poligami_opinion      String                @db.Text
     createdAt             DateTime              @default(now())
     updatedAt             DateTime              @default(now()) @updatedAt
+
+    @@map("biodata")
 }
 
 enum ManhajStatus {
@@ -590,4 +593,25 @@ enum Cycle {
     kadang_kadang
     pernah_sekali
     belum_pernah
+}
+
+model PhysicalCriteria {
+    id                     String      @id @default(uuid())
+    height                 Int         @default(0) @db.Int
+    weight                 Int         @default(0) @db.Int
+    body_shape             body_shape?
+    skin_color             skin_color?
+    hair_color             hair_color?
+    hair_type              hair_type?
+    eye_color              eye_Color?
+    characteristic         Boolean     @default(false)
+    characteristic_detail  String?     @db.Text
+    medical_history        Boolean     @default(false)
+    medical_history_detail String?     @db.Text
+    Biodata                Biodata?    @relation(fields: [biodataId], references: [id])
+    biodataId              String?     @unique
+    createdAt              DateTime    @default(now())
+    updatedAt              DateTime    @default(now()) @updatedAt
+
+    @@map("physical_criteria")
 }
