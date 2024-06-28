@@ -169,9 +169,9 @@ model Biodata {
     non_physical_chars    NonPhysicalCharacter?
     marriage_preparations MarriagePreparation?
     family_members        FamilyMember[]
-    ibadah                Ibadah?
     life_goals            LifeGoal?
-    PhysicalCriteria      PhysicalCriteria?
+    ibadah                Ibadah?
+    physical_criteria     PhysicalCriteria?
     dob                   DateTime              @db.Date
     birth_place           String                @db.VarChar(100)
     birth_order           Int                   @db.TinyInt
@@ -286,8 +286,8 @@ model LifeGoal {
     wife_work_permit_desc  String?  @db.Text
     createdAt              DateTime @default(now())
     updatedAt              DateTime @default(now()) @updatedAt
-    Biodata                Biodata? @relation(fields: [biodataId], references: [id])
-    biodataId              String?  @unique
+    biodata                Biodata  @relation(fields: [biodataId], references: [id])
+    biodataId              String   @unique
 
     @@map("life_goal")
 }
@@ -307,8 +307,8 @@ model PhysicalCharacter {
     medical_history_detail String?     @db.Text
     createdAt              DateTime    @default(now())
     updatedAt              DateTime    @default(now()) @updatedAt
-    Biodata                Biodata?    @relation(fields: [biodataId], references: [id])
-    biodataId              String?     @unique
+    biodata                Biodata     @relation(fields: [biodataId], references: [id])
+    biodataId              String      @unique
 
     @@map("physical_character")
 }
@@ -367,16 +367,16 @@ model NonPhysicalCharacter {
     smoking             Boolean  @default(false)
     createdAt           DateTime @default(now())
     updatedAt           DateTime @default(now()) @updatedAt
-    biodata             Biodata? @relation(fields: [biodataId], references: [id])
-    biodataId           String?  @unique
+    biodata             Biodata  @relation(fields: [biodataId], references: [id])
+    biodataId           String   @unique
 
     @@map("non_physical_character")
 }
 
 model FamilyMember {
     id           String        @id @default(uuid())
-    Biodata      Biodata?      @relation(fields: [biodataId], references: [id])
-    biodataId    String?
+    biodata      Biodata       @relation(fields: [biodataId], references: [id])
+    biodataId    String
     relationship relationship?
     religion     religion?
     dob          String        @db.VarChar(20)
@@ -544,8 +544,8 @@ enum AprovalStatus {
 
 model MarriagePreparation {
     id        String   @id @default(uuid())
-    Biodata   Biodata? @relation(fields: [biodataId], references: [id])
-    biodataId String?  @unique
+    biodata   Biodata  @relation(fields: [biodataId], references: [id])
+    biodataId String   @unique
     visi      String?  @db.Text
     misi      String?  @db.Text
     mental    String?  @db.Text
@@ -572,7 +572,7 @@ model Ibadah {
     sedekah           Cycle?
     umrah             Cycle?
     haji              Boolean      @default(false)
-    biodata           Biodata?     @relation(fields: [biodataId], references: [id])
+    biodata           Biodata      @relation(fields: [biodataId], references: [id])
     biodataId         String       @unique
     createdAt         DateTime     @default(now())
     updatedAt         DateTime     @default(now()) @updatedAt
@@ -608,8 +608,8 @@ model PhysicalCriteria {
     characteristic_detail  String?     @db.Text
     medical_history        Boolean     @default(false)
     medical_history_detail String?     @db.Text
-    Biodata                Biodata?    @relation(fields: [biodataId], references: [id])
-    biodataId              String?     @unique
+    biodata                Biodata     @relation(fields: [biodataId], references: [id])
+    biodataId              String      @unique
     createdAt              DateTime    @default(now())
     updatedAt              DateTime    @default(now()) @updatedAt
 

@@ -13,13 +13,14 @@ import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { BiodataService } from 'src/biodata/biodata.service';
 import { CreatePhysicalCharDto } from './dto/create-physical_char.dto';
+import { Prisma } from '@prisma/client';
 
 @Controller('physical_chars')
 export class PhysicalCharsController {
     constructor(
         private readonly physicalCharsService: PhysicalCharsService,
         private readonly biodataService: BiodataService,
-    ) {}
+    ) { }
 
     @Roles(Role.Member)
     @Get()
@@ -50,7 +51,12 @@ export class PhysicalCharsController {
             // check apakah biodata!= null > jika masih null throw error
             if (!biodata) throw new BadRequestException();
 
-            return this.physicalCharsService.upsert(biodata.id, data);
+            const dataSave: Prisma.PhysicalCharacterCreateInput = {
+                ...data,
+                biodata: { connect: { id: biodata.id } }
+            };
+
+            return this.physicalCharsService.upsert(biodata.id, dataSave);
         } catch (error) {
             throw error;
         }

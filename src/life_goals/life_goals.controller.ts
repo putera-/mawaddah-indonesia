@@ -5,11 +5,12 @@ import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { BiodataService } from 'src/biodata/biodata.service';
 import { LifeGoalsService } from './life_goals.service';
+import { Prisma } from '@prisma/client';
 
 @Controller('life-goals')
 export class LifeGoalsController {
     constructor(
-        private readonly lifeGoalService: LifeGoalsService ,
+        private readonly lifeGoalService: LifeGoalsService,
         private readonly biodataService: BiodataService,
     ) { }
 
@@ -42,7 +43,12 @@ export class LifeGoalsController {
             // check apakah biodata!= null > jika masih null throw error
             if (!biodata) throw new BadRequestException();
 
-            return this.lifeGoalService.upsert(biodata.id, data);
+            const dataSave: Prisma.LifeGoalCreateInput = {
+                ...data,
+                biodata: { connect: { id: biodata.id } }
+            }
+
+            return this.lifeGoalService.upsert(biodata.id, dataSave);
         } catch (error) {
             throw error;
         }

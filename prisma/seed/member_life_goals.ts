@@ -122,7 +122,7 @@ export async function member_life_goals_seed(prisma: PrismaClient) {
             long_term_achievement: long_term_achievement,
             wife_work_permit: wife_work_permit,
             wife_work_permit_desc: wife_work_permit_desc,
-            Biodata: { connect: { id: bio.id } }
+            biodata: { connect: { id: bio.id } }
         };
         await prisma.lifeGoal.create({
             data

@@ -15,7 +15,7 @@ export interface Physical_char {
     medical_history_detail: string
     createdAt: Date
     updatedAt: Date
-    Biodata?: Biodata
+    biodata?: Biodata
     biodataId: string
 }
 

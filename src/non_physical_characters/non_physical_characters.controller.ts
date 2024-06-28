@@ -4,6 +4,7 @@ import { UpdateNonPhysicalCharacterDto } from './dto/update-non_physical_charact
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { BiodataService } from 'src/biodata/biodata.service';
+import { Prisma } from '@prisma/client';
 
 @Controller('non_physical_characters')
 export class NonPhysicalCharactersController {
@@ -36,9 +37,14 @@ export class NonPhysicalCharactersController {
             const biodata = await this.biodataService.findMe(userId)
 
             // check apakah biodata!= null > jika masih null throw error
-            if (!biodata) throw new BadRequestException()
+            if (!biodata) throw new BadRequestException();
 
-            return this.nonPhysicalService.upsert(biodata.id, data);
+            const dataSave: Prisma.NonPhysicalCharacterCreateInput = {
+                ...data,
+                biodata: { connect: { id: biodata.id } }
+            }
+
+            return this.nonPhysicalService.upsert(biodata.id, dataSave);
 
         } catch (error) {
             throw error;

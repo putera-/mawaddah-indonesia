@@ -5,6 +5,7 @@ import { UpdateMarriagePreparationDto } from './dto/update-marriage_preparation.
 import { BiodataService } from 'src/biodata/biodata.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
+import { Prisma } from '@prisma/client';
 
 @Controller('marriage_preparation')
 export class MarriagePreparationController {
@@ -38,9 +39,14 @@ export class MarriagePreparationController {
             const biodata = await this.biodataService.findMe(userId)
 
             // check apakah biodata!= null > jika masih null throw error
-            if (!biodata) throw new BadRequestException()
+            if (!biodata) throw new BadRequestException();
 
-            return this.marriagePreparationService.upsert(biodata.id, data);
+            const dataSave: Prisma.MarriagePreparationCreateInput = {
+                ...data,
+                biodata: { connect: { id: biodata.id } }
+            }
+
+            return this.marriagePreparationService.upsert(biodata.id, dataSave);
 
         } catch (error) {
             throw error;

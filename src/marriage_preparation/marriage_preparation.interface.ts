@@ -2,7 +2,7 @@ import { Biodata } from "@prisma/client"
 
 export interface MarriagePreparation {
     id: string
-    Biodata?: Biodata
+    biodata?: Biodata
     biodataId: string
     visi?: string
     misi?: string

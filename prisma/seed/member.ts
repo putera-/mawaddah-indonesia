@@ -650,7 +650,7 @@ export async function memberSeed(prisma: PrismaClient) {
                     '/dummy/ikhwan_blurred_' + randomNumber + '_md.png',
             };
 
-            const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
+            const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
             {
                 motto: mottos[Math.floor(Math.random() * mottos.length)],
                 life_goal:
@@ -684,18 +684,6 @@ export async function memberSeed(prisma: PrismaClient) {
                 smoking: Math.random() < 0.5,
             };
 
-            const data_marriage_preparation: Prisma.MarriagePreparationCreateInput =
-            {
-                visi: visi2[Math.floor(Math.random() * visi2.length)],
-                misi: misi2[Math.floor(Math.random() * misi2.length)],
-                mental: mental2[Math.floor(Math.random() * mental2.length)],
-                mahar: mahar2[Math.floor(Math.random() * mahar2.length)],
-                cost: costString,
-                span_time:
-                    span_times[
-                    Math.floor(Math.random() * span_times.length)
-                    ],
-            };
 
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
@@ -845,7 +833,7 @@ export async function memberSeed(prisma: PrismaClient) {
                     '/dummy/akhwat_blurred_' + randomNumber + '_md.png',
             };
 
-            const data_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
+            const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
             {
                 motto: mottos[Math.floor(Math.random() * mottos.length)],
                 life_goal:
@@ -879,7 +867,7 @@ export async function memberSeed(prisma: PrismaClient) {
                 smoking: Math.random() < 0.5,
             };
 
-            const data_marriage_preparation: Prisma.MarriagePreparationCreateInput =
+            const data_marriage_preparation: Prisma.MarriagePreparationCreateWithoutBiodataInput =
             {
                 visi: visi2[Math.floor(Math.random() * visi2.length)],
                 misi: misi2[Math.floor(Math.random() * misi2.length)],

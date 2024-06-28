@@ -14,7 +14,7 @@ export interface Life_goal {
     wife_work_permit_desc?: string
     createdAt: Date
     updatedAt: Date
-    Biodata?: Biodata
+    biodata?: Biodata
     biodataId: string
 
 }

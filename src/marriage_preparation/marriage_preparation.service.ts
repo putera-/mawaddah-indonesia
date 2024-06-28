@@ -34,7 +34,7 @@ export class MarriagePreparationService {
         if (!data.marriage_preparations) {
             return this.prisma.marriagePreparation.create({
                 data: {
-                    Biodata: { connect: { id: biodataId } }
+                    biodata: { connect: { id: biodataId } }
                 }
             })
 

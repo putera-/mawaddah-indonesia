@@ -10,7 +10,7 @@ import { taaruf_goldSeed } from './seed/taaruf_gold';
 import { bookmarksSeed } from './seed/bookmark';
 import { taarufSeed } from './seed/taaruf';
 import { familyMembersSeed } from './seed/member_family';
-import { member_physical_character_seed } from './seed/member_physical_character';
+import { member_physical_character_seed } from './seed/member_physical_character_n_criteria';
 import { member_ibadah_seed } from './seed/member_ibadah';
 import { member_life_goals_seed } from './seed/member_life_goals';
 const prisma = new PrismaClient();

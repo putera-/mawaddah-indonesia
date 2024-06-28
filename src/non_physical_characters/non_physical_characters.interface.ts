@@ -14,6 +14,6 @@ export interface Non_physical_char {
     smoking: boolean
     createdAt: Date
     updatedAt: Date
-    Biodata?: Biodata
+    biodata?: Biodata
     biodataId: string
 }

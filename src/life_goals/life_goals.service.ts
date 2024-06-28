@@ -35,7 +35,7 @@ export class LifeGoalsService {
         if (!data.life_goals) {
             return this.prisma.lifeGoal.create({
                 data: {
-                    Biodata: { connect: { id: biodataId } }
+                    biodata: { connect: { id: biodataId } }
                 }
             })
 

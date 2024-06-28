@@ -2,7 +2,7 @@ import { Biodata, relationship, religion } from "@prisma/client";
 
 export interface FamilyMember {
     id: string
-    Biodata: Biodata
+    biodata: Biodata
     biodataId: string
     relationship: relationship
     religion: religion

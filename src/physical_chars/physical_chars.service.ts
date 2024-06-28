@@ -33,7 +33,7 @@ export class PhysicalCharsService {
         if (!data.physical_characters) {
             return this.prisma.physicalCharacter.create({
                 data: {
-                    Biodata: { connect: { id: biodataId } }
+                    biodata: { connect: { id: biodataId } }
                 }
             })
 

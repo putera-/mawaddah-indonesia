@@ -4,7 +4,7 @@ import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class PhysicalCriteriaService {
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService) { }
 
     async upsert(biodataId: string, data: Prisma.PhysicalCriteriaCreateInput) {
         return this.prisma.physicalCriteria.upsert({
@@ -31,7 +31,7 @@ export class PhysicalCriteriaService {
         if (!data.physical_criteria) {
             return this.prisma.physicalCriteria.create({
                 data: {
-                    Biodata: { connect: { id: biodataId } },
+                    biodata: { connect: { id: biodataId } },
                 },
             });
         }

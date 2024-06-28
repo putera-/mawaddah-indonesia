@@ -4,7 +4,7 @@ import { Ibadah, Prisma } from '@prisma/client';
 
 @Injectable()
 export class IbadahService {
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService) { }
 
     async upsert(biodataId: string, data: Prisma.IbadahCreateInput) {
         return this.prisma.ibadah.upsert({

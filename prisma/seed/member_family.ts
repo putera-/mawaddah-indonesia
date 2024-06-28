@@ -81,7 +81,7 @@ export async function familyMembersSeed(prisma: PrismaClient) {
                     job: faker.helpers.arrayElement(jobs),
                     education: faker.helpers.arrayElement(education),
                     is_alive: faker.helpers.arrayElement(is_alive),
-                    Biodata: {
+                    biodata: {
                         connect: {
                             id: bio.id
                         }

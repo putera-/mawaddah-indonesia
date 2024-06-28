@@ -16,13 +16,15 @@ import { BiodataService } from 'src/biodata/biodata.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { UpdatePhysicalCriteriaDto } from './dto/update-physical_criteria.dto';
+import { connect } from 'http2';
+import { Prisma } from '@prisma/client';
 
 @Controller('physical-criteria')
 export class PhysicalCriteriaController {
     constructor(
         private readonly physicalCriteriaService: PhysicalCriteriaService,
         private readonly biodataService: BiodataService,
-    ) {}
+    ) { }
     @Roles(Role.Member)
     @Get()
     async findOne(@Request() req: any) {
@@ -52,7 +54,12 @@ export class PhysicalCriteriaController {
             // check apakah biodata!= null > jika masih null throw error
             if (!biodata) throw new BadRequestException();
 
-            return this.physicalCriteriaService.upsert(biodata.id, data);
+            const dataSave: Prisma.PhysicalCriteriaCreateInput = {
+                ...data,
+                biodata: { connect: { id: biodata.id } }
+            }
+
+            return this.physicalCriteriaService.upsert(biodata.id, dataSave);
         } catch (error) {
             throw error;
         }
