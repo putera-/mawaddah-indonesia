@@ -12,19 +12,19 @@ import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { IbadahService } from './ibadah.service';
 import { UpdateIbadahDto } from './dto/update-ibadah.dto';
-import { connect } from 'http2';
 import { Prisma } from '@prisma/client';
+import { Ibadah } from './ibadah.interface';
 
 @Controller('ibadah')
 export class IbadahController {
     constructor(
         private readonly ibadahService: IbadahService,
         private readonly biodataService: BiodataService,
-    ) { }
+    ) {}
 
     @Roles(Role.Member)
     @Get()
-    async findOne(@Request() req: any) {
+    async findOne(@Request() req: any): Promise<Ibadah> {
         const userId = req.user.id;
         try {
             const biodata = await this.biodataService.findMe(userId);
@@ -46,7 +46,7 @@ export class IbadahController {
     async update(
         @Request() req: any,
         @Body(new ValidationPipe()) data: UpdateIbadahDto,
-    ) {
+    ): Promise<Ibadah> {
         const userId = req.user.id;
         try {
             const biodata = await this.biodataService.findMe(userId);
@@ -59,8 +59,8 @@ export class IbadahController {
 
             const dataSave: Prisma.IbadahCreateInput = {
                 ...data,
-                biodata: { connect: { id: biodata.id } }
-            }
+                biodata: { connect: { id: biodata.id } },
+            };
 
             return this.ibadahService.upsert(biodata.id, dataSave);
         } catch (error) {

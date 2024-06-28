@@ -1,18 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { Ibadah, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import { Ibadah } from './ibadah.interface';
 
 @Injectable()
 export class IbadahService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaService) {}
 
-    async upsert(biodataId: string, data: Prisma.IbadahCreateInput) {
+    async upsert(
+        biodataId: string,
+        data: Prisma.IbadahCreateInput,
+    ): Promise<Ibadah> {
         return this.prisma.ibadah.upsert({
             where: { biodataId },
             update: data,
             create: data,
         });
     }
+
     async findOne(userId: string, biodataId: string): Promise<Ibadah> {
         const data = await this.prisma.biodata.findFirst({
             where: {
