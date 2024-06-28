@@ -25,11 +25,11 @@ export class NonPhysicalCharactersService {
             },
             select: {
                 id: true,
-                non_physical_chars: true
+                non_physical_characters: true
             }
         })
 
-        if (!data.non_physical_chars) {
+        if (!data.non_physical_characters) {
             return this.prisma.nonPhysicalCharacter.create({
                 data: {
                     biodata: { connect: { id: biodataId } }
@@ -38,7 +38,7 @@ export class NonPhysicalCharactersService {
 
         }
 
-        return data.non_physical_chars;
+        return data.non_physical_characters;
 
     }
 

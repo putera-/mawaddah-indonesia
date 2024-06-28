@@ -12,13 +12,14 @@ import { UpdateNonPhysicalCriteriaDto } from './dto/update-non_physical_criteria
 import { BiodataService } from 'src/biodata/biodata.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
+import { Prisma } from '@prisma/client';
 
 @Controller('non_physical_criteria')
 export class NonPhysicalCriteriaController {
     constructor(
         private readonly nonPhysicalCriteriaService: NonPhysicalCriteriaService,
         private readonly biodataService: BiodataService,
-    ) {}
+    ) { }
 
     @Roles(Role.Member)
     @Get()
@@ -49,7 +50,12 @@ export class NonPhysicalCriteriaController {
             // check apakah biodata!= null > jika masih null throw error
             if (!biodata) throw new BadRequestException();
 
-            return this.nonPhysicalCriteriaService.upsert(biodata.id, data);
+            const dataSave: Prisma.NonPhysicalCriteriaCreateInput = {
+                ...data,
+                biodata: { connect: { id: biodata.id } }
+            }
+
+            return this.nonPhysicalCriteriaService.upsert(biodata.id, dataSave);
         } catch (error) {
             throw error;
         }

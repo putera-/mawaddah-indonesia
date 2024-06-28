@@ -18,6 +18,17 @@ const select = {
     createdAt: true,
 };
 
+const includeBiodata = {
+    physical_characters: true,
+    non_physical_characters: true,
+    marriage_preparations: true,
+    family_members: true,
+    life_goals: true,
+    ibadah: true,
+    physical_criteria: true,
+    non_physical_criteria: true,
+}
+
 @Injectable()
 export class CandidateService {
     constructor(
@@ -41,16 +52,7 @@ export class CandidateService {
             },
             include: {
                 biodata: {
-                    include: {
-                        physical_characters: true,
-                        non_physical_chars: true,
-                        marriage_preparations: true,
-                        family_members: true,
-                        life_goals: true,
-                        ibadah: true,
-                        physical_criteria: true,
-                        non_physical_criteria: true,
-                    },,
+                    include: includeBiodata,
                 },
                 Education: true,
                 Skill: true,
@@ -93,16 +95,7 @@ export class CandidateService {
             },
             include: {
                 biodata: {
-                    include: {
-                        physical_characters: true,
-                        non_physical_chars: true,
-                        marriage_preparations: true,
-                        life_goals: true,
-                        family_members: true,
-                        ibadah: true,
-                        physical_criteria: true,
-                        non_physical_criteria: true,
-                    },,
+                    include: includeBiodata,
                 },
                 Education: true,
                 Skill: true,
@@ -180,15 +173,7 @@ export class CandidateService {
             },
             include: {
                 biodata: {
-                    include: {
-                        physical_characters: true,
-                        non_physical_chars: true,
-                        marriage_preparations: true,
-                        family_members: true,
-                        ibadah: true,
-                        physical_criteria: true,
-                        non_physical_criteria: true,
-                    },
+                    include: includeBiodata,
                 },
                 Education: true,
                 Skill: { select: { title: true } },
@@ -271,10 +256,7 @@ export class CandidateService {
                 Hobby: { select: { title: true } },
                 Married_goal: { select: { title: true } },
                 biodata: {
-                    include: {
-                        physical_characters: true,
-                        non_physical_chars: true,
-                    },
+                    include: includeBiodata,
                 },
             },
             orderBy: {
@@ -311,7 +293,7 @@ export class CandidateService {
                 biodata: {
                     include: {
                         physical_characters: true,
-                        non_physical_chars: true,
+                        non_physical_characters: true,
                     },
                 },
             },

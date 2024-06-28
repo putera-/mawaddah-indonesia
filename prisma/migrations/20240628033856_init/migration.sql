@@ -437,7 +437,7 @@ CREATE TABLE `ibadah` (
     `sedekah` ENUM('rutin', 'kadang_kadang', 'pernah_sekali', 'belum_pernah') NULL,
     `umrah` ENUM('rutin', 'kadang_kadang', 'pernah_sekali', 'belum_pernah') NULL,
     `haji` BOOLEAN NOT NULL DEFAULT false,
-    `biodataId` VARCHAR(191) NULL,
+    `biodataId` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -480,7 +480,7 @@ CREATE TABLE `non_physical_criteria` (
     `ethnic` VARCHAR(100) NULL,
     `job` VARCHAR(100) NULL,
     `other` TEXT NULL,
-    `biodataId` VARCHAR(191) NULL,
+    `biodataId` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `non_physical_criteria_biodataId_key`(`biodataId`),
     PRIMARY KEY (`id`)
@@ -571,9 +571,10 @@ ALTER TABLE `akad` ADD CONSTRAINT `akad_taarufId_fkey` FOREIGN KEY (`taarufId`) 
 ALTER TABLE `marriage_preparation` ADD CONSTRAINT `marriage_preparation_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `physical_criteria` ADD CONSTRAINT `physical_criteria_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
-ALTER TABLE `ibadah` ADD CONSTRAINT `ibadah_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `ibadah` ADD CONSTRAINT `ibadah_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `non_physical_criteria` ADD CONSTRAINT `non_physical_criteria_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `physical_criteria` ADD CONSTRAINT `physical_criteria_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `non_physical_criteria` ADD CONSTRAINT `non_physical_criteria_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

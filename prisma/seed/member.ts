@@ -703,7 +703,7 @@ export async function memberSeed(prisma: PrismaClient) {
                         address_town: provinces[randomProvinceIndex1].name,
                         address_province: provinces[randomProvinceIndex].name,
                         hometown_province: provinces[randomProvinceIndex2].name,
-                        non_physical_chars: {
+                        non_physical_characters: {
                             create: data_non_physical_character,
                         },
                         ethnic: sukuIndonesia[
@@ -899,7 +899,7 @@ export async function memberSeed(prisma: PrismaClient) {
                         address_town: provinces[randomProvinceIndex1].name,
                         address_province: provinces[randomProvinceIndex].name,
                         hometown_province: provinces[randomProvinceIndex2].name,
-                        non_physical_chars: {
+                        non_physical_characters: {
                             create: data_non_physical_character,
                         },
                         marriage_preparations: {
