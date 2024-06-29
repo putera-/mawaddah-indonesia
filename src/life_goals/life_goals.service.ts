@@ -20,8 +20,6 @@ export class LifeGoalsService {
     }
 
     async findOne(userId: string, biodataId: string): Promise<LifeGoal> {
-        //TODO insert data dummy jika belum punya life_goal
-
         const data = await this.prisma.biodata.findFirst({
             where: {
                 userId

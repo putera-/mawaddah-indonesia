@@ -21,7 +21,7 @@ export class CandidateController {
         private readonly userService: UsersService,
         private Prisma: PrismaService,
         private readonly biodataService: BiodataService,
-    ) { }
+    ) {}
 
     @Roles(Role.Member)
     @Get('new')
@@ -40,7 +40,7 @@ export class CandidateController {
             const candidate = await this.candidateService.findNew(
                 user.gender,
                 +page || 1,
-                +limit || 10,
+                +limit || 0,
             );
             for (const c of candidate.data) {
                 this.userService.formatGray(c);
@@ -62,7 +62,6 @@ export class CandidateController {
     //     }
     // }
 
-
     @Roles(Role.Member)
     @Get('suggestion')
     async findSuggestion2(
@@ -73,7 +72,10 @@ export class CandidateController {
         try {
             const userBiodata = await this.biodataService.findMe(req.user.id);
 
-            return await this.candidateService.getSimiliar2(req.user.id, userBiodata);
+            return await this.candidateService.getSimiliar2(
+                req.user.id,
+                userBiodata,
+            );
         } catch (error) {
             throw error;
         }
@@ -89,7 +91,12 @@ export class CandidateController {
         try {
             const userBiodata = await this.biodataService.findMe(req.user.id);
 
-            return await this.candidateService.getSimiliar2(req.user.id, userBiodata, 1, 14);
+            return await this.candidateService.getSimiliar2(
+                req.user.id,
+                userBiodata,
+                1,
+                14,
+            );
         } catch (error) {
             throw error;
         }
@@ -104,8 +111,6 @@ export class CandidateController {
             throw error;
         }
     }
-
-
 
     // @Roles(Role.Member)
     // @Get('suggestion_old')
@@ -147,7 +152,6 @@ export class CandidateController {
     //         throw error;
     //     }
     // }
-
 
     // @Roles(Role.Member)
     // @Get('you-may-like-old')
