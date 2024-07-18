@@ -651,38 +651,38 @@ export async function memberSeed(prisma: PrismaClient) {
             };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
-                {
-                    motto: mottos[Math.floor(Math.random() * mottos.length)],
-                    life_goal:
-                        life_goals[
-                            Math.floor(Math.random() * life_goals.length)
-                        ],
-                    hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
-                    spare_time_activity:
-                        spare_time_activities[
-                            Math.floor(
-                                Math.random() * spare_time_activities.length,
-                            )
-                        ],
-                    positive_traits:
-                        positive_traits[
-                            Math.floor(Math.random() * positive_traits.length)
-                        ],
-                    negative_traits:
-                        negative_traits[
-                            Math.floor(Math.random() * negative_traits.length)
-                        ],
-                    liked_things:
-                        liked_things[
-                            Math.floor(Math.random() * liked_things.length)
-                        ],
-                    unliked_things:
-                        unliked_things[
-                            Math.floor(Math.random() * unliked_things.length)
-                        ],
-                    drink_alcohol: Math.random() < 0.5,
-                    smoking: Math.random() < 0.5,
-                };
+            {
+                motto: mottos[Math.floor(Math.random() * mottos.length)],
+                life_goal:
+                    life_goals[
+                    Math.floor(Math.random() * life_goals.length)
+                    ],
+                hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
+                spare_time_activity:
+                    spare_time_activities[
+                    Math.floor(
+                        Math.random() * spare_time_activities.length,
+                    )
+                    ],
+                positive_traits:
+                    positive_traits[
+                    Math.floor(Math.random() * positive_traits.length)
+                    ],
+                negative_traits:
+                    negative_traits[
+                    Math.floor(Math.random() * negative_traits.length)
+                    ],
+                liked_things:
+                    liked_things[
+                    Math.floor(Math.random() * liked_things.length)
+                    ],
+                unliked_things:
+                    unliked_things[
+                    Math.floor(Math.random() * unliked_things.length)
+                    ],
+                drink_alcohol: Math.random() < 0.5,
+                smoking: Math.random() < 0.5,
+            };
 
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
@@ -693,7 +693,7 @@ export async function memberSeed(prisma: PrismaClient) {
                         bio:
                             'Assalamualaikum, ukhti. ' +
                             biography[
-                                Math.floor(Math.random() * biography.length)
+                            Math.floor(Math.random() * biography.length)
                             ],
                         phone: '+628123456789',
                         company: 'Al Bashiroh Corp',
@@ -719,19 +719,19 @@ export async function memberSeed(prisma: PrismaClient) {
                         address_zip_code: Math.floor(Math.random() * 100),
                         poligami_opinion:
                             poligamiOpinions[
-                                Math.floor(
-                                    Math.random() * poligamiOpinions.length,
-                                )
+                            Math.floor(
+                                Math.random() * poligamiOpinions.length,
+                            )
                             ],
                         marriage_status:
                             marriedStatus[
-                                Math.floor(Math.random() * marriedStatus.length)
+                            Math.floor(Math.random() * marriedStatus.length)
                             ],
                         marriage_permission:
                             marriagePermissions[
-                                Math.floor(
-                                    Math.random() * marriagePermissions.length,
-                                )
+                            Math.floor(
+                                Math.random() * marriagePermissions.length,
+                            )
                             ],
                     },
                 };
@@ -789,60 +789,60 @@ export async function memberSeed(prisma: PrismaClient) {
                 email,
                 firstname,
                 lastname: faker.person.lastName('female'),
-                avatar: '/dummy/akhwat_' + randomNumber + '_lg.png',
-                avatar_md: '/dummy/akhwat_' + randomNumber + '_md.png',
+                avatar: '/dummy/akhwat_' + randomNumber + '_lg.jpg',
+                avatar_md: '/dummy/akhwat_' + randomNumber + '_md.jpg',
                 blurred_avatar:
-                    '/dummy/akhwat_blurred_' + randomNumber + '_lg.png',
+                    '/dummy/akhwat_blurred_' + randomNumber + '_lg.jpg',
                 blurred_avatar_md:
-                    '/dummy/akhwat_blurred_' + randomNumber + '_md.png',
+                    '/dummy/akhwat_blurred_' + randomNumber + '_md.jpg',
             };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
-                {
-                    motto: mottos[Math.floor(Math.random() * mottos.length)],
-                    life_goal:
-                        life_goals[
-                            Math.floor(Math.random() * life_goals.length)
-                        ],
-                    hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
-                    spare_time_activity:
-                        spare_time_activities[
-                            Math.floor(
-                                Math.random() * spare_time_activities.length,
-                            )
-                        ],
-                    positive_traits:
-                        positive_traits[
-                            Math.floor(Math.random() * positive_traits.length)
-                        ],
-                    negative_traits:
-                        negative_traits[
-                            Math.floor(Math.random() * negative_traits.length)
-                        ],
-                    liked_things:
-                        liked_things[
-                            Math.floor(Math.random() * liked_things.length)
-                        ],
-                    unliked_things:
-                        unliked_things[
-                            Math.floor(Math.random() * unliked_things.length)
-                        ],
-                    drink_alcohol: Math.random() < 0.5,
-                    smoking: Math.random() < 0.5,
-                };
+            {
+                motto: mottos[Math.floor(Math.random() * mottos.length)],
+                life_goal:
+                    life_goals[
+                    Math.floor(Math.random() * life_goals.length)
+                    ],
+                hobby: hobbies[Math.floor(Math.random() * hobbies.length)],
+                spare_time_activity:
+                    spare_time_activities[
+                    Math.floor(
+                        Math.random() * spare_time_activities.length,
+                    )
+                    ],
+                positive_traits:
+                    positive_traits[
+                    Math.floor(Math.random() * positive_traits.length)
+                    ],
+                negative_traits:
+                    negative_traits[
+                    Math.floor(Math.random() * negative_traits.length)
+                    ],
+                liked_things:
+                    liked_things[
+                    Math.floor(Math.random() * liked_things.length)
+                    ],
+                unliked_things:
+                    unliked_things[
+                    Math.floor(Math.random() * unliked_things.length)
+                    ],
+                drink_alcohol: Math.random() < 0.5,
+                smoking: Math.random() < 0.5,
+            };
 
             const data_marriage_preparation: Prisma.MarriagePreparationCreateWithoutBiodataInput =
-                {
-                    visi: visi2[Math.floor(Math.random() * visi2.length)],
-                    misi: misi2[Math.floor(Math.random() * misi2.length)],
-                    mental: mental2[Math.floor(Math.random() * mental2.length)],
-                    mahar: mahar2[Math.floor(Math.random() * mahar2.length)],
-                    cost: costString,
-                    span_time:
-                        span_times[
-                            Math.floor(Math.random() * span_times.length)
-                        ],
-                };
+            {
+                visi: visi2[Math.floor(Math.random() * visi2.length)],
+                misi: misi2[Math.floor(Math.random() * misi2.length)],
+                mental: mental2[Math.floor(Math.random() * mental2.length)],
+                mahar: mahar2[Math.floor(Math.random() * mahar2.length)],
+                cost: costString,
+                span_time:
+                    span_times[
+                    Math.floor(Math.random() * span_times.length)
+                    ],
+            };
 
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
@@ -853,7 +853,7 @@ export async function memberSeed(prisma: PrismaClient) {
                         bio:
                             'Assalamualaikum, akhi. ' +
                             biography[
-                                Math.floor(Math.random() * biography.length)
+                            Math.floor(Math.random() * biography.length)
                             ],
                         phone: '+628987654321',
                         company: 'Al Bashiroh Corp',
@@ -882,19 +882,19 @@ export async function memberSeed(prisma: PrismaClient) {
                         address_zip_code: Math.floor(Math.random() * 100),
                         poligami_opinion:
                             poligamiOpinions[
-                                Math.floor(
-                                    Math.random() * poligamiOpinions.length,
-                                )
+                            Math.floor(
+                                Math.random() * poligamiOpinions.length,
+                            )
                             ],
                         marriage_status:
                             marriedStatus[
-                                Math.floor(Math.random() * marriedStatus.length)
+                            Math.floor(Math.random() * marriedStatus.length)
                             ],
                         marriage_permission:
                             marriagePermissions[
-                                Math.floor(
-                                    Math.random() * marriagePermissions.length,
-                                )
+                            Math.floor(
+                                Math.random() * marriagePermissions.length,
+                            )
                             ],
                     },
                 };
