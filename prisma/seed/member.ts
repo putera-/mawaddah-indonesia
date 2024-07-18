@@ -733,44 +733,6 @@ export async function memberSeed(prisma: PrismaClient) {
                             ],
                     },
                 };
-                data.Skill = {
-                    createMany: {
-                        data: getRandomOfObjectArray(skillSet),
-                    },
-                };
-                data.Hobby = {
-                    createMany: {
-                        data: getRandomOfObjectArray(hobiList),
-                    },
-                };
-                data.Education = {
-                    createMany: {
-                        data: [
-                            {
-                                institution_name: 'Universitas Al-Bashiroh',
-                                degree: 'Bachelor',
-                                major: 'Japanese Literature',
-                                city: 'Jakarta',
-                                startYear: 2022,
-                            },
-                            {
-                                institution_name: 'SMA Al-Bashiroh',
-                                city: 'Jakarta',
-                                startYear: 2019,
-                            },
-                            {
-                                institution_name: 'SMP Al-Bashiroh',
-                                city: 'Jakarta',
-                                startYear: 2016,
-                            },
-                        ],
-                    },
-                };
-                data.Married_goal = {
-                    createMany: {
-                        data: getRandomOfObjectArray(married_goals),
-                    },
-                };
                 data.auth = {
                     createMany: {
                         data: getRandomAuths(),
@@ -929,44 +891,6 @@ export async function memberSeed(prisma: PrismaClient) {
                                 Math.random() * marriagePermissions.length,
                             )
                             ],
-                    },
-                };
-                data.Skill = {
-                    createMany: {
-                        data: getRandomOfObjectArray(skillSet),
-                    },
-                };
-                data.Hobby = {
-                    createMany: {
-                        data: getRandomOfObjectArray(hobiList),
-                    },
-                };
-                data.Education = {
-                    createMany: {
-                        data: [
-                            {
-                                institution_name: 'Universitas Al-Bashiroh',
-                                degree: 'Bachelor',
-                                major: 'Japanese Literature',
-                                city: 'Jakarta',
-                                startYear: 2022,
-                            },
-                            {
-                                institution_name: 'SMA Al-Bashiroh',
-                                city: 'Jakarta',
-                                startYear: 2019,
-                            },
-                            {
-                                institution_name: 'SMP Al-Bashiroh',
-                                city: 'Jakarta',
-                                startYear: 2016,
-                            },
-                        ],
-                    },
-                };
-                data.Married_goal = {
-                    createMany: {
-                        data: getRandomOfObjectArray(married_goals),
                     },
                 };
                 data.auth = {
