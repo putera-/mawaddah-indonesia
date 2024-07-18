@@ -15,8 +15,6 @@ import { RolesGuard } from './roles/roles.guard';
 import { EducationsModule } from './educations/educations.module';
 import { UserSuperadminModule } from './user-superadmin/user-superadmin.module';
 import { UserAdminModule } from './user-admin/user-admin.module';
-import { HobbiesModule } from './hobbies/hobbies.module';
-import { MarriedGoalsModule } from './married_goals/married_goals.module';
 import { LifeGoalsModule } from './life_goals/life_goals.module';
 import { PhysicalCharsModule } from './physical_chars/physical_chars.module';
 import { BiodataModule } from './biodata/biodata.module';
@@ -24,7 +22,6 @@ import { ProvinceModule } from './province/province.module';
 import { BookmarkModule } from './bookmark/bookmark.module';
 import { CandidateModule } from './candidate/candidate.module';
 import { ResetPasswordModule } from './reset_password/reset_password.module';
-import { SkillsModule } from './skills/skills.module';
 import { ActivationModule } from './activation/activation.module';
 import { TaarufGoldModule } from './taaruf_gold/taaruf_gold.module';
 import { PaymentModule } from './payment/payment.module';
@@ -53,9 +50,6 @@ import { NonPhysicalCriteriaModule } from './non_physical_criteria/non_physical_
         EducationsModule,
         UserSuperadminModule,
         UserAdminModule,
-        HobbiesModule,
-        SkillsModule,
-        MarriedGoalsModule,
         LifeGoalsModule,
         PhysicalCharsModule,
         BiodataModule,
