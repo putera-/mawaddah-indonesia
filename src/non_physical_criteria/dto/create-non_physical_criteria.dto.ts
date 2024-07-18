@@ -1,5 +1,5 @@
 import { MarriageStatus } from '@prisma/client';
-import { IsNumber, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsString } from 'class-validator';
 
 export class CreateNonPhysicalCriteriaDto {
     @IsNumber()
@@ -11,7 +11,7 @@ export class CreateNonPhysicalCriteriaDto {
     @IsString()
     education: string;
 
-    @IsString()
+    @IsEnum(MarriageStatus)
     married_status: MarriageStatus;
 
     @IsString()

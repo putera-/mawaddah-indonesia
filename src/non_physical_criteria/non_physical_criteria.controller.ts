@@ -14,7 +14,7 @@ import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { Prisma } from '@prisma/client';
 
-@Controller('non_physical_criteria')
+@Controller('non-physical-criteria')
 export class NonPhysicalCriteriaController {
     constructor(
         private readonly nonPhysicalCriteriaService: NonPhysicalCriteriaService,
