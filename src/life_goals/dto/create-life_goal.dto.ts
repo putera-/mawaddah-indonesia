@@ -1,4 +1,4 @@
-import { IsString } from "class-validator";
+import { IsBoolean, IsString } from "class-validator";
 
 export class CreateLifeGoalDto {
     @IsString()
@@ -25,7 +25,7 @@ export class CreateLifeGoalDto {
     @IsString()
     long_term_achievement: string
 
-    @IsString()
+    @IsBoolean()
     wife_work_permit: boolean
 
     @IsString()
