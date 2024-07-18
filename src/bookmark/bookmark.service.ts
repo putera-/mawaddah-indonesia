@@ -52,11 +52,7 @@ export class BookmarkService {
                 include: {
                     candidate: {
                         include: {
-                            biodata: true,
-                            Education: true,
-                            Skill: true,
-                            Hobby: true,
-                            Married_goal: true,
+                            biodata: true
                         }
                     }
                 }

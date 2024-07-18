@@ -30,14 +30,16 @@ export class EducationsService {
     ): Promise<Education> {
         const user = await this.prisma.user.findUnique({
             where: { id },
-            select: { id: true, taaruf_status: true },
+            include: {
+                biodata: true
+            }
         });
 
         if (user.taaruf_status !== TaarufStatus.OPEN)
             throw new ForbiddenException(`Taaruf is not open or pending`);
 
         return this.prisma.education.create({
-            data: { ...data, User: { connect: { id } } },
+            data: { ...data, Biodata: { connect: { id: user.biodata.id } } },
             select,
         });
     }

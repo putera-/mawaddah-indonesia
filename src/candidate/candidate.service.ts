@@ -34,7 +34,7 @@ export class CandidateService {
     constructor(
         private Prisma: PrismaService,
         private User: UsersService,
-    ) {}
+    ) { }
 
     // TODO
     // buang limit & skip
@@ -62,10 +62,6 @@ export class CandidateService {
                 biodata: {
                     include: includeBiodata,
                 },
-                Education: true,
-                Skill: true,
-                Hobby: true,
-                Married_goal: true,
                 auth: {
                     select: { createdAt: true },
                     orderBy: { createdAt: 'desc' },
@@ -107,10 +103,6 @@ export class CandidateService {
                 biodata: {
                     include: includeBiodata,
                 },
-                Education: true,
-                Skill: true,
-                Hobby: true,
-                Married_goal: true,
                 auth: {
                     select: { createdAt: true },
                     orderBy: { createdAt: 'desc' },
@@ -148,10 +140,6 @@ export class CandidateService {
                 biodata: {
                     include: includeBiodata,
                 },
-                Education: true,
-                Skill: { select: { title: true } },
-                Hobby: { select: { title: true } },
-                Married_goal: { select: { title: true } },
                 auth: {
                     select: { createdAt: true },
                     orderBy: { createdAt: 'desc' },
@@ -234,9 +222,6 @@ export class CandidateService {
             },
             select: {
                 ...select,
-                Skill: { select: { title: true } },
-                Hobby: { select: { title: true } },
-                Married_goal: { select: { title: true } },
                 biodata: {
                     include: includeBiodata,
                 },
@@ -270,9 +255,6 @@ export class CandidateService {
             },
             select: {
                 ...select,
-                Skill: { select: { title: true } },
-                Hobby: { select: { title: true } },
-                Married_goal: { select: { title: true } },
                 biodata: {
                     include: {
                         physical_characters: true,
