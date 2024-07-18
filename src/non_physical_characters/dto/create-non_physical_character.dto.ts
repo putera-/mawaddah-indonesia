@@ -1,4 +1,4 @@
-import { IsBoolean, IsEmpty, IsOptional, IsString, MinLength } from "class-validator"
+import { IsBoolean, IsString, MinLength } from "class-validator"
 
 export class CreateNonPhysicalCharacterDto {
     @IsString()

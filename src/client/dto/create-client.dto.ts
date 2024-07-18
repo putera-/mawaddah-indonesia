@@ -1,10 +1,10 @@
-import { IsOptional, IsPhoneNumber, IsString, Length, MinLength} from "class-validator";
+import { IsOptional, IsString, Length, MinLength } from "class-validator";
 
 export class CreateClientDto {
     @IsString()
     @Length(1, 100)
     name: string;
-    
+
     @IsString()
     @Length(1, 20)
     phone: string;
@@ -20,15 +20,15 @@ export class CreateClientDto {
     @IsString()
     @IsOptional()
     taaruf_muqoddimah: string;
-    
+
     @IsString()
     @IsOptional()
     login_muqoddimah: string;
-    
+
     @IsString()
     @IsOptional()
     signup_muqoddimah: string;
-    
+
     @IsString()
     @IsOptional()
     youtube: string;
@@ -36,11 +36,11 @@ export class CreateClientDto {
     @IsString()
     @IsOptional()
     facebook: string;
-    
+
     @IsString()
     @IsOptional()
     twitter: string;
-    
+
     @IsString()
     @IsOptional()
     tiktok: string;

@@ -25,15 +25,19 @@ export class CreateBiodatumDto {
     @IsOptional()
     company: string;
 
+    // FIXME enum
     @IsString()
     manhaj: ManhajStatus;
 
+    // FIXME enum
     @IsString()
     gender: Gender;
 
+    // FIXME enum
     @IsString()
     marriage_status: MarriageStatus;
 
+    // FIXME enum
     @IsString()
     marriage_permission: MarriagePermission;
 
