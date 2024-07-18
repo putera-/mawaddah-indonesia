@@ -27,14 +27,14 @@ const includeBiodata = {
     ibadah: true,
     physical_criteria: true,
     non_physical_criteria: true,
-}
+};
 
 @Injectable()
 export class CandidateService {
     constructor(
         private Prisma: PrismaService,
         private User: UsersService,
-    ) { }
+    ) {}
 
     // TODO
     // buang limit & skip
@@ -42,9 +42,9 @@ export class CandidateService {
     async findNew(
         gender: any,
         page: number = 1,
-        limit: number = 10,
+        limit: number = 0,
     ): Promise<Pagination<User[]>> {
-        const skip = (page - 1) * limit;
+        // const skip = (page - 1) * limit;
 
         const oppositeGender = this.getOppositeGender(gender);
         const newUsers = await this.Prisma.user.findMany({
@@ -52,6 +52,10 @@ export class CandidateService {
                 biodata: {
                     id: { not: undefined },
                     gender: oppositeGender,
+                    // where the biodata is created less than 30 days
+                    createdAt: {
+                        gt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+                    },
                 },
             },
             include: {
@@ -73,16 +77,16 @@ export class CandidateService {
                     createdAt: 'desc',
                 },
             },
-            take: limit,
-            skip,
+            // take: limit,
+            // skip,
         });
 
         return {
             data: newUsers,
             total: 0,
             page: page,
-            maxPages: Math.ceil(0 / limit),
-            limit: limit,
+            maxPages: 1,
+            limit: newUsers.length,
         };
     }
 
@@ -191,19 +195,26 @@ export class CandidateService {
         };
     }
 
-
     // TODO update similiarity
     calculateSimilarity(userBiodata: Biodata, candidateBiodata: Biodata) {
         let score = 0;
-
+        if (userBiodata.manhaj == candidateBiodata.manhaj) score += 15;
+        // town address
         if (userBiodata.address_town == candidateBiodata.address_town)
             score += 15;
+        // province address
         if (userBiodata.address_province == candidateBiodata.address_province)
             score += 5;
+        // province hometown
         if (userBiodata.hometown_province == candidateBiodata.hometown_province)
             score += 10;
+        // user ethnic
         if (userBiodata.ethnic == candidateBiodata.ethnic) score += 10;
-
+        // user zipcore address
+        if (userBiodata.address_zip_code == candidateBiodata.address_zip_code)
+            score += 5;
+        if (userBiodata.poligami_opinion == candidateBiodata.poligami_opinion)
+            score += 15;
         return score;
     }
 
@@ -246,6 +257,7 @@ export class CandidateService {
             limit: +limit,
         };
     }
+
     async findLike(gender: any, page = '3', limit = '10') {
         const oppositeGender = this.getOppositeGender(gender);
         const numberSkip = +page - 1;
@@ -279,7 +291,6 @@ export class CandidateService {
         return mayLike;
         // return `This action returns a #${id} candidate`;
     }
-
 
     // getSimiliar(user: any, suggest: Record<string, any>[]) {
     //     for (const data of suggest) {

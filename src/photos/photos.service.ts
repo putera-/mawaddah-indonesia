@@ -27,7 +27,7 @@ export class PhotosService {
     }
     async blurringImage(size, buffer, filepath) {
         const resizedBuffer = await sharp(buffer, { animated: true })
-            .blur(50)
+            .blur(75)
             .resize(size)
             .toBuffer();
 

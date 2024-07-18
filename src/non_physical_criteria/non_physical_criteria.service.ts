@@ -23,8 +23,6 @@ export class NonPhysicalCriteriaService {
         userId: string,
         biodataId: string,
     ): Promise<NonPhysicalCriteria> {
-        //TODO insert data dummy jika belum punya physical_character
-
         const data = await this.prisma.biodata.findFirst({
             where: {
                 userId,
