@@ -1,49 +1,38 @@
 import { Cycle, ShalatFardu } from '@prisma/client';
-import { IsBoolean, IsString } from 'class-validator';
+import { IsBoolean, IsEnum } from 'class-validator';
 
 export class CreateIbadahDto {
-    // FIXME enum
-    @IsString()
+    @IsEnum(ShalatFardu)
     shalat_fardu: ShalatFardu;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(Cycle)
     shalat_rawatib: Cycle;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(Cycle)
     shalat_dhuha: Cycle;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(Cycle)
     shalat_tahajud: Cycle;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(Cycle)
     puasa_ramadhan: Cycle;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(Cycle)
     puasa_senin_kamis: Cycle;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(Cycle)
     puasa_daud: Cycle;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(Cycle)
     puasa_ayamul_bid: Cycle;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(Cycle)
     zakat: Cycle;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(Cycle)
     sedekah: Cycle;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(Cycle)
     umrah: Cycle;
 
     @IsBoolean()
