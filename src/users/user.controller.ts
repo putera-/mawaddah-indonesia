@@ -31,7 +31,7 @@ export class UsersController {
         try {
             const roles: RoleStatus[] = ['MEMBER'];
             limit = limit ? +limit : 10;
-            page = page ? +page : 10;
+            page = page ? +page : 1;
 
             return await this.userService.findAll(roles, limit, page);
         } catch (error) {
