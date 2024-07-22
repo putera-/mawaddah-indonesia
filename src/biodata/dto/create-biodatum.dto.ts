@@ -5,6 +5,7 @@ import {
     MarriageStatus,
 } from '@prisma/client';
 import {
+    IsEnum,
     IsISO8601,
     IsNumber,
     IsOptional,
@@ -25,20 +26,16 @@ export class CreateBiodatumDto {
     @IsOptional()
     company: string;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(ManhajStatus)
     manhaj: ManhajStatus;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(Gender)
     gender: Gender;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(MarriageStatus)
     marriage_status: MarriageStatus;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(MarriagePermission)
     marriage_permission: MarriagePermission;
 
     @IsISO8601()

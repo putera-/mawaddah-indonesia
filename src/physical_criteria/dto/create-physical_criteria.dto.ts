@@ -5,7 +5,7 @@ import {
     hair_type,
     skin_color,
 } from '@prisma/client';
-import { IsInt, IsString } from 'class-validator';
+import { IsEnum, IsInt } from 'class-validator';
 
 export class CreatePhysicalCriteriaDto {
     @IsInt()
@@ -14,23 +14,18 @@ export class CreatePhysicalCriteriaDto {
     @IsInt()
     weight: number;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(body_shape)
     body_shape: body_shape;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(skin_color)
     skin_color: skin_color;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(hair_color)
     hair_color: hair_color;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(hair_type)
     hair_type: hair_type;
 
-    // FIXME enum
-    @IsString()
+    @IsEnum(eye_Color)
     eye_color: eye_Color;
 }
