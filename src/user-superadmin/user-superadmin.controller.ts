@@ -17,7 +17,7 @@ import { Public } from 'src/auth/auth.metadata';
 import { UsersService } from 'src/users/user.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
-import { RoleStatus } from '@prisma/client';
+import { Prisma, RoleStatus } from '@prisma/client';
 
 @Controller('user-superadmin')
 export class UserSuperadminController {
@@ -38,7 +38,18 @@ export class UserSuperadminController {
 
             // set as superadmin
             data.role = 'SUPERADMIN';
-            return this.usersService.create(data);
+            const password = data.password
+            delete data.password
+            delete data.confirm_password
+            const dataUser: Prisma.UserCreateInput = {
+                ...data,
+                password: {
+                    create: {
+                        password
+                    }
+                }
+            }
+            return this.usersService.create(dataUser);
         } catch (error) {
             throw error;
         }
@@ -53,7 +64,18 @@ export class UserSuperadminController {
 
             // set as superadmin
             data.role = 'SUPERADMIN';
-            return this.usersService.create(data);
+            const password = data.password
+            delete data.password
+            delete data.confirm_password
+            const dataUser: Prisma.UserCreateInput = {
+                ...data,
+                password: {
+                    create: {
+                        password
+                    }
+                }
+            }
+            return this.usersService.create(dataUser);
         } catch (error) {
             throw error;
         }

@@ -10,7 +10,6 @@ export async function userSeed(prisma: PrismaClient) {
     {
         const superadmin = {
             lastname: 'So Super',
-            password,
             active: true,
             verified: true,
             avatar: '/dummy/abang.png',
@@ -26,6 +25,17 @@ export async function userSeed(prisma: PrismaClient) {
         for (let i = 0; i < 10; i++) {
             const email = `superadmin${i}@prisma.io`;
             const firstname = 'Bob' + i;
+            const data: Prisma.UserCreateInput = {
+                ...superadmin,
+                email,
+                firstname,
+                role: 'SUPERADMIN',
+                password: {
+                    create: {
+                        password
+                    }
+                }
+            }
             await prisma.user.upsert({
                 where: { email },
                 update: {
@@ -50,7 +60,6 @@ export async function userSeed(prisma: PrismaClient) {
     {
         const admin = {
             lastname: 'Admin',
-            password,
             active: true,
             verified: true,
             avatar: '/dummy/abang.png',
@@ -66,6 +75,17 @@ export async function userSeed(prisma: PrismaClient) {
         for (let i = 0; i < 10; i++) {
             const email = `admin${i}@prisma.io`;
             const firstname = 'Bob' + i;
+            const data: Prisma.UserCreateInput = {
+                ...admin,
+                email,
+                firstname,
+                role: 'ADMIN',
+                password: {
+                    create: {
+                        password
+                    }
+                }
+            }
             await prisma.user.upsert({
                 where: { email },
                 update: {

@@ -32,10 +32,11 @@ export class AuthService {
         email = email.toLowerCase();
         const user = await this.prisma.user.findFirst({
             where: { email, role: 'MEMBER' },
+            include: { password: true }
         });
         if (!user)
             throw new UnauthorizedException('Email atau password salah.');
-        const match = await bcrypt.compare(pass, user.password);
+        const match = await bcrypt.compare(pass, user.password.password);
         if (!match) {
             throw new UnauthorizedException('Email atau password salah.');
         }
@@ -48,9 +49,10 @@ export class AuthService {
                 email,
                 role: { in: ['ADMIN', 'SUPERADMIN'] },
             },
+            include: { password: true }
         });
         if (!user) throw new UnauthorizedException('Otentikasi tidak valid.');
-        const match = await bcrypt.compare(pass, user.password);
+        const match = await bcrypt.compare(pass, user.password.password);
         if (!match) {
             throw new UnauthorizedException('Otentikasi tidak valid.');
         }
@@ -125,8 +127,8 @@ export class AuthService {
             where: { id },
             data: { used: true, expiredAt: now },
         });
-        await this.prisma.user.update({
-            where: { id: user.id },
+        await this.prisma.password.update({
+            where: { userId: user.id },
             data: { password: data.password },
         });
     }

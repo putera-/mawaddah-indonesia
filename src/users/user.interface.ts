@@ -6,7 +6,7 @@ export interface User {
     email: string;
     firstname: string;
     lastname: string;
-    password?: string;
+    password?: Password;
     active: boolean;
     verified: boolean;
     avatar?: string;
@@ -25,4 +25,13 @@ export interface User {
     Taaruf_candidate?: Taaruf[]
     inTaaruf?: boolean
     auth?: AuthPartial[]
+}
+
+export interface Password {
+    id: string;
+    user?: User;
+    userId: string;
+    password: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }

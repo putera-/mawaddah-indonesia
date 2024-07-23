@@ -58,7 +58,6 @@ export class UsersService {
         data.lastname = data.lastname.slice(0, 2) + '...';
         delete data.avatar;
         delete data.avatar_md;
-        delete data.password;
     }
 
     async findAll(roles: RoleStatus[], limit = 10, page = 1): Promise<Pagination<User[]>> {
@@ -183,23 +182,26 @@ export class UsersService {
     }
 
     async updatePassword(id: string, data: any): Promise<void> {
-        const user = await this.Prisma.user.findFirst({ where: { id } });
+        const user = await this.Prisma.user.findFirst({
+            where: { id },
+            include: { password: true },
+         });
         if (!user) throw new NotFoundException();
         if (data.password != data.confirm_password)
             throw new BadRequestException('Konfirmasi password tidak sesuai');
         const checkPassword = await bcrypt.compare(
             data.old_password,
-            user.password,
+            user.password.password,
         );
         if (!checkPassword)
             throw new BadRequestException('Password lama salah');
 
-        delete data.confirm_password;
-        delete data.old_password;
-        data.password = await bcrypt.hash(data.password, 10);
-        await this.Prisma.user.update({
-            where: { id: user.id },
-            data: { password: data.password },
+        // delete data.confirm_password;
+        // delete data.old_password;
+        const password = await bcrypt.hash(data.password, 10);
+        await this.Prisma.password.update({
+            where: { userId: user.id },
+            data: { password },
         });
     }
 
@@ -270,4 +272,6 @@ export class UsersService {
             data: { active: false },
         });
     }
+
+
 }

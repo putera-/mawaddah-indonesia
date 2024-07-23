@@ -605,7 +605,6 @@ export async function memberSeed(prisma: PrismaClient) {
     // BOB
     {
         const bob = {
-            password,
             active: true,
             verified: true,
             activations: {
@@ -648,6 +647,11 @@ export async function memberSeed(prisma: PrismaClient) {
                     '/dummy/ikhwan_blurred_' + randomNumber + '_lg.png',
                 blurred_avatar_md:
                     '/dummy/ikhwan_blurred_' + randomNumber + '_md.png',
+                password: {
+                    create: {
+                        password
+                    }
+                }
             };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
@@ -754,7 +758,6 @@ export async function memberSeed(prisma: PrismaClient) {
     // ALICE
     {
         const alice = {
-            password,
             active: true,
             verified: true,
             activations: {
@@ -795,6 +798,11 @@ export async function memberSeed(prisma: PrismaClient) {
                     '/dummy/akhwat_blurred_' + randomNumber + '_lg.jpg',
                 blurred_avatar_md:
                     '/dummy/akhwat_blurred_' + randomNumber + '_md.jpg',
+                password: {
+                    create: {
+                        password
+                    }
+                }
             };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =

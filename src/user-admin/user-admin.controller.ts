@@ -15,7 +15,7 @@ import { CreateUserAdminDto } from './dto/create-user-admin.dto';
 import { UsersService } from 'src/users/user.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
-import { RoleStatus } from '@prisma/client';
+import { Prisma, RoleStatus } from '@prisma/client';
 
 @Controller('user-admin')
 export class UserAdminController {
@@ -31,7 +31,15 @@ export class UserAdminController {
 
             // set as superadmin
             data.role = 'ADMIN';
-            return this.usersService.create(data);
+            const dataUser: Prisma.UserCreateInput = {
+                ...data,
+                password: {
+                    create: {
+                        password: data.password
+                    }
+                }
+            }
+            return this.usersService.create(dataUser);
         } catch (error) {
             throw error;
         }

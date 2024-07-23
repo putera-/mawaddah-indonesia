@@ -34,6 +34,7 @@ import { Response } from 'express';
 import { sendResetPassword } from './dto/send-reset-password.dto';
 import { ResetPasswordDto } from 'src/reset_password/dto/reset-password.dto';
 import { BiodataService } from 'src/biodata/biodata.service';
+import { Prisma } from '@prisma/client';
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -54,7 +55,16 @@ export class AuthController {
             // validasi apakah user sudah terdaftar atau belum
             await this.userService.validateNewUser(data);
             // buat user
-            const user: User = await this.userService.create(data);
+            const dataUser: Prisma.UserCreateInput = {
+                ...data,
+                password: {
+                    create: {
+                        password: data.password
+                    }
+                }
+            }
+
+            const user: User = await this.userService.create(dataUser);
             // kirim kode aktivasi ke email
             await this.authService.sendActivation(user.email);
 
@@ -196,7 +206,7 @@ export class AuthController {
         // only can update belongs to auth user
         const { id } = req.user;
         // prevent change email
-        if (data.email) delete data.email;
+        // if (data.email) delete data.email;
         try {
             if (file) {
                 const avatarBuffer = file.buffer;
@@ -217,7 +227,6 @@ export class AuthController {
                         const blurredFilepath = path.join(
                             './public/avatar/' + blurredFilename,
                         );
-
                         await this.photoService.resize(
                             size,
                             avatarBuffer,
@@ -235,9 +244,19 @@ export class AuthController {
                 data.avatar_md = `/avatar/${uniqueSuffix}_md.${ext}`;
                 data.blurred_avatar = `/avatar/${blurUniqueSuffix}_lg.${ext}`;
                 data.blurred_avatar_md = `/avatar/${blurUniqueSuffix}_md.${ext}`;
+
+            }
+            const dataUser: Prisma.UserUpdateInput = {
+                ...data,
+                password: {
+                    connect: {
+                        userId : req.user.id
+                    }
+                }
             }
 
-            return this.userService.update(id, data);
+
+            return this.userService.update(id, dataUser);
         } catch (error) {
             // remove avatar
             if (file) {

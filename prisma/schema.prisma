@@ -18,7 +18,7 @@ model User {
     email              String          @unique @db.VarChar(100)
     firstname          String          @db.VarChar(100)
     lastname           String          @db.VarChar(100)
-    password           String          @db.VarChar(100)
+    password           Password?
     active             Boolean         @default(false)
     verified           Boolean         @default(false)
     avatar             String?         @db.VarChar(255)
@@ -41,6 +41,17 @@ model User {
     updatedAt          DateTime        @default(now()) @updatedAt
 
     @@map("user")
+}
+
+model Password {
+    id        String   @id @default(uuid())
+    user      User?    @relation(fields: [userId], references: [id])
+    userId    String  @unique
+    password  String   @db.VarChar(255)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
+
+    @@map("password")
 }
 
 model Client {
@@ -234,7 +245,6 @@ model Education {
 
     @@map("education")
 }
-
 
 model LifeGoal {
     id                     String   @id @default(uuid())
