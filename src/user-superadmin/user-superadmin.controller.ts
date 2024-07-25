@@ -38,14 +38,12 @@ export class UserSuperadminController {
 
             // set as superadmin
             data.role = 'SUPERADMIN';
-            const password = data.password
-            delete data.password
-            delete data.confirm_password
+
             const dataUser: Prisma.UserCreateInput = {
                 ...data,
                 password: {
                     create: {
-                        password
+                        password : data.password
                     }
                 }
             }
@@ -64,14 +62,12 @@ export class UserSuperadminController {
 
             // set as superadmin
             data.role = 'SUPERADMIN';
-            const password = data.password
-            delete data.password
-            delete data.confirm_password
+
             const dataUser: Prisma.UserCreateInput = {
                 ...data,
                 password: {
                     create: {
-                        password
+                        password : data.password
                     }
                 }
             }
