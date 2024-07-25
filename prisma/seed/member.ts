@@ -575,14 +575,15 @@ export async function memberSeed(prisma: PrismaClient) {
         // Kembalikan tanggal dalam format ISO 8601
         return randomDate.toISOString();
     }
-     function getRandomAuths() {
+    function getRandomAuths() {
         const authEntries = [];
         for (let i = 0; i < Math.floor(Math.random() * 20); i++) {
             // Randomly select a user
             // const user = users[Math.floor(Math.random() * users.length)];
 
             // Create a random Auth entry
-            const authEntry = {
+            // const authEntry:Prisma.AuthCreateWithoutUserInput = {
+            const authEntry: Prisma.AuthCreateWithoutUserInput = {
                 // userId: user.id,
                 access_token: faker.internet.password(), // Generates a random string
                 expiredAt: faker.date.future(), // Generates a future date
@@ -752,10 +753,12 @@ export async function memberSeed(prisma: PrismaClient) {
                 },
             };
 
+            console.log(data)
+
             await prisma.user.upsert({
                 where: { email },
-                update: data,
                 create: data,
+                update: data,
             });
 
 
@@ -933,10 +936,12 @@ export async function memberSeed(prisma: PrismaClient) {
                 },
             };
 
+            console.log(data)
+
             await prisma.user.upsert({
                 where: { email },
-                update: data,
                 create: data,
+                update: data,
             });
         }
     }

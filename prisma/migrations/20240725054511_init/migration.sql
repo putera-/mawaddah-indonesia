@@ -4,7 +4,6 @@ CREATE TABLE `user` (
     `email` VARCHAR(100) NOT NULL,
     `firstname` VARCHAR(100) NOT NULL,
     `lastname` VARCHAR(100) NOT NULL,
-    `password` VARCHAR(100) NOT NULL,
     `active` BOOLEAN NOT NULL DEFAULT false,
     `verified` BOOLEAN NOT NULL DEFAULT false,
     `avatar` VARCHAR(255) NULL,
@@ -17,6 +16,18 @@ CREATE TABLE `user` (
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     UNIQUE INDEX `user_email_key`(`email`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `password` (
+    `id` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    UNIQUE INDEX `password_userId_key`(`userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -43,7 +54,7 @@ CREATE TABLE `client` (
 -- CreateTable
 CREATE TABLE `auth` (
     `id` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NULL,
+    `userId` VARCHAR(191) NOT NULL,
     `access_token` VARCHAR(300) NOT NULL,
     `expiredAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `path` VARCHAR(100) NOT NULL,
@@ -56,7 +67,7 @@ CREATE TABLE `auth` (
 -- CreateTable
 CREATE TABLE `reset_password` (
     `id` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NULL,
+    `userId` VARCHAR(191) NOT NULL,
     `used` BOOLEAN NOT NULL DEFAULT false,
     `expiredAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -68,7 +79,7 @@ CREATE TABLE `reset_password` (
 -- CreateTable
 CREATE TABLE `gallery` (
     `id` VARCHAR(191) NOT NULL,
-    `clientId` VARCHAR(191) NULL,
+    `clientId` VARCHAR(191) NOT NULL,
     `title` VARCHAR(100) NULL,
     `photo` TEXT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -80,7 +91,7 @@ CREATE TABLE `gallery` (
 -- CreateTable
 CREATE TABLE `slider` (
     `id` VARCHAR(191) NOT NULL,
-    `clientId` VARCHAR(191) NULL,
+    `clientId` VARCHAR(191) NOT NULL,
     `title` TEXT NULL,
     `photo` TEXT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -92,7 +103,7 @@ CREATE TABLE `slider` (
 -- CreateTable
 CREATE TABLE `faq` (
     `id` VARCHAR(191) NOT NULL,
-    `clientId` VARCHAR(191) NULL,
+    `clientId` VARCHAR(191) NOT NULL,
     `question` VARCHAR(255) NOT NULL,
     `answer` VARCHAR(255) NOT NULL,
     `deleted` BOOLEAN NOT NULL DEFAULT false,
@@ -105,7 +116,7 @@ CREATE TABLE `faq` (
 -- CreateTable
 CREATE TABLE `activation` (
     `id` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NULL,
+    `userId` VARCHAR(191) NOT NULL,
     `used` BOOLEAN NOT NULL DEFAULT false,
     `expiredAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -116,7 +127,7 @@ CREATE TABLE `activation` (
 -- CreateTable
 CREATE TABLE `biodata` (
     `id` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NULL,
+    `userId` VARCHAR(191) NOT NULL,
     `bio` TEXT NOT NULL,
     `phone` VARCHAR(20) NOT NULL,
     `company` VARCHAR(100) NULL,
@@ -154,7 +165,7 @@ CREATE TABLE `province` (
 -- CreateTable
 CREATE TABLE `education` (
     `id` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NULL,
+    `userId` VARCHAR(191) NOT NULL,
     `institution_name` VARCHAR(100) NOT NULL,
     `major` VARCHAR(100) NULL,
     `degree` VARCHAR(100) NULL,
@@ -449,25 +460,28 @@ CREATE TABLE `non_physical_criteria` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `auth` ADD CONSTRAINT `auth_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `password` ADD CONSTRAINT `password_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `reset_password` ADD CONSTRAINT `reset_password_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `auth` ADD CONSTRAINT `auth_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `gallery` ADD CONSTRAINT `gallery_clientId_fkey` FOREIGN KEY (`clientId`) REFERENCES `client`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `reset_password` ADD CONSTRAINT `reset_password_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `slider` ADD CONSTRAINT `slider_clientId_fkey` FOREIGN KEY (`clientId`) REFERENCES `client`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `gallery` ADD CONSTRAINT `gallery_clientId_fkey` FOREIGN KEY (`clientId`) REFERENCES `client`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `faq` ADD CONSTRAINT `faq_clientId_fkey` FOREIGN KEY (`clientId`) REFERENCES `client`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `slider` ADD CONSTRAINT `slider_clientId_fkey` FOREIGN KEY (`clientId`) REFERENCES `client`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `activation` ADD CONSTRAINT `activation_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `faq` ADD CONSTRAINT `faq_clientId_fkey` FOREIGN KEY (`clientId`) REFERENCES `client`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `biodata` ADD CONSTRAINT `biodata_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `activation` ADD CONSTRAINT `activation_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `biodata` ADD CONSTRAINT `biodata_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `education` ADD CONSTRAINT `education_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
