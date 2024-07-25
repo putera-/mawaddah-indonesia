@@ -89,7 +89,7 @@ export async function memberSeed(prisma: PrismaClient) {
         'Saya selalu berusaha untuk menjadi orang yang ramah dan mudah bergaul',
         'Saya orangnya pekerja keras dan bertanggung jawab',
         'Saya selalu berusaha untuk menjadi orang yang setia dan dapat diandalkan',
-    ];
+    ]
 
     const negative_traits: string[] = [
         'Saya orangnya sering terburu-buru dan kurang sabar',
@@ -575,8 +575,7 @@ export async function memberSeed(prisma: PrismaClient) {
         // Kembalikan tanggal dalam format ISO 8601
         return randomDate.toISOString();
     }
-
-    function getRandomAuths() {
+     function getRandomAuths() {
         const authEntries = [];
         for (let i = 0; i < Math.floor(Math.random() * 20); i++) {
             // Randomly select a user
@@ -647,12 +646,15 @@ export async function memberSeed(prisma: PrismaClient) {
                     '/dummy/ikhwan_blurred_' + randomNumber + '_lg.png',
                 blurred_avatar_md:
                     '/dummy/ikhwan_blurred_' + randomNumber + '_md.png',
-                password: {
-                    create: {
-                        password
-                    }
-                }
+                createdAt: faker.date.past()
             };
+
+            data.password = {
+                create: {
+                    password
+                }
+            }
+
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
             {
@@ -739,19 +741,24 @@ export async function memberSeed(prisma: PrismaClient) {
                             ],
                     },
                 };
-                data.auth = {
-                    createMany: {
-                        data: getRandomAuths(),
-                    },
-                };
 
                 data.taaruf_status = 'OPEN';
             }
-            const post = await prisma.user.upsert({
+
+            data.auth = {
+                createMany: {
+                    data: getRandomAuths(),
+
+                },
+            };
+
+            await prisma.user.upsert({
                 where: { email },
                 update: data,
                 create: data,
             });
+
+
         }
     }
 
@@ -802,7 +809,9 @@ export async function memberSeed(prisma: PrismaClient) {
                     create: {
                         password
                     }
-                }
+                },
+                createdAt: faker.date.past()
+
             };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
@@ -905,15 +914,25 @@ export async function memberSeed(prisma: PrismaClient) {
                             )
                             ],
                     },
+
                 };
-                data.auth = {
-                    createMany: {
-                        data: getRandomAuths(),
-                    },
-                };
+
+
+                data.password = {
+                    create: {
+                        password
+                    }
+                }
 
                 data.taaruf_status = 'OPEN';
             }
+
+            data.auth = {
+                createMany: {
+                    data: getRandomAuths(),
+                },
+            };
+
             await prisma.user.upsert({
                 where: { email },
                 update: data,
