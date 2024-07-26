@@ -76,8 +76,8 @@ export class ResetPasswordService {
         // delete confirm password
         delete data.confirm_password;
         // update password.
-        await this.prisma.user.update({
-            where: { id: user.id },
+        await this.prisma.password.update({
+            where: { userId: user.id },
             data: { password: data.password },
         });
         await this.prisma.resetPassword.update({

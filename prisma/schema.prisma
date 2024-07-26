@@ -18,7 +18,7 @@ model User {
     email              String          @unique @db.VarChar(100)
     firstname          String          @db.VarChar(100)
     lastname           String          @db.VarChar(100)
-    password           String          @db.VarChar(100)
+    password           Password?
     active             Boolean         @default(false)
     verified           Boolean         @default(false)
     avatar             String?         @db.VarChar(255)
@@ -41,6 +41,17 @@ model User {
     updatedAt          DateTime        @default(now()) @updatedAt
 
     @@map("user")
+}
+
+model Password {
+    id        String   @id @default(uuid())
+    user      User?    @relation(fields: [userId], references: [id])
+    userId    String   @unique
+    password  String   @db.VarChar(255)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
+
+    @@map("password")
 }
 
 model Client {
@@ -79,8 +90,8 @@ enum TaarufStatus {
 
 model Auth {
     id           String   @id @default(uuid())
-    user         User?    @relation(fields: [userId], references: [id])
-    userId       String?
+    user         User     @relation(fields: [userId], references: [id])
+    userId       String
     access_token String   @db.VarChar(300)
     expiredAt    DateTime @default(now())
     path         String   @db.VarChar(100)
@@ -92,8 +103,8 @@ model Auth {
 
 model ResetPassword {
     id        String   @id @default(uuid())
-    user      User?    @relation(fields: [userId], references: [id])
-    userId    String?
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
     used      Boolean  @default(false)
     expiredAt DateTime @default(now())
     createdAt DateTime @default(now())
@@ -104,8 +115,8 @@ model ResetPassword {
 
 model Gallery {
     id        String   @id @default(uuid())
-    Client    Client?  @relation(fields: [clientId], references: [id])
-    clientId  String?
+    Client    Client   @relation(fields: [clientId], references: [id])
+    clientId  String
     title     String?  @db.VarChar(100)
     photo     String?  @db.Text
     createdAt DateTime @default(now())
@@ -116,8 +127,8 @@ model Gallery {
 
 model Slider {
     id        String   @id @default(uuid())
-    Client    Client?  @relation(fields: [clientId], references: [id])
-    clientId  String?
+    Client    Client   @relation(fields: [clientId], references: [id])
+    clientId  String
     title     String?  @db.Text
     photo     String?  @db.Text
     createdAt DateTime @default(now())
@@ -128,8 +139,8 @@ model Slider {
 
 model FAQ {
     id        String   @id @default(uuid())
-    Client    Client?  @relation(fields: [clientId], references: [id])
-    clientId  String?
+    Client    Client   @relation(fields: [clientId], references: [id])
+    clientId  String
     question  String   @db.VarChar(255)
     answer    String   @db.VarChar(255)
     deleted   Boolean  @default(false)
@@ -141,8 +152,8 @@ model FAQ {
 
 model Activation {
     id        String   @id @default(uuid())
-    user      User?    @relation(fields: [userId], references: [id])
-    userId    String?
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
     used      Boolean  @default(false)
     expiredAt DateTime @default(now())
     createdAt DateTime @default(now())
@@ -152,8 +163,8 @@ model Activation {
 
 model Biodata {
     id                      String                @id @default(uuid())
-    user                    User?                 @relation(fields: [userId], references: [id])
-    userId                  String?               @unique
+    user                    User                  @relation(fields: [userId], references: [id])
+    userId                  String                @unique
     bio                     String                @db.Text
     phone                   String                @db.VarChar(20)
     company                 String?               @db.VarChar(100)
@@ -219,7 +230,7 @@ model Province {
 
 model Education {
     id               String   @id @default(uuid())
-    userId           String?
+    userId           String
     institution_name String   @db.VarChar(100)
     major            String?  @db.VarChar(100)
     degree           String?  @db.VarChar(100)
@@ -234,7 +245,6 @@ model Education {
 
     @@map("education")
 }
-
 
 model LifeGoal {
     id                     String   @id @default(uuid())

@@ -89,7 +89,7 @@ export async function memberSeed(prisma: PrismaClient) {
         'Saya selalu berusaha untuk menjadi orang yang ramah dan mudah bergaul',
         'Saya orangnya pekerja keras dan bertanggung jawab',
         'Saya selalu berusaha untuk menjadi orang yang setia dan dapat diandalkan',
-    ];
+    ]
 
     const negative_traits: string[] = [
         'Saya orangnya sering terburu-buru dan kurang sabar',
@@ -575,7 +575,6 @@ export async function memberSeed(prisma: PrismaClient) {
         // Kembalikan tanggal dalam format ISO 8601
         return randomDate.toISOString();
     }
-
     function getRandomAuths() {
         const authEntries = [];
         for (let i = 0; i < Math.floor(Math.random() * 20); i++) {
@@ -583,7 +582,8 @@ export async function memberSeed(prisma: PrismaClient) {
             // const user = users[Math.floor(Math.random() * users.length)];
 
             // Create a random Auth entry
-            const authEntry = {
+            // const authEntry:Prisma.AuthCreateWithoutUserInput = {
+            const authEntry: Prisma.AuthCreateWithoutUserInput = {
                 // userId: user.id,
                 access_token: faker.internet.password(), // Generates a random string
                 expiredAt: faker.date.future(), // Generates a future date
@@ -605,7 +605,6 @@ export async function memberSeed(prisma: PrismaClient) {
     // BOB
     {
         const bob = {
-            password,
             active: true,
             verified: true,
             activations: {
@@ -625,7 +624,7 @@ export async function memberSeed(prisma: PrismaClient) {
             process.stdout.write('.');
             const randomNumber = Math.floor(Math.random() * 10) + 1;
             const firstname = faker.person.firstName('male');
-            const email = faker.internet.email({ firstName: firstname });
+            const email = faker.internet.email({ firstName: firstname }).toLowerCase();
 
             const randomProvinceIndex = Math.floor(
                 Math.random() * provinces.length,
@@ -648,7 +647,15 @@ export async function memberSeed(prisma: PrismaClient) {
                     '/dummy/ikhwan_blurred_' + randomNumber + '_lg.png',
                 blurred_avatar_md:
                     '/dummy/ikhwan_blurred_' + randomNumber + '_md.png',
+                createdAt: faker.date.past()
             };
+
+            data.password = {
+                create: {
+                    password
+                }
+            }
+
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
             {
@@ -735,26 +742,32 @@ export async function memberSeed(prisma: PrismaClient) {
                             ],
                     },
                 };
-                data.auth = {
-                    createMany: {
-                        data: getRandomAuths(),
-                    },
-                };
 
                 data.taaruf_status = 'OPEN';
             }
-            const post = await prisma.user.upsert({
+
+            data.auth = {
+                createMany: {
+                    data: getRandomAuths(),
+
+                },
+            };
+
+            console.log(data)
+
+            await prisma.user.upsert({
                 where: { email },
-                update: data,
                 create: data,
+                update: data,
             });
+
+
         }
     }
 
     // ALICE
     {
         const alice = {
-            password,
             active: true,
             verified: true,
             activations: {
@@ -783,7 +796,7 @@ export async function memberSeed(prisma: PrismaClient) {
             );
 
             const firstname = faker.person.firstName('female');
-            const email = faker.internet.email({ firstName: firstname });
+            const email = faker.internet.email({ firstName: firstname }).toLocaleLowerCase();
             const data: Prisma.UserCreateInput = {
                 ...alice,
                 email,
@@ -795,6 +808,13 @@ export async function memberSeed(prisma: PrismaClient) {
                     '/dummy/akhwat_blurred_' + randomNumber + '_lg.jpg',
                 blurred_avatar_md:
                     '/dummy/akhwat_blurred_' + randomNumber + '_md.jpg',
+                password: {
+                    create: {
+                        password
+                    }
+                },
+                createdAt: faker.date.past()
+
             };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
@@ -897,19 +917,31 @@ export async function memberSeed(prisma: PrismaClient) {
                             )
                             ],
                     },
+
                 };
-                data.auth = {
-                    createMany: {
-                        data: getRandomAuths(),
-                    },
-                };
+
+
+                data.password = {
+                    create: {
+                        password
+                    }
+                }
 
                 data.taaruf_status = 'OPEN';
             }
+
+            data.auth = {
+                createMany: {
+                    data: getRandomAuths(),
+                },
+            };
+
+            console.log(data)
+
             await prisma.user.upsert({
                 where: { email },
-                update: data,
                 create: data,
+                update: data,
             });
         }
     }
