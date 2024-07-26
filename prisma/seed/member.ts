@@ -754,12 +754,13 @@ export async function memberSeed(prisma: PrismaClient) {
             };
 
             // console.log(data)
+            const userCheck = await prisma.user.findFirst({ where: { email } });
 
-            await prisma.user.upsert({
-                where: { email },
-                create: data,
-                update: data,
-            });
+            if (!userCheck) {
+                await prisma.user.create({
+                    data,
+                });
+            }
         }
     }
 
@@ -934,12 +935,13 @@ export async function memberSeed(prisma: PrismaClient) {
             };
 
             // console.log(data)
+            const userCheck = await prisma.user.findFirst({ where: { email } });
 
-            await prisma.user.upsert({
-                where: { email },
-                create: data,
-                update: data,
-            });
+            if (!userCheck) {
+                await prisma.user.create({
+                    data,
+                });
+            }
         }
     }
 
