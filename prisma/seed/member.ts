@@ -624,7 +624,7 @@ export async function memberSeed(prisma: PrismaClient) {
             process.stdout.write('.');
             const randomNumber = Math.floor(Math.random() * 10) + 1;
             const firstname = faker.person.firstName('male');
-            const email = faker.internet.email({ firstName: firstname });
+            const email = faker.internet.email({ firstName: firstname }).toLowerCase();
 
             const randomProvinceIndex = Math.floor(
                 Math.random() * provinces.length,
@@ -796,7 +796,7 @@ export async function memberSeed(prisma: PrismaClient) {
             );
 
             const firstname = faker.person.firstName('female');
-            const email = faker.internet.email({ firstName: firstname });
+            const email = faker.internet.email({ firstName: firstname }).toLocaleLowerCase();
             const data: Prisma.UserCreateInput = {
                 ...alice,
                 email,
