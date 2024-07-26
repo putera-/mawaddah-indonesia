@@ -185,19 +185,20 @@ export class UsersService {
         const user = await this.Prisma.user.findFirst({
             where: { id },
             include: { password: true },
-         });
+        });
         if (!user) throw new NotFoundException();
+
         if (data.password != data.confirm_password)
             throw new BadRequestException('Konfirmasi password tidak sesuai');
+
         const checkPassword = await bcrypt.compare(
             data.old_password,
             user.password.password,
         );
+
         if (!checkPassword)
             throw new BadRequestException('Password lama salah');
 
-        // delete data.confirm_password;
-        // delete data.old_password;
         const password = await bcrypt.hash(data.password, 10);
         await this.Prisma.password.update({
             where: { userId: user.id },
