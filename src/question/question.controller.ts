@@ -31,21 +31,28 @@ export class QuestionController {
         }
     }
 
+    @Roles(Role.Admin, Role.Superadmin)
     @Get()
     async findAll() {
         return await this.questionService.findAll();
     }
 
+    @Roles(Role.Admin, Role.Superadmin)
     @Get(':id')
     async findOne(@Param('id') id: string) {
         return await this.questionService.findOne(id);
     }
 
+    @Roles(Role.Admin, Role.Superadmin)
     @Patch(':id')
     async update(@Param('id') id: string, @Body() data: CreateQuestionDto) {
-        return await this.questionService.update(id, data as Prisma.QuestionUpdateInput);
+        return await this.questionService.update(
+            id,
+            data as Prisma.QuestionUpdateInput,
+        );
     }
 
+    @Roles(Role.Admin, Role.Superadmin)
     @Delete(':id')
     async remove(@Param('id') id: string) {
         return await this.questionService.remove(id);
