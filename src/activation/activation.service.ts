@@ -6,7 +6,7 @@ import {
 import { PrismaService } from 'src/prisma.service';
 import dayjs from 'dayjs';
 import { EmailService } from 'src/email.service';
-import { Prisma } from '@prisma/client';
+import { Activation, Prisma } from '@prisma/client';
 
 @Injectable()
 export class ActivationService {
@@ -36,7 +36,7 @@ export class ActivationService {
         data.expiredAt = expDate;
         const userId = user.id;
         // create activation
-        const result: Prisma.ActivationCreateInput =
+        const result: Activation =
             await this.Prisma.activation.create({
                 data: {
                     ...data,

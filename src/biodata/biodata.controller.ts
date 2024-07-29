@@ -11,8 +11,10 @@ import {
 } from '@nestjs/common';
 import { BiodataService } from './biodata.service';
 import { CreateBiodatumDto } from './dto/create-biodatum.dto';
+import { UpdateBiodataDto } from './dto/update-biodata.dto';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
+import { Prisma } from '@prisma/client';
 
 @Controller('biodata')
 export class BiodataController {
@@ -25,7 +27,7 @@ export class BiodataController {
         @Body(new ValidationPipe()) data: CreateBiodatumDto,
     ) {
         try {
-            return await this.biodataService.create(req.user.id, data);
+            return await this.biodataService.create(req.user.id, data as Prisma.BiodataCreateInput);
         } catch (error) {
             throw error;
         }
@@ -53,10 +55,10 @@ export class BiodataController {
     @Patch()
     async update(
         @Request() req: any,
-        @Body(new ValidationPipe()) data: CreateBiodatumDto,
+        @Body(new ValidationPipe()) data: UpdateBiodataDto,
     ) {
         try {
-            return await this.biodataService.update(req.user.id, data);
+            return await this.biodataService.update(req.user.id, data as Prisma.BiodataUpdateInput);
         } catch (error) {
             throw error;
         }

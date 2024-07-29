@@ -5,7 +5,7 @@ import { UsersService } from 'src/users/user.service';
 
 @Injectable()
 export class BiodataService {
-    constructor(private Prisma: PrismaService) {}
+    constructor(private Prisma: PrismaService) { }
 
     async create(id: string, data: Prisma.BiodataCreateInput) {
         const result = await this.Prisma.biodata.create({
@@ -29,7 +29,7 @@ export class BiodataService {
         });
     }
 
-    update(id: string, data: Prisma.BiodataCreateInput) {
+    update(id: string, data: Prisma.BiodataUpdateInput) {
         return this.Prisma.biodata.update({ where: { userId: id }, data });
     }
 }
