@@ -137,7 +137,7 @@ export class UsersService {
 
     async findOne(id: string, role: RoleStatus): Promise<User> {
         const user = await this.Prisma.user.findFirst({
-            where: { id, role, active: true },
+            where: { id, role, active: true }
         });
         if (!user) throw new NotFoundException(`User tidak ditemukan`);
         return user;
@@ -274,5 +274,15 @@ export class UsersService {
         });
     }
 
+    async isTaarufGold(userId: string): Promise<boolean> {
+        const taaruf_gold_data = await this.Prisma.taaruf_gold.findMany({
+            where: {
+                userId,
+                startedAt: { gt: new Date() },
+                endingAt: { lt: new Date() }
+            }
+        });
 
+        return taaruf_gold_data.length ? true : false;
+    }
 }

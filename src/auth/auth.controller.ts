@@ -182,6 +182,7 @@ export class AuthController {
             const userId = req.user.id;
             const userRole = req.user.role;
             const user: User = await this.userService.findOne(userId, userRole);
+            user.isTaarufGold = await this.userService.isTaarufGold(userId);
 
             return user;
         } catch (error) {
@@ -250,7 +251,7 @@ export class AuthController {
                 ...data,
                 password: {
                     connect: {
-                        userId : req.user.id
+                        userId: req.user.id
                     }
                 }
             }
