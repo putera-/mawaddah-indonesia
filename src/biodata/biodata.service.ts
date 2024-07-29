@@ -29,7 +29,7 @@ export class BiodataService {
         });
     }
 
-    update(id: string, data: Prisma.BiodataCreateInput) {
+    update(id: string, data: Prisma.BiodataUpdateInput) {
         return this.Prisma.biodata.update({ where: { userId: id }, data });
     }
 }

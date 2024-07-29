@@ -13,7 +13,7 @@ export class ActivationService {
     constructor(
         private Prisma: PrismaService,
         private emailService: EmailService,
-    ) { }
+    ) {}
     async create(email: string): Promise<void> {
         // cek user by email
         const user = await this.Prisma.user.findFirst({
@@ -29,22 +29,20 @@ export class ActivationService {
             where: { userId: user.id, used: false },
             data: { used: true, expiredAt: now },
         });
+
         // buat baru
-        const data: any = [];
         const exp = Math.round(dayjs().add(10, 'm').valueOf()) as number;
         const expDate = new Date(exp);
-        data.expiredAt = expDate;
         const userId = user.id;
+        const data: Prisma.ActivationCreateInput = {
+            expiredAt: expDate,
+            user: {
+                connect: { id: userId },
+            },
+        };
+
         // create activation
-        const result: Prisma.ActivationCreateInput =
-            await this.Prisma.activation.create({
-                data: {
-                    ...data,
-                    user: {
-                        connect: { id: userId },
-                    },
-                },
-            });
+        const result = await this.Prisma.activation.create({ data });
         await this.emailService.sendActivation(result.id, email);
         return;
     }
