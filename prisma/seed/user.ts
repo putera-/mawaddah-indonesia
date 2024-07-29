@@ -32,24 +32,14 @@ export async function userSeed(prisma: PrismaClient) {
                 role: 'SUPERADMIN',
                 password: {
                     create: {
-                        password
-                    }
-                }
-            }
+                        password,
+                    },
+                },
+            };
             await prisma.user.upsert({
                 where: { email },
-                update: {
-                    email,
-                    firstname,
-                    role: 'SUPERADMIN',
-                    ...superadmin,
-                },
-                create: {
-                    email,
-                    firstname,
-                    role: 'SUPERADMIN',
-                    ...superadmin,
-                },
+                update: data,
+                create: data,
             });
         }
     }
@@ -82,24 +72,14 @@ export async function userSeed(prisma: PrismaClient) {
                 role: 'ADMIN',
                 password: {
                     create: {
-                        password
-                    }
-                }
-            }
+                        password,
+                    },
+                },
+            };
             await prisma.user.upsert({
                 where: { email },
-                update: {
-                    email,
-                    firstname,
-                    role: 'ADMIN',
-                    ...admin,
-                },
-                create: {
-                    email,
-                    firstname,
-                    role: 'ADMIN',
-                    ...admin,
-                },
+                update: data,
+                create: data,
             });
         }
     }

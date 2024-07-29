@@ -18,7 +18,7 @@ import { Prisma } from '@prisma/client';
 
 @Controller('biodata')
 export class BiodataController {
-    constructor(private readonly biodataService: BiodataService) { }
+    constructor(private readonly biodataService: BiodataService) {}
 
     @Roles(Role.Member)
     @Post()
@@ -27,7 +27,10 @@ export class BiodataController {
         @Body(new ValidationPipe()) data: CreateBiodatumDto,
     ) {
         try {
-            return await this.biodataService.create(req.user.id, data as Prisma.BiodataCreateInput);
+            return await this.biodataService.create(
+                req.user.id,
+                data as Prisma.BiodataCreateInput,
+            );
         } catch (error) {
             throw error;
         }
@@ -58,7 +61,10 @@ export class BiodataController {
         @Body(new ValidationPipe()) data: UpdateBiodataDto,
     ) {
         try {
-            return await this.biodataService.update(req.user.id, data as Prisma.BiodataUpdateInput);
+            return await this.biodataService.update(
+                req.user.id,
+                data as Prisma.BiodataUpdateInput,
+            );
         } catch (error) {
             throw error;
         }
