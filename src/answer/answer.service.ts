@@ -1,52 +1,76 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAnswerDto } from './dto/create-answer.dto';
-import { UpdateAnswerDto } from './dto/update-answer.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { Prisma } from '@prisma/client';
+import { Question } from 'src/question/question.interface';
 
 @Injectable()
 export class AnswerService {
-    constructor(private readonly Prisma: PrismaService) {}
-    //   create(createAnswerDto: CreateAnswerDto) {
-    //     return 'This action adds a new answer';
-    //   }
+    constructor(private readonly Prisma: PrismaService) { }
 
-    async findAll(userId: string) {
+    async findAll(userId: string): Promise<Question[]> {
         const user = await this.Prisma.user.findFirst({
             where: { id: userId },
             include: { biodata: true },
         });
-        return this.Prisma.answer.findMany({
-            where: { biodataId: user.biodata.id },
-            include: {
-                question: true,
+        const questions: Question[] = await this.Prisma.question.findMany({
+            where: {
+                deleted: false
             },
+            include: {
+                answers: {
+                    where: { biodataId: user.biodata.id }
+                }
+            }
         });
+
+        for (const question of questions) {
+            if (question.answers.length) {
+                question.answer = question.answers[0];
+            }
+
+            delete question.answers;
+        }
+
+        return questions;
     }
 
-    async findOne(userId: string, questionId: string) {
+    async findOne(userId: string, questionId: string): Promise<Question> {
         const user = await this.Prisma.user.findFirst({
             where: { id: userId },
             include: { biodata: true },
         });
 
-        const result = await this.Prisma.answer.findFirst({
-            where: { questionId, biodataId: user.biodata.id },
-            include: {
-                question: true,
+        const question: Question = await this.Prisma.question.findFirst({
+            where: {
+                id: questionId,
+                deleted: false
             },
+            include: {
+                answers: {
+                    where: { biodataId: user.biodata.id }
+                }
+            }
         });
 
-        if (!result) {
-            return this.Prisma.answer.create({
+        if (!question) throw new NotFoundException('Question is not found!');
+
+        if (question.answers.length) {
+            question.answer = question.answers[0];
+        } else {
+            // create empty answer
+            const answer = await this.Prisma.answer.create({
                 data: {
                     answer: '',
                     biodataId: user.biodata.id,
                     questionId: questionId,
                 },
             });
+
+            question.answer = answer;
         }
-        return result;
+        delete question.answers;
+
+        return question;
     }
 
     async update(userId: string, questionId: string, data: Prisma.AnswerCreateInput) {
@@ -69,8 +93,4 @@ export class AnswerService {
             },
         });
     }
-
-    // remove(id: number) {
-    //     return `This action removes a #${id} answer`;
-    // }
 }

@@ -6,7 +6,8 @@ export interface Question {
     deleted: boolean;
     createdBy?: User;
     userId: string;
-    answer?: Answer[];
+    answers?: Answer[];
+    answer?: Answer;
     createdAt: Date;
     updatedAt: Date;
 }
