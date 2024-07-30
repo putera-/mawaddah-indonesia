@@ -6,6 +6,8 @@ import {
     Patch,
     Param,
     Delete,
+    Req,
+    Query,
 } from '@nestjs/common';
 import { AnswerService } from './answer.service';
 import { CreateAnswerDto } from './dto/create-answer.dto';
@@ -20,23 +22,43 @@ export class AnswerController {
 
     @Roles(Role.Member)
     @Get()
-    async findAll(): Promise<Answer[]> {
-        return await this.answerService.findAll();
+    async findAll(@Req() req: any): Promise<Answer[]> {
+        try {
+            return await this.answerService.findAll(req.user.id);
+        } catch (error) {
+            throw error;
+        }
     }
 
     @Roles(Role.Member)
-    @Get('id')
-    async findOne(@Param('id') id: string): Promise<Answer> {
-        return await this.answerService.findOne(id);
+    @Get('by-question')
+    async findOne(
+        @Query('questionId') questionId: string,
+        @Req() req: any,
+    ): Promise<Answer> {
+        try {
+            return await this.answerService.findOne(req.user.id, questionId);
+        } catch (error) {
+            throw error;
+        }
     }
 
     @Roles(Role.Member)
-    @Patch(':id')
-    async update(@Param('id') id: string, @Body() data: UpdateAnswerDto) {
-        return await this.answerService.update(
-            id,
-            data as Prisma.AnswerCreateInput,
-        );
+    @Patch('by-question')
+    async update(
+        @Req() req: any,
+        @Query('questionId') questionId: string,
+        @Body() data: UpdateAnswerDto,
+    ) {
+        try {
+            return await this.answerService.update(
+                req.user.id,
+                questionId,
+                data as Prisma.AnswerCreateInput,
+            );
+        } catch (error) {
+            throw error;
+        }
     }
 
     // @Delete(':id')

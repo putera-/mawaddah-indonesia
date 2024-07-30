@@ -36,9 +36,6 @@ export class CandidateService {
         private User: UsersService,
     ) { }
 
-    // TODO
-    // buang limit & skip
-    // where tambahakan, 30 hari terakhir
     async findNew(
         gender: any,
         page: number = 1,
@@ -183,7 +180,6 @@ export class CandidateService {
         };
     }
 
-    // TODO update similiarity
     calculateSimilarity(userBiodata: Biodata, candidateBiodata: Biodata) {
         let score = 0;
         if (userBiodata.manhaj == candidateBiodata.manhaj) score += 15;
