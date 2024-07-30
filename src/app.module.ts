@@ -36,6 +36,8 @@ import { MarriagePreparationModule } from './marriage_preparation/marriage_prepa
 import { IbadahModule } from './ibadah/ibadah.module';
 import { PhysicalCriteriaModule } from './physical_criteria/physical_criteria.module';
 import { NonPhysicalCriteriaModule } from './non_physical_criteria/non_physical_criteria.module';
+import { QuestionModule } from './question/question.module';
+import { AnswerModule } from './answer/answer.module';
 
 @Module({
     imports: [
@@ -72,6 +74,8 @@ import { NonPhysicalCriteriaModule } from './non_physical_criteria/non_physical_
         IbadahModule,
         PhysicalCriteriaModule,
         NonPhysicalCriteriaModule,
+        QuestionModule,
+        AnswerModule,
     ],
 
     controllers: [AppController],

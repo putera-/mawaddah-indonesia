@@ -18,7 +18,6 @@ export async function taarufSeed(prisma: PrismaClient) {
         const biodata = user.biodata;
         const opposite = await prisma.user.findFirst({
             where: {
-                // TODO FIX THIS
                 biodata: { gender: { not: biodata.gender } },
             },
             include: {
