@@ -15,6 +15,8 @@ export async function answerSeed(prisma: PrismaClient) {
 
     for (let i = 0; i < users.length; i++) {
         if (!users[i].biodata) continue;
+
+        process.stdout.write('.');
         const answers: Prisma.AnswerCreateManyInput[] = [];
 
         for (const q of questions) {

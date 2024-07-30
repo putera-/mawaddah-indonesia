@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 // import { CreateQuestionDto } from './dto/create-question.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Question } from './question.interface';
@@ -6,7 +6,7 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class QuestionService {
-    constructor(private Prisma: PrismaService) {}
+    constructor(private Prisma: PrismaService) { }
     async create(
         id: string,
         data: Prisma.QuestionCreateInput,
@@ -22,13 +22,24 @@ export class QuestionService {
     }
 
     findAll(): Promise<Question[]> {
-        return this.Prisma.question.findMany();
+        return this.Prisma.question.findMany({
+            where: {
+                deleted: false
+            }
+        });
     }
 
-    findOne(id: string): Promise<Question> {
-        return this.Prisma.question.findFirst({
-            where: { id },
+    async findOne(id: string): Promise<Question> {
+        const question = await this.Prisma.question.findFirst({
+            where: {
+                id,
+                deleted: false
+            },
         });
+
+        if (!question) throw new NotFoundException("Question is not found");
+
+        return question;
     }
 
     async update(
@@ -41,8 +52,8 @@ export class QuestionService {
         });
     }
 
-    remove(id: string): Promise<void> {
-        this.Prisma.question.update({
+    async remove(id: string): Promise<void> {
+        await this.Prisma.question.update({
             where: { id },
             data: {
                 deleted: true,

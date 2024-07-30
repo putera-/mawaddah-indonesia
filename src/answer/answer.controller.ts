@@ -1,11 +1,8 @@
 import {
     Controller,
     Get,
-    Post,
     Body,
     Patch,
-    Param,
-    Delete,
     Req,
     Query,
 } from '@nestjs/common';
@@ -18,7 +15,7 @@ import { Answer, Prisma } from '@prisma/client';
 
 @Controller('answer')
 export class AnswerController {
-    constructor(private readonly answerService: AnswerService) {}
+    constructor(private readonly answerService: AnswerService) { }
 
     @Roles(Role.Member)
     @Get()

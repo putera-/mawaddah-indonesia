@@ -7,6 +7,7 @@ import {
     Delete,
     Req,
     Patch,
+    HttpCode,
 } from '@nestjs/common';
 import { QuestionService } from './question.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
@@ -16,7 +17,7 @@ import { Prisma } from '@prisma/client';
 
 @Controller('question')
 export class QuestionController {
-    constructor(private readonly questionService: QuestionService) {}
+    constructor(private readonly questionService: QuestionService) { }
 
     @Roles(Role.Admin, Role.Superadmin)
     @Post()
@@ -34,27 +35,45 @@ export class QuestionController {
     @Roles(Role.Admin, Role.Superadmin)
     @Get()
     async findAll() {
-        return await this.questionService.findAll();
+        try {
+            return await this.questionService.findAll();
+        } catch (error) {
+            throw error;
+        }
     }
 
     @Roles(Role.Admin, Role.Superadmin)
     @Get(':id')
     async findOne(@Param('id') id: string) {
-        return await this.questionService.findOne(id);
+        try {
+            return await this.questionService.findOne(id);
+        } catch (error) {
+            throw error;
+        }
     }
 
     @Roles(Role.Admin, Role.Superadmin)
     @Patch(':id')
     async update(@Param('id') id: string, @Body() data: CreateQuestionDto) {
-        return await this.questionService.update(
-            id,
-            data as Prisma.QuestionUpdateInput,
-        );
+        try {
+            return await this.questionService.update(
+                id,
+                data as Prisma.QuestionUpdateInput,
+            );
+        } catch (error) {
+            throw error;
+        }
     }
 
     @Roles(Role.Admin, Role.Superadmin)
     @Delete(':id')
+    @HttpCode(204)
     async remove(@Param('id') id: string) {
-        return await this.questionService.remove(id);
+        try {
+            await this.questionService.remove(id);
+            return;
+        } catch (error) {
+            throw error;
+        }
     }
 }
