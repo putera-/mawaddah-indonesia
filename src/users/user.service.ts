@@ -217,7 +217,7 @@ export class UsersService {
         email = email.trim().toLowerCase();
         const user = await this.Prisma.user.findUnique({
             where: { email },
-        });
+        }); 
         return user;
     }
     async checkPassword(data: any) {
