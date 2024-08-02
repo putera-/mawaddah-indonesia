@@ -1,6 +1,7 @@
 -- CreateTable
 CREATE TABLE `user` (
     `id` VARCHAR(191) NOT NULL,
+    `old_id` INTEGER NULL,
     `email` VARCHAR(100) NOT NULL,
     `firstname` VARCHAR(100) NOT NULL,
     `lastname` VARCHAR(100) NOT NULL,
@@ -15,7 +16,7 @@ CREATE TABLE `user` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
-    UNIQUE INDEX `user_email_key`(`email`),
+    UNIQUE INDEX `user_email_old_id_key`(`email`, `old_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -454,6 +455,8 @@ CREATE TABLE `non_physical_criteria` (
     `job` VARCHAR(100) NULL,
     `other` TEXT NULL,
     `biodataId` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     UNIQUE INDEX `non_physical_criteria_biodataId_key`(`biodataId`),
     PRIMARY KEY (`id`)
