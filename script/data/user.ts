@@ -9,7 +9,6 @@ import {
 } from '@prisma/client';
 import mysql from 'mysql2/promise';
 import { get_user_by_old_id } from './helper/get_user_by_old_id';
-
 const parameters = process.argv;
 
 // check runner parameter

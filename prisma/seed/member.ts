@@ -786,7 +786,6 @@ export async function memberSeed(prisma: PrismaClient) {
                 await prisma.user.create({
                     data,
                 });
-                // console.log('.');
             }
         }
     }
@@ -827,6 +826,7 @@ export async function memberSeed(prisma: PrismaClient) {
             const randomProvinceIndex2 = Math.floor(
                 Math.random() * provinces.length,
             );
+
             const data: Prisma.UserCreateInput = {
                 ...alice,
                 email,
@@ -973,7 +973,6 @@ export async function memberSeed(prisma: PrismaClient) {
                 await prisma.user.create({
                     data,
                 });
-                // console.log('.');
             }
         }
     }
