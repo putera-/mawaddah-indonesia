@@ -174,6 +174,7 @@ CREATE TABLE `province` (
 -- CreateTable
 CREATE TABLE `education` (
     `id` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
     `institution_name` VARCHAR(100) NOT NULL,
     `major` VARCHAR(100) NULL,
     `degree` VARCHAR(100) NULL,
@@ -245,7 +246,6 @@ CREATE TABLE `non_physical_character` (
     `unliked_things` TEXT NULL,
     `drink_alcohol` BOOLEAN NOT NULL DEFAULT false,
     `smoking` BOOLEAN NOT NULL DEFAULT false,
-    `sport` TEXT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `biodataId` VARCHAR(191) NOT NULL,
@@ -258,7 +258,7 @@ CREATE TABLE `non_physical_character` (
 CREATE TABLE `family_member` (
     `id` VARCHAR(191) NOT NULL,
     `biodataId` VARCHAR(191) NOT NULL,
-    `relationship` ENUM('ayah', 'ibu', 'kakak_pria', 'kakak_wanita', 'adik_pria', 'adik_wanita', 'ipar_pria', 'ipar_wanita', 'anak_kandung', 'anak_angkat', 'none') NULL,
+    `relationship` ENUM('ayah', 'ibu', 'kakak_pria', 'kakak_wanita', 'adik_pria', 'adik_wanita', 'ipar_pria', 'ipar_wanita', 'anak_kandung', 'anak_angkat') NULL,
     `religion` ENUM('islam', 'non_islam') NULL,
     `dob` VARCHAR(20) NOT NULL,
     `education` TEXT NOT NULL,
@@ -470,46 +470,6 @@ CREATE TABLE `non_physical_criteria` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- CreateTable
-CREATE TABLE `question` (
-    `id` VARCHAR(191) NOT NULL,
-    `question` LONGTEXT NOT NULL,
-    `deleted` BOOLEAN NOT NULL DEFAULT false,
-    `userId` VARCHAR(191) NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `answer` (
-    `id` VARCHAR(191) NOT NULL,
-    `biodataId` VARCHAR(191) NOT NULL,
-    `questionId` VARCHAR(191) NOT NULL,
-    `answer` LONGTEXT NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-
-    UNIQUE INDEX `answer_questionId_biodataId_key`(`questionId`, `biodataId`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
-<<<<<<<< HEAD:prisma/migrations/20240814040347_init/migration.sql
-<<<<<<<< HEAD:prisma/migrations/20240814040347_init/migration.sql
--- AddForeignKey
-ALTER TABLE `backup_detail` ADD CONSTRAINT `backup_detail_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
-========
->>>>>>>> 9d5a58e (-handle partial physical character):prisma/migrations/20240805034552_init/migration.sql
--- AddForeignKey
-ALTER TABLE `backup_detail` ADD CONSTRAINT `backup_detail_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
-========
->>>>>>>> 9d5a58e (-handle partial physical character):prisma/migrations/20240805034552_init/migration.sql
--- AddForeignKey
-ALTER TABLE `backup_detail` ADD CONSTRAINT `backup_detail_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
 -- AddForeignKey
 ALTER TABLE `backup_detail` ADD CONSTRAINT `backup_detail_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -599,12 +559,3 @@ ALTER TABLE `physical_criteria` ADD CONSTRAINT `physical_criteria_biodataId_fkey
 
 -- AddForeignKey
 ALTER TABLE `non_physical_criteria` ADD CONSTRAINT `non_physical_criteria_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `question` ADD CONSTRAINT `question_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `answer` ADD CONSTRAINT `answer_biodataId_fkey` FOREIGN KEY (`biodataId`) REFERENCES `biodata`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `answer` ADD CONSTRAINT `answer_questionId_fkey` FOREIGN KEY (`questionId`) REFERENCES `question`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
