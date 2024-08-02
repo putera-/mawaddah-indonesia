@@ -200,15 +200,15 @@ export async function physical_character(
                         gender: 'PRIA',
                         marriage_status:
                             marriage_status[
-                                Math.floor(
-                                    Math.random() * marriage_status.length,
-                                )
+                            Math.floor(
+                                Math.random() * marriage_status.length,
+                            )
                             ],
                         marriage_permission:
                             marriage_permissions[
-                                Math.floor(
-                                    Math.random() * marriage_permissions.length,
-                                )
+                            Math.floor(
+                                Math.random() * marriage_permissions.length,
+                            )
                             ],
                         birth_place: provinces[randomProvinceIndex].name,
                         birth_order: 1,
@@ -222,9 +222,9 @@ export async function physical_character(
                         address_zip_code: Math.floor(Math.random() * 100),
                         poligami_opinion:
                             poligamiOpinions[
-                                Math.floor(
-                                    Math.random() * poligamiOpinions.length,
-                                )
+                            Math.floor(
+                                Math.random() * poligamiOpinions.length,
+                            )
                             ],
                         physical_characters: {
                             create: {
