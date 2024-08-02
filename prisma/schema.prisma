@@ -386,6 +386,7 @@ enum relationship {
     ipar_wanita
     anak_kandung
     anak_angkat
+    none
 }
 
 enum religion {
