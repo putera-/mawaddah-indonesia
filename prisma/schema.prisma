@@ -40,8 +40,17 @@ model User {
     Question           Question[]
     createdAt          DateTime        @default(now())
     updatedAt          DateTime        @default(now()) @updatedAt
+    backup_detail      BackupDetail?
 
     @@map("user")
+}
+
+model BackupDetail {
+    user   User?  @relation(fields: [userId], references: [id])
+    userId String @unique
+    old_id Int    @db.Int
+
+    @@map("backup_detail")
 }
 
 model Password {

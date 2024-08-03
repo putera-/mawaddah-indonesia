@@ -106,6 +106,11 @@ export async function user(old_db: mysql.Connection, new_db: PrismaClient) {
                     address_zip_code: 0, // FIXME
                     poligami_opinion: '', // FIXME
                 }
+            },
+            backup_detail: {
+                create: {
+                    old_id: old_user.id
+                }
             }
         }
 
