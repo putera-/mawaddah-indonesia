@@ -625,10 +625,9 @@ export async function memberSeed(prisma: PrismaClient) {
             const randomNumber = Math.floor(Math.random() * 10) + 1;
             const firstname = faker.person.firstName('male');
             const lastname = faker.person.lastName('male') + i;
-            const email = faker.internet.email({
-                firstName: firstname,
-                lastName: lastname,
-            });
+            const email = faker.internet
+                .email({ firstName: firstname, lastName: lastname })
+                .toLowerCase();
 
             const randomProvinceIndex = Math.floor(
                 Math.random() * provinces.length,
@@ -652,16 +651,6 @@ export async function memberSeed(prisma: PrismaClient) {
                 blurred_avatar_md:
                     '/dummy/ikhwan_blurred_' + randomNumber + '_md.png',
                 createdAt: faker.date.past(),
-                password: {
-                    create: {
-                        password
-                    }
-                },
-                auth: {
-                    createMany: {
-                        data: getRandomAuths(),
-                    }
-                }
             };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
@@ -848,12 +837,7 @@ export async function memberSeed(prisma: PrismaClient) {
                     '/dummy/akhwat_blurred_' + randomNumber + '_lg.jpg',
                 blurred_avatar_md:
                     '/dummy/akhwat_blurred_' + randomNumber + '_md.jpg',
-                password: {
-                    create: {
-                        password
-                    }
-                },
-                createdAt: faker.date.past()
+                createdAt: faker.date.past(),
             };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
@@ -971,24 +955,7 @@ export async function memberSeed(prisma: PrismaClient) {
                 },
             };
 
-            // console.log(data)
-
-            // await prisma.user.upsert({
-            //     where: { email },
-            //     create: data,
-            //     update: data,
-            // });
-
-            const findEmail = await prisma.user.findFirst({
-                where: {
-                    email,
-                },
-            });
-            if (!findEmail) {
-                await prisma.user.create({
-                    data,
-                });
-            }
+            await prisma.user.create({ data });
         }
     }
 
