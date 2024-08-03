@@ -652,6 +652,16 @@ export async function memberSeed(prisma: PrismaClient) {
                 blurred_avatar_md:
                     '/dummy/ikhwan_blurred_' + randomNumber + '_md.png',
                 createdAt: faker.date.past(),
+                password: {
+                    create: {
+                        password
+                    }
+                },
+                auth: {
+                    createMany: {
+                        data: getRandomAuths(),
+                    }
+                }
             };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
@@ -838,7 +848,12 @@ export async function memberSeed(prisma: PrismaClient) {
                     '/dummy/akhwat_blurred_' + randomNumber + '_lg.jpg',
                 blurred_avatar_md:
                     '/dummy/akhwat_blurred_' + randomNumber + '_md.jpg',
-                createdAt: faker.date.past(),
+                password: {
+                    create: {
+                        password
+                    }
+                },
+                createdAt: faker.date.past()
             };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
