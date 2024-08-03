@@ -647,15 +647,18 @@ export async function memberSeed(prisma: PrismaClient) {
                     '/dummy/ikhwan_blurred_' + randomNumber + '_lg.png',
                 blurred_avatar_md:
                     '/dummy/ikhwan_blurred_' + randomNumber + '_md.png',
-                createdAt: faker.date.past()
-            };
-
-            data.password = {
-                create: {
-                    password
+                createdAt: faker.date.past(),
+                password: {
+                    create: {
+                        password
+                    }
+                },
+                auth: {
+                    createMany: {
+                        data: getRandomAuths(),
+                    }
                 }
-            }
-
+            };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
             {
@@ -746,22 +749,7 @@ export async function memberSeed(prisma: PrismaClient) {
                 data.taaruf_status = 'OPEN';
             }
 
-            data.auth = {
-                createMany: {
-                    data: getRandomAuths(),
-
-                },
-            };
-
-            console.log(data)
-
-            await prisma.user.upsert({
-                where: { email },
-                create: data,
-                update: data,
-            });
-
-
+            await prisma.user.create({ data });
         }
     }
 
@@ -814,7 +802,6 @@ export async function memberSeed(prisma: PrismaClient) {
                     }
                 },
                 createdAt: faker.date.past()
-
             };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
@@ -920,13 +907,6 @@ export async function memberSeed(prisma: PrismaClient) {
 
                 };
 
-
-                data.password = {
-                    create: {
-                        password
-                    }
-                }
-
                 data.taaruf_status = 'OPEN';
             }
 
@@ -936,13 +916,7 @@ export async function memberSeed(prisma: PrismaClient) {
                 },
             };
 
-            console.log(data)
-
-            await prisma.user.upsert({
-                where: { email },
-                create: data,
-                update: data,
-            });
+            await prisma.user.create({ data });
         }
     }
 
