@@ -784,7 +784,7 @@ export async function memberSeed(prisma: PrismaClient) {
                 await prisma.user.create({
                     data,
                 });
-                console.log('.');
+                // console.log('.');
             }
         }
     }
@@ -971,7 +971,7 @@ export async function memberSeed(prisma: PrismaClient) {
                 await prisma.user.create({
                     data,
                 });
-                console.log('.');
+                // console.log('.');
             }
         }
     }
