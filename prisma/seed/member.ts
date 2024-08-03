@@ -727,9 +727,6 @@ export async function memberSeed(prisma: PrismaClient) {
                         marriage_preparations: {
                             create: data_marriage_preparation,
                         },
-                        marriage_preparations: {
-                            create: data_marriage_preparation,
-                        },
                         ethnic: sukuIndonesia[
                             Math.floor(Math.random() * sukuIndonesia.length)
                         ],
@@ -790,14 +787,6 @@ export async function memberSeed(prisma: PrismaClient) {
                 });
                 // console.log('.');
             }
-            data.password = {
-                create: {
-                    password,
-                },
-            };
-            data.taaruf_status = 'OPEN';
-
-            await prisma.user.create({ data });
         }
     }
 
@@ -817,6 +806,7 @@ export async function memberSeed(prisma: PrismaClient) {
         for (let i = 0; i < 1000; i++) {
             if (i % 2 == 1) randoms.push(i);
         }
+
 
         // create 100 Alice MEMBER
         for (let i = 0; i < 1000; i++) {
