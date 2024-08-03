@@ -651,6 +651,16 @@ export async function memberSeed(prisma: PrismaClient) {
                 blurred_avatar_md:
                     '/dummy/ikhwan_blurred_' + randomNumber + '_md.png',
                 createdAt: faker.date.past(),
+                password: {
+                    create: {
+                        password
+                    }
+                },
+                auth: {
+                    createMany: {
+                        data: getRandomAuths(),
+                    }
+                }
             };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
