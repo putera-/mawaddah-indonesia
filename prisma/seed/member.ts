@@ -625,9 +625,10 @@ export async function memberSeed(prisma: PrismaClient) {
             const randomNumber = Math.floor(Math.random() * 10) + 1;
             const firstname = faker.person.firstName('male');
             const lastname = faker.person.lastName('male') + i;
-            const email = faker.internet
-                .email({ firstName: firstname, lastName: lastname })
-                .toLowerCase();
+            const email = faker.internet.email({
+                firstName: firstname,
+                lastName: lastname,
+            });
 
             const randomProvinceIndex = Math.floor(
                 Math.random() * provinces.length,
@@ -802,18 +803,20 @@ export async function memberSeed(prisma: PrismaClient) {
             },
         };
 
-
-
         const randoms = [];
         for (let i = 0; i < 1000; i++) {
             if (i % 2 == 1) randoms.push(i);
         }
 
-
         // create 100 Alice MEMBER
         for (let i = 0; i < 1000; i++) {
             process.stdout.write('.');
             const randomNumber = Math.floor(Math.random() * 10) + 1;
+            const firstname = faker.person.firstName('female');
+            const lastname = faker.person.lastName('female') + i;
+            const email = faker.internet
+                .email({ firstName: firstname })
+                .toLowerCase();
 
             const randomProvinceIndex = Math.floor(
                 Math.random() * provinces.length,
@@ -824,12 +827,6 @@ export async function memberSeed(prisma: PrismaClient) {
             const randomProvinceIndex2 = Math.floor(
                 Math.random() * provinces.length,
             );
-
-            const firstname = faker.person.firstName('female');
-            const lastname = faker.person.lastName('female') + i;
-            const email = faker.internet
-                .email({ firstName: firstname, lastName: lastname })
-                .toLocaleLowerCase();
             const data: Prisma.UserCreateInput = {
                 ...alice,
                 email,
