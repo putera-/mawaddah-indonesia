@@ -649,6 +649,16 @@ export async function memberSeed(prisma: PrismaClient) {
                 blurred_avatar_md:
                     '/dummy/ikhwan_blurred_' + randomNumber + '_md.png',
                 createdAt: faker.date.past(),
+                password: {
+                    create: {
+                        password
+                    }
+                },
+                auth: {
+                    createMany: {
+                        data: getRandomAuths(),
+                    }
+                }
             };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
@@ -760,31 +770,7 @@ export async function memberSeed(prisma: PrismaClient) {
             };
             data.taaruf_status = 'OPEN';
 
-            data.auth = {
-                createMany: {
-                    data: getRandomAuths(),
-                },
-            };
-
-            // console.log(data)
-
-            // await prisma.user.upsert({
-            //     where: { email },
-            //     create: data,
-            //     update: data,
-            // });
-
-            const findEmail = await prisma.user.findFirst({
-                where: {
-                    email,
-                },
-            });
-            if (!findEmail) {
-                await prisma.user.create({
-                    data,
-                });
-                // console.log('.');
-            }
+            await prisma.user.create({ data });
         }
     }
 
@@ -834,7 +820,12 @@ export async function memberSeed(prisma: PrismaClient) {
                     '/dummy/akhwat_blurred_' + randomNumber + '_lg.jpg',
                 blurred_avatar_md:
                     '/dummy/akhwat_blurred_' + randomNumber + '_md.jpg',
-                createdAt: faker.date.past(),
+                password: {
+                    create: {
+                        password
+                    }
+                },
+                createdAt: faker.date.past()
             };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
@@ -946,27 +937,9 @@ export async function memberSeed(prisma: PrismaClient) {
                     },
                 };
 
-                // console.log(data)
-
-                // await prisma.user.upsert({
-                //     where: { email },
-                //     create: data,
-                //     update: data,
-                // });
-
-                const findEmail = await prisma.user.findFirst({
-                    where: {
-                        email,
-                    },
-                });
-                if (!findEmail) {
-                    await prisma.user.create({
-                        data,
-                    });
-                    // console.log('.');
-                }
-            }
+            await prisma.user.create({ data });
         }
+    }
 
         console.log('\nSeed Finish: Member Done');
     }
