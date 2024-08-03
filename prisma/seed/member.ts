@@ -806,6 +806,7 @@ export async function memberSeed(prisma: PrismaClient) {
             if (i % 2 == 1) randoms.push(i);
         }
 
+
         // create 100 Alice MEMBER
         for (let i = 0; i < 1000; i++) {
             process.stdout.write('.');
