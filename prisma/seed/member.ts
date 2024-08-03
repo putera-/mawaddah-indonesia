@@ -955,7 +955,25 @@ export async function memberSeed(prisma: PrismaClient) {
                 },
             };
 
-            await prisma.user.create({ data });
+            // console.log(data)
+
+            // await prisma.user.upsert({
+            //     where: { email },
+            //     create: data,
+            //     update: data,
+            // });
+
+            const findEmail = await prisma.user.findFirst({
+                where: {
+                    email,
+                },
+            });
+            if (!findEmail) {
+                await prisma.user.create({
+                    data,
+                });
+                // console.log('.');
+            }
         }
     }
 
