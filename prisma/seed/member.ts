@@ -801,7 +801,6 @@ export async function memberSeed(prisma: PrismaClient) {
             },
         };
 
-
         const randoms = [];
         for (let i = 0; i < 1000; i++) {
             if (i % 2 == 1) randoms.push(i);

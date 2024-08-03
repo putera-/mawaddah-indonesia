@@ -18,13 +18,6 @@ const isTest = parameters.includes('test');
 
 let count = 0;
 
-const parameters = process.argv;
-
-// check runner parameter
-// isTest, gunakan variable ini untuk membuat data dummy
-// misal untuk create dummy user
-const isTest = parameters.includes('test');
-
 export async function user(old_db: mysql.Connection, new_db: PrismaClient) {
     const [old_users]: any[] = await old_db.execute('SELECT * FROM users');
 
@@ -137,11 +130,6 @@ export async function user(old_db: mysql.Connection, new_db: PrismaClient) {
                     hometown_province: old_user.address_origin,
                     address_zip_code: 0, // FIXME
                     poligami_opinion: '', // FIXME
-                },
-            },
-            backup_detail: {
-                create: {
-                    old_id: old_user.id,
                 },
             },
         };
