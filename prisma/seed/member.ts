@@ -651,16 +651,6 @@ export async function memberSeed(prisma: PrismaClient) {
                 blurred_avatar_md:
                     '/dummy/ikhwan_blurred_' + randomNumber + '_md.png',
                 createdAt: faker.date.past(),
-                password: {
-                    create: {
-                        password
-                    }
-                },
-                auth: {
-                    createMany: {
-                        data: getRandomAuths(),
-                    }
-                }
             };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
@@ -813,15 +803,18 @@ export async function memberSeed(prisma: PrismaClient) {
         };
 
 
+
         const randoms = [];
         for (let i = 0; i < 1000; i++) {
             if (i % 2 == 1) randoms.push(i);
         }
 
+
         // create 100 Alice MEMBER
         for (let i = 0; i < 1000; i++) {
             process.stdout.write('.');
             const randomNumber = Math.floor(Math.random() * 10) + 1;
+
             const randomProvinceIndex = Math.floor(
                 Math.random() * provinces.length,
             );
