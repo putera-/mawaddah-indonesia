@@ -1,6 +1,15 @@
-import { faker } from '@faker-js/faker';
-import { body_shape, Prisma, PrismaClient, RoleStatus } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
+import { faker, fakerMK } from '@faker-js/faker';
+import {
+    body_shape,
+    Gender,
+    ManhajStatus,
+    MarriagePermission,
+    MarriageStatus,
+    Prisma,
+    PrismaClient,
+    RoleStatus,
+} from '@prisma/client';
+// import * as bcrypt from 'bcrypt';
 import mysql from 'mysql2/promise';
 
 const parameters = process.argv;
@@ -21,42 +30,91 @@ export async function physical_character(
         'SELECT * FROM gambaran_fisik',
     );
 
+    const manhaj: ManhajStatus[] = [
+        ManhajStatus.BARU_BELAJAR,
+        ManhajStatus.NON_SALAF,
+        ManhajStatus.SALAF,
+    ];
+
+    // const dummy_gender: Gender[] = ['PRIA', 'WANITA'];
+
+    function getRandomDate(startYear = 1970, endYear = 2005) {
+        // Tanggal awal: 1 Januari 1970
+        const start = new Date(`${startYear}-01-01T00:00:00.000Z`).getTime();
+        // Tanggal akhir: 1 Januari 2005
+        const end = new Date(`${endYear}-01-01T00:00:00.000Z`).getTime();
+
+        // Milidetik acak antara start dan end
+        const randomTime =
+            Math.floor(Math.random() * (end - start + 1)) + start;
+
+        // Buat objek Date dari milidetik acak
+        const randomDate = new Date(randomTime);
+
+        // Kembalikan tanggal dalam format ISO 8601
+        return randomDate.toISOString();
+    }
+
+    const marriage_status: MarriageStatus[] = [
+        MarriageStatus.CERAI_HIDUP,
+        MarriageStatus.CERAI_MATI,
+        MarriageStatus.LAJANG,
+        MarriageStatus.MENIKAH,
+    ];
+
+    const marriage_permissions: MarriagePermission[] = [
+        MarriagePermission.NON_POLIGAMI,
+        MarriagePermission.POLIGAMI,
+    ];
+
+    const provinces = await new_db.province.findMany();
+    const randomProvinceIndex = Math.floor(Math.random() * provinces.length);
+    const randomProvinceIndex1 = Math.floor(Math.random() * provinces.length);
+    const randomProvinceIndex2 = Math.floor(Math.random() * provinces.length);
+
+    const sukuIndonesia = [
+        'Aceh',
+        'Batak',
+        'Minangkabau',
+        'Melayu',
+        'Sunda',
+        'Jawa',
+        'Madura',
+        'Betawi',
+        'Bali',
+        'Sasak',
+        'Bugis',
+        'Makassar',
+        'Toraja',
+        'Dayak',
+        'Banjar',
+        'Papua',
+        'Ambon',
+        'Flores',
+        'Timor',
+        'Sumbawa',
+        'Nias',
+        'Asmat',
+        'Mentawai',
+        'Tolaki',
+        'Minahasa',
+        'Sangir',
+        'Bajau',
+        'Torres Strait Islander',
+    ];
+
+    const poligamiOpinions = [
+        'Saya sangat suka dengan poligami',
+        'Yang pasti hukum Islam tidak melarang poligami secara mutlak (haram) dan juga tidak menganjurkan secara mutlak (wajib).',
+        'Menurutku poligami itu sah-sah aja asal tujuan dan caranya baik-baik',
+        'Saya kurang suka dengan poligami',
+        'Saya tidak suka dengan poligami',
+        'Poligami itu tanda tidak setia dan tidak cinta',
+    ];
+
     for (const gambaran_fisik of gambaran_fisiks) {
         const user_id = gambaran_fisik.user_id;
-        const password = await bcrypt.hash('rahasia', 10);
-
-        let user: Prisma.UserCreateInput = users.find(
-            (u: any) => u.old_id == user_id,
-        );
-
-        if (!user && isTest) {
-            // create dummy user for test
-            const firstname = faker.person.firstName();
-            user = {
-                old_id: user_id,
-                email: faker.internet
-                    .email({ firstName: firstname })
-                    .toLowerCase(),
-                firstname,
-                lastname: faker.person.lastName(),
-                active: true,
-                verified: true,
-                role: RoleStatus.MEMBER,
-                // password: {
-                //     create: {
-                //         password,
-                //     },
-                // },
-            };
-
-            await new_db.user.create({ data: user });
-        }
-        // process.stdout.write('.');
-        // for (const u_id of old_physical_character.user_id) {
-        //     const user = await old_db.execute(
-        //         `SELECT * FROM users WHERE id = ${u_id}`,
-        //     );
-        // }
+        // const password = await bcrypt.hash('rahasia', 10);
 
         const bodyShape: body_shape = (() => {
             switch (gambaran_fisik.bentuk_fisik) {
@@ -78,6 +136,129 @@ export async function physical_character(
                     return body_shape.normal;
             }
         })();
+
+        const characteristic = (() => {
+            switch (gambaran_fisik.cacat_fisik) {
+                case 0:
+                    return false;
+                case 1:
+                    return true;
+                default:
+                    return false;
+            }
+        })();
+        let characteristic_detail: string;
+        if (characteristic == true) {
+            characteristic_detail = gambaran_fisik.cacat_fisik_desc;
+        } else {
+            characteristic_detail = '';
+        }
+
+        const medical_history = (() => {
+            switch (gambaran_fisik.riwayat_penyakit) {
+                case 0:
+                    return false;
+                case 1:
+                    return true;
+                default:
+                    return false;
+            }
+        })();
+        let medical_history_detail: string;
+        if (medical_history == true) {
+            medical_history_detail = gambaran_fisik.riwayat_penyakit_desc;
+        } else {
+            medical_history_detail = '';
+        }
+
+        let user: Prisma.UserCreateInput = users.find(
+            (u: any) => u.old_id == user_id,
+        );
+
+        if (!user && isTest) {
+            // create dummy user for test
+
+            const firstname = faker.person.firstName('male');
+            user = {
+                old_id: user_id,
+                email: faker.internet
+                    .email({ firstName: firstname })
+                    .toLowerCase(),
+                firstname,
+                lastname: faker.person.lastName('male'),
+                active: true,
+                verified: true,
+                role: RoleStatus.MEMBER,
+                biodata: {
+                    create: {
+                        bio: faker.person.bio(),
+                        phone: '081234567890',
+                        manhaj: manhaj[
+                            Math.floor(Math.random() * manhaj.length)
+                        ],
+                        dob: getRandomDate(),
+                        gender: 'PRIA',
+                        marriage_status:
+                            marriage_status[
+                                Math.floor(
+                                    Math.random() * marriage_status.length,
+                                )
+                            ],
+                        marriage_permission:
+                            marriage_permissions[
+                                Math.floor(
+                                    Math.random() * marriage_permissions.length,
+                                )
+                            ],
+                        birth_place: provinces[randomProvinceIndex].name,
+                        birth_order: 1,
+                        ethnic: sukuIndonesia[
+                            Math.floor(Math.random() * sukuIndonesia.length)
+                        ],
+                        address: faker.location.streetAddress(true),
+                        address_town: provinces[randomProvinceIndex1].name,
+                        address_province: provinces[randomProvinceIndex].name,
+                        hometown_province: provinces[randomProvinceIndex2].name,
+                        address_zip_code: Math.floor(Math.random() * 100),
+                        poligami_opinion:
+                            poligamiOpinions[
+                                Math.floor(
+                                    Math.random() * poligamiOpinions.length,
+                                )
+                            ],
+                        physical_characters: {
+                            create: {
+                                height: gambaran_fisik.tinggi_badan,
+                                weight: gambaran_fisik.berat_badan,
+                                body_shape: bodyShape,
+                                skin_color: gambaran_fisik.warna_kulit,
+                                hair_color: gambaran_fisik.warna_rambut,
+                                hair_type: gambaran_fisik.tipe_rambut,
+                                eye_color: gambaran_fisik.warna_mata,
+                                characteristic,
+                                characteristic_detail,
+                                medical_history,
+                                medical_history_detail,
+                            },
+                        },
+                    },
+                },
+                // password: {
+                //     create: {
+                //         password,
+                //     },
+                // },
+            };
+
+            await new_db.user.create({ data: user });
+        }
+
+        // process.stdout.write('.');
+        // for (const u_id of old_physical_character.user_id) {
+        //     const user = await old_db.execute(
+        //         `SELECT * FROM users WHERE id = ${u_id}`,
+        //     );
+        // }
     }
 
     // for (const old_user of old_users) {
