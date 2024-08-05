@@ -1,10 +1,18 @@
 import { faker } from "@faker-js/faker";
 import { Gender, ManhajStatus, MarriagePermission, MarriageStatus, Prisma, PrismaClient } from "@prisma/client";
+import { User } from "src/users/user.interface";
+import { get_user_by_old_id } from "./get_user_by_old_id";
 
-export async function create_dummy_user_biodata(old_id: number, new_db: PrismaClient, index = 0) {
+export async function create_dummy_user_biodata(old_id: number, new_db: PrismaClient, index = 0): Promise<User> {
     const firstname = faker.person.firstName('male') + index;
     const lastname = faker.person.lastName('male');
     const email = faker.internet.email({ firstName: firstname, lastName: lastname }).toLowerCase();
+
+    let user = await get_user_by_old_id(old_id, new_db);
+
+    // return user if already exist
+    if (user) { return user; }
+
     const data_user: Prisma.UserCreateInput = {
         firstname,
         lastname,
@@ -38,12 +46,13 @@ export async function create_dummy_user_biodata(old_id: number, new_db: PrismaCl
         }
     }
 
-    const user = await new_db.user.create({
+    user = await new_db.user.create({
         data: data_user,
         include: {
             backup_detail: true
         }
 
     });
+
     return user;
 }
