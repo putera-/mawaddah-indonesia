@@ -120,12 +120,6 @@ export async function gambaran_keluarga(old_db: mysql.Connection, new_db: Prisma
 
             await new_db.familyMember.create({ data: new_famMembers });
         }
-
-
-        //TODO find user by old_id
-
-        // console.log(new_famMembers)
-
+        console.log('Done migration: Family Members')
     }
-
 }
