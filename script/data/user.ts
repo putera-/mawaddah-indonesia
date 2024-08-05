@@ -19,18 +19,10 @@ const isTest = parameters.includes('test');
 
 let count = 0;
 
-const parameters = process.argv;
-
-// check runner parameter
-// isTest, gunakan variable ini untuk membuat data dummy
-// misal untuk create dummy user
-const isTest = parameters.includes('test');
-
 export async function user(old_db: mysql.Connection, new_db: PrismaClient) {
     const [old_users]: any[] = await old_db.execute('SELECT * FROM users');
 
     for (const old_user of old_users) {
-
         // IN TEST MODE, STOP AT 100 DATA
         if (isTest) {
             if (count >= 100) {
@@ -110,7 +102,6 @@ export async function user(old_db: mysql.Connection, new_db: PrismaClient) {
             }
         })();
 
-
         const new_user: Prisma.UserCreateInput = {
             old_id: old_user.id,
             email: old_user.email,
@@ -152,5 +143,5 @@ export async function user(old_db: mysql.Connection, new_db: PrismaClient) {
         await new_db.user.create({ data: new_user });
     }
 
-    console.log('\nDone migration: Users')
+    console.log('\nDone migration: Users');
 }
