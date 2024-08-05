@@ -20,23 +20,21 @@ export async function gambaran_keluarga(old_db: mysql.Connection, new_db: Prisma
 
     for (let i = 0; i < families.length; i++) {
         const family = families[i];
+        const old_user_id = family.user_id;
         process.stdout.write('.');
 
         let backup_detail = await new_db.backupDetail.findFirst({
             where: {
-                old_id: family.id
+                old_id: old_user_id
             }
         })
-        console.log(backup_detail)
 
         if (backup_detail == null && isTest) {
             //create data dummy
-            const user = await create_dummy_user_biodata(family.id, new_db, i);
+            const user = await create_dummy_user_biodata(old_user_id, new_db, i);
 
             backup_detail = user.backup_detail
         }
-
-        console.log(backup_detail)
 
         if (backup_detail != null) {
             const biodata = await new_db.biodata.findFirst({
