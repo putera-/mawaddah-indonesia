@@ -26,8 +26,7 @@ async function main() {
 
     await user(old_db, new_db);
     await biodata(old_db, new_db);
-    await gambaran_keluarga(old_db, new_db)
-
+    await gambaran_keluarga(old_db, new_db);
 }
 
 main()
