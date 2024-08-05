@@ -33,7 +33,7 @@ export async function gambaran_keluarga(old_db: mysql.Connection, new_db: Prisma
             //create data dummy
             const user = await create_dummy_user_biodata(old_user_id, new_db, i);
 
-            backup_detail = user.backup_detail
+            backup_detail = user.backup_detail;
         }
 
         if (backup_detail != null) {
@@ -118,6 +118,7 @@ export async function gambaran_keluarga(old_db: mysql.Connection, new_db: Prisma
 
             await new_db.familyMember.create({ data: new_famMembers });
         }
-        console.log('Done migration: Family Members')
     }
+
+    console.log('Done migration: Family Members')
 }
