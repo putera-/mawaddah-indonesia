@@ -624,9 +624,8 @@ export async function memberSeed(prisma: PrismaClient) {
             process.stdout.write('.');
             const randomNumber = Math.floor(Math.random() * 10) + 1;
             const firstname = faker.person.firstName('male');
-            const email = faker.internet
-                .email({ firstName: firstname })
-                .toLowerCase();
+            const lastname = faker.person.lastName('male') + i;
+            const email = faker.internet.email({ firstName: firstname, lastName: lastname }).toLowerCase();
 
             const randomProvinceIndex = Math.floor(
                 Math.random() * provinces.length,
@@ -642,7 +641,7 @@ export async function memberSeed(prisma: PrismaClient) {
                 ...bob,
                 email,
                 firstname,
-                lastname: faker.person.lastName('male'),
+                lastname,
                 avatar: '/dummy/ikhwan_' + randomNumber + '_lg.png',
                 avatar_md: '/dummy/ikhwan_' + randomNumber + '_md.png',
                 blurred_avatar:
@@ -786,14 +785,13 @@ export async function memberSeed(prisma: PrismaClient) {
             );
 
             const firstname = faker.person.firstName('female');
-            const email = faker.internet
-                .email({ firstName: firstname })
-                .toLocaleLowerCase();
+            const lastname = faker.person.lastName('female') + i;
+            const email = faker.internet.email({ firstName: firstname, lastName: lastname }).toLocaleLowerCase();
             const data: Prisma.UserCreateInput = {
                 ...alice,
                 email,
                 firstname,
-                lastname: faker.person.lastName('female'),
+                lastname,
                 avatar: '/dummy/akhwat_' + randomNumber + '_lg.jpg',
                 avatar_md: '/dummy/akhwat_' + randomNumber + '_md.jpg',
                 blurred_avatar:
