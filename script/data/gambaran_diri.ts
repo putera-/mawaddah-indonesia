@@ -1,0 +1,89 @@
+import { Prisma, PrismaClient } from '@prisma/client';
+import mysql from 'mysql2/promise';
+import { create_dummy_user_biodata } from './helper/create_user_biodata';
+
+const parameters = process.argv;
+
+// check runner parameter
+// isTest, gunakan variable ini untuk membuat data dummy
+// misal untuk create dummy user
+const isTest = parameters.includes('test');
+
+export async function non_physical_character(
+    old_db: mysql.Connection,
+    new_db: PrismaClient,
+) {
+    const [gambaran_diris]: any[] = await old_db.execute(
+        'SELECT * FROM gambaran_diri',
+    );
+
+    for (const gambaran_diri of gambaran_diris) {
+        const user_id = gambaran_diri.user_id;
+        process.stdout.write('.');
+
+        let motto: string = gambaran_diri.moto;
+        let life_goal: string = gambaran_diri.target_hidup;
+        let hobby: string = gambaran_diri.hobi;
+        let spare_time_activity: string = gambaran_diri.kegiatan_waktu_luang;
+        let positive_traits: string = gambaran_diri.sifat_positif;
+        let negative_traits: string = gambaran_diri.sifat_negatif;
+        let liked_things: string = gambaran_diri.hal_disukai;
+        let unliked_things: string;
+        let alcohol_smoking = (() => {
+            switch (gambaran_diri.merokok) {
+                case 0:
+                    return false;
+                case 1:
+                    return true;
+                default:
+                    return false;
+            }
+        })();
+        let drink_alcohol: boolean = alcohol_smoking;
+        let smoking: boolean = alcohol_smoking;
+        let sport: string = '';
+        // const sports_user_id = sports.user_id;
+        // const user = () => user_id.find((u: number) => u == sports_user_id);
+
+        let backup_detail = await new_db.backupDetail.findFirst({
+            where: {
+                old_id: user_id,
+            },
+        });
+
+        if (backup_detail == null && isTest) {
+            //create data dummy
+            const user = await create_dummy_user_biodata(user_id, new_db);
+
+            backup_detail = user.backup_detail;
+        }
+
+        if (backup_detail != null) {
+            const biodata = await new_db.biodata.findFirst({
+                where: {
+                    userId: backup_detail.userId,
+                },
+            });
+            if (biodata) {
+                const new_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
+                    {
+                        biodata: { connect: { id: biodata.id } },
+                        motto,
+                        life_goal,
+                        hobby,
+                        spare_time_activity,
+                        positive_traits,
+                        negative_traits,
+                        liked_things,
+                        unliked_things,
+                        drink_alcohol,
+                        smoking,
+                        sport,
+                    };
+                await new_db.nonPhysicalCharacter.create({
+                    data: new_non_physical_character,
+                });
+            }
+        }
+    }
+}
