@@ -5,6 +5,7 @@ import { gambaran_keluarga } from './data/gambaran_keluarga';
 import { harapan } from './data/harapan';
 import { pendidikan } from './data/pendidikan';
 import { non_physical_character } from './data/gambaran_diri';
+import { physical_character } from './data/gambaran_fisik';
 
 const new_db = new PrismaClient();
 
@@ -40,6 +41,7 @@ async function main() {
     -Usaha/Bisnis yang akan digeluti - 1
     -Impian - 1
     */
+    await physical_character(old_db, new_db);
 }
 
 main()
