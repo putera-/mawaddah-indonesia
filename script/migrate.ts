@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import mysql from 'mysql2/promise';
 import { user } from './data/user';
 import { gambaran_keluarga } from './data/familyMember';
-import { biodata } from './data/biodata';
+import { physical_character } from './data/gambaran_fisik';
 
 const new_db = new PrismaClient();
 
@@ -25,9 +25,8 @@ async function main() {
     old_db = await mysql.createConnection(oldDbConfig);
 
     await user(old_db, new_db);
-    await biodata(old_db, new_db);
-    await gambaran_keluarga(old_db, new_db)
-
+    await gambaran_keluarga(old_db, new_db);
+    await physical_character(old_db, new_db);
 }
 
 main()
