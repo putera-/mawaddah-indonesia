@@ -89,7 +89,7 @@ export async function user(old_db: mysql.Connection, new_db: PrismaClient) {
         })();
 
         const new_user: Prisma.UserCreateInput = {
-            old_id: old_user.id,
+            id: old_user.id,
             email: old_user.email,
             firstname: old_user.first_name,
             lastname: old_user.last_name,

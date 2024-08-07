@@ -108,7 +108,6 @@ export async function harapan(old_db: mysql.Connection, new_db: PrismaClient) {
 
             console.log(new_life_goals)
 
-
         }
     }
 }
