@@ -25,7 +25,7 @@ let old_db: mysql.Connection;
 async function main() {
     old_db = await mysql.createConnection(oldDbConfig);
 
-    // await user(old_db, new_db);
+    await user(old_db, new_db);
     // await biodata(old_db, new_db);
     // await gambaran_keluarga(old_db, new_db);
     await harapan(old_db, new_db);

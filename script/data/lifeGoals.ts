@@ -36,12 +36,11 @@ export async function harapan(old_db: mysql.Connection, new_db: PrismaClient) {
                 }
             })
 
+            if (!biodata) continue;
+
             //TODO bikin schema 'Sumber dana acara pernikahan'
 
-            //  if (goal.tag == 'Sumber dana acara pernikahan') {
-            //     return dataLifeGoals.career
-            // }
-            let child_count = ''
+             let child_count = ''
             if (goal.tag == 'Keturunan dan pendidikan anak') {
                 child_count = goal.keterangan
             }
@@ -86,7 +85,7 @@ export async function harapan(old_db: mysql.Connection, new_db: PrismaClient) {
                 wife_work_permit_desc = goal.keterangan
             }
 
-            const dataLifeGoals = {
+            const new_life_goals: Prisma.LifeGoalCreateInput = {
                 career,
                 domicile,
                 child_count,
@@ -96,18 +95,19 @@ export async function harapan(old_db: mysql.Connection, new_db: PrismaClient) {
                 short_term_achievement,
                 long_term_achievement,
                 wife_work_permit_desc,
-            }
-
-
-            const new_life_goals: Prisma.LifeGoalCreateInput = {
-                ...dataLifeGoals,
                 biodata: { connect: { id: biodata.id } }
             }
 
-            await new_db.lifeGoal.create({ data: new_life_goals })
-
-            console.log(new_life_goals)
-
+            await new_db.lifeGoal.upsert(
+                {
+                    where: { biodataId: biodata.id },
+                    create: new_life_goals,
+                    update: new_life_goals,
+                }
+            )
         }
     }
+
+    console.log('Done migration: Life Goals')
+
 }
