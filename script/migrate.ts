@@ -1,9 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import mysql from 'mysql2/promise';
 import { user } from './data/user';
-import { gambaran_keluarga } from './data/familyMember';
+import { gambaran_keluarga } from './data/gambaran_keluarga';
 import { biodata } from './data/biodata';
-import { harapan } from './data/lifeGoals';
+import { harapan } from './data/harapan';
 
 const new_db = new PrismaClient();
 
@@ -42,3 +42,12 @@ main()
         await old_db.end();
         process.exit(1);
     });
+
+/*
+-sumber dana acara pernikahan - 27791
+-gambaran acara pernikahan - 28736
+-sumber dana Walimah -  3529
+-gambaran Walimah - 3616
+-Usaha/Bisnis yang akan digeluti - 1
+-Impian - 1
+*/
