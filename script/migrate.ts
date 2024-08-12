@@ -6,6 +6,7 @@ import { harapan } from './data/harapan';
 import { pendidikan } from './data/pendidikan';
 import { non_physical_character } from './data/gambaran_diri';
 import { physical_character } from './data/gambaran_fisik';
+import { non_physical_character } from './data/gambaran_diri';
 
 const new_db = new PrismaClient();
 
