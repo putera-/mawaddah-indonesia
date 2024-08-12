@@ -1,5 +1,12 @@
-import { Gender, ManhajStatus, MarriagePermission, MarriageStatus, Prisma, PrismaClient } from '@prisma/client';
-import mysql from 'mysql2/promise'
+import {
+    Gender,
+    ManhajStatus,
+    MarriagePermission,
+    MarriageStatus,
+    Prisma,
+    PrismaClient,
+} from '@prisma/client';
+import mysql from 'mysql2/promise';
 import { get_user_by_old_id } from './helper/get_user_by_old_id';
 
 const parameters = process.argv;
@@ -18,7 +25,9 @@ export async function user(old_db: mysql.Connection, new_db: PrismaClient) {
         const user = await get_user_by_old_id(old_user.id, new_db);
 
         // Skip if already created
-        if (user) { continue; }
+        if (user) {
+            continue;
+        }
 
         const marriage_status: MarriageStatus = (() => {
             switch (old_user.merried) {
@@ -110,17 +119,17 @@ export async function user(old_db: mysql.Connection, new_db: PrismaClient) {
                     hometown_province: old_user.address_origin,
                     address_zip_code: 0, // FIXME
                     poligami_opinion: '', // FIXME
-                }
+                },
             },
             backup_detail: {
                 create: {
-                    old_id: old_user.id
-                }
-            }
-        }
+                    old_id: old_user.id,
+                },
+            },
+        };
 
         await new_db.user.create({ data: new_user });
     }
 
-    console.log('Done migration: Family Members')
+    console.log('Done migration: Exist users');
 }
