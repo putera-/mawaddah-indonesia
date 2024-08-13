@@ -28,7 +28,7 @@ export async function non_physical_character(
         let positive_traits: string = gambaran_diri.sifat_positif;
         let negative_traits: string = gambaran_diri.sifat_negatif;
         let liked_things: string = gambaran_diri.hal_disukai;
-        let unliked_things: string;
+        let unliked_things: string = '';
         let alcohol_smoking = (() => {
             switch (gambaran_diri.merokok) {
                 case 0:
@@ -65,9 +65,14 @@ export async function non_physical_character(
                 },
             });
             if (biodata) {
+                const biodataId = biodata.id;
                 const new_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
                     {
-                        biodata: { connect: { id: biodata.id } },
+                        biodata: {
+                            connect: {
+                                id: biodataId,
+                            },
+                        },
                         motto,
                         life_goal,
                         hobby,
@@ -80,10 +85,14 @@ export async function non_physical_character(
                         smoking,
                         sport,
                     };
-                await new_db.nonPhysicalCharacter.create({
-                    data: new_non_physical_character,
+                await new_db.nonPhysicalCharacter.upsert({
+                    where: { biodataId: biodataId },
+                    create: new_non_physical_character,
+                    update: new_non_physical_character,
                 });
             }
         }
     }
+
+    console.log('Done migration: Non physical character');
 }

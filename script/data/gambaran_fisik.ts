@@ -1,16 +1,21 @@
 // import { faker, fakerMK } from '@faker-js/faker';
 import {
     body_shape,
+    eye_Color,
+    hair_color,
+    hair_type,
     // Gender,
     // ManhajStatus,
     // MarriagePermission,
     // MarriageStatus,
     Prisma,
     PrismaClient,
+    skin_color,
     // RoleStatus,
 } from '@prisma/client';
 import mysql from 'mysql2/promise';
 import { create_dummy_user_biodata } from './helper/create_user_biodata';
+import { fa } from '@faker-js/faker';
 
 const parameters = process.argv;
 
@@ -52,6 +57,70 @@ export async function physical_character(
             }
         })();
 
+        const skinColor: skin_color = (() => {
+            switch (gambaran_fisik.warna_kulit) {
+                case 'coklat_sawo_matang':
+                    return skin_color.sawo_matang;
+                case 'putih':
+                    return skin_color.putih;
+                case 'putih_kemerahan':
+                    return skin_color.putih_kemerahan;
+                case 'Gelap':
+                    return skin_color.gelap;
+                case 'Hitam':
+                    return skin_color.hitam;
+                default:
+                    return skin_color.sawo_matang;
+            }
+        })();
+
+        const hairColor: hair_color = (() => {
+            switch (gambaran_fisik.warna_rambut) {
+                case 'hitam':
+                    return hair_color.hitam;
+                case 'pirang':
+                    return hair_color.pirang;
+                case 'merah':
+                    return hair_color.merah;
+                case 'putih':
+                    return hair_color.putih;
+                default:
+                    return hair_color.hitam;
+            }
+        })();
+
+        const hairType: hair_type = (() => {
+            switch (gambaran_fisik.tipe_rambut) {
+                case 'lurus':
+                    return hair_type.lurus;
+                case 'ikal':
+                    return hair_type.ikal;
+                case 'keriting':
+                    return hair_type.keriting;
+                case 'kribo':
+                    return hair_type.kribo;
+                case 'botak':
+                    return hair_type.botak;
+                default:
+                    return hair_type.ikal;
+            }
+        })();
+
+        const eyeColor: eye_Color = (() => {
+            switch (gambaran_fisik.warna_mata) {
+                case 'hitam':
+                    return eye_Color.hitam;
+                case 'coklat':
+                    return eye_Color.coklat;
+                case 'biru':
+                    return eye_Color.biru;
+                case 'hijau':
+                    return eye_Color.hijau;
+                default:
+                    return eye_Color.hitam;
+            }
+        })();
+
         const characteristic = (() => {
             switch (gambaran_fisik.cacat_fisik) {
                 case 0:
@@ -68,6 +137,13 @@ export async function physical_character(
         } else {
             characteristic_detail = '';
         }
+
+        let height: number = Math.max(
+            gambaran_fisik.tinggi_badan.match(/\d+/g).map(Number),
+        );
+        let weight: number = Math.max(
+            gambaran_fisik.berat_badan.match(/\d+/g).map(Number),
+        );
 
         const medical_history = (() => {
             switch (gambaran_fisik.riwayat_penyakit) {
@@ -99,7 +175,6 @@ export async function physical_character(
 
             backup_detail = user.backup_detail;
         }
-
         if (backup_detail != null) {
             const biodata = await new_db.biodata.findFirst({
                 where: {
@@ -107,33 +182,53 @@ export async function physical_character(
                 },
             });
             if (biodata) {
+                const biodataId = biodata.id;
                 const new_physical_character: Prisma.PhysicalCharacterCreateInput =
                     {
-                        biodata: { connect: { id: biodata.id } },
-                        height: gambaran_fisik.tinggi_badan,
-                        weight: gambaran_fisik.berat_badan,
+                        biodata: { connect: { id: biodataId } },
+                        height,
+                        weight,
                         body_shape: bodyShape,
-                        skin_color: gambaran_fisik.warna_kulit,
-                        hair_color: gambaran_fisik.warna_rambut,
-                        hair_type: gambaran_fisik.tipe_rambut,
-                        eye_color: gambaran_fisik.warna_mata,
+                        skin_color: skinColor,
+                        hair_color: hairColor,
+                        hair_type: hairType,
+                        eye_color: eyeColor,
                         characteristic,
                         characteristic_detail,
                         medical_history,
                         medical_history_detail,
                     };
-                await new_db.physicalCharacter.create({
-                    data: new_physical_character,
+                await new_db.physicalCharacter.upsert({
+                    where: { biodataId: biodataId },
+                    create: new_physical_character,
+                    update: new_physical_character,
                 });
-                await new_db.nonPhysicalCharacter.update({
-                    where: {
-                        biodataId: biodata.id,
-                    },
+                const check_non_physical_character =
+                    await new_db.nonPhysicalCharacter.findFirst({
+                        where: {
+                            biodataId: biodataId,
+                        },
+                    });
+
+                if (check_non_physical_character) {
+                    const data = { sport: gambaran_fisik.olahraga_digemari };
+                    await new_db.nonPhysicalCharacter.update({
+                        where: {
+                            biodataId: biodata.id,
+                        },
+                        data,
+                    });
+                }
+                await new_db.nonPhysicalCharacter.create({
                     data: {
+                        biodata: {
+                            connect: { id: biodataId },
+                        },
                         sport: gambaran_fisik.olahraga_digemari,
                     },
                 });
             }
         }
     }
+    console.log('Done migration: Physical character');
 }
