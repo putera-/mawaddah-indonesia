@@ -9,6 +9,7 @@ import {
 } from '@prisma/client';
 import mysql from 'mysql2/promise';
 import { create_dummy_user_biodata } from './helper/create_user_biodata';
+import { fa } from '@faker-js/faker';
 
 const parameters = process.argv;
 
