@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { Prisma } from '@prisma/client';
 import { Question } from 'src/question/question.interface';
@@ -12,6 +12,9 @@ export class AnswerService {
             where: { id: userId },
             include: { biodata: true },
         });
+
+        if (!user.biodata) throw new ForbiddenException('Biodata is not found, please create biodata first!');
+
         const questions: Question[] = await this.Prisma.question.findMany({
             where: {
                 deleted: false
@@ -39,6 +42,8 @@ export class AnswerService {
             where: { id: userId },
             include: { biodata: true },
         });
+
+        if (!user.biodata) throw new ForbiddenException('Biodata is not found, please create biodata first!');
 
         const question: Question = await this.Prisma.question.findFirst({
             where: {
@@ -78,6 +83,9 @@ export class AnswerService {
             where: { id: userId },
             include: { biodata: true },
         });
+
+        if (!user.biodata) throw new ForbiddenException('Biodata is not found, please create biodata first!');
+
         return this.Prisma.answer.upsert({
             where: {
                 questionId_biodataId: {
