@@ -1,6 +1,8 @@
-import { Prisma, PrismaClient, relationship, religion } from '@prisma/client';
+import { faker } from '@faker-js/faker';
+import { BackupDetail, Gender, ManhajStatus, MarriagePermission, MarriageStatus, Prisma, PrismaClient, relationship, religion } from '@prisma/client';
 import dayjs from 'dayjs';
 import mysql from 'mysql2/promise'
+import { create_dummy_user_biodata } from './helper/create_user_biodata';
 
 const parameters = process.argv;
 
@@ -16,79 +18,107 @@ export async function gambaran_keluarga(old_db: mysql.Connection, new_db: Prisma
     const [families]: any[] = await old_db.execute("SELECT * FROM gambaran_keluarga");
     // console.log(families)
 
-    for (const family of families) {
+    for (let i = 0; i < families.length; i++) {
+        const family = families[i];
+        const old_user_id = family.user_id;
         process.stdout.write('.');
 
-        const relationships: relationship = (() => {
-            switch (family.posisi) {
-                case "Ayah":
-                    return relationship.ayah
-                    break;
-                case "Ibu":
-                    return relationship.ibu
-                    break;
-                case "Kakak Laki":
-                    return relationship.kakak_pria
-                    break;
-                case "Kakak Perempuan":
-                    return relationship.kakak_wanita
-                    break;
-                case "Adik Laki":
-                    return relationship.adik_pria
-                    break;
-                case "Adik Perempuan":
-                    return relationship.adik_wanita
-                    break;
-                case "Anak Laki":
-                    return relationship.anak_kandung
-                    break;
-                case "Anak Perempuan":
-                    return relationship.anak_kandung
-                    break;
-                //TODO sementara pakai default untuk data diluar enum
-                default:
-                    return relationship.none
+        let backup_detail = await new_db.backupDetail.findFirst({
+            where: {
+                old_id: old_user_id
             }
-        })();
+        })
 
-        const religions: religion = (() => {
-            switch (family.agama) {
-                case "IslamSalaf":
-                    return religion.islam
-                    break;
-                case "Islam":
-                    return religion.islam
-                    break;
-                case "BukanIslam":
-                    return religion.non_islam
-                    break;
-            }
-        })();
+        if (backup_detail == null && isTest) {
+            //create data dummy
+            const user = await create_dummy_user_biodata(old_user_id, new_db, i);
 
-        const is_alive: boolean = (() => {
-            switch (family.masih_hidup) {
-                case 1:
-                    return true
-                    break;
-                case 0:
-                    return false
-                    break;
-            }
-        })();
+            backup_detail = user.backup_detail;
+        }
 
-        const dob = dayjs().subtract(family.usia, 'year').format('YYYY-MM-DD');
-        const new_famMembers: Prisma.FamilyMemberCreateWithoutBiodataInput = {
-            relationship: relationships,
-            religion: religions,
-            dob,
-            education: family.pekerjaan,
-            is_alive,
-            job: family.pekerjaan
-        };
-        //TODO find user by old_id
+        if (backup_detail != null) {
+            const biodata = await new_db.biodata.findFirst({
+                where: {
+                    userId: backup_detail.userId
+                }
+            })
 
-        console.log(new_famMembers)
 
+            const relationships: relationship = (() => {
+                switch (family.posisi) {
+                    case "Ayah":
+                        return relationship.ayah
+                        break;
+                    case "Ibu":
+                        return relationship.ibu
+                        break;
+                    case "Kakak Laki":
+                        return relationship.kakak_pria
+                        break;
+                    case "Kakak Perempuan":
+                        return relationship.kakak_wanita
+                        break;
+                    case "Adik Laki":
+                        return relationship.adik_pria
+                        break;
+                    case "Adik Perempuan":
+                        return relationship.adik_wanita
+                        break;
+                    case "Anak Laki":
+                        return relationship.anak_kandung
+                        break;
+                    case "Anak Perempuan":
+                        return relationship.anak_kandung
+                        break;
+                    //TODO sementara pakai default untuk data diluar enum
+                    default:
+                        return relationship.none
+                }
+            })();
+
+            const religions: religion = (() => {
+                switch (family.agama) {
+                    case "IslamSalaf":
+                        return religion.islam
+                        break;
+                    case "Islam":
+                        return religion.islam
+                        break;
+                    case "BukanIslam":
+                        return religion.non_islam
+                        break;
+                }
+            })();
+
+            const is_alive: boolean = (() => {
+                switch (family.masih_hidup) {
+                    case 1:
+                        return true
+                        break;
+                    case 0:
+                        return false
+                        break;
+                }
+            })();
+
+            const dob = dayjs().subtract(family.usia, 'year').format('YYYY-MM-DD');
+            const new_famMembers: Prisma.FamilyMemberCreateInput = {
+                relationship: relationships,
+                religion: religions,
+                dob,
+                education: family.pekerjaan,
+                is_alive,
+                job: family.pekerjaan,
+                biodata: {
+                    connect: {
+                        id: biodata.id
+                    }
+                }
+            };
+
+            await new_db.familyMember.create({ data: new_famMembers });
+        }
     }
 
+    console.log('Done migration: Family Members')
 }

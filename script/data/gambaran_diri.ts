@@ -55,7 +55,7 @@ export async function non_physical_character(
 
             backup_detail = user.backup_detail;
         }
-        
+
         if (backup_detail != null) {
             const biodata = await new_db.biodata.findFirst({
                 where: {
