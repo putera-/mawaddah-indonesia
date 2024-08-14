@@ -15,6 +15,7 @@ datasource db {
 
 model User {
     id                 String          @id @default(uuid())
+    old_id             Int?            @db.Int
     email              String          @unique @db.VarChar(100)
     firstname          String          @db.VarChar(100)
     lastname           String          @db.VarChar(100)
@@ -241,7 +242,6 @@ model Province {
 
 model Education {
     id               String   @id @default(uuid())
-    userId           String
     institution_name String   @db.VarChar(100)
     major            String?  @db.VarChar(100)
     degree           String?  @db.VarChar(100)
@@ -350,6 +350,7 @@ model NonPhysicalCharacter {
     unliked_things      String?  @db.Text()
     drink_alcohol       Boolean  @default(false)
     smoking             Boolean  @default(false)
+    sport               String?  @db.Text()
     createdAt           DateTime @default(now())
     updatedAt           DateTime @default(now()) @updatedAt
     biodata             Biodata  @relation(fields: [biodataId], references: [id])
@@ -612,6 +613,8 @@ model NonPhysicalCriteria {
     other          String?         @db.Text
     biodata        Biodata         @relation(fields: [biodataId], references: [id])
     biodataId      String          @unique
+    createdAt      DateTime        @default(now())
+    updatedAt      DateTime        @default(now()) @updatedAt
 
     @@map("non_physical_criteria")
 }

@@ -1,6 +1,7 @@
 -- CreateTable
 CREATE TABLE `user` (
     `id` VARCHAR(191) NOT NULL,
+    `old_id` INTEGER NULL,
     `email` VARCHAR(100) NOT NULL,
     `firstname` VARCHAR(100) NOT NULL,
     `lastname` VARCHAR(100) NOT NULL,
@@ -173,7 +174,6 @@ CREATE TABLE `province` (
 -- CreateTable
 CREATE TABLE `education` (
     `id` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NOT NULL,
     `institution_name` VARCHAR(100) NOT NULL,
     `major` VARCHAR(100) NULL,
     `degree` VARCHAR(100) NULL,
@@ -245,6 +245,7 @@ CREATE TABLE `non_physical_character` (
     `unliked_things` TEXT NULL,
     `drink_alcohol` BOOLEAN NOT NULL DEFAULT false,
     `smoking` BOOLEAN NOT NULL DEFAULT false,
+    `sport` TEXT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `biodataId` VARCHAR(191) NOT NULL,
@@ -462,6 +463,8 @@ CREATE TABLE `non_physical_criteria` (
     `job` VARCHAR(100) NULL,
     `other` TEXT NULL,
     `biodataId` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     UNIQUE INDEX `non_physical_criteria_biodataId_key`(`biodataId`),
     PRIMARY KEY (`id`)

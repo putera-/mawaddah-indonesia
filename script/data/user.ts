@@ -1,5 +1,13 @@
-import { Gender, ManhajStatus, MarriagePermission, MarriageStatus, Prisma, PrismaClient } from '@prisma/client';
-import mysql from 'mysql2/promise'
+import {
+    body_shape,
+    Gender,
+    ManhajStatus,
+    MarriagePermission,
+    MarriageStatus,
+    Prisma,
+    PrismaClient,
+} from '@prisma/client';
+import mysql from 'mysql2/promise';
 import { get_user_by_old_id } from './helper/get_user_by_old_id';
 
 const parameters = process.argv;
@@ -10,7 +18,7 @@ const parameters = process.argv;
 const isTest = parameters.includes('test');
 
 export async function user(old_db: mysql.Connection, new_db: PrismaClient) {
-    const [old_users]: any[] = await old_db.execute("SELECT * FROM users");
+    const [old_users]: any[] = await old_db.execute('SELECT * FROM users');
 
     for (const old_user of old_users) {
         process.stdout.write('.');
@@ -35,7 +43,7 @@ export async function user(old_db: mysql.Connection, new_db: PrismaClient) {
                     return MarriageStatus.CERAI_MATI;
                     break;
                 default:
-                    return MarriageStatus.LAJANG
+                    return MarriageStatus.LAJANG;
             }
         })();
 
@@ -55,19 +63,17 @@ export async function user(old_db: mysql.Connection, new_db: PrismaClient) {
         const manhaj: ManhajStatus = (() => {
             switch (old_user.manhaj) {
                 case 'SALAF':
-                    return ManhajStatus.SALAF
+                    return ManhajStatus.SALAF;
                     break;
                 case 'UNSALAF':
-                    return ManhajStatus.BARU_BELAJAR
+                    return ManhajStatus.BARU_BELAJAR;
                     break;
                 case 'NOSALAF':
-                    return ManhajStatus.NON_SALAF
+                    return ManhajStatus.NON_SALAF;
                     break;
                 default:
-                    return ManhajStatus.SALAF
-
+                    return ManhajStatus.SALAF;
             }
-
         })();
 
         const gender: Gender = (() => {
@@ -81,8 +87,7 @@ export async function user(old_db: mysql.Connection, new_db: PrismaClient) {
                 default:
                     return Gender.PRIA;
             }
-        })()
-
+        })();
 
         const new_user: Prisma.UserCreateInput = {
             email: old_user.email,
@@ -91,8 +96,8 @@ export async function user(old_db: mysql.Connection, new_db: PrismaClient) {
             active: old_user.active ? true : false,
             password: {
                 create: {
-                    password: old_user.encrypted_password
-                }
+                    password: old_user.encrypted_password,
+                },
             },
             biodata: {
                 create: {

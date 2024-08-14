@@ -1,5 +1,4 @@
-import { faker } from '@faker-js/faker';
-import { BackupDetail, Gender, ManhajStatus, MarriagePermission, MarriageStatus, Prisma, PrismaClient, relationship, religion } from '@prisma/client';
+import { Prisma, PrismaClient, relationship, religion } from '@prisma/client';
 import dayjs from 'dayjs';
 import mysql from 'mysql2/promise'
 import { create_dummy_user_biodata } from './helper/create_user_biodata';
