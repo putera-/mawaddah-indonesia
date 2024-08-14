@@ -1,21 +1,14 @@
-// import { faker, fakerMK } from '@faker-js/faker';
 import {
     body_shape,
     eye_Color,
     hair_color,
     hair_type,
-    // Gender,
-    // ManhajStatus,
-    // MarriagePermission,
-    // MarriageStatus,
     Prisma,
     PrismaClient,
     skin_color,
-    // RoleStatus,
 } from '@prisma/client';
 import mysql from 'mysql2/promise';
 import { create_dummy_user_biodata } from './helper/create_user_biodata';
-import { fa } from '@faker-js/faker';
 
 const parameters = process.argv;
 
@@ -28,7 +21,6 @@ export async function physical_character(
     old_db: mysql.Connection,
     new_db: PrismaClient,
 ) {
-    // const users = await new_db.user.findMany();
     const [gambaran_fisiks]: any[] = await old_db.execute(
         'SELECT * FROM gambaran_fisik',
     );
