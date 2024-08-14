@@ -242,7 +242,6 @@ model Province {
 
 model Education {
     id               String   @id @default(uuid())
-    userId           String
     institution_name String   @db.VarChar(100)
     major            String?  @db.VarChar(100)
     degree           String?  @db.VarChar(100)
