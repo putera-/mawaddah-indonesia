@@ -138,13 +138,19 @@ export async function physical_character(
             characteristic_detail = '';
         }
 
-        let height: number = Math.max(
-            gambaran_fisik.tinggi_badan.match(/\d+/g).map(Number),
-        );
-        let weight: number = Math.max(
-            gambaran_fisik.berat_badan.match(/\d+/g).map(Number),
-        );
-
+        let height: number =
+            gambaran_fisik.tinggi_badan == '-'
+                ? 0
+                : Math.max(
+                      gambaran_fisik.tinggi_badan.match(/\d+/g).map(Number),
+                  );
+        let weight: number =
+            gambaran_fisik.berat_badan == '-'
+                ? 0
+                : Math.max(
+                      gambaran_fisik.berat_badan.match(/\d+/g).map(Number),
+                  );
+        // console.log(user_id, height, weight);
         const medical_history = (() => {
             switch (gambaran_fisik.riwayat_penyakit) {
                 case 0:
@@ -186,8 +192,8 @@ export async function physical_character(
                 const new_physical_character: Prisma.PhysicalCharacterCreateInput =
                     {
                         biodata: { connect: { id: biodataId } },
-                        height,
-                        weight,
+                        height: isNaN(height) ? 0 : height,
+                        weight: isNaN(weight) ? 0 : weight,
                         body_shape: bodyShape,
                         skin_color: skinColor,
                         hair_color: hairColor,
@@ -210,23 +216,24 @@ export async function physical_character(
                         },
                     });
 
+                const data = { sport: gambaran_fisik.olahraga_digemari };
                 if (check_non_physical_character) {
-                    const data = { sport: gambaran_fisik.olahraga_digemari };
                     await new_db.nonPhysicalCharacter.update({
                         where: {
                             biodataId: biodata.id,
                         },
                         data,
                     });
-                }
-                await new_db.nonPhysicalCharacter.create({
-                    data: {
-                        biodata: {
-                            connect: { id: biodataId },
+                } else {
+                    await new_db.nonPhysicalCharacter.create({
+                        data: {
+                            ...data,
+                            biodata: {
+                                connect: { id: biodataId },
+                            },
                         },
-                        sport: gambaran_fisik.olahraga_digemari,
-                    },
-                });
+                    });
+                }
             }
         }
     }
