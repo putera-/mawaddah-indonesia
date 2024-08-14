@@ -257,7 +257,7 @@ CREATE TABLE `non_physical_character` (
 CREATE TABLE `family_member` (
     `id` VARCHAR(191) NOT NULL,
     `biodataId` VARCHAR(191) NOT NULL,
-    `relationship` ENUM('ayah', 'ibu', 'kakak_pria', 'kakak_wanita', 'adik_pria', 'adik_wanita', 'ipar_pria', 'ipar_wanita', 'anak_kandung', 'anak_angkat') NULL,
+    `relationship` ENUM('ayah', 'ibu', 'kakak_pria', 'kakak_wanita', 'adik_pria', 'adik_wanita', 'ipar_pria', 'ipar_wanita', 'anak_kandung', 'anak_angkat', 'none') NULL,
     `religion` ENUM('islam', 'non_islam') NULL,
     `dob` VARCHAR(20) NOT NULL,
     `education` TEXT NOT NULL,
