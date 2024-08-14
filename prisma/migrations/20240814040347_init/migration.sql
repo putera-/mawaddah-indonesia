@@ -174,7 +174,6 @@ CREATE TABLE `province` (
 -- CreateTable
 CREATE TABLE `education` (
     `id` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NOT NULL,
     `institution_name` VARCHAR(100) NOT NULL,
     `major` VARCHAR(100) NULL,
     `degree` VARCHAR(100) NULL,

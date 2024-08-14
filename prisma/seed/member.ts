@@ -809,10 +809,6 @@ export async function memberSeed(prisma: PrismaClient) {
         for (let i = 0; i < 1000; i++) {
             process.stdout.write('.');
             const randomNumber = Math.floor(Math.random() * 10) + 1;
-            const firstname = faker.person.firstName('female');
-            const email = faker.internet
-                .email({ firstName: firstname })
-                .toLowerCase();
 
             const randomProvinceIndex = Math.floor(
                 Math.random() * provinces.length,
@@ -974,3 +970,4 @@ export async function memberSeed(prisma: PrismaClient) {
 
         console.log('\nSeed Finish: Member Done');
     }
+}

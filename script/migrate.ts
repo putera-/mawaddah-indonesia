@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client';
 import mysql from 'mysql2/promise';
 import { user } from './data/user';
 import { gambaran_keluarga } from './data/gambaran_keluarga';
-import { biodata } from './data/biodata';
 import { harapan } from './data/harapan';
 import { pendidikan } from './data/pendidikan';
 
@@ -26,8 +25,7 @@ let old_db: mysql.Connection;
 async function main() {
     old_db = await mysql.createConnection(oldDbConfig);
 
-    // await user(old_db, new_db);
-    // await biodata(old_db, new_db);
+    await user(old_db, new_db);
     // await gambaran_keluarga(old_db, new_db);
     // await harapan(old_db, new_db);
     await pendidikan(old_db, new_db);
