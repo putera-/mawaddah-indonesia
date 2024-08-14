@@ -42,8 +42,6 @@ export async function non_physical_character(
         let drink_alcohol: boolean = alcohol_smoking;
         let smoking: boolean = alcohol_smoking;
         let sport: string = '';
-        // const sports_user_id = sports.user_id;
-        // const user = () => user_id.find((u: number) => u == sports_user_id);
 
         let backup_detail = await new_db.backupDetail.findFirst({
             where: {
@@ -57,7 +55,7 @@ export async function non_physical_character(
 
             backup_detail = user.backup_detail;
         }
-
+        
         if (backup_detail != null) {
             const biodata = await new_db.biodata.findFirst({
                 where: {
