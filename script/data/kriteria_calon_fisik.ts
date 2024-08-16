@@ -114,23 +114,6 @@ export async function physical_character(
             }
         })();
 
-        // const characteristic = (() => {
-        //     switch (kriteria_calon_fisik.cacat_fisik) {
-        //         case 0:
-        //             return false;
-        //         case 1:
-        //             return true;
-        //         default:
-        //             return false;
-        //     }
-        // })();
-        // let characteristic_detail: string;
-        // if (characteristic == true) {
-        //     characteristic_detail = kriteria_calon_fisik.cacat_fisik_desc;
-        // } else {
-        //     characteristic_detail = '';
-        // }
-
         let height: number =
             kriteria_calon_fisik.tinggi_badan == '-'
                 ? 0
@@ -147,23 +130,6 @@ export async function physical_character(
                           .match(/\d+/g)
                           .map(Number),
                   );
-
-        // const medical_history = (() => {
-        //     switch (kriteria_calon_fisik.riwayat_penyakit) {
-        //         case 0:
-        //             return false;
-        //         case 1:
-        //             return true;
-        //         default:
-        //             return false;
-        //     }
-        // })();
-        // let medical_history_detail: string;
-        // if (medical_history == true) {
-        //     medical_history_detail = kriteria_calon_fisik.riwayat_penyakit_desc;
-        // } else {
-        //     medical_history_detail = '';
-        // }
 
         let backup_detail = await new_db.backupDetail.findFirst({
             where: {
@@ -184,54 +150,50 @@ export async function physical_character(
                     userId: backup_detail.userId,
                 },
             });
-            // if (biodata) {
-            //     const biodataId = biodata.id;
-            //     const new_physical_character: Prisma.PhysicalCharacterCreateInput =
-            //         {
-            //             biodata: { connect: { id: biodataId } },
-            //             height: isNaN(height) ? 0 : height,
-            //             weight: isNaN(weight) ? 0 : weight,
-            //             body_shape: bodyShape,
-            //             skin_color: skinColor,
-            //             hair_color: hairColor,
-            //             hair_type: hairType,
-            //             eye_color: eyeColor,
-            //             characteristic,
-            //             characteristic_detail,
-            //             medical_history,
-            //             medical_history_detail,
-            //         };
-            //     await new_db.physicalCharacter.upsert({
-            //         where: { biodataId: biodataId },
-            //         create: new_physical_character,
-            //         update: new_physical_character,
-            //     });
-            //     const check_non_physical_character =
-            //         await new_db.nonPhysicalCharacter.findFirst({
-            //             where: {
-            //                 biodataId: biodataId,
-            //             },
-            //         });
+            if (biodata) {
+                const biodataId = biodata.id;
+                const new_physical_criteria: Prisma.PhysicalCriteriaCreateInput =
+                    {
+                        biodata: { connect: { id: biodataId } },
+                        height: isNaN(height) ? 0 : height,
+                        weight: isNaN(weight) ? 0 : weight,
+                        body_shape: bodyShape,
+                        skin_color: skinColor,
+                        hair_color: hairColor,
+                        hair_type: hairType,
+                        eye_color: eyeColor,
+                    };
+                await new_db.physicalCriteria.upsert({
+                    where: { biodataId: biodataId },
+                    create: new_physical_criteria,
+                    update: new_physical_criteria,
+                });
+                const check_non_physical_character =
+                    await new_db.nonPhysicalCharacter.findFirst({
+                        where: {
+                            biodataId: biodataId,
+                        },
+                    });
 
-            //     const data = { sport: kriteria_calon_fisik.olahraga_digemari };
-            //     if (check_non_physical_character) {
-            //         await new_db.nonPhysicalCharacter.update({
-            //             where: {
-            //                 biodataId: biodata.id,
-            //             },
-            //             data,
-            //         });
-            //     } else {
-            //         await new_db.nonPhysicalCharacter.create({
-            //             data: {
-            //                 ...data,
-            //                 biodata: {
-            //                     connect: { id: biodataId },
-            //                 },
-            //             },
-            //         });
-            //     }
-            // }
+                const data = { sport: kriteria_calon_fisik.olahraga_digemari };
+                if (check_non_physical_character) {
+                    await new_db.nonPhysicalCharacter.update({
+                        where: {
+                            biodataId: biodata.id,
+                        },
+                        data,
+                    });
+                } else {
+                    await new_db.nonPhysicalCharacter.create({
+                        data: {
+                            ...data,
+                            biodata: {
+                                connect: { id: biodataId },
+                            },
+                        },
+                    });
+                }
+            }
         }
     }
     console.log('Done migration: Physical character');
