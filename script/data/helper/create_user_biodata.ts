@@ -9,7 +9,7 @@ export async function create_dummy_user_biodata(old_id: number, new_db: PrismaCl
     const lastname = faker.person.lastName('male');
     const email = faker.internet.email({ firstName: firstname, lastName: lastname }).toLowerCase();
 
-    let user = await get_user_by_old_id(old_id, new_db);
+    let user: User = await get_user_by_old_id(old_id, new_db);
 
     // return user if already exist
     if (user) { return user; }
@@ -55,7 +55,8 @@ export async function create_dummy_user_biodata(old_id: number, new_db: PrismaCl
     user = await new_db.user.create({
         data: data_user,
         include: {
-            backup_detail: true
+            backup_detail: true,
+            biodata: true
         }
 
     });
