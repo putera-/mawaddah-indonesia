@@ -1,11 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import mysql from 'mysql2/promise';
 import { user } from './data/user';
-import { gambaran_keluarga } from './data/gambaran_keluarga';
-import { harapan } from './data/harapan';
-import { pendidikan } from './data/pendidikan';
-import { non_physical_character } from './data/gambaran_diri';
 import { physical_character } from './data/gambaran_fisik';
+import { non_physical_character } from './data/gambaran_diri';
+import { pendidikan } from './data/pendidikan';
+import { harapan } from './data/harapan';
+import { gambaran_keluarga } from './data/gambaran_keluarga';
 
 const new_db = new PrismaClient();
 

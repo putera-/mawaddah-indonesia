@@ -625,10 +625,9 @@ export async function memberSeed(prisma: PrismaClient) {
             const randomNumber = Math.floor(Math.random() * 10) + 1;
             const firstname = faker.person.firstName('male');
             const lastname = faker.person.lastName('male') + i;
-            const email = faker.internet.email({
-                firstName: firstname,
-                lastName: lastname,
-            });
+            const email = faker.internet
+                .email({ firstName: firstname, lastName: lastname })
+                .toLowerCase();
 
             const randomProvinceIndex = Math.floor(
                 Math.random() * provinces.length,
