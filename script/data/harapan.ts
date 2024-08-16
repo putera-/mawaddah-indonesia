@@ -16,6 +16,15 @@ export async function harapan(old_db: mysql.Connection, new_db: PrismaClient) {
     const [lifeGoals]: any[] = await old_db.execute("SELECT * FROM harapan");
 
     for (let i = 0; i < lifeGoals.length; i++) {
+
+        // IN TEST MODE, STOP AT 100 DATA
+        if (isTest) {
+            if (i >= 100) {
+                process.stdout.write('STOP AT 100 DATA: HARAPAN');
+                break;
+            }
+        }
+
         const goal = lifeGoals[i];
         const old_user_id = goal.user_id;
         process.stdout.write('.');
@@ -40,7 +49,7 @@ export async function harapan(old_db: mysql.Connection, new_db: PrismaClient) {
 
             //TODO bikin schema 'Sumber dana acara pernikahan'
 
-             let child_count = ''
+            let child_count = ''
             if (goal.tag == 'Keturunan dan pendidikan anak') {
                 child_count = goal.keterangan
             }
@@ -108,6 +117,6 @@ export async function harapan(old_db: mysql.Connection, new_db: PrismaClient) {
         }
     }
 
-    console.log('Done migration: Life Goals')
+    console.log('\nDone migration: Life Goals')
 
 }

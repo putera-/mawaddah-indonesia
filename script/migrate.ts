@@ -26,8 +26,8 @@ async function main() {
     old_db = await mysql.createConnection(oldDbConfig);
 
     await user(old_db, new_db);
-    // await gambaran_keluarga(old_db, new_db);
-    // await harapan(old_db, new_db);
+    await gambaran_keluarga(old_db, new_db);
+    await harapan(old_db, new_db);
     await pendidikan(old_db, new_db);
 
     /*

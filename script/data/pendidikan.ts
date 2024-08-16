@@ -16,6 +16,14 @@ export async function pendidikan(old_db: mysql.Connection, new_db: PrismaClient)
     const [educations]: any[] = await old_db.execute("SELECT * FROM pendidikan");
 
     for (let i = 0; i < educations.length; i++) {
+        // IN TEST MODE, STOP AT 100 DATA
+        if (isTest) {
+            if (i >= 100) {
+                process.stdout.write('STOP AT 100 DATA: PENDIDIKAN');
+                break;
+            }
+        }
+
         const education = educations[i];
         const old_user_id = education.user_id;
         process.stdout.write('.');
@@ -49,8 +57,6 @@ export async function pendidikan(old_db: mysql.Connection, new_db: PrismaClient)
                 Biodata: { connect: { id: biodata.id } }
             }
 
-            console.log(new_educations)
-
             if (!new_educations.startYear || !new_educations.endYear) continue
 
             await new_db.education.upsert(
@@ -62,5 +68,5 @@ export async function pendidikan(old_db: mysql.Connection, new_db: PrismaClient)
             )
         }
     }
-    console.log('Done Migration: Educations')
+    console.log('\nDone Migration: Educations')
 }

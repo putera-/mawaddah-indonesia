@@ -15,9 +15,17 @@ migrasi table gazwah.gambaran_keluarga > rq.family_member
 */
 export async function gambaran_keluarga(old_db: mysql.Connection, new_db: PrismaClient) {
     const [families]: any[] = await old_db.execute("SELECT * FROM gambaran_keluarga");
-    // console.log(families)
 
     for (let i = 0; i < families.length; i++) {
+
+        // IN TEST MODE, STOP AT 100 DATA
+        if (isTest) {
+            if (i >= 100) {
+                process.stdout.write('STOP AT 100 DATA: GAMBARAN KELUARGA');
+                break;
+            }
+        }
+
         const family = families[i];
         const old_user_id = family.user_id;
         process.stdout.write('.');
@@ -119,5 +127,5 @@ export async function gambaran_keluarga(old_db: mysql.Connection, new_db: Prisma
         }
     }
 
-    console.log('Done migration: Family Members')
+    console.log('\nDone migration: Family Members')
 }
