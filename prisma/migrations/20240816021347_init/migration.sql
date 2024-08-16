@@ -495,6 +495,7 @@ CREATE TABLE `answer` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+<<<<<<< HEAD
 <<<<<<< HEAD:prisma/migrations/20240814040347_init/migration.sql
 <<<<<<<< HEAD:prisma/migrations/20240814040347_init/migration.sql
 <<<<<<<< HEAD:prisma/migrations/20240814040347_init/migration.sql
@@ -524,6 +525,8 @@ ALTER TABLE `backup_detail` ADD CONSTRAINT `backup_detail_userId_fkey` FOREIGN K
 >>>>>>>> 9d5a58e (-handle partial physical character):prisma/migrations/20240805034552_init/migration.sql
 =======
 >>>>>>> adf02d9 (handle error kr fiteria calon):prisma/migrations/20240816021347_init/migration.sql
+=======
+>>>>>>> adf02d9bb6e6b4d357526dc1658011cf09053e20
 -- AddForeignKey
 ALTER TABLE `backup_detail` ADD CONSTRAINT `backup_detail_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
