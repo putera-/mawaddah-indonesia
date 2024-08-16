@@ -9,7 +9,6 @@ import {
 } from '@prisma/client';
 import mysql from 'mysql2/promise';
 import { create_dummy_user_biodata } from './helper/create_user_biodata';
-import { fa } from '@faker-js/faker';
 
 const parameters = process.argv;
 
@@ -17,6 +16,8 @@ const parameters = process.argv;
 // isTest, gunakan variable ini untuk membuat data dummy
 // misal untuk create dummy user
 const isTest = parameters.includes('test');
+
+let count = 0;
 
 export async function physical_character(
     old_db: mysql.Connection,
@@ -27,6 +28,16 @@ export async function physical_character(
     );
 
     for (const gambaran_fisik of gambaran_fisiks) {
+        if (isTest) {
+            if (count >= 100) {
+                process.stdout.write('STOP AT 100 DATA: GAMBARAN FISIK');
+                break;
+            }
+            count++;
+        }
+
+        process.stdout.write('.');
+
         const user_id = gambaran_fisik.user_id;
 
         const bodyShape: body_shape = (() => {

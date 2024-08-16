@@ -17,6 +17,8 @@ const parameters = process.argv;
 // misal untuk create dummy user
 const isTest = parameters.includes('test');
 
+let count = 0;
+
 export async function physical_character(
     old_db: mysql.Connection,
     new_db: PrismaClient,
@@ -27,6 +29,16 @@ export async function physical_character(
     );
 
     for (const kriteria_calon_fisik of kriteria_calon_fisiks) {
+        if (isTest) {
+            if (count >= 100) {
+                process.stdout.write('STOP AT 100 DATA: KRITERIA CALON FISIK');
+                break;
+            }
+            count++;
+        }
+
+        process.stdout.write('.');
+
         const user_id = kriteria_calon_fisik.user_id;
 
         const bodyShape: body_shape = (() => {

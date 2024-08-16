@@ -9,6 +9,8 @@ const parameters = process.argv;
 // misal untuk create dummy user
 const isTest = parameters.includes('test');
 
+let count = 0;
+
 export async function non_physical_character(
     old_db: mysql.Connection,
     new_db: PrismaClient,
@@ -18,8 +20,17 @@ export async function non_physical_character(
     );
 
     for (const gambaran_diri of gambaran_diris) {
-        const user_id = gambaran_diri.user_id;
+        if (isTest) {
+            if (count >= 100) {
+                process.stdout.write('STOP AT 100 DATA: GAMBARAN DIRI');
+                break;
+            }
+            count++;
+        }
+
         process.stdout.write('.');
+
+        const user_id = gambaran_diri.user_id;
 
         let motto: string = gambaran_diri.moto;
         let life_goal: string = gambaran_diri.target_hidup;
