@@ -6,6 +6,7 @@ export function get_user_by_old_id(old_id: number, new_db: PrismaClient) {
             backup_detail: {
                 old_id
             }
-        }
+        },
+        include: { biodata: true }
     });
 }

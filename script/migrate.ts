@@ -4,6 +4,7 @@ import { user } from './data/user';
 import { gambaran_keluarga } from './data/gambaran_keluarga';
 import { harapan } from './data/harapan';
 import { pendidikan } from './data/pendidikan';
+import { questions } from './data/questions';
 
 const new_db = new PrismaClient();
 
@@ -29,6 +30,7 @@ async function main() {
     await gambaran_keluarga(old_db, new_db);
     await harapan(old_db, new_db);
     await pendidikan(old_db, new_db);
+    await questions(old_db, new_db);
 
     /*
     -sumber dana acara pernikahan - 27791
