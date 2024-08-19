@@ -18,6 +18,14 @@ export async function persiapan_pernikahan(old_db: mysql.Connection, new_db: Pri
     const [preparations]: any[] = await old_db.execute("SELECT * FROM persiapan_pernikahan");
 
     for (let i = 0; i < preparations.length; i++) {
+
+        if (isTest) {
+            if (i >= 100) {
+                process.stdout.write('STOP AT 100 DATA: GAMBARAN KELUARGA');
+                break;
+            }
+        }
+
         const preparation = preparations[i];
         const old_user_id = preparation.user_id;
         process.stdout.write('.');
