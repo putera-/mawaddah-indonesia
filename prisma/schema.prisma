@@ -656,13 +656,13 @@ model Experience {
     end_year    Int            @db.Year
     position    String         @db.VarChar(100)
     description String         @db.Text
-    createdAtt  DateTime       @default(now())
+    createdAt   DateTime       @default(now())
     updatedAt   DateTime       @default(now()) @updatedAt
 
     @@map("experience")
 }
 
 enum ExperienceType {
-    kerja
-    organisasi
+    Kerja
+    Organisasi
 }
