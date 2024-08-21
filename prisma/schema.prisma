@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
     provider = "mysql"
-    url      = env("DATABASE_URL")
+    url      = "mysql://root:root@localhost:3306/mawaddah_dev"
 }
 
 model User {
@@ -602,14 +602,14 @@ model PhysicalCriteria {
 model NonPhysicalCriteria {
     id             String          @id @default(uuid())
     age            Int?            @db.Int
-    domicile       String?         @db.VarChar(100)
-    education      String?         @db.VarChar(100)
+    domicile       String?         @db.Text
+    education      String?         @db.Text
     married_status MarriageStatus?
     sport          String?         @db.Text
     hobby          String?         @db.Text
-    traits         String?         @db.VarChar(100)
+    traits         String?         @db.Text
     ethnic         String?         @db.VarChar(100)
-    job            String?         @db.VarChar(100)
+    job            String?         @db.Text
     other          String?         @db.Text
     biodata        Biodata         @relation(fields: [biodataId], references: [id])
     biodataId      String          @unique
