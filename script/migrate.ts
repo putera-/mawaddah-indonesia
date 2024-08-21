@@ -5,6 +5,7 @@ import { gambaran_keluarga } from './data/gambaran_keluarga';
 import { harapan } from './data/harapan';
 import { pendidikan } from './data/pendidikan';
 import { questions } from './data/questions';
+import { non_physical_criteria } from './data/kriteria_calon_non_fisik';
 
 const new_db = new PrismaClient();
 
@@ -31,6 +32,7 @@ async function main() {
     await harapan(old_db, new_db);
     await pendidikan(old_db, new_db);
     await questions(old_db, new_db);
+    await non_physical_criteria(old_db, new_db);
 
     /*
     -sumber dana acara pernikahan - 27791
@@ -40,7 +42,6 @@ async function main() {
     -Usaha/Bisnis yang akan digeluti - 1
     -Impian - 1
     */
-
 }
 
 main()
