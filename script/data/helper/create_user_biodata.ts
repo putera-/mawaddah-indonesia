@@ -1,7 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { Gender, ManhajStatus, MarriagePermission, MarriageStatus, Prisma, PrismaClient } from "@prisma/client";
 import { User } from "src/users/user.interface";
-import * as bcrypt from 'bcrypt';
 import { get_user_by_old_id } from "./get_user_by_old_id";
 
 export async function create_dummy_user_biodata(old_id: number, new_db: PrismaClient, index = 0): Promise<User> {
@@ -23,11 +22,6 @@ export async function create_dummy_user_biodata(old_id: number, new_db: PrismaCl
         backup_detail: {
             create: {
                 old_id
-            }
-        },
-        password: {
-            create: {
-                password: await bcrypt.hash('rahasia', 10)
             }
         },
         biodata: {
