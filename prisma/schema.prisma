@@ -651,11 +651,12 @@ model Experience {
     id          String         @id @default(uuid())
     biodata     Biodata        @relation(fields: [biodataId], references: [id])
     biodataId   String
-    type        ExperienceType
+    type        ExperienceType @default(Kerja)
     start_year  Int            @db.Year
     end_year    Int            @db.Year
     position    String         @db.VarChar(100)
     description String         @db.Text
+    deleted     Boolean        @default(false)
     createdAt   DateTime       @default(now())
     updatedAt   DateTime       @default(now()) @updatedAt
 
