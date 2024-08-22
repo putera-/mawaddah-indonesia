@@ -12,6 +12,3 @@ export interface Experiences {
     createdAt: Date
     updatedAt: Date
 }
-
-
-
