@@ -1,14 +1,15 @@
+import { gamabaran_fisik } from './data/gambaran_fisik';
 import { PrismaClient } from '@prisma/client';
 import mysql from 'mysql2/promise';
 import { user } from './data/user';
-import { physical_character } from './data/gambaran_fisik';
 import { pendidikan } from './data/pendidikan';
 import { harapan } from './data/harapan';
 import { gambaran_keluarga } from './data/gambaran_keluarga';
-import { non_physical_character } from './data/gambaran_diri';
+import { gambaran_diri } from './data/gambaran_diri';
 import { questions } from './data/questions';
-import { non_physical_criteria } from './data/kriteria_calon_non_fisik';
+import { kriteria_calon_non_fisik } from './data/kriteria_calon_non_fisik';
 import { persiapan_pernikahan } from './data/persiapan_pernikahan';
+import { kriteria_calon_fisik } from './data/kriteria_calon_fisik';
 
 const new_db = new PrismaClient();
 
@@ -31,13 +32,15 @@ async function main() {
     old_db = await mysql.createConnection(oldDbConfig);
 
     await user(old_db, new_db);
+    await gambaran_diri(old_db, new_db);
+    await gamabaran_fisik(old_db, new_db);
     await gambaran_keluarga(old_db, new_db);
-    await non_physical_character(old_db, new_db);
     await harapan(old_db, new_db);
+    await kriteria_calon_fisik(old_db, new_db);
+    await kriteria_calon_non_fisik(old_db, new_db);
     await pendidikan(old_db, new_db);
-    await questions(old_db, new_db);
-    await non_physical_criteria(old_db, new_db);
     await persiapan_pernikahan(old_db, new_db);
+    await questions(old_db, new_db);
 
     /*
     -sumber dana acara pernikahan - 27791
@@ -47,7 +50,6 @@ async function main() {
     -Usaha/Bisnis yang akan digeluti - 1
     -Impian - 1
     */
-    await physical_character(old_db, new_db);
 }
 
 main()

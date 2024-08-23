@@ -19,7 +19,7 @@ const isTest = parameters.includes('test');
 
 let count = 0;
 
-export async function physical_character(
+export async function gamabaran_fisik(
     old_db: mysql.Connection,
     new_db: PrismaClient,
 ) {
@@ -146,14 +146,14 @@ export async function physical_character(
             gambaran_fisik.tinggi_badan == '-'
                 ? 0
                 : Math.max(
-                      gambaran_fisik.tinggi_badan.match(/\d+/g).map(Number),
-                  );
+                    gambaran_fisik.tinggi_badan.match(/\d+/g).map(Number),
+                );
         let weight: number =
             gambaran_fisik.berat_badan == '-'
                 ? 0
                 : Math.max(
-                      gambaran_fisik.berat_badan.match(/\d+/g).map(Number),
-                  );
+                    gambaran_fisik.berat_badan.match(/\d+/g).map(Number),
+                );
         // console.log(user_id, height, weight);
         const medical_history = (() => {
             switch (gambaran_fisik.riwayat_penyakit) {
@@ -194,20 +194,20 @@ export async function physical_character(
             if (biodata) {
                 const biodataId = biodata.id;
                 const new_physical_character: Prisma.PhysicalCharacterCreateInput =
-                    {
-                        biodata: { connect: { id: biodataId } },
-                        height: isNaN(height) ? 0 : height,
-                        weight: isNaN(weight) ? 0 : weight,
-                        body_shape: bodyShape,
-                        skin_color: skinColor,
-                        hair_color: hairColor,
-                        hair_type: hairType,
-                        eye_color: eyeColor,
-                        characteristic,
-                        characteristic_detail,
-                        medical_history,
-                        medical_history_detail,
-                    };
+                {
+                    biodata: { connect: { id: biodataId } },
+                    height: isNaN(height) ? 0 : height,
+                    weight: isNaN(weight) ? 0 : weight,
+                    body_shape: bodyShape,
+                    skin_color: skinColor,
+                    hair_color: hairColor,
+                    hair_type: hairType,
+                    eye_color: eyeColor,
+                    characteristic,
+                    characteristic_detail,
+                    medical_history,
+                    medical_history_detail,
+                };
                 await new_db.physicalCharacter.upsert({
                     where: { biodataId: biodataId },
                     create: new_physical_character,

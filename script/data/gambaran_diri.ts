@@ -11,7 +11,7 @@ const isTest = parameters.includes('test');
 
 let count = 0;
 
-export async function non_physical_character(
+export async function gambaran_diri(
     old_db: mysql.Connection,
     new_db: PrismaClient,
 ) {
@@ -76,24 +76,24 @@ export async function non_physical_character(
             if (biodata) {
                 const biodataId = biodata.id;
                 const new_non_physical_character: Prisma.NonPhysicalCharacterCreateInput =
-                    {
-                        biodata: {
-                            connect: {
-                                id: biodataId,
-                            },
+                {
+                    biodata: {
+                        connect: {
+                            id: biodataId,
                         },
-                        motto,
-                        life_goal,
-                        hobby,
-                        spare_time_activity,
-                        positive_traits,
-                        negative_traits,
-                        liked_things,
-                        unliked_things,
-                        drink_alcohol,
-                        smoking,
-                        sport,
-                    };
+                    },
+                    motto,
+                    life_goal,
+                    hobby,
+                    spare_time_activity,
+                    positive_traits,
+                    negative_traits,
+                    liked_things,
+                    unliked_things,
+                    drink_alcohol,
+                    smoking,
+                    sport,
+                };
                 await new_db.nonPhysicalCharacter.upsert({
                     where: { biodataId: biodataId },
                     create: new_non_physical_character,

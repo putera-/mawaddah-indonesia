@@ -11,7 +11,7 @@ const isTest = parameters.includes('test');
 
 let count = 0;
 
-export async function non_physical_criteria(
+export async function kriteria_calon_non_fisik(
     old_db: mysql.Connection,
     new_db: PrismaClient,
 ) {
@@ -77,19 +77,19 @@ export async function non_physical_criteria(
             if (biodata) {
                 const biodataId = biodata.id;
                 const new_non_physical_criteria: Prisma.NonPhysicalCriteriaCreateInput =
-                    {
-                        biodata: { connect: { id: biodataId } },
-                        age: isNaN(age) ? 0 : age,
-                        domicile: kriteria_calon_non_fisik.domisili,
-                        education: kriteria_calon_non_fisik.pendidikan,
-                        married_status,
-                        sport,
-                        hobby,
-                        traits: kriteria_calon_non_fisik.sifat,
-                        ethnic: kriteria_calon_non_fisik.suku,
-                        job: kriteria_calon_non_fisik.pekerjaan,
-                        other: kriteria_calon_non_fisik.lain_lain,
-                    };
+                {
+                    biodata: { connect: { id: biodataId } },
+                    age: isNaN(age) ? 0 : age,
+                    domicile: kriteria_calon_non_fisik.domisili,
+                    education: kriteria_calon_non_fisik.pendidikan,
+                    married_status,
+                    sport,
+                    hobby,
+                    traits: kriteria_calon_non_fisik.sifat,
+                    ethnic: kriteria_calon_non_fisik.suku,
+                    job: kriteria_calon_non_fisik.pekerjaan,
+                    other: kriteria_calon_non_fisik.lain_lain,
+                };
                 await new_db.nonPhysicalCriteria.upsert({
                     where: { biodataId: biodataId },
                     create: new_non_physical_criteria,

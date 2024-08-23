@@ -19,7 +19,7 @@ const isTest = parameters.includes('test');
 
 let count = 0;
 
-export async function physical_character(
+export async function kriteria_calon_fisik(
     old_db: mysql.Connection,
     new_db: PrismaClient,
 ) {
@@ -130,18 +130,18 @@ export async function physical_character(
             kriteria_calon_fisik.tinggi_badan == '-'
                 ? 0
                 : Math.min(
-                      kriteria_calon_fisik.tinggi_badan
-                          .match(/\d+/g)
-                          .map(Number),
-                  );
+                    kriteria_calon_fisik.tinggi_badan
+                        .match(/\d+/g)
+                        .map(Number),
+                );
         let weight: number =
             kriteria_calon_fisik.berat_badan == '-'
                 ? 0
                 : Math.min(
-                      kriteria_calon_fisik.berat_badan
-                          .match(/\d+/g)
-                          .map(Number),
-                  );
+                    kriteria_calon_fisik.berat_badan
+                        .match(/\d+/g)
+                        .map(Number),
+                );
 
         let backup_detail = await new_db.backupDetail.findFirst({
             where: {
@@ -165,16 +165,16 @@ export async function physical_character(
             if (biodata) {
                 const biodataId = biodata.id;
                 const new_physical_criteria: Prisma.PhysicalCriteriaCreateInput =
-                    {
-                        biodata: { connect: { id: biodataId } },
-                        height: isNaN(height) ? 0 : height,
-                        weight: isNaN(weight) ? 0 : weight,
-                        body_shape: bodyShape,
-                        skin_color: skinColor,
-                        hair_color: hairColor,
-                        hair_type: hairType,
-                        eye_color: eyeColor,
-                    };
+                {
+                    biodata: { connect: { id: biodataId } },
+                    height: isNaN(height) ? 0 : height,
+                    weight: isNaN(weight) ? 0 : weight,
+                    body_shape: bodyShape,
+                    skin_color: skinColor,
+                    hair_color: hairColor,
+                    hair_type: hairType,
+                    eye_color: eyeColor,
+                };
                 await new_db.physicalCriteria.upsert({
                     where: { biodataId: biodataId },
                     create: new_physical_criteria,
