@@ -1,4 +1,4 @@
-import { gamabaran_fisik } from './data/gambaran_fisik';
+import { gambaran_fisik } from './data/gambaran_fisik';
 import { PrismaClient } from '@prisma/client';
 import mysql from 'mysql2/promise';
 import { user } from './data/user';
@@ -10,6 +10,7 @@ import { questions } from './data/questions';
 import { kriteria_calon_non_fisik } from './data/kriteria_calon_non_fisik';
 import { persiapan_pernikahan } from './data/persiapan_pernikahan';
 import { kriteria_calon_fisik } from './data/kriteria_calon_fisik';
+import { pengalaman } from './data/pengalaman';
 
 const new_db = new PrismaClient();
 
@@ -33,7 +34,7 @@ async function main() {
 
     await user(old_db, new_db);
     await gambaran_diri(old_db, new_db);
-    await gamabaran_fisik(old_db, new_db);
+    await gambaran_fisik(old_db, new_db);
     await gambaran_keluarga(old_db, new_db);
     await harapan(old_db, new_db);
     await kriteria_calon_fisik(old_db, new_db);
@@ -41,6 +42,7 @@ async function main() {
     await pendidikan(old_db, new_db);
     await persiapan_pernikahan(old_db, new_db);
     await questions(old_db, new_db);
+    await pengalaman(old_db, new_db);
 
     /*
     -sumber dana acara pernikahan - 27791

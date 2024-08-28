@@ -9,6 +9,7 @@ import {
 } from '@prisma/client';
 import mysql from 'mysql2/promise';
 import { create_dummy_user_biodata } from './helper/create_user_biodata';
+import { get_lowest_number_from_string } from './helper/get_lowest_number_from_string';
 
 const parameters = process.argv;
 
@@ -129,19 +130,11 @@ export async function kriteria_calon_fisik(
         let height: number =
             kriteria_calon_fisik.tinggi_badan == '-'
                 ? 0
-                : Math.min(
-                    kriteria_calon_fisik.tinggi_badan
-                        .match(/\d+/g)
-                        .map(Number),
-                );
+                : get_lowest_number_from_string(kriteria_calon_fisik.tinggi);
         let weight: number =
             kriteria_calon_fisik.berat_badan == '-'
                 ? 0
-                : Math.min(
-                    kriteria_calon_fisik.berat_badan
-                        .match(/\d+/g)
-                        .map(Number),
-                );
+                : get_lowest_number_from_string(kriteria_calon_fisik.berat);
 
         let backup_detail = await new_db.backupDetail.findFirst({
             where: {
@@ -165,16 +158,16 @@ export async function kriteria_calon_fisik(
             if (biodata) {
                 const biodataId = biodata.id;
                 const new_physical_criteria: Prisma.PhysicalCriteriaCreateInput =
-                {
-                    biodata: { connect: { id: biodataId } },
-                    height: isNaN(height) ? 0 : height,
-                    weight: isNaN(weight) ? 0 : weight,
-                    body_shape: bodyShape,
-                    skin_color: skinColor,
-                    hair_color: hairColor,
-                    hair_type: hairType,
-                    eye_color: eyeColor,
-                };
+                    {
+                        biodata: { connect: { id: biodataId } },
+                        height: height,
+                        weight: weight,
+                        body_shape: bodyShape,
+                        skin_color: skinColor,
+                        hair_color: hairColor,
+                        hair_type: hairType,
+                        eye_color: eyeColor,
+                    };
                 await new_db.physicalCriteria.upsert({
                     where: { biodataId: biodataId },
                     create: new_physical_criteria,
@@ -208,5 +201,5 @@ export async function kriteria_calon_fisik(
             }
         }
     }
-    console.log('Done migration: Physical character');
+    console.log('\nDone migration: Physical character');
 }

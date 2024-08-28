@@ -19,7 +19,7 @@ const isTest = parameters.includes('test');
 
 let count = 0;
 
-export async function gamabaran_fisik(
+export async function gambaran_fisik(
     old_db: mysql.Connection,
     new_db: PrismaClient,
 ) {
@@ -154,7 +154,6 @@ export async function gamabaran_fisik(
                 : Math.max(
                     gambaran_fisik.berat_badan.match(/\d+/g).map(Number),
                 );
-        // console.log(user_id, height, weight);
         const medical_history = (() => {
             switch (gambaran_fisik.riwayat_penyakit) {
                 case 0:
@@ -241,5 +240,5 @@ export async function gamabaran_fisik(
             }
         }
     }
-    console.log('Done migration: Physical character');
+    console.log('\nDone migration: Physical character');
 }
