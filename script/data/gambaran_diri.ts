@@ -103,5 +103,5 @@ export async function gambaran_diri(
         }
     }
 
-    console.log('Done migration: Non physical character');
+    console.log('\nDone migration: Non physical character');
 }

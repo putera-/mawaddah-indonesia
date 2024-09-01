@@ -16,6 +16,7 @@ import { member_non_physical_criteria_seed } from './seed/member_non_physical_cr
 import { member_life_goals_seed } from './seed/member_life_goals';
 import { questionSeeder } from './seed/question';
 import { answerSeed } from './seed/answer';
+import { experience } from './seed/experience';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -38,6 +39,7 @@ async function main() {
     await familyMembersSeed(prisma);
     await member_life_goals_seed(prisma);
     await answerSeed(prisma);
+    await experience(prisma);
 }
 
 main()

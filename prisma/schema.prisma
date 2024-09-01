@@ -9,13 +9,13 @@ generator client {
 }
 
 datasource db {
-    provider = "mysql"
-    url      = "mysql://root:root@localhost:3306/mawaddah_dev"
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
     id                 String          @id @default(uuid())
-    old_id             Int?            @db.Int
+    old_id             Int?            @db.Integer
     email              String          @unique @db.VarChar(100)
     firstname          String          @db.VarChar(100)
     lastname           String          @db.VarChar(100)
@@ -49,7 +49,7 @@ model User {
 model BackupDetail {
     user   User?  @relation(fields: [userId], references: [id])
     userId String @unique
-    old_id Int    @db.Int
+    old_id Int    @db.Integer
 
     @@map("backup_detail")
 }
@@ -194,12 +194,12 @@ model Biodata {
     non_physical_criteria   NonPhysicalCriteria?
     dob                     DateTime              @db.Date
     birth_place             String                @db.VarChar(100)
-    birth_order             Int                   @db.TinyInt
+    birth_order             Int                   @db.SmallInt
     address                 String                @db.VarChar(100)
     address_town            String                @db.VarChar(100)
     address_province        String                @db.VarChar(100)
     hometown_province       String                @db.VarChar(100)
-    address_zip_code        Int                   @db.Int
+    address_zip_code        Int                   @db.Integer
     ethnic                  String                @db.VarChar(100)
     poligami_opinion        String                @db.Text
     Answer                  Answer[]
@@ -247,8 +247,8 @@ model Education {
     major            String?  @db.VarChar(100)
     degree           String?  @db.VarChar(100)
     city             String?  @db.VarChar(100)
-    startYear        Int      @db.Year
-    endYear          Int?     @db.Year
+    startYear        Int      @db.Integer
+    endYear          Int?     @db.Integer
     deleted          Boolean  @default(false)
     createdAt        DateTime @default(now())
     updatedAt        DateTime @default(now()) @updatedAt
@@ -280,8 +280,8 @@ model LifeGoal {
 
 model PhysicalCharacter {
     id                     String      @id @default(uuid())
-    height                 Int         @default(0) @db.Int
-    weight                 Int         @default(0) @db.Int
+    height                 Int         @default(0) @db.Integer
+    weight                 Int         @default(0) @db.Integer
     body_shape             body_shape?
     skin_color             skin_color?
     hair_color             hair_color?
@@ -430,7 +430,7 @@ model Midtrans_callback {
     id            String   @id @default(uuid())
     payment       Payment? @relation(fields: [paymentId], references: [id])
     paymentId     String   @unique
-    callback_data String   @db.LongText
+    callback_data String   @db.Text
     createdAt     DateTime @default(now())
 
     @@map("midtrans_callback")
@@ -585,8 +585,8 @@ enum Cycle {
 
 model PhysicalCriteria {
     id         String      @id @default(uuid())
-    height     Int         @default(0) @db.Int
-    weight     Int         @default(0) @db.Int
+    height     Int         @default(0) @db.Integer
+    weight     Int         @default(0) @db.Integer
     body_shape body_shape?
     skin_color skin_color?
     hair_color hair_color?
@@ -602,7 +602,7 @@ model PhysicalCriteria {
 
 model NonPhysicalCriteria {
     id             String          @id @default(uuid())
-    age            Int?            @db.Int
+    age            Int?            @db.Integer
     domicile       String?         @db.Text
     education      String?         @db.Text
     married_status MarriageStatus?
@@ -622,8 +622,8 @@ model NonPhysicalCriteria {
 
 model Question {
     id        String   @id @default(uuid())
-    question  String   @db.LongText
-    deleted   Boolean  @default(false) @db.TinyInt
+    question  String   @db.Text
+    deleted   Boolean  @default(false)
     createdBy User     @relation(fields: [userId], references: [id])
     userId    String
     answers   Answer[]
@@ -639,7 +639,7 @@ model Answer {
     biodataId  String
     question   Question @relation(fields: [questionId], references: [id])
     questionId String
-    answer     String   @db.LongText
+    answer     String   @db.Text
     createdAt  DateTime @default(now())
     updatedAt  DateTime @default(now()) @updatedAt
 
@@ -652,8 +652,8 @@ model Experience {
     biodata     Biodata        @relation(fields: [biodataId], references: [id])
     biodataId   String
     type        ExperienceType @default(Kerja)
-    start_year  Int            @db.Year
-    end_year    Int            @db.Year
+    start_year  Int            @db.Integer
+    end_year    Int            @db.Integer
     position    String         @db.VarChar(100)
     description String         @db.Text
     deleted     Boolean        @default(false)
