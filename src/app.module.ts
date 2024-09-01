@@ -38,6 +38,7 @@ import { PhysicalCriteriaModule } from './physical_criteria/physical_criteria.mo
 import { NonPhysicalCriteriaModule } from './non_physical_criteria/non_physical_criteria.module';
 import { QuestionModule } from './question/question.module';
 import { AnswerModule } from './answer/answer.module';
+import { ExperiencesModule } from './experiences/experiences.module';
 
 @Module({
     imports: [
@@ -76,6 +77,7 @@ import { AnswerModule } from './answer/answer.module';
         NonPhysicalCriteriaModule,
         QuestionModule,
         AnswerModule,
+        ExperiencesModule,
     ],
 
     controllers: [AppController],
