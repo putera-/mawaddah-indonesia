@@ -7,7 +7,7 @@ services:
             context: .
             dockerfile: Dockerfile
         container_name: api_mawaddah
-        image: api_mawaddah:0.0.12
+        image: api_mawaddah:0.0.13
         restart: always
         ports:
             - 5021:5000
@@ -17,7 +17,8 @@ services:
             JWTSECRET: MAWADDAHINDONESIA2024
             JWT_EXPIRATION: 180
             # for prisma
-            DATABASE_URL: mysql://root:my-secret-pw@mawaddah_mysql:3306/mawaddah_indonesia
+            DATABASE_URL: postgresql://postgres:postgres@mawaddah_postgre:5432/mydb?schema=mawaddah_dev
+            # DATABASE_URL: mysql://root:my-secret-pw@mawaddah_mysql:3306/mawaddah_indonesia
             # gmail for blast email. use different docker compose file to extend
             GMAIL_APP_PASSWORD: abc abc abc
             GMAIL_ADDRESS: test@gmail.com
@@ -29,28 +30,44 @@ services:
         networks:
             - mawaddah_api_network
         depends_on:
-            - mawaddah_mysql
+            - mawaddah_postgre
+            # - mawaddah_mysql
 
-    # mysql database
-    mawaddah_mysql:
-        container_name: mawaddah_mysql
-        image: mysql:8.3.0
-        command: --default-authentication-plugin=mysql_native_password
-        restart: always
+    # postgre database
+    mawaddah_postgre:
+        image: postgres:latest
+        ports:
+            - 5432:5432
         environment:
-            MYSQL_ROOT_PASSWORD: my-secret-pw
-            MYSQL_DATABASE: mawaddah_indonesia
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: postgres
         volumes:
-            - mawaddah_mysql:/var/lib/mysql
+            - mawaddah_postgre:/var/lib/postgresql/data
         networks:
             - mawaddah_api_network
+    # mysql database
+    # mawaddah_mysql:
+    #     container_name: mawaddah_mysql
+    #     image: mysql:8.3.0
+    #     command: --default-authentication-plugin=mysql_native_password
+    #     restart: always
+    #     environment:
+    #         MYSQL_ROOT_PASSWORD: my-secret-pw
+    #         MYSQL_DATABASE: mawaddah_indonesia
+    #     volumes:
+    #         - mawaddah_mysql:/var/lib/mysql
+    #     networks:
+    #         - mawaddah_api_network
 
 # volumes
 volumes:
     mawaddah_api_public:
         name: mawaddah_api_public
-    mawaddah_mysql:
-        name: mawaddah_mysql
+    mawaddah_postgre:
+        name: mawaddah_postgre
+    # mawaddah_mysql:
+    #     name: mawaddah_mysql
 
 # networks
 networks:
