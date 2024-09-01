@@ -7,7 +7,7 @@ services:
             context: .
             dockerfile: Dockerfile
         container_name: api_mawaddah
-        image: api_mawaddah:0.0.13
+        image: api_mawaddah:0.0.14
         restart: always
         ports:
             - 5021:5000
@@ -35,6 +35,7 @@ services:
 
     # postgre database
     mawaddah_postgre:
+        container_name: mawaddah_postgre
         image: postgres:latest
         ports:
             - 5432:5432
