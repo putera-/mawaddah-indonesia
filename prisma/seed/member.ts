@@ -624,8 +624,9 @@ export async function memberSeed(prisma: PrismaClient) {
             process.stdout.write('.');
             const randomNumber = Math.floor(Math.random() * 10) + 1;
             const firstname = faker.person.firstName('male');
+            const lastname = faker.person.lastName('male') + i;
             const email = faker.internet
-                .email({ firstName: firstname })
+                .email({ firstName: firstname, lastName: lastname })
                 .toLowerCase();
 
             const randomProvinceIndex = Math.floor(
@@ -642,7 +643,7 @@ export async function memberSeed(prisma: PrismaClient) {
                 ...bob,
                 email,
                 firstname,
-                lastname: faker.person.lastName('male'),
+                lastname,
                 avatar: '/dummy/ikhwan_' + randomNumber + '_lg.png',
                 avatar_md: '/dummy/ikhwan_' + randomNumber + '_md.png',
                 blurred_avatar:
@@ -650,12 +651,6 @@ export async function memberSeed(prisma: PrismaClient) {
                 blurred_avatar_md:
                     '/dummy/ikhwan_blurred_' + randomNumber + '_md.png',
                 createdAt: faker.date.past(),
-            };
-
-            data.password = {
-                create: {
-                    password,
-                },
             };
 
             const data_non_physical_character: Prisma.NonPhysicalCharacterCreateWithoutBiodataInput =
@@ -692,6 +687,19 @@ export async function memberSeed(prisma: PrismaClient) {
                     smoking: Math.random() < 0.5,
                 };
 
+            const data_marriage_preparation: Prisma.MarriagePreparationCreateWithoutBiodataInput =
+                {
+                    visi: visi2[Math.floor(Math.random() * visi2.length)],
+                    misi: misi2[Math.floor(Math.random() * misi2.length)],
+                    mental: mental2[Math.floor(Math.random() * mental2.length)],
+                    mahar: mahar2[Math.floor(Math.random() * mahar2.length)],
+                    cost: costString,
+                    span_time:
+                        span_times[
+                            Math.floor(Math.random() * span_times.length)
+                        ],
+                };
+
             if (randoms.indexOf(i) != -1) {
                 // create relasi biodata
                 const startYear = new Date().getFullYear() - 3;
@@ -716,6 +724,9 @@ export async function memberSeed(prisma: PrismaClient) {
                         non_physical_characters: {
                             create: data_non_physical_character,
                         },
+                        marriage_preparations: {
+                            create: data_marriage_preparation,
+                        },
                         ethnic: sukuIndonesia[
                             Math.floor(Math.random() * sukuIndonesia.length)
                         ],
@@ -723,7 +734,6 @@ export async function memberSeed(prisma: PrismaClient) {
                             Math.floor(Math.random() * manhaj.length)
                         ],
                         gender: 'PRIA',
-
                         address_zip_code: Math.floor(Math.random() * 100),
                         poligami_opinion:
                             poligamiOpinions[
@@ -743,9 +753,14 @@ export async function memberSeed(prisma: PrismaClient) {
                             ],
                     },
                 };
-
-                data.taaruf_status = 'OPEN';
             }
+
+            data.password = {
+                create: {
+                    password,
+                },
+            };
+            data.taaruf_status = 'OPEN';
 
             data.auth = {
                 createMany: {
@@ -754,9 +769,19 @@ export async function memberSeed(prisma: PrismaClient) {
             };
 
             // console.log(data)
-            const userCheck = await prisma.user.findFirst({ where: { email } });
 
-            if (!userCheck) {
+            // await prisma.user.upsert({
+            //     where: { email },
+            //     create: data,
+            //     update: data,
+            // });
+
+            const findEmail = await prisma.user.findFirst({
+                where: {
+                    email,
+                },
+            });
+            if (!findEmail) {
                 await prisma.user.create({
                     data,
                 });
@@ -775,14 +800,21 @@ export async function memberSeed(prisma: PrismaClient) {
                 },
             },
         };
+
         const randoms = [];
         for (let i = 0; i < 1000; i++) {
             if (i % 2 == 1) randoms.push(i);
         }
+
         // create 100 Alice MEMBER
         for (let i = 0; i < 1000; i++) {
             process.stdout.write('.');
             const randomNumber = Math.floor(Math.random() * 10) + 1;
+            const firstname = faker.person.firstName('female');
+            const lastname = faker.person.lastName('female') + i;
+            const email = faker.internet
+                .email({ firstName: firstname })
+                .toLowerCase();
 
             const randomProvinceIndex = Math.floor(
                 Math.random() * provinces.length,
@@ -794,26 +826,17 @@ export async function memberSeed(prisma: PrismaClient) {
                 Math.random() * provinces.length,
             );
 
-            const firstname = faker.person.firstName('female');
-            const email = faker.internet
-                .email({ firstName: firstname })
-                .toLocaleLowerCase();
             const data: Prisma.UserCreateInput = {
                 ...alice,
                 email,
                 firstname,
-                lastname: faker.person.lastName('female'),
+                lastname,
                 avatar: '/dummy/akhwat_' + randomNumber + '_lg.jpg',
                 avatar_md: '/dummy/akhwat_' + randomNumber + '_md.jpg',
                 blurred_avatar:
                     '/dummy/akhwat_blurred_' + randomNumber + '_lg.jpg',
                 blurred_avatar_md:
                     '/dummy/akhwat_blurred_' + randomNumber + '_md.jpg',
-                password: {
-                    create: {
-                        password,
-                    },
-                },
                 createdAt: faker.date.past(),
             };
 
@@ -882,7 +905,6 @@ export async function memberSeed(prisma: PrismaClient) {
                         birth_place: provinces[randomProvinceIndex2].name,
                         birth_order: 1,
                         address: faker.location.streetAddress(true),
-
                         address_town: provinces[randomProvinceIndex1].name,
                         address_province: provinces[randomProvinceIndex].name,
                         hometown_province: provinces[randomProvinceIndex2].name,
@@ -918,15 +940,14 @@ export async function memberSeed(prisma: PrismaClient) {
                             ],
                     },
                 };
-
-                data.password = {
-                    create: {
-                        password,
-                    },
-                };
-
-                data.taaruf_status = 'OPEN';
             }
+            data.password = {
+                create: {
+                    password,
+                },
+            };
+
+            data.taaruf_status = 'OPEN';
 
             data.auth = {
                 createMany: {
@@ -935,12 +956,23 @@ export async function memberSeed(prisma: PrismaClient) {
             };
 
             // console.log(data)
-            const userCheck = await prisma.user.findFirst({ where: { email } });
 
-            if (!userCheck) {
+            // await prisma.user.upsert({
+            //     where: { email },
+            //     create: data,
+            //     update: data,
+            // });
+
+            const findEmail = await prisma.user.findFirst({
+                where: {
+                    email,
+                },
+            });
+            if (!findEmail) {
                 await prisma.user.create({
                     data,
                 });
+                // console.log('.');
             }
         }
     }

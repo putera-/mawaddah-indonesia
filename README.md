@@ -1,4 +1,5 @@
 ## DEVELOPMENT
+
 ### Installation
 
 ```bash
@@ -20,6 +21,7 @@ $ npm run dev
 ```
 
 ## PRODUCTION
+
 ### Installation
 
 ```bash
@@ -38,4 +40,14 @@ $ npm run start
 
 # production mode
 $ npm run start:prod
+```
+
+### Migrate from gazwah database to this database
+
+```bash
+# test
+$ npm run migrate:migrate-test
+
+# production mode
+$ npm run migrate:migrate
 ```

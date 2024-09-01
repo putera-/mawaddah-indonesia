@@ -10,11 +10,12 @@ generator client {
 
 datasource db {
     provider = "mysql"
-    url      = env("DATABASE_URL")
+    url      = "mysql://root:root@localhost:3306/mawaddah_dev"
 }
 
 model User {
     id                 String          @id @default(uuid())
+    old_id             Int?            @db.Int
     email              String          @unique @db.VarChar(100)
     firstname          String          @db.VarChar(100)
     lastname           String          @db.VarChar(100)
@@ -40,8 +41,17 @@ model User {
     Question           Question[]
     createdAt          DateTime        @default(now())
     updatedAt          DateTime        @default(now()) @updatedAt
+    backup_detail      BackupDetail?
 
     @@map("user")
+}
+
+model BackupDetail {
+    user   User?  @relation(fields: [userId], references: [id])
+    userId String @unique
+    old_id Int    @db.Int
+
+    @@map("backup_detail")
 }
 
 model Password {
@@ -232,7 +242,6 @@ model Province {
 
 model Education {
     id               String   @id @default(uuid())
-    userId           String
     institution_name String   @db.VarChar(100)
     major            String?  @db.VarChar(100)
     degree           String?  @db.VarChar(100)
@@ -341,6 +350,7 @@ model NonPhysicalCharacter {
     unliked_things      String?  @db.Text()
     drink_alcohol       Boolean  @default(false)
     smoking             Boolean  @default(false)
+    sport               String?  @db.Text()
     createdAt           DateTime @default(now())
     updatedAt           DateTime @default(now()) @updatedAt
     biodata             Biodata  @relation(fields: [biodataId], references: [id])
@@ -377,6 +387,7 @@ enum relationship {
     ipar_wanita
     anak_kandung
     anak_angkat
+    none
 }
 
 enum religion {
@@ -591,17 +602,19 @@ model PhysicalCriteria {
 model NonPhysicalCriteria {
     id             String          @id @default(uuid())
     age            Int?            @db.Int
-    domicile       String?         @db.VarChar(100)
-    education      String?         @db.VarChar(100)
+    domicile       String?         @db.Text
+    education      String?         @db.Text
     married_status MarriageStatus?
     sport          String?         @db.Text
     hobby          String?         @db.Text
-    traits         String?         @db.VarChar(100)
+    traits         String?         @db.Text
     ethnic         String?         @db.VarChar(100)
-    job            String?         @db.VarChar(100)
+    job            String?         @db.Text
     other          String?         @db.Text
     biodata        Biodata         @relation(fields: [biodataId], references: [id])
     biodataId      String          @unique
+    createdAt      DateTime        @default(now())
+    updatedAt      DateTime        @default(now()) @updatedAt
 
     @@map("non_physical_criteria")
 }

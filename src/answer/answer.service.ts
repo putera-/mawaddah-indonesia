@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { Prisma } from '@prisma/client';
+import { Answer, Prisma } from '@prisma/client';
 import { Question } from 'src/question/question.interface';
 
 @Injectable()
@@ -27,10 +27,20 @@ export class AnswerService {
         });
 
         for (const question of questions) {
+            let answer: Answer;
             if (question.answers.length) {
-                question.answer = question.answers[0];
+                answer = question.answers[0];
+            } else {
+                answer = await this.Prisma.answer.create({
+                    data: {
+                        biodataId: user.biodata.id,
+                        questionId: question.id,
+                        answer: ''
+                    }
+                });
             }
 
+            question.answer = answer;
             delete question.answers;
         }
 
