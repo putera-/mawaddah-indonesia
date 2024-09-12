@@ -2,6 +2,9 @@
 FROM node:21-alpine
 
 # ENV PORT=5001
+ENV PORT=5000
+ENV DATABASE_URL="postgresql://postgres:postgres@localhost:5432/mydb?schema=mawaddah_dev"
+ENV JWTSECRET="MAWADDAHINDONESIA"
 
 # PRISMA
 # ENV DATABASE_URL="mysql://root:my-secret-pw@db-ecourse-rehab-hati:3306/ecourse"
