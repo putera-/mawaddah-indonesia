@@ -1,11 +1,18 @@
-import { Controller, Get, NotFoundException, Param, Res } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param, Redirect, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Public } from './auth/auth.metadata';
 import { promises as fs } from 'fs';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
     constructor(private readonly appService: AppService) { }
+
+    @Get()
+    @Redirect('/api', 301)
+    @ApiOperation({ summary: 'Redirect to API documentation' })
+    @ApiResponse({ status: 301, description: 'Redirect to Swagger UI' })
+    redirectToApiSwagger() { }
 
     @Public()
     @Get('photo/:file')
