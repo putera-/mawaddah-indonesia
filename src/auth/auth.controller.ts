@@ -35,6 +35,10 @@ import { sendResetPassword } from './dto/send-reset-password.dto';
 import { ResetPasswordDto } from 'src/reset_password/dto/reset-password.dto';
 import { BiodataService } from 'src/biodata/biodata.service';
 import { Prisma } from '@prisma/client';
+import { LoginAdminDoc, LoginDoc } from './auth.doc';
+import { ApiTags } from '@nestjs/swagger';
+
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -137,6 +141,7 @@ export class AuthController {
     }
 
     @Public()
+    @LoginDoc()
     @HttpCode(HttpStatus.OK)
     @Post('login')
     async signIn(@Body(new ValidationPipe()) signInDto: SignInDto) {
@@ -148,7 +153,10 @@ export class AuthController {
             throw error;
         }
     }
+
+
     @Public()
+    @LoginAdminDoc()
     @HttpCode(HttpStatus.OK)
     @Post('admin/login')
     adminSignIn(@Body(new ValidationPipe()) signInDto: SignInDto): Promise<User> {
