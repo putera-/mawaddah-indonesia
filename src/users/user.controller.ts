@@ -16,7 +16,11 @@ import { Prisma, RoleStatus } from '@prisma/client';
 import { PhotosService } from 'src/photos/photos.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { DeactivateUserDoc, DeleteUserDoc, GetAllUserDoc, GetUserDoc } from './user.doc';
 
+@ApiTags('Users')
+@ApiBearerAuth()
 @Controller('users')
 export class UsersController {
     constructor(
@@ -25,6 +29,7 @@ export class UsersController {
     ) { }
 
     // ONLY GET LIST OF MEMBER
+    @GetAllUserDoc()
     @Roles(Role.Superadmin, Role.Admin)
     @Get()
     async findAll(@Request() req: any, @Query('limit') limit: number, @Query('page') page: number) {
@@ -39,6 +44,7 @@ export class UsersController {
         }
     }
 
+    @GetUserDoc()
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Get(':id')
     async findOne(@Param('id') id: string) {
@@ -52,6 +58,7 @@ export class UsersController {
     }
 
 
+    @DeactivateUserDoc()
     @Roles(Role.Admin, Role.Superadmin)
     @Patch('deactivate/:id')
     @HttpCode(204)
@@ -62,6 +69,8 @@ export class UsersController {
             throw error;
         }
     }
+
+    @DeleteUserDoc()
     @Roles(Role.Admin, Role.Superadmin)
     @Delete(':id')
     @HttpCode(204)
