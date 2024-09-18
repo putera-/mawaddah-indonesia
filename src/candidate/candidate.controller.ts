@@ -13,7 +13,11 @@ import { UsersService } from 'src/users/user.service';
 import { PrismaService } from 'src/prisma.service';
 import { BiodataService } from 'src/biodata/biodata.service';
 import { User } from 'src/users/user.interface';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { GetNewCandidateDoc } from './candidate.doc';
 
+@ApiTags('Candidates')
+@ApiBearerAuth()
 @Controller('candidate')
 export class CandidateController {
     constructor(
@@ -25,10 +29,11 @@ export class CandidateController {
 
     @Roles(Role.Member)
     @Get('new')
+    @GetNewCandidateDoc()
     async findNew(
         @Request() req: any,
-        @Query('page') page: string,
-        @Query('limit') limit: string,
+        @Query('page') page: number,
+        @Query('limit') limit: number,
     ) {
         try {
             const user = await this.Prisma.biodata.findFirst({
@@ -66,8 +71,8 @@ export class CandidateController {
     @Get('suggestion')
     async findSuggestion2(
         @Request() req: any,
-        @Query('page') page: string,
-        @Query('limit') limit: string,
+        @Query('page') page: number,
+        @Query('limit') limit: number,
     ) {
         try {
             const userBiodata = await this.biodataService.findMe(req.user.id);
