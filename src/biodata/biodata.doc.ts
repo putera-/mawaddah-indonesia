@@ -1,26 +1,25 @@
 import { applyDecorators } from "@nestjs/common";
-import { ApiOperation, ApiQuery, ApiResponse } from "@nestjs/swagger";
+import { ApiBody, ApiOperation, ApiQuery, ApiResponse } from "@nestjs/swagger";
+import { CreateBiodatumDto } from "./dto/create-biodatum.dto";
 
 export function CreateBiodataDoc() {
     return applyDecorators(
         ApiOperation({ summary: 'Create Biodata, Restricted for Member' }),
+        ApiBody({
+            type: CreateBiodatumDto
+        }),
         ApiResponse({
             status: 201,
             description: 'Success',
-            example: {
-                message: 'Success',
-                data: {
-                    sampleBiodata
-                }
-            }
+            example: sampleBiodata
         }),
         ApiResponse({
-            status: 400,
-            description: 'Error: Bad Request',
+            status: 401,
+            description: 'Error: Unauthorized',
             schema: {
                 example: {
-                    message: 'Bad Request',
-                    statusCode: 400
+                    message: 'Unauthorized',
+                    statusCode: 401
                 }
             }
         }
@@ -28,6 +27,54 @@ export function CreateBiodataDoc() {
     );
 }
 
+
+export function GetBiodataDoc() {
+    return applyDecorators(
+        ApiOperation({ summary: 'Get Biodata, Restricted for Member' }),
+        ApiResponse({
+            status: 200,
+            description: 'Success',
+            example: sampleBiodata
+
+        }),
+        ApiResponse({
+            status: 401,
+            description: 'Unauthorized',
+            schema: {
+                example: {
+                    message: 'Unauthorized',
+                    statusCode: 401
+                }
+            }
+        }),
+        ApiResponse({
+            status: 204,
+            description: 'Biodata havent been created yet',
+            schema: {
+                example: {
+                    message: 'No Content',
+                    statusCode: 204
+                }
+            }
+
+        })
+    );
+}
+
+export function UpdateBiodataDoc() {
+    return applyDecorators(
+        ApiOperation({ summary: 'Update Biodata, Restricted for Member' }),
+        ApiBody({
+            type: CreateBiodatumDto
+        }),
+        ApiResponse({
+            status: 200,
+            description: 'Success',
+            example: sampleBiodata
+
+        })
+    )
+}
 
 const sampleBiodata = {
     id: "19a9371f-d673-442e-b85c-e4bcbb07c24d",
