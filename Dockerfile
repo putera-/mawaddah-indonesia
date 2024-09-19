@@ -1,5 +1,5 @@
 # Use a base image with Node.js installed
-FROM node:21-alpine
+FROM node:20.16.0-alpine
 
 # ENV PORT=5001
 
@@ -10,10 +10,10 @@ FROM node:21-alpine
 WORKDIR /app
 
 # Copy package.json and package-lock.json to the container
-COPY package.json ./
+COPY package*.json ./
 
 # Install dependencies
-RUN npm install --verbose
+RUN npm ci --verbose
 
 # Copy the rest of the application code
 COPY . .
