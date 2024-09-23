@@ -24,7 +24,7 @@ export function GetNewCandidateDoc() {
                 example: {
                     limit: 1,
                     total: 1,
-                    page:1,
+                    page: 1,
                     maxPages: 12,
                     data: {
                         sampleUser1
@@ -54,6 +54,149 @@ export function GetNewCandidateDoc() {
         })
     )
 }
+
+export function CandidateYouMayLikeDoc() {
+    return applyDecorators(
+        ApiOperation({ summary: 'Get Candidate You May Like, Restricted for Member' }),
+        ApiQuery({
+            name: 'page',
+            required: false,
+            type: Number,
+            description: 'Page number'
+        }),
+        ApiQuery({
+            name: 'limit',
+            required: false,
+            type: Number,
+            description: 'Number of item per page'
+        }),
+        ApiResponse({
+            status: 200,
+            description: 'Success',
+            schema: {
+                example: {
+                    limit: 1,
+                    total: 1,
+                    page: 1,
+                    maxPages: 12,
+                    data: {
+                        sampleUser1
+                    }
+                }
+            }
+        }),
+        ApiResponse({
+            status: 401,
+            description: 'Error: Unauthorized (you need to login to see this content)',
+            schema: {
+                example: {
+                    message: 'Unauthorized',
+                    statusCode: 401
+                }
+            }
+        }),
+        ApiResponse({
+            status: 404,
+            description: 'Error: Not Found (You need to complete biodata details)',
+            schema: {
+                example: {
+                    message: 'Not Found',
+                    statusCode: 404
+                }
+            }
+        })
+    )
+}
+
+export function CandidateGetOneDoc() {
+    return applyDecorators(
+        ApiOperation({ summary: 'Get Candidate Suggestion, Restricted for Member' }),
+        ApiQuery({
+            name: 'page',
+            required: false,
+            type: Number,
+            description: 'Page number'
+        }),
+        ApiQuery({
+            name: 'limit',
+            required: false,
+            type: Number,
+            description: 'Number of item per page'
+        }),
+        ApiResponse({
+            status: 200,
+            description: 'Success',
+            schema: {
+                example: {
+                    sampleUser1
+                }
+            }
+        }),
+        ApiResponse({
+            status: 401,
+            description: 'Error: Unauthorized (you need to login to see this content)',
+            schema: {
+                example: {
+                    message: 'Unauthorized',
+                    statusCode: 401
+                }
+            }
+        }),
+        ApiResponse({
+            status: 404,
+            description: 'Error: Not Found (You need to complete biodata details)',
+            schema: {
+                example: {
+                    message: 'Not Found',
+                    statusCode: 404
+                }
+            }
+        })
+    )
+}
+
+export function CandidateSuggestionDoc() {
+    return applyDecorators(
+        ApiOperation({ summary: 'Get Candidate Suggestion, Restricted for Member' }),
+        ApiResponse({
+            status: 200,
+            description: 'Success',
+            schema: {
+                example: {
+                    limit: 1,
+                    total: 1,
+                    page: 1,
+                    maxPages: 12,
+                    data: {
+                        sampleUser1
+                    }
+                }
+            }
+        }),
+        ApiResponse({
+            status: 401,
+            description: 'Error: Unauthorized (you need to login to see this content)',
+            schema: {
+                example: {
+                    message: 'Unauthorized',
+                    statusCode: 401
+                }
+            }
+        }),
+        ApiResponse({
+            status: 404,
+            description: 'Error: Not Found (You need to complete biodata details)',
+            schema: {
+                example: {
+                    message: 'Not Found',
+                    statusCode: 404
+                }
+            }
+        })
+    )
+}
+
+
 
 const sampleUser1 = {
     id: "76efe560-73b1-4379-82d8-6337cd0ea81a",

@@ -14,7 +14,7 @@ import { PrismaService } from 'src/prisma.service';
 import { BiodataService } from 'src/biodata/biodata.service';
 import { User } from 'src/users/user.interface';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { GetNewCandidateDoc } from './candidate.doc';
+import { CandidateGetOneDoc, CandidateSuggestionDoc, CandidateYouMayLikeDoc, GetNewCandidateDoc } from './candidate.doc';
 
 @ApiTags('Candidates')
 @ApiBearerAuth()
@@ -67,6 +67,7 @@ export class CandidateController {
     //     }
     // }
 
+    @CandidateSuggestionDoc()
     @Roles(Role.Member)
     @Get('suggestion')
     async findSuggestion2(
@@ -86,6 +87,7 @@ export class CandidateController {
         }
     }
 
+    @CandidateYouMayLikeDoc()
     @Roles(Role.Member)
     @Get('you-may-like')
     async findLike2(
@@ -107,6 +109,7 @@ export class CandidateController {
         }
     }
 
+    @CandidateGetOneDoc()
     @Roles(Role.Member)
     @Get(':id')
     async findOne(@Param('id') id: string) {
