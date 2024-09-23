@@ -1,17 +1,20 @@
-import { Type } from "class-transformer";
-import { IsDate, IsOptional, IsString } from "class-validator"
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsDate, IsOptional, IsString } from 'class-validator';
 
 export class CreateAkadDto {
-
+    @ApiProperty()
     @IsDate()
     @Type(() => Date)
     schedule: Date;
 
+    @ApiProperty()
     @IsOptional()
     @IsString()
-    message?: string
+    message?: string;
 
+    @ApiProperty()
     @IsOptional()
     @IsString()
-    reply?: string
+    reply?: string;
 }

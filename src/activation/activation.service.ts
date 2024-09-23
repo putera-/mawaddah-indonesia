@@ -55,7 +55,7 @@ export class ActivationService {
         const find = await this.Prisma.activation.findFirst(id);
     }
 
-    remove(id: number) {
+    remove(id: string) {
         return `This action removes a #${id} activation`;
     }
 }

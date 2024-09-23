@@ -26,6 +26,6 @@ export class ActivationController {
     @DeleteActivationDoc()
     @Delete(':id')
     remove(@Param('id') id: string) {
-        return this.activationService.remove(+id);
+        return this.activationService.remove(id);
     }
 }
