@@ -1,5 +1,5 @@
 import { applyDecorators } from "@nestjs/common";
-import { ApiOperation, ApiQuery, ApiResponse } from "@nestjs/swagger";
+import { ApiOperation, ApiParam, ApiQuery, ApiResponse } from "@nestjs/swagger";
 
 
 export function GetNewCandidateDoc() {
@@ -111,18 +111,7 @@ export function CandidateYouMayLikeDoc() {
 export function CandidateGetOneDoc() {
     return applyDecorators(
         ApiOperation({ summary: 'Get Candidate Suggestion, Restricted for Member' }),
-        ApiQuery({
-            name: 'page',
-            required: false,
-            type: Number,
-            description: 'Page number'
-        }),
-        ApiQuery({
-            name: 'limit',
-            required: false,
-            type: Number,
-            description: 'Number of item per page'
-        }),
+        ApiParam({ name: 'Candidate ID', type: String }),
         ApiResponse({
             status: 200,
             description: 'Success',
