@@ -78,6 +78,17 @@ export class BookmarkService {
         });
         return bookmarks;
     }
+
+    async isBookmarked(idUser: string, idCandidate: string): Promise<boolean> {
+        const bookmark = await this.Prisma.bookmark.findFirst({
+            where: {
+                userId: idUser,
+                candidateId: idCandidate,
+            },
+        });
+        return bookmark ? true : false;
+    }
+
     async remove(id: string) {
         return await this.Prisma.bookmark.update({
             where: { id },

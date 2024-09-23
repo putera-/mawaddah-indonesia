@@ -14,7 +14,7 @@ import { Role } from 'src/roles/role.enums';
 
 @Controller('bookmark')
 export class BookmarkController {
-    constructor(private readonly bookmarkService: BookmarkService) {}
+    constructor(private readonly bookmarkService: BookmarkService) { }
     @Roles(Role.Member)
     @Post(':id')
     create(@Request() req: any, @Param('id') id: string) {
@@ -34,6 +34,13 @@ export class BookmarkController {
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.bookmarkService.findOne(id);
+    }
+
+    @Roles(Role.Member)
+    @Get('check/:id')
+    isBookmarked(@Request() req: any, @Param('id') idCandidate: string): Promise<boolean> {
+        const idUser = req.user.id;
+        return this.bookmarkService.isBookmarked(idUser, idCandidate);
     }
 
     @Roles(Role.Member)
