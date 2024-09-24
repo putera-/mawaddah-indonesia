@@ -5,11 +5,15 @@ import { UpdateEducationDto } from './dto/update-education.dto';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { Prisma } from '@prisma/client';
+import { CreateEducationDoc, DeleteEducationById, GetEducationAll, GetEducationById, UpdateEducationById } from './education.doc';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Education')
 @Controller('educations')
 export class EducationsController {
     constructor(private readonly educationsService: EducationsService) { }
 
+    @CreateEducationDoc()
     @Roles(Role.Member)
     @Post()
     create(@Request() req: any, @Body(new ValidationPipe()) data: CreateEducationDto) {
@@ -22,6 +26,7 @@ export class EducationsController {
         }
     }
 
+    @GetEducationAll()
     @Roles(Role.Member)
     @Get()
     findAll(@Request() req: any, @Query('page') page: number, @Query('limit') limit: number) {
@@ -35,6 +40,7 @@ export class EducationsController {
     }
 
 
+    @GetEducationById()
     @Roles(Role.Member)
     @Get(':id')
     findOne(@Request() req: any, @Param('id') id: string) {
@@ -48,6 +54,7 @@ export class EducationsController {
         }
     }
 
+    @UpdateEducationById()
     @Roles(Role.Member)
     @Patch(':id')
     update(@Request() req: any, @Param('id') id: string, @Body(new ValidationPipe()) data: UpdateEducationDto) {
@@ -61,6 +68,7 @@ export class EducationsController {
         }
     }
 
+    @DeleteEducationById()
     @Roles(Role.Member)
     @HttpCode(204)
     @Delete(':id')

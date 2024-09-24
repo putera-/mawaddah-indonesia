@@ -78,7 +78,7 @@ export async function memberSeed(prisma: PrismaClient) {
         'Di waktu luang, saya sering mendengarkan musik atau bermain alat musik.',
         'Ketika memiliki waktu luang, saya senang memasak dan mencoba resep-resep baru.',
         'Pada waktu luang, saya suka menonton film atau serial televisi favorit.',
-        'Ketika memiliki waktu luang, saya sering menghabiskan waktu luang di tempat-tempat yang nyaman.',
+        'Ketika memiliki waktu luang, saya_name sering menghabiskan waktu luang di tempat-tempat yang nyaman.',
         'Di waktu luang, saya sering bermain game dan bermain permainan komputer.',
     ];
 

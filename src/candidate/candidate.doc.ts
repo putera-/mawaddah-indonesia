@@ -2,6 +2,8 @@ import { applyDecorators } from "@nestjs/common";
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse } from "@nestjs/swagger";
 
 
+
+
 export function GetNewCandidateDoc() {
     return applyDecorators(
         ApiOperation({ summary: 'Get New Candidate, Restricted for Member' }),
