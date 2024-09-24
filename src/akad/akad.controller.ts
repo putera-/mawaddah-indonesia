@@ -3,6 +3,14 @@ import { AkadService } from './akad.service';
 import { CreateAkadDto } from './dto/create-akad.dto';
 import { UpdateAkadDto } from './dto/update-akad.dto';
 
+/**
+TODO
+FIXME
+- TRY CATCH ERROR
+- ROLE GUARD
+- CEK TAARUF ID RELATION
+**/
+
 @Controller('akad')
 export class AkadController {
   constructor(private readonly akadService: AkadService) { }
