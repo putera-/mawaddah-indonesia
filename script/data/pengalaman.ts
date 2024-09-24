@@ -31,11 +31,12 @@ export async function pengalaman(
 
         const type: ExperienceType = (() => {
             switch (pengalaman.pengalaman_di) {
-                case 'Kerja' || 'Pengalaman Pekerjaan':
+                case 'Kerja':
+                case 'Pengalaman Pekerjaan':
                     return ExperienceType.Kerja;
-                case 'organisasi' ||
-                    'Pengalaman Organisasi' ||
-                    'Pengalaman Kepanitiaan':
+                case 'organisasi':
+                case 'Pengalaman Organisasi':
+                case 'Pengalaman Kepanitiaan':
                     return ExperienceType.Organisasi;
                 default:
                     return ExperienceType.Organisasi;
