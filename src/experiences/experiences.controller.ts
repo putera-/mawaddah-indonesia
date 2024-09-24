@@ -6,13 +6,17 @@ import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { Prisma } from '@prisma/client';
 import { BiodataService } from 'src/biodata/biodata.service';
+import { ApiTags } from '@nestjs/swagger';
+import { CreateExperienceDoc, DeleteExperienceById, GetExperiemceAll, GetExperiemceById, UpdateExperienceById } from './experience.doc';
 
+@ApiTags('experiences')
 @Controller('experiences')
 export class ExperiencesController {
     constructor(private readonly experienceService: ExperiencesService,
         private readonly biodataService: BiodataService
     ) { }
 
+    @CreateExperienceDoc()
     @Roles(Role.Member)
     @Post()
     async create(@Request() req: any, @Body(new ValidationPipe()) data: CreateExperienceDto) {
@@ -35,6 +39,7 @@ export class ExperiencesController {
         }
     }
 
+    @GetExperiemceAll()
     @Roles(Role.Member)
     @Get()
     async findAll(@Request() req: any, @Query('page') page: number, @Query('limit') limit: number) {
@@ -53,6 +58,7 @@ export class ExperiencesController {
 
 
     @Roles(Role.Member)
+    @GetExperiemceById()
     @Get(':id')
     async findOne(@Request() req: any, @Param('id') id: string) {
         const userId = req.user.id
@@ -69,6 +75,7 @@ export class ExperiencesController {
         }
     }
 
+    @UpdateExperienceById()
     @Roles(Role.Member)
     @Patch(':id')
     async update(@Request() req: any, @Param('id') id: string, @Body(new ValidationPipe()) data: UpdateExperienceDto) {
@@ -86,6 +93,7 @@ export class ExperiencesController {
         }
     }
 
+    @DeleteExperienceById()
     @Roles(Role.Member)
     @HttpCode(204)
     @Delete(':id')

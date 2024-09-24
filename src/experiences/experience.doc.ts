@@ -1,13 +1,14 @@
 import { applyDecorators } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiQuery, ApiResponse } from "@nestjs/swagger";
-import { CreateEducationDto } from "./dto/create-education.dto";
+import { sample } from "rxjs";
+import { CreateExperienceDto } from "./dto/create-experience.dto";
 
 
-export function CreateEducationDoc() {
+export function CreateExperienceDoc() {
     return applyDecorators(
-        ApiOperation({ summary: 'Create Education, Restricted for Member' }),
+        ApiOperation({ summary: 'Create Experience, Restricted for Member' }),
         ApiBody({
-            type: CreateEducationDto
+            type: CreateExperienceDto
         }),
         ApiResponse({
             status: 200,
@@ -38,10 +39,9 @@ export function CreateEducationDoc() {
     );
 }
 
-
-export function GetEducationAll() {
+export function GetExperiemceAll() {
     return applyDecorators(
-        ApiOperation({ summary: 'Get Education, Restricted for Member' }),
+        ApiOperation({ summary: 'Get Experience, Restricted for Member' }),
         ApiQuery({
             name: 'page',
             required: false,
@@ -92,9 +92,9 @@ export function GetEducationAll() {
     )
 }
 
-export function GetEducationById() {
+export function GetExperiemceById() {
     return applyDecorators(
-        ApiOperation({ summary: 'Get Education By Id, Restricted for Member' }),
+        ApiOperation({ summary: 'Get Experience By Id, Restricted for Member' }),
         ApiResponse({
             status: 200,
             description: 'Success',
@@ -123,11 +123,11 @@ export function GetEducationById() {
     )
 }
 
-export function UpdateEducationById() {
+export function UpdateExperienceById() {
     return applyDecorators(
-        ApiOperation({ summary: 'Update Education By Id, Restricted for Member' }),
+        ApiOperation({ summary: 'Update Experience By Id, Restricted for Member' }),
         ApiBody({
-            type: CreateEducationDto
+            type: CreateExperienceDto
         }),
         ApiResponse({
             status: 200,
@@ -157,9 +157,9 @@ export function UpdateEducationById() {
     )
 }
 
-export function DeleteEducationById() {
+export function DeleteExperienceById() {
     return applyDecorators(
-        ApiOperation({ summary: 'Delete Education By Id, Restricted for Member' }),
+        ApiOperation({ summary: 'Delete Experience By Id, Restricted for Member' }),
         ApiResponse({
             status: 204,
         }),
@@ -187,25 +187,28 @@ export function DeleteEducationById() {
 }
 
 const sample1 = {
-	"id": "8f2acb5e-23a8-464b-951c-c68487a659b4",
-	"institution_name": "Fountain Magic Academy",
-	"major": null,
-	"degree": "Senior Highschool",
-	"city": "mondtstald",
-	"startYear": 2000,
-	"endYear": null,
-	"createdAt": "2024-09-24T01:59:26.762Z",
-	"updatedAt": "2024-09-24T02:00:37.602Z"
+    "id": "5855200b-c9e2-4ae1-aa20-bb05b5613ec0",
+    "biodataId": "b3ac4e99-b008-4abc-a7ad-a6c2f83dfbaf",
+    "type": "Kerja",
+    "start_year": 2023,
+    "end_year": 2024,
+    "position": "Human Resources Manager",
+    "description": "Tutis vilicus vicissitudo ver ceno tametsi acceptus aeneus coerceo tonsor. Agnosco termes congregatio reprehenderit deinde. Crur chirographum curto aequitas ver varietas cumque.\nArchitecto viriliter abundans accommodo aro theatrum tracto. Quis doloremque sed verus vitium versus denuo careo spes celer. Vesica curis maiores quisquam repellat stabilis.\nAdmoveo turba caelestis alveus. Pauci quibusdam urbs vacuus video vivo. Adaugeo bonus aqua denego.",
+    "deleted": false,
+    "createdAt": "2024-09-23T02:19:49.780Z",
+    "updatedAt": "2024-09-23T02:19:49.780Z"
 }
 
 const sample2 = {
-	"id": "8f2acb5e-23a8-464b-951c-c35453a659b4",
-	"institution_name": "Harlord Magic Academy",
-	"major": null,
-	"degree": "Senior Highschool",
-	"city": "Manchester",
-	"startYear": 2008,
-	"endYear": null,
-	"createdAt": "2024-09-24T01:59:26.762Z",
-	"updatedAt": "2024-09-24T02:00:37.602Z"
+    "id": "b7c929be-e247-43a9-80f8-3fd1ee817272",
+    "biodataId": "b3ac4e99-b008-4abc-a7ad-a6c2f83dfbaf",
+    "type": "Organisasi",
+    "start_year": 2024,
+    "end_year": 2024,
+    "position": "Data Analyst",
+    "description": "Deduco compello desidero fuga cupiditate subiungo sint. Placeat tergum baiulus carpo decor cernuus sublime vulticulus vinculum. Vinitor decens derideo.\nSumptus provident creta annus velit aptus volo. Consectetur basium vomito cometes thymbra crapula aduro. Utor calculus copiose comitatus arx.\nComplectus terebro quaerat consequuntur defleo. Vicissitudo deserunt dens spiritus confido adfectus tempore complectus atavus libero. Aranea pecus campana averto pax.",
+    "deleted": false,
+    "createdAt": "2024-09-23T02:19:49.768Z",
+    "updatedAt": "2024-09-23T02:19:49.768Z"
 }
+
