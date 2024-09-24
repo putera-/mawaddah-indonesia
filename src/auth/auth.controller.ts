@@ -36,7 +36,7 @@ import { ResetPasswordDto } from 'src/reset_password/dto/reset-password.dto';
 import { BiodataService } from 'src/biodata/biodata.service';
 import { Prisma } from '@prisma/client';
 import { LoginAdminDoc, LoginDoc } from './auth.doc';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -45,8 +45,8 @@ export class AuthController {
         private authService: AuthService,
         private userService: UsersService,
         private photoService: PhotosService,
-        private biodataService: BiodataService
-    ) { }
+        private biodataService: BiodataService,
+    ) {}
 
     @Public()
     @HttpCode(HttpStatus.OK)
@@ -63,10 +63,10 @@ export class AuthController {
                 ...data,
                 password: {
                     create: {
-                        password: data.password
-                    }
-                }
-            }
+                        password: data.password,
+                    },
+                },
+            };
 
             const user: User = await this.userService.create(dataUser);
             // kirim kode aktivasi ke email
@@ -91,6 +91,7 @@ export class AuthController {
         }
     }
 
+    @ApiBearerAuth()
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('send-activation')
@@ -102,6 +103,7 @@ export class AuthController {
         }
     }
 
+    @ApiBearerAuth()
     @Public()
     @HttpCode(HttpStatus.OK)
     @Post('reset-password')
@@ -146,7 +148,10 @@ export class AuthController {
     @Post('login')
     async signIn(@Body(new ValidationPipe()) signInDto: SignInDto) {
         try {
-            const login_data = await this.authService.signIn(signInDto.email, signInDto.password);
+            const login_data = await this.authService.signIn(
+                signInDto.email,
+                signInDto.password,
+            );
 
             return login_data;
         } catch (error) {
@@ -154,14 +159,18 @@ export class AuthController {
         }
     }
 
-
     @Public()
     @LoginAdminDoc()
     @HttpCode(HttpStatus.OK)
     @Post('admin/login')
-    adminSignIn(@Body(new ValidationPipe()) signInDto: SignInDto): Promise<User> {
+    adminSignIn(
+        @Body(new ValidationPipe()) signInDto: SignInDto,
+    ): Promise<User> {
         try {
-            return this.authService.adminSignIn(signInDto.email, signInDto.password);
+            return this.authService.adminSignIn(
+                signInDto.email,
+                signInDto.password,
+            );
         } catch (error) {
             throw error;
         }
@@ -183,6 +192,7 @@ export class AuthController {
         return { access_token, exp };
     }
 
+    @ApiBearerAuth()
     @Roles(Role.Member, Role.Superadmin, Role.Admin)
     @Get('profile')
     async getProfile(@Request() req) {
@@ -198,6 +208,7 @@ export class AuthController {
         }
     }
 
+    @ApiBearerAuth()
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Patch('profile')
     @UseInterceptors(FileInterceptor('avatar'))
@@ -253,17 +264,15 @@ export class AuthController {
                 data.avatar_md = `/avatar/${uniqueSuffix}_md.${ext}`;
                 data.blurred_avatar = `/avatar/${blurUniqueSuffix}_lg.${ext}`;
                 data.blurred_avatar_md = `/avatar/${blurUniqueSuffix}_md.${ext}`;
-
             }
             const dataUser: Prisma.UserUpdateInput = {
                 ...data,
                 password: {
                     connect: {
-                        userId: req.user.id
-                    }
-                }
-            }
-
+                        userId: req.user.id,
+                    },
+                },
+            };
 
             return this.userService.update(id, dataUser);
         } catch (error) {
@@ -280,6 +289,7 @@ export class AuthController {
         }
     }
 
+    @ApiBearerAuth()
     @Roles(Role.Superadmin, Role.Admin, Role.Member)
     @Patch('change_password')
     @HttpCode(204)
@@ -294,6 +304,7 @@ export class AuthController {
         }
     }
 
+    @ApiBearerAuth()
     @Delete('logout')
     @HttpCode(204)
     logOut(@Req() req) {
