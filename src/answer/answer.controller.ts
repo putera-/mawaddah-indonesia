@@ -1,22 +1,20 @@
-import {
-    Controller,
-    Get,
-    Body,
-    Patch,
-    Req,
-    Query,
-} from '@nestjs/common';
+import { Controller, Get, Body, Patch, Req, Query } from '@nestjs/common';
 import { AnswerService } from './answer.service';
 import { UpdateAnswerDto } from './dto/update-answer.dto';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { Answer, Prisma } from '@prisma/client';
 import { Question } from 'src/question/question.interface';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { GetAllAnswerDoc, GetAnswerDoc, PatchAnswerDoc } from './answer.doc';
 
+@ApiTags('Answer')
+@ApiBearerAuth()
 @Controller('answer')
 export class AnswerController {
-    constructor(private readonly answerService: AnswerService) { }
+    constructor(private readonly answerService: AnswerService) {}
 
+    @GetAllAnswerDoc()
     @Roles(Role.Member)
     @Get()
     async findAll(@Req() req: any): Promise<Question[]> {
@@ -27,6 +25,7 @@ export class AnswerController {
         }
     }
 
+    @GetAnswerDoc()
     @Roles(Role.Member)
     @Get('by-question')
     async findOne(
@@ -40,6 +39,7 @@ export class AnswerController {
         }
     }
 
+    @PatchAnswerDoc()
     @Roles(Role.Member)
     @Patch('by-question')
     async update(
