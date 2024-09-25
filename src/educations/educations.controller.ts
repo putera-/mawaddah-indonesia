@@ -6,9 +6,10 @@ import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { Prisma } from '@prisma/client';
 import { CreateEducationDoc, DeleteEducationById, GetEducationAll, GetEducationById, UpdateEducationById } from './education.doc';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Education')
+@ApiBearerAuth()
 @Controller('educations')
 export class EducationsController {
     constructor(private readonly educationsService: EducationsService) { }

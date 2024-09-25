@@ -6,10 +6,11 @@ import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { Prisma } from '@prisma/client';
 import { BiodataService } from 'src/biodata/biodata.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateExperienceDoc, DeleteExperienceById, GetExperiemceAll, GetExperiemceById, UpdateExperienceById } from './experience.doc';
 
 @ApiTags('experiences')
+@ApiBearerAuth()
 @Controller('experiences')
 export class ExperiencesController {
     constructor(private readonly experienceService: ExperiencesService,
