@@ -11,7 +11,6 @@ import { BiodataService } from 'src/biodata/biodata.service';
 
 const select = {
     id: true,
-    userId: true,
     institution_name: true,
     major: true,
     degree: true,

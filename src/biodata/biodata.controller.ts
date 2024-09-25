@@ -15,13 +15,18 @@ import { UpdateBiodataDto } from './dto/update-biodata.dto';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { Prisma } from '@prisma/client';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CreateBiodataDoc, GetBiodataDoc, UpdateBiodataDoc } from './biodata.doc';
 
+@ApiTags('Biodata')
+@ApiBearerAuth()
 @Controller('biodata')
 export class BiodataController {
     constructor(private readonly biodataService: BiodataService) {}
 
     @Roles(Role.Member)
     @Post()
+    @CreateBiodataDoc()
     async create(
         @Request() req: any,
         @Body(new ValidationPipe()) data: CreateBiodatumDto,
@@ -38,6 +43,7 @@ export class BiodataController {
 
     @Roles(Role.Member)
     @Get()
+    @GetBiodataDoc()
     async findMe(@Request() req: any) {
         try {
             const me = req.user.id;
@@ -56,6 +62,7 @@ export class BiodataController {
 
     @Roles(Role.Member)
     @Patch()
+    @UpdateBiodataDoc()
     async update(
         @Request() req: any,
         @Body(new ValidationPipe()) data: UpdateBiodataDto,
