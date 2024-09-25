@@ -25,5 +25,5 @@ COPY . .
 
 # Command to run your application
 # CMD npx prisma migrate reset --force && npm run migrate:deploy && npm run start
-CMD npm run start
-# CMD npx prisma generate && npm run migrate:deploy && npm run start
+# CMD npm run start
+CMD npx prisma generate && npm run migrate:deploy && npm run start
