@@ -7,7 +7,7 @@ services:
             context: .
             dockerfile: Dockerfile
         container_name: api_mawaddah
-        image: api_mawaddah:0.0.15
+        image: api_mawaddah:0.0.16
         restart: always
         ports:
             - 5021:5000
