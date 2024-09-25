@@ -43,7 +43,7 @@ export class UsersService {
         private Prisma: PrismaService,
         private appService: AppService,
         // private activation: ActivationService,
-    ) { }
+    ) {}
 
     create(data: Prisma.UserCreateInput) {
         return this.Prisma.user.create({
@@ -60,45 +60,48 @@ export class UsersService {
         delete data.avatar_md;
     }
 
-    async findAll(roles: RoleStatus[], limit = 10, page = 1): Promise<Pagination<User[]>> {
+    async findAll(
+        roles: RoleStatus[],
+        limit = 10,
+        page = 1,
+    ): Promise<Pagination<User[]>> {
         const skip = (page - 1) * limit;
 
         const [total, data] = await Promise.all([
-
             this.Prisma.user.count({
                 where: {
                     active: true,
-                    role: { in: roles }
-                }
+                    role: { in: roles },
+                },
             }),
             this.Prisma.user.findMany({
                 where: {
                     active: true,
-                    role: { in: roles }
+                    role: { in: roles },
                 },
                 include: {
                     biodata: true,
                     Taaruf_gold: {
                         where: {
                             startedAt: { gt: new Date() },
-                            endingAt: { lt: new Date() }
-                        }
+                            endingAt: { lt: new Date() },
+                        },
                     },
                     Taaruf: {
                         where: { status: true },
                         orderBy: { createdAt: 'desc' },
-                        take: 1
+                        take: 1,
                     },
                     Taaruf_candidate: {
                         where: { status: true },
                         orderBy: { createdAt: 'desc' },
-                        take: 1
+                        take: 1,
                     },
                     auth: {
                         select: { createdAt: true },
                         orderBy: { createdAt: 'desc' },
-                        take: 1
-                    }
+                        take: 1,
+                    },
                 },
                 orderBy: { createdAt: 'desc' },
                 skip,
@@ -115,12 +118,14 @@ export class UsersService {
                 user.isTaarufGold = user.Taaruf_gold.length ? true : false;
                 user.hasBiodata = user.biodata ? true : false;
 
-                user.inTaaruf = (user.Taaruf.length || user.Taaruf_candidate.length) ? true : false;
-
+                user.inTaaruf =
+                    user.Taaruf.length || user.Taaruf_candidate.length
+                        ? true
+                        : false;
             }
 
             delete user.Taaruf_gold;
-            delete user.biodata
+            delete user.biodata;
             delete user.Taaruf;
             delete user.Taaruf_candidate;
         }
@@ -131,13 +136,12 @@ export class UsersService {
             total,
             page,
             maxPages: Math.ceil(total / limit),
-        }
-
+        };
     }
 
     async findOne(id: string, role: RoleStatus): Promise<User> {
         const user = await this.Prisma.user.findFirst({
-            where: { id, role, active: true }
+            where: { id, role, active: true },
         });
         if (!user) throw new NotFoundException(`User tidak ditemukan`);
         return user;
@@ -155,7 +159,7 @@ export class UsersService {
         const currentData = await this.Prisma.user.findUnique({
             where: { id },
         });
-        if (!currentData) throw new NotFoundException();
+        if (!currentData) throw new NotFoundException('User tidak ditemukan');
 
         const updatedData = await this.Prisma.user.update({
             where: { id, active: true },
@@ -186,7 +190,7 @@ export class UsersService {
             where: { id },
             include: { password: true },
         });
-        if (!user) throw new NotFoundException();
+        if (!user) throw new NotFoundException('User tidak ditemukan.');
 
         if (data.password != data.confirm_password)
             throw new BadRequestException('Konfirmasi password tidak sesuai');
@@ -217,7 +221,7 @@ export class UsersService {
         email = email.trim().toLowerCase();
         const user = await this.Prisma.user.findUnique({
             where: { email },
-        }); 
+        });
         return user;
     }
     async checkPassword(data: any) {
@@ -279,8 +283,8 @@ export class UsersService {
             where: {
                 userId,
                 startedAt: { gt: new Date() },
-                endingAt: { lt: new Date() }
-            }
+                endingAt: { lt: new Date() },
+            },
         });
 
         return taaruf_gold_data.length ? true : false;
