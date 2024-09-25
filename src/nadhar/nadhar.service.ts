@@ -2,94 +2,69 @@ import { BadRequestException, ForbiddenException, Injectable, NotFoundException 
 import { CreateNadharDto } from './dto/create-nadhar.dto';
 import { UpdateNadharDto } from './dto/update-nadhar.dto';
 import { PrismaService } from 'src/prisma.service';
+import { Nadhar } from './nadhar.interface';
 
 @Injectable()
 export class NadharService {
     constructor(private prisma: PrismaService) { }
 
-    //ga dihapus karena untuk keperluan testing
-    
-    //    async getAll(userId: string) {
-    //     return this.prisma.taaruf.findMany({
-    //         where: { userId: userId },
-    //         include: { approval: true }
-    //     });
-    // }
-    
-    async create(data: CreateNadharDto, userId: string, taarufid: string) {
-        const target = await this.prisma.taaruf.findFirst({
+    async create(data: CreateNadharDto, userId: string, taarufid: string): Promise<Nadhar> {
+        const taaruf = await this.prisma.taaruf.findFirst({
             //supaya hanya mendapatkan punya user dan yang status approved
             where: { id: taarufid, userId: userId, approval: { status: 'Yes' } },
-            include: { approval: true }
+            include: {
+                approval: true,
+                nadhars: true,
+            }
         });
 
-        //cek apakan data taaruf ada apa tidak
-        if (!target) throw new NotFoundException('Data taaruf tidak ditemukan');
+        // cek apakah data taaruf ada apa tidak
+        if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan');
+
+        // check apakah nadhar sudah disetujui atau belum
+        const has_approved_nadhar = taaruf.nadhars.some(nadhar => nadhar.status == 'Yes');
+        if (has_approved_nadhar) throw new BadRequestException('Nadhar nda sudah disetujui.');
 
         //create nadhor dengan status pending
-        await this.prisma.nadhar.create({
+        const result = await this.prisma.nadhar.create({
             data: {
                 ...data,
-                Taaruf: { connect: { id: target.id } },
+                Taaruf: { connect: { id: taaruf.id } },
                 schedule: data.schedule,
                 message: data.message || '',
                 reply: data.reply || '',
                 status: 'Pending'
             },
         });
-        return data;
+        return result;
     }
 
-    async updateDate(taarufId: string, data: UpdateNadharDto) {
-        const taaruf = await this.prisma.taaruf.findFirst({
-            where: { id: taarufId },
-            include: { nadhars: {
-                orderBy: {createdAt: 'desc'},
-                take: 1
-            } },
-        });
+    async update(id: string, data: UpdateNadharDto): Promise<Nadhar> {
+        const nadhar = await this.findOne(id);
 
-        //cek apakan data taaruf ada apa tidak
-        if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan');
-
-        const nadhars = taaruf.nadhars;
-        if (!nadhars.length) throw new NotFoundException();
-        const nadhar = nadhars[0];
+        if (!nadhar) throw new NotFoundException();
 
         //check if nadhar was approved, if (approved) => not allowed to update/change data
         if (nadhar.status == 'Yes') throw new BadRequestException('Nadhar sudah disetujui, tidak bisa mengubah data');
 
         const result = await this.prisma.nadhar.update({
-            where: { id: nadhar.id },
-            data: {
-                schedule: data.schedule
-            }
+            where: { id },
+            data
         })
         return result;
 
     }
 
-    async cancel(taarufId: string) {
-        const taaruf = await this.prisma.taaruf.findFirst({
-            where: { id: taarufId },
-            include: { nadhars: {
-                orderBy: {createdAt: 'desc'},
-                take: 1
-            } },
-        });
+    async cancel(id: string): Promise<Nadhar> {
+        const nadhar = await this.findOne(id);
 
-        //cek apakan data taaruf ada apa tidak
-        if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan');
-
-        const nadhars = taaruf.nadhars;
-        if (!nadhars.length) throw new NotFoundException();
-        const nadhar = nadhars[0];
+        if (!nadhar) throw new NotFoundException();
 
         //check if nadhar was approved, if (approved) => not allowed to update/change data
         if (nadhar.status == 'Yes') throw new BadRequestException('Nadhar sudah disetujui, tidak bisa mengubah data');
 
         const result = await this.prisma.nadhar.update({
-            where: { id: nadhar.id },
+            where: { id },
             data: {
                 status: 'No'
             }
@@ -97,54 +72,32 @@ export class NadharService {
         return result;
     }
 
-    async approve(taarufId: string) {
-        const taaruf = await this.prisma.taaruf.findFirst({
-            where: { id: taarufId },
-            include: { nadhars: {
-                orderBy: {createdAt: 'desc'},
-                take: 1
-            } },
-        });
+    async approve(id: string): Promise<Nadhar> {
+        const nadhar = await this.findOne(id);
 
-        //cek apakan data taaruf ada apa tidak
-        if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan');
-
-        const nadhars = taaruf.nadhars;
-        if (!nadhars.length) throw new NotFoundException();
-        const nadhar = nadhars[0];
+        if (!nadhar) throw new NotFoundException();
 
         //check if nadhar was approved, if (approved) => not allowed to update/change data
-        if (nadhar.status == 'No') throw new BadRequestException('Nadhar sudah ditolak, tidak bisa mengubah data');
+        if (nadhar.status == 'Yes') throw new BadRequestException('Nadhar sudah disetujui, tidak bisa mengubah data');
 
         const result = await this.prisma.nadhar.update({
-            where: { id: nadhar.id },
+            where: { id },
             data: {
                 status: 'Yes'
             }
         })
         return result;
     }
-    async reject(taarufId: string) {
-        const taaruf = await this.prisma.taaruf.findFirst({
-            where: { id: taarufId },
-            include: { nadhars: {
-                orderBy: {createdAt: 'desc'},
-                take: 1
-            } },
-        });
+    async reject(id: string): Promise<Nadhar> {
+        const nadhar = await this.findOne(id);
 
-        //cek apakan data taaruf ada apa tidak
-        if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan');
-
-        const nadhars = taaruf.nadhars;
-        if (!nadhars.length) throw new NotFoundException();
-        const nadhar = nadhars[0];
+        if (!nadhar) throw new NotFoundException();
 
         //check if nadhar was approved, if (approved) => not allowed to update/change data
         if (nadhar.status == 'Yes') throw new BadRequestException('Nadhar sudah disetujui, tidak bisa mengubah data');
 
         const result = await this.prisma.nadhar.update({
-            where: { id: nadhar.id },
+            where: { id },
             data: {
                 status: 'No'
             }
@@ -152,9 +105,9 @@ export class NadharService {
         return result;
     }
 
-    // getAllRequests() {
-    //     return this.prisma.nadhar.findMany({
-    //         where: { status: 'Pending' }
-    //     });
-    // }
+    findOne(id: string): Promise<Nadhar> {
+        return this.prisma.nadhar.findFirst({
+            where: { id: id },
+        });
+    }
 }
