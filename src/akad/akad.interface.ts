@@ -1,3 +1,4 @@
+import { AprovalStatus } from '@prisma/client';
 import { Taaruf } from 'src/taaruf/taaruf.interface';
 
 export interface Akad {
@@ -5,7 +6,7 @@ export interface Akad {
     Taaruf?: Taaruf;
     taarufId: string;
     schedule: Date;
-    status: 'Pending' | 'Yes' | 'No';
+    status: AprovalStatus;
     message: string;
     reply: string;
     createdAt: Date;

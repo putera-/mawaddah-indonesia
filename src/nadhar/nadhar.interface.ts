@@ -1,3 +1,6 @@
+import {
+    AprovalStatus
+} from '@prisma/client'
 import { Taaruf } from 'src/taaruf/taaruf.interface';
 
 export interface Nadhar {
@@ -5,7 +8,7 @@ export interface Nadhar {
     Taaruf?: Taaruf;
     taarufId: string;
     schedule: Date;
-    status: 'Pending' | 'Yes' | 'No';
+    status: AprovalStatus;
     message: string;
     reply: string;
     createdAt: Date;
