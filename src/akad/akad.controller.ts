@@ -29,6 +29,17 @@ FIXME
 export class AkadController {
     constructor(private readonly akadService: AkadService) { }
 
+    //for maintainence only
+    // @Get()
+    // async getAll(@Request() req: any) {
+    //     const userId = req.user.id;
+    //     try {
+    //         return this.akadService.getAll(userId);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+
     @CreateAkadDoc()
     @Roles(Role.Member)
     @Post(':taarufid')
@@ -37,7 +48,6 @@ export class AkadController {
         @Param('taarufid') taarufId: string,
         @Body() data: CreateAkadDto,
     ) {
-        // TODO cek bug taaruf id tidak ditemukan padahal ada
         const userId = req.user.id;
         try {
             return this.akadService.create(data, userId, taarufId);
@@ -49,30 +59,50 @@ export class AkadController {
     // TODO use akad id for patching
     @UpdateAkadDoc()
     @Roles(Role.Member)
-    @Patch(':taarufid')
-    updateDate(
-        @Param('taarufid') taarufId: string,
-        @Body() data: UpdateAkadDto,
-    ) {
-        return this.akadService.updateDate(taarufId, data);
+    @Patch(':id')
+    update(
+
+        @Param('id') id: string,
+        @Body() data: UpdateAkadDto,) {
+            try {
+                return this.akadService.update(id, data);
+
+            } catch (error) {
+                console.log(error);
+            }
     }
 
     @Roles(Role.Member)
-    @Patch('cancel/:taarufid')
-    cancel(@Param('taarufid') taarufid: string) {
-        return this.akadService.cancel(taarufid);
+    @Patch('cancel/:id')
+    cancel(@Param('id') id: string) {
+        try {
+            return this.akadService.cancel(id);
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     @Roles(Role.Member)
-    @Patch('approve/:taarufid')
-    approve(@Param('taarufid') taarufid: string) {
-        return this.akadService.approve(taarufid);
+    @Patch('approve/:id')
+    approve(@Param('id') id: string) {
+        try {
+            return this.akadService.approve(id);
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     @Roles(Role.Member)
-    @Patch('reject/:taarufid')
-    reject(@Param('taarufid') taarufid: string) {
-        return this.akadService.reject(taarufid);
+    @Patch('reject/:id')
+    reject(@Param('id') id: string) {
+        try {
+            return this.akadService.reject(id);
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     // TODO create get all akad and get akad by id

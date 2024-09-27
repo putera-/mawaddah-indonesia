@@ -6,10 +6,23 @@ import {
 import { CreateAkadDto } from './dto/create-akad.dto';
 import { UpdateAkadDto } from './dto/update-akad.dto';
 import { PrismaService } from 'src/prisma.service';
+import { Akad } from './akad.interface';
 
 @Injectable()
 export class AkadService {
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService) { }
+
+    // for maintainance only
+    // async getAll(userId: string) {
+    //     return await this.prisma.taaruf.findMany({
+    //         where: { userId },
+    //         include: {
+    //             approval: true,
+    //             khitbahs: true,
+    //             akads: true,
+    //         }
+    //     });
+    // }
 
     async create(data: CreateAkadDto, userId: string, taarufid: string) {
         const target = await this.prisma.taaruf.findFirst({
@@ -19,7 +32,7 @@ export class AkadService {
                 userId: userId,
                 approval: { status: 'Yes' },
             },
-            include: { approval: true, nadhars: true },
+            include: { approval: true, nadhars: true, khitbahs: true },
         });
 
         const taaruf = await this.prisma.taaruf.findFirst({
@@ -49,24 +62,10 @@ export class AkadService {
         return data;
     }
 
-    async updateDate(taarufId: string, data: UpdateAkadDto) {
-        const taaruf = await this.prisma.taaruf.findFirst({
-            where: { id: taarufId },
-            include: {
-                akads: {
-                    orderBy: { createdAt: 'desc' },
-                    take: 1,
-                },
-            },
-        });
-
-        //cek apakan data taaruf ada apa tidak
-        if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan');
-
-        const akads = taaruf.akads;
-        if (!akads.length) throw new NotFoundException();
-        const akad = akads[0];
-
+    async update(id: string, data: UpdateAkadDto) {
+        const akad = await this.prisma.akad.findFirst({
+            where: { id },
+        })
         //check if akad was approved, if (approved) => not allowed to update/change data
         if (akad.status == 'Yes')
             throw new BadRequestException(
@@ -82,23 +81,10 @@ export class AkadService {
         return result;
     }
 
-    async cancel(taarufId: string) {
-        const taaruf = await this.prisma.taaruf.findFirst({
-            where: { id: taarufId },
-            include: {
-                akads: {
-                    orderBy: { createdAt: 'desc' },
-                    take: 1,
-                },
-            },
+    async cancel(id: string) {
+        const akad = await this.prisma.akad.findFirst({
+            where: { id },
         });
-
-        //cek apakan data taaruf ada apa tidak
-        if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan');
-
-        const akads = taaruf.akads;
-        if (!akads.length) throw new NotFoundException();
-        const akad = akads[0];
 
         //check if akad was approved, if (approved) => not allowed to update/change data
         if (akad.status == 'Yes')
@@ -115,23 +101,10 @@ export class AkadService {
         return result;
     }
 
-    async approve(taarufId: string) {
-        const taaruf = await this.prisma.taaruf.findFirst({
-            where: { id: taarufId },
-            include: {
-                akads: {
-                    orderBy: { createdAt: 'desc' },
-                    take: 1,
-                },
-            },
-        });
-
-        //cek apakan data taaruf ada apa tidak
-        if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan');
-
-        const akads = taaruf.akads;
-        if (!akads.length) throw new NotFoundException();
-        const akad = akads[0];
+    async approve(id: string) {
+        const akad = await this.prisma.akad.findFirst({
+            where: { id },
+        })
 
         //check if akad was approved, if (approved) => not allowed to update/change data
         if (akad.status == 'No')
@@ -148,24 +121,10 @@ export class AkadService {
         return result;
     }
 
-    async reject(taarufId: string) {
-        const taaruf = await this.prisma.taaruf.findFirst({
-            where: { id: taarufId },
-            include: {
-                akads: {
-                    orderBy: { createdAt: 'desc' },
-                    take: 1,
-                },
-            },
-        });
-
-        //cek apakan data taaruf ada apa tidak
-        if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan');
-
-        const akads = taaruf.akads;
-        if (!akads.length) throw new NotFoundException();
-        const akad = akads[0];
-
+    async reject(id: string) {
+        const akad = await this.prisma.akad.findFirst({
+            where: { id },
+        })
         //check if akad was approved, if (approved) => not allowed to update/change data
         if (akad.status == 'Yes')
             throw new BadRequestException(
@@ -179,5 +138,11 @@ export class AkadService {
             },
         });
         return result;
+    }
+
+    findOne(id: string): Promise<Akad> {
+        return this.prisma.akad.findFirst({
+            where: { id },
+        });
     }
 }
