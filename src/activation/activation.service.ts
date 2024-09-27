@@ -47,15 +47,8 @@ export class ActivationService {
         return;
     }
 
-    findAll() {
-        return `This action returns all activation`;
-    }
-
     async findOne(id: any) {
         const find = await this.Prisma.activation.findFirst(id);
     }
 
-    remove(id: string) {
-        return `This action removes a #${id} activation`;
-    }
 }
