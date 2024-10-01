@@ -1,57 +1,57 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
-import { CreateAkadDto } from './dto/create-akad.dto';
+import { CreateKhitbahDto } from './dto/create-khitbah.dto';
 
-export function GetAllAkadDoc() {
+export function GetAllKhitbahDoc() {
     return applyDecorators(
-        ApiOperation({ summary: 'Get All Akad, Restricted for Member' }),
+        ApiOperation({ summary: 'Get All Khitbah, Restricted for Member' }),
         ApiQuery({
             name: 'limit',
             required: false,
             type: Number,
-            description: 'Limit of Akad',
+            description: 'Limit of Khitbah',
         }),
         ApiQuery({
             name: 'page',
             required: false,
             type: Number,
-            description: 'Page of Akad',
+            description: 'Page of Khitbah',
         }),
         ApiResponse({
             status: 200,
-            description: 'List of Akad.',
+            description: 'List of Khitbah.',
             schema: {
-                example: { sampleAkad4 }
+                example: { sampleKhitbah4 }
             }
         }),
     );
 }
 
-export function GetByIdAkadDoc() {
+export function GetByIdKhitbahDoc() {
     return applyDecorators(
-        ApiOperation({ summary: 'Get One Akad, Restricted for Member' }),
+        ApiOperation({ summary: 'Get One Khitbah, Restricted for Member' }),
         ApiParam({
             name: 'id',
             required: true,
             type: String,
-            description: 'ID of Akad',
+            description: 'ID of Khitbah',
         }),
         ApiResponse({
             status: 200,
-            description: 'Akad detail.',
+            description: 'Khitbah detail.',
             schema: {
-                example: { sampleAkad1 }
+                example: { sampleKhitbah1 }
             }
         }),
     );
 }
 
 
-export function CreateAkadDoc() {
+export function CreateKhitbahDoc() {
     return applyDecorators(
-        ApiOperation({ summary: 'Create New Akad, Restricted for Member' }),
+        ApiOperation({ summary: 'Create New Khitbah, Restricted for Member' }),
         ApiBody({
-            type: CreateAkadDto
+            type: CreateKhitbahDto
         }),
         ApiParam({
             name: 'taarufid',
@@ -61,10 +61,10 @@ export function CreateAkadDoc() {
         }),
         ApiResponse({
             status: 201,
-            description: 'Akad berhasil dibuat.',
+            description: 'Khitbah berhasil dibuat.',
             schema: {
                 example: {
-                    "message": "ayo lanjut ke Akad",
+                    "message": "ayo lanjut ke Khitbah",
                     "schedule": "2024-05-28T20:16:17.982Z"
                 },
             },
@@ -103,23 +103,23 @@ export function CreateAkadDoc() {
     );
 }
 
-export function UpdateAkadDoc() {
+export function UpdateKhitbahDoc() {
     return applyDecorators(
-        ApiOperation({ summary: 'Update Akad Date, Restricted for Member' }),
+        ApiOperation({ summary: 'Update Khitbah Date, Restricted for Member' }),
         ApiBody({
-            type: CreateAkadDto
+            type: CreateKhitbahDto
         }),
         ApiParam({
-            name: 'Akadid',
+            name: 'Khitbahid',
             required: true,
             type: String,
-            description: 'ID of Akad',
+            description: 'ID of Khitbah',
         }),
         ApiResponse({
             status: 200,
-            description: 'Akad berhasil diperbarui.',
+            description: 'Khitbah berhasil diperbarui.',
             schema: {
-                example: { sampleAkad1 },
+                example: { sampleKhitbah1 },
             },
         }),
         ApiResponse({
@@ -146,20 +146,20 @@ export function UpdateAkadDoc() {
     );
 }
 
-export function CancelAkadDoc() {
+export function CancelKhitbahDoc() {
     return applyDecorators(
-        ApiOperation({ summary: 'Cancel Akad, Restricted for Member' }),
+        ApiOperation({ summary: 'Cancel Khitbah, Restricted for Member' }),
         ApiParam({
-            name: 'Akadid',
+            name: 'Khitbahid',
             required: true,
             type: String,
-            description: 'ID of Akad',
+            description: 'ID of Khitbah',
         }),
         ApiResponse({
             status: 200,
-            description: 'Akad berhasil dibatalkan.',
+            description: 'Khitbah berhasil dibatalkan.',
             schema: {
-                example: { sampleAkad3 },
+                example: { sampleKhitbah3 },
             },
         }),
         ApiResponse({
@@ -185,20 +185,20 @@ export function CancelAkadDoc() {
         }),
     );
 }
-export function ApproveAkadDoc() {
+export function ApproveKhitbahDoc() {
     return applyDecorators(
-        ApiOperation({ summary: 'Approve Akad, Restricted for Member' }),
+        ApiOperation({ summary: 'Approve Khitbah, Restricted for Member' }),
         ApiParam({
-            name: 'Akadid',
+            name: 'Khitbahid',
             required: true,
             type: String,
-            description: 'ID of Akad',
+            description: 'ID of Khitbah',
         }),
         ApiResponse({
             status: 200,
-            description: 'Akad berhasil disetujui.',
+            description: 'Khitbah berhasil disetujui.',
             schema: {
-                example: { sampleAkad1 },
+                example: { sampleKhitbah1 },
             },
         }),
         ApiResponse({
@@ -224,20 +224,20 @@ export function ApproveAkadDoc() {
         }),
     );
 }
-export function RejectAkadDoc() {
+export function RejectKhitbahDoc() {
     return applyDecorators(
-        ApiOperation({ summary: 'Reject Akad, Restricted for Member' }),
+        ApiOperation({ summary: 'Reject Khitbah, Restricted for Member' }),
         ApiParam({
-            name: 'Akadid',
+            name: 'Khitbahid',
             required: true,
             type: String,
-            description: 'ID of Akad',
+            description: 'ID of Khitbah',
         }),
         ApiResponse({
             status: 200,
-            description: 'Akad berhasil ditolak.',
+            description: 'Khitbah berhasil ditolak.',
             schema: {
-                example: { sampleAkad2 },
+                example: { sampleKhitbah2 },
             },
         }),
         ApiResponse({
@@ -264,31 +264,31 @@ export function RejectAkadDoc() {
     );
 }
 
-const sampleAkad1 = {
+const sampleKhitbah1 = {
     id: "bf4c58c4-0919-4d16-9d75-83895edffc1c",
     taarufId: "25efcb6f-802e-419d-9a78-a75f000537d8",
     schedule: "2024-05-28T20:16:17.982Z",
     status: "Yes",
-    message: "ayo lanjut ke Akad",
+    message: "ayo lanjut ke Khitbah",
     reply: "iya ayo",
     createdAt: "2024-10-01T01:43:53.918Z",
     updatedAt: "2024-10-01T01:47:57.929Z"
 
 };
 
-const sampleAkad2 = {
+const sampleKhitbah2 = {
     id: "bf4c58c4-0919-4d16-9d75-83895edffc1c",
     taarufId: "25efcb6f-802e-419d-9a78-a75f000537d8",
     schedule: "2024-05-28T20:16:17.982Z",
     status: "No",
-    message: "ayo lanjut ke Akad",
+    message: "ayo lanjut ke Khitbah",
     reply: "Maaf aku ga bisa",
     createdAt: "2024-10-01T01:43:53.918Z",
     updatedAt: "2024-10-01T01:47:57.929Z"
 
 };
 
-const sampleAkad3 = {
+const sampleKhitbah3 = {
     id: "bf4c58c4-0919-4d16-9d75-83895edffc1c",
     taarufId: "25efcb6f-802e-419d-9a78-a75f000537d8",
     schedule: "2024-05-28T20:16:17.982Z",
@@ -300,7 +300,7 @@ const sampleAkad3 = {
 
 };
 
-const sampleAkad4 = [
+const sampleKhitbah4 = [
     {
         "id": "49d1a39f-bcbc-4869-b6f9-ba2a5659c695",
         "userId": "0005fbff-1213-4ac4-9afb-03c0bbe72f2b",
@@ -317,7 +317,8 @@ const sampleAkad4 = [
             "reply": "",
             "updatedAt": "2024-09-23T02:17:00.257Z"
         },
-        "Akads": []
+        "khitbahs": [],
+        "Khitbahs": []
     },
     {
         "id": "25efcb6f-802e-419d-9a78-a75f000537d8",
@@ -335,7 +336,7 @@ const sampleAkad4 = [
             "reply": "",
             "updatedAt": "2024-09-27T02:11:06.478Z"
         },
-        "Akads": [
+        "khitbahs": [
             {
                 "id": "0a737216-a478-4847-9041-4632a1c82adf",
                 "taarufId": "25efcb6f-802e-419d-9a78-a75f000537d8",
@@ -347,5 +348,39 @@ const sampleAkad4 = [
                 "updatedAt": "2024-09-27T02:30:58.058Z"
             }
         ],
+        "Khitbahs": [
+            {
+                "id": "7cca13aa-52c3-4283-8450-9960987cfd7d",
+                "taarufId": "25efcb6f-802e-419d-9a78-a75f000537d8",
+                "schedule": "2024-05-28T20:16:17.982Z",
+                "status": "Pending",
+                "message": "ayo lanjut ke Khitbah",
+                "reply": "",
+                "createdAt": "2024-09-27T02:31:19.996Z",
+                "updatedAt": "2024-09-27T02:31:19.996Z"
+            },
+            {
+                "id": "bf4c58c4-0919-4d16-9d75-83895edffc1c",
+                "taarufId": "25efcb6f-802e-419d-9a78-a75f000537d8",
+                "schedule": "2024-05-28T20:16:17.982Z",
+                "status": "Yes",
+                "message": "ayo lanjut ke Khitbah",
+                "reply": "",
+                "createdAt": "2024-10-01T01:43:53.918Z",
+                "updatedAt": "2024-10-01T01:47:57.929Z"
+            },
+            {
+                "id": "23e3fda7-339a-4f2c-b190-e21753340e40",
+                "taarufId": "25efcb6f-802e-419d-9a78-a75f000537d8",
+                "schedule": "2024-05-28T20:16:17.982Z",
+                "status": "Pending",
+                "message": "ayo lanjut ke Khitbah",
+                "reply": "",
+                "createdAt": "2024-10-01T01:54:15.288Z",
+                "updatedAt": "2024-10-01T01:54:57.672Z"
+            }
+        ]
     }
 ]
+
+

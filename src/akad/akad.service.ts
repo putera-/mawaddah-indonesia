@@ -13,16 +13,16 @@ export class AkadService {
     constructor(private prisma: PrismaService) { }
 
     // for maintainance only
-    // async getAll(userId: string) {
-    //     return await this.prisma.taaruf.findMany({
-    //         where: { userId },
-    //         include: {
-    //             approval: true,
-    //             khitbahs: true,
-    //             akads: true,
-    //         }
-    //     });
-    // }
+    async getAll(userId: string) {
+        return await this.prisma.taaruf.findMany({
+            where: { userId },
+            include: {
+                approval: true,
+                khitbahs: true,
+                akads: true,
+            }
+        });
+    }
 
     async create(data: CreateAkadDto, userId: string, taarufid: string) {
         const target = await this.prisma.taaruf.findFirst({
@@ -37,7 +37,7 @@ export class AkadService {
 
         const taaruf = await this.prisma.taaruf.findFirst({
             where: { id: taarufid, khitbahs: { some: { status: 'Yes' } } },
-            include: { khitbahs: true },
+            include: {  khitbahs: true },
             orderBy: { createdAt: 'desc' },
             take: 1,
         });

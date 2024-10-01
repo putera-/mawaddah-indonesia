@@ -13,15 +13,7 @@ import { UpdateAkadDto } from './dto/update-akad.dto';
 import { Role } from 'src/roles/role.enums';
 import { Roles } from 'src/roles/roles.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { CreateAkadDoc, UpdateAkadDoc } from './akad.doc';
-
-/**
-TODO
-FIXME
-- TRY CATCH ERROR
-- ROLE GUARD
-- CEK TAARUF ID RELATION
-**/
+import { ApproveAkadDoc, CancelAkadDoc, CreateAkadDoc, GetAllAkadDoc, GetByIdAkadDoc, RejectAkadDoc, UpdateAkadDoc } from './akad.doc';
 
 @ApiTags('Akad')
 @ApiBearerAuth()
@@ -29,16 +21,26 @@ FIXME
 export class AkadController {
     constructor(private readonly akadService: AkadService) { }
 
-    //for maintainence only
-    // @Get()
-    // async getAll(@Request() req: any) {
-    //     const userId = req.user.id;
-    //     try {
-    //         return this.akadService.getAll(userId);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+    @GetAllAkadDoc()
+    @Get('requests')
+    async getAll(@Request() req: any) {
+        const userId = req.user.id;
+        try {
+            return this.akadService.getAll(userId);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    @GetByIdAkadDoc()
+    @Get(':id')
+    async findOne(@Param('id') id: string) {
+        try {
+            return this.akadService.findOne(id);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     @CreateAkadDoc()
     @Roles(Role.Member)
@@ -56,7 +58,6 @@ export class AkadController {
         }
     }
 
-    // TODO use akad id for patching
     @UpdateAkadDoc()
     @Roles(Role.Member)
     @Patch(':id')
@@ -72,6 +73,7 @@ export class AkadController {
             }
     }
 
+    @CancelAkadDoc()
     @Roles(Role.Member)
     @Patch('cancel/:id')
     cancel(@Param('id') id: string) {
@@ -83,6 +85,7 @@ export class AkadController {
         }
     }
 
+    @ApproveAkadDoc()
     @Roles(Role.Member)
     @Patch('approve/:id')
     approve(@Param('id') id: string) {
@@ -94,6 +97,8 @@ export class AkadController {
         }
     }
 
+
+    @RejectAkadDoc()
     @Roles(Role.Member)
     @Patch('reject/:id')
     reject(@Param('id') id: string) {
@@ -105,5 +110,4 @@ export class AkadController {
         }
     }
 
-    // TODO create get all akad and get akad by id
 }

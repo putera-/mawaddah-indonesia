@@ -8,17 +8,16 @@ import { Khitbah } from './khitbah.interface';
 export class KhitbahService {
     constructor(private prisma: PrismaService) { }
 
-    // for maintainance only
-    // async getAll(userId: string) {
-    //     return await this.prisma.taaruf.findMany({
-    //         where: { userId },
-    //         include: {
-    //             approval: true,
-    //             khitbahs: true,
-    //             nadhars: true
-    //         }
-    //     });
-    // }
+    async getAll(userId: string) {
+        return await this.prisma.taaruf.findMany({
+            where: { userId },
+            include: {
+                approval: true,
+                khitbahs: true,
+                nadhars: true
+            }
+        });
+    }
 
     async create(data: CreateKhitbahDto, userId: string, id: string) {
         const target = await this.prisma.taaruf.findFirst({
