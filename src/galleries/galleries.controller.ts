@@ -22,7 +22,10 @@ import { AppService } from 'src/app.service';
 import { Role } from 'src/roles/role.enums';
 import { Roles } from 'src/roles/roles.decorator';
 import { Public } from 'src/auth/auth.metadata';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Gallery')
+@ApiBearerAuth()
 @Controller('galleries')
 export class GalleriesController {
     constructor(
@@ -81,6 +84,7 @@ export class GalleriesController {
             throw error;
         }
     }
+    
     //public karena galleries ditampilkan di landing page
     @Public()
     @Get()

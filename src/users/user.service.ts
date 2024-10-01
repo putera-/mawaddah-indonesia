@@ -166,6 +166,8 @@ export class UsersService {
             data,
             select: { ...select },
         });
+        if (!updatedData)
+            throw new BadRequestException('File yang diinput salah.');
 
         if (currentData.avatar) {
             if (currentData.avatar != updatedData.avatar) {
