@@ -5,23 +5,28 @@ import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class FamilyMembersService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaService) {}
 
     async create(data: CreateFamilyMemberDto, userId: string) {
-        const bioadata = await this.prisma.biodata.findUnique({
+        const biodata = await this.prisma.biodata.findUnique({
             where: {
                 userId: userId,
-            }
-        })
+            },
+        });
+
+        if (!biodata)
+            throw new NotFoundException(
+                'Silakan lengkapi biodata terlebih dahulu.',
+            );
 
         const result = await this.prisma.familyMember.create({
             data: {
                 ...data,
                 biodata: {
-                    connect: { id: bioadata.id }
-                }
-            }
-        })
+                    connect: { id: biodata.id },
+                },
+            },
+        });
 
         return result;
     }
@@ -30,14 +35,13 @@ export class FamilyMembersService {
         const data = await this.prisma.familyMember.findMany({
             where: {
                 biodata: {
-                    userId: userId
+                    userId: userId,
                 },
-                deleted: false
-            }
-        })
-
+                deleted: false,
+            },
+        });
+        if (!data) throw new NotFoundException('Data tidak ditemukan');
         return data;
-
     }
 
     async findOne(id: string, userId: string) {
@@ -45,49 +49,51 @@ export class FamilyMembersService {
             where: {
                 id: id,
                 biodata: {
-                    userId: userId
+                    userId: userId,
                 },
-                deleted: false
-            }
-        })
+                deleted: false,
+            },
+        });
 
-        if (!data) throw new NotFoundException();
+        if (!data) throw new NotFoundException('Data tidak ditemukan');
 
         return data;
     }
 
-
-
     async update(id: string, data: UpdateFamilyMemberDto, userId: string) {
-        const famMember = await this.findOne(id, userId)
+        const famMember = await this.findOne(id, userId);
 
-        await this.prisma.familyMember.update({
+        if (!famMember) {
+            throw new NotFoundException('Data tidak ditemukan');
+        }
+        
+        return await this.prisma.familyMember.update({
             where: {
                 id: famMember.id,
-                biodata: { userId }
+                biodata: { userId },
             },
-            data
-        })
-
+            data,
+        });
     }
 
     async remove(id: string, userId: string) {
-        const famMember = await this.findOneDel(id, userId)
+        const famMember = await this.findOneDel(id, userId);
 
         if (famMember.deleted) {
-            throw new NotFoundException();
+            throw new NotFoundException('Data tidak ditemukan');
         }
 
         await this.prisma.familyMember.update({
             where: {
                 id: famMember.id,
-                biodata: { userId }
+                biodata: { userId },
             },
             data: {
-                deleted: true
-            }
-        })
+                deleted: true,
+            },
+        });
 
+        return;
     }
 
     async findOneDel(id: string, userId: string) {
@@ -95,10 +101,10 @@ export class FamilyMembersService {
             where: {
                 id: id,
                 biodata: {
-                    userId: userId
-                }
-            }
-        })
+                    userId: userId,
+                },
+            },
+        });
 
         if (!data) throw new NotFoundException();
 
