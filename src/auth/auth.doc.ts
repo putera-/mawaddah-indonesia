@@ -355,6 +355,7 @@ export function PatchProfileDoc() {
     // use createSchemaFromDto to generate globaluser schema
     const schema = createSchemaFromDto(GlobalUserDto);
 
+    // FIXME gagal upload foto karena unexpected field
     // add image property to schema
     schema.properties.image = { type: 'string', format: 'binary' };
 
@@ -380,6 +381,16 @@ export function PatchProfileDoc() {
                 example: {
                     message: 'User tidak ditemukan.',
                     statusCode: 404,
+                },
+            },
+        }),
+        ApiResponse({
+            status: 400,
+            description: 'Error: Bad Request',
+            schema: {
+                example: {
+                    message: 'File yang diinput salah.',
+                    statusCode: 400,
                 },
             },
         }),
