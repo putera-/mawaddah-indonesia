@@ -10,6 +10,17 @@ import { Role } from 'src/roles/role.enums';
 export class NadharController {
     constructor(private readonly nadharService: NadharService) { }
 
+    // for maintainance only
+    // @Get()
+    // async getAll(@Request() req: any) {
+    //     const userId = req.user.id;
+    //     try {
+    //         return this.nadharService.getAll(userId);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+
     @Roles(Role.Member)
     @Post(':taarufid')
     async create(@Request() req: any, @Param('taarufid') taarufId: string, @Body() data: CreateNadharDto): Promise<Nadhar> {

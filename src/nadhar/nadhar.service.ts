@@ -8,6 +8,18 @@ import { Nadhar } from './nadhar.interface';
 export class NadharService {
     constructor(private prisma: PrismaService) { }
 
+    // for maintainance only
+    // async getAll(userId: string) {
+    //     return await this.prisma.taaruf.findMany({
+    //         where: { userId },
+    //         include: {
+    //             approval: true,
+    //             khitbahs: true,
+    //             nadhars: true
+    //         }
+    //     });
+    // }
+
     async create(data: CreateNadharDto, userId: string, taarufid: string): Promise<Nadhar> {
         const taaruf = await this.prisma.taaruf.findFirst({
             //supaya hanya mendapatkan punya user dan yang status approved
@@ -23,7 +35,7 @@ export class NadharService {
 
         // check apakah nadhar sudah disetujui atau belum
         const has_approved_nadhar = taaruf.nadhars.some(nadhar => nadhar.status == 'Yes');
-        if (has_approved_nadhar) throw new BadRequestException('Nadhar nda sudah disetujui.');
+        if (has_approved_nadhar) throw new BadRequestException('Nadhar anda sudah disetujui.');
 
         //create nadhor dengan status pending
         const result = await this.prisma.nadhar.create({
@@ -56,7 +68,9 @@ export class NadharService {
     }
 
     async cancel(id: string): Promise<Nadhar> {
-        const nadhar = await this.findOne(id);
+        const nadhar = await this.prisma.nadhar.findFirst({
+            where: { id: id },
+        });
 
         if (!nadhar) throw new NotFoundException();
 
