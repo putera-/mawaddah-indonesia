@@ -35,7 +35,7 @@ export class NadharService {
 
         // check apakah nadhar sudah disetujui atau belum
         const has_approved_nadhar = taaruf.nadhars.some(nadhar => nadhar.status == 'Yes');
-        if (has_approved_nadhar) throw new BadRequestException('Nadhar nda sudah disetujui.');
+        if (has_approved_nadhar) throw new BadRequestException('Nadhar anda sudah disetujui.');
 
         //create nadhor dengan status pending
         const result = await this.prisma.nadhar.create({

@@ -75,7 +75,7 @@ export class KhitbahService {
         const khitbah = await this.findOne(id);
 
         //check if khitbah was approved, if (approved) => not allowed to update/change data
-        if (khitbah.status == 'Yes') throw new BadRequestException('khitbah sudah disetujui, tidak bisa mengubah data');
+        if (khitbah.status == 'Yes') throw new BadRequestException('Khitbah sudah disetujui, tidak bisa mengubah data');
 
         const result = await this.prisma.khitbah.update({
             where: { id: khitbah.id },
@@ -90,7 +90,7 @@ export class KhitbahService {
         const khitbah = await this.findOne(id);
 
         //check if khitbah was approved, if (approved) => not allowed to update/change data
-        if (khitbah.status == 'No') throw new BadRequestException('khitbah sudah ditolak, tidak bisa mengubah data');
+        if (khitbah.status == 'No') throw new BadRequestException('Khitbah sudah ditolak, tidak bisa mengubah data');
 
         const result = await this.prisma.khitbah.update({
             where: { id: khitbah.id },
@@ -105,7 +105,7 @@ export class KhitbahService {
         const khitbah = await this.findOne(id);
 
         //check if khitbah was approved, if (approved) => not allowed to update/change data
-        if (khitbah.status == 'Yes') throw new BadRequestException('khitbah sudah disetujui, tidak bisa mengubah data');
+        if (khitbah.status == 'Yes') throw new BadRequestException('Khitbah sudah disetujui, tidak bisa mengubah data');
 
         const result = await this.prisma.khitbah.update({
             where: { id: khitbah.id },
@@ -121,6 +121,4 @@ export class KhitbahService {
             where: { id: id },
         });
     }
-
-
 }
