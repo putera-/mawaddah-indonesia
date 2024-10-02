@@ -21,13 +21,13 @@ import {
     GetFamilyMemberByIdDoc,
     UpdateFamilyMemberDoc,
 } from './family_member.doc';
-import { GetAllActivationDoc } from 'src/activation/activation.doc';
+// import { GetAllActivationDoc } from 'src/activation/activation.doc';
 
 @ApiTags('Family Members')
 @ApiBearerAuth()
 @Controller('family-members')
 export class FamilyMembersController {
-    constructor(private readonly familyMembersService: FamilyMembersService) {}
+    constructor(private readonly familyMembersService: FamilyMembersService) { }
 
     @CreateFamilyMemberDoc()
     @Roles(Role.Member)
@@ -38,7 +38,8 @@ export class FamilyMembersController {
         return this.familyMembersService.create(data, userId);
     }
 
-    @GetAllActivationDoc()
+    // FIXME
+    // @GetAllActivationDoc()
     @Roles(Role.Member)
     @Get()
     findAll(@Request() req: any) {

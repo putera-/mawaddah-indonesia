@@ -9,7 +9,7 @@ import { BiodataService } from 'src/biodata/biodata.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateExperienceDoc, DeleteExperienceById, GetExperiemceAll, GetExperiemceById, UpdateExperienceById } from './experience.doc';
 
-@ApiTags('experiences')
+@ApiTags('Experiences')
 @ApiBearerAuth()
 @Controller('experiences')
 export class ExperiencesController {
