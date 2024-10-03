@@ -14,7 +14,7 @@ export class TaarufService {
     constructor(
         private PrismaService: PrismaService,
         private userService: UsersService,
-    ) {}
+    ) { }
     async create(
         userId: string,
         candidateId: string,
@@ -28,6 +28,7 @@ export class TaarufService {
 
         // check if connection already created
         const exist = await this.PrismaService.taaruf.findFirst({
+            // FIXME where status is true, jadi klopun sudah false, akan tetap bisa ajukan ulang
             where: { userId, candidateId },
         });
         if (exist)
@@ -58,6 +59,10 @@ export class TaarufService {
                 akads: true,
             },
         });
+
+        /** TODO
+        CREATE inbox
+        */
     }
 
     async findAllIncoming(userId: string, page = '1', limit = '10') {
@@ -148,6 +153,8 @@ export class TaarufService {
                 },
             },
         });
+
+        // TODO update taaruf status = false
     }
 
     async cancel(userId: string, id: string, message: string) {

@@ -14,34 +14,40 @@ datasource db {
 }
 
 model User {
-    id                 String          @id @default(uuid())
-    old_id             Int?            @db.Integer
-    email              String          @unique @db.VarChar(100)
-    firstname          String          @db.VarChar(100)
-    lastname           String          @db.VarChar(100)
+    id                 String              @id @default(uuid())
+    old_id             Int?                @db.Integer
+    email              String              @unique @db.VarChar(100)
+    firstname          String              @db.VarChar(100)
+    lastname           String              @db.VarChar(100)
     password           Password?
-    active             Boolean         @default(false)
-    verified           Boolean         @default(false)
-    avatar             String?         @db.VarChar(255)
-    avatar_md          String?         @db.VarChar(255)
-    blurred_avatar     String?         @db.VarChar(255)
-    blurred_avatar_md  String?         @db.VarChar(255)
-    role               RoleStatus      @default(MEMBER)
-    taaruf_status      TaarufStatus    @default(BLOCKED)
+    active             Boolean             @default(false)
+    verified           Boolean             @default(false)
+    avatar             String?             @db.VarChar(255)
+    avatar_md          String?             @db.VarChar(255)
+    blurred_avatar     String?             @db.VarChar(255)
+    blurred_avatar_md  String?             @db.VarChar(255)
+    role               RoleStatus          @default(MEMBER)
+    taaruf_status      TaarufStatus        @default(BLOCKED)
     auth               Auth[]
     Taaruf_gold        Taaruf_gold[]
     Payment            Payment[]
     reset_password     ResetPassword[]
     activations        Activation[]
     biodata            Biodata?
-    bookmarks          Bookmark[]      @relation("UserBookmarks")
-    bookmark_candidate Bookmark[]      @relation("UserCandidates")
-    Taaruf             Taaruf[]        @relation("TaarufUser")
-    Taaruf_candidate   Taaruf[]        @relation("TaarufCandidates")
+    bookmarks          Bookmark[]          @relation("UserBookmarks")
+    bookmark_candidate Bookmark[]          @relation("UserCandidates")
+    Taaruf             Taaruf[]            @relation("TaarufUser")
+    Taaruf_candidate   Taaruf[]            @relation("TaarufCandidates")
     Question           Question[]
-    createdAt          DateTime        @default(now())
-    updatedAt          DateTime        @default(now()) @updatedAt
+    createdAt          DateTime            @default(now())
+    updatedAt          DateTime            @default(now()) @updatedAt
     backup_detail      BackupDetail?
+    taaruf_cancelation TaarufCancelation[]
+    inbox              Inbox[]
+    Nadhar             Nadhar[]
+    Khitbah            Khitbah[]
+    Akad               Akad[]
+    Response           Response[]
 
     @@map("user")
 }
@@ -451,77 +457,121 @@ model Bookmark {
 
 // TAARUF PROGGRESS
 model Taaruf {
-    id          String          @id @default(uuid())
-    user        User            @relation(name: "TaarufUser", fields: [userId], references: [id])
-    userId      String // This field holds the foreign key
-    candidate   User            @relation(name: "TaarufCandidates", fields: [candidateId], references: [id])
-    candidateId String // This field holds the foreign key
-    status      Boolean         @default(true)
-    // message dibutuhkan saat taaruf di batalkan oleh user,
-    // user mengisi alasan pembatalan
-    message     String          @db.Text
-    approval    TaarufApproval?
-    nadhars     Nadhar[]
-    khitbahs    Khitbah[]
-    akads       Akad[]
-    createdAt   DateTime        @default(now())
-    updatedAt   DateTime        @default(now()) @updatedAt
+    id            String             @id @default(uuid())
+    user          User               @relation(name: "TaarufUser", fields: [userId], references: [id])
+    userId        String // This field holds the foreign key
+    candidate     User               @relation(name: "TaarufCandidates", fields: [candidateId], references: [id])
+    candidateId   String // This field holds the foreign key
+    active        Boolean            @default(true)
+    status        AprovalStatus      @default(Pending)
+    message       String             @db.Text
+    latestProcess TaarufProcess      @default(TaarufRequest)
+    nadhars       Nadhar[]
+    khitbahs      Khitbah[]
+    akads         Akad[]
+    createdAt     DateTime           @default(now())
+    updatedAt     DateTime           @default(now()) @updatedAt
+    cancelation   TaarufCancelation?
+    Inbox         Inbox[]
+    Response      Response?
 
     @@map("taaruf")
 }
 
-model TaarufApproval {
-    id        String        @id @default(uuid())
-    taaruf    Taaruf?       @relation(fields: [taarufId], references: [id])
-    taarufId  String        @unique
-    status    AprovalStatus @default(Pending)
-    message   String        @db.Text
-    reply     String        @db.Text
-    updatedAt DateTime      @default(now()) @updatedAt
+enum TaarufProcess {
+    TaarufRequest
+    Taaruf
+    NadharRequest
+    Nadhar
+    KhitbahRequest
+    Khitbah
+    AkadRequest
+    Akad
+    Completed
+    Canceled
+}
 
-    @@map("taaruf_approval")
+model TaarufCancelation {
+    id         String    @id @default(uuid())
+    taaruf     Taaruf?   @relation(fields: [taarufId], references: [id])
+    taarufId   String    @unique
+    cancelById String
+    cancelBy   User      @relation(fields: [cancelById], references: [id])
+    message    String    @db.Text
+    Response   Response?
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @default(now()) @updatedAt
+
+    @@map("taaruf_cancelation")
 }
 
 model Nadhar {
-    id        String        @id @default(uuid())
-    Taaruf    Taaruf?       @relation(fields: [taarufId], references: [id])
-    taarufId  String
-    schedule  DateTime      @default(now())
-    status    AprovalStatus @default(Pending)
-    message   String        @db.Text
-    reply     String        @db.Text
-    createdAt DateTime      @default(now())
-    updatedAt DateTime      @default(now()) @updatedAt
+    id          String        @id @default(uuid())
+    Taaruf      Taaruf?       @relation(fields: [taarufId], references: [id])
+    taarufId    String
+    requestBy   User          @relation(fields: [requestById], references: [id])
+    requestById String
+    schedule    DateTime      @default(now())
+    status      AprovalStatus @default(Pending)
+    message     String        @db.Text
+    Response    Response?
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @default(now()) @updatedAt
 
     @@map("nadhar")
 }
 
 model Khitbah {
-    id        String        @id @default(uuid())
-    Taaruf    Taaruf?       @relation(fields: [taarufId], references: [id])
-    taarufId  String
-    schedule  DateTime      @default(now())
-    status    AprovalStatus @default(Pending)
-    message   String        @db.Text
-    reply     String        @db.Text
-    createdAt DateTime      @default(now())
-    updatedAt DateTime      @default(now()) @updatedAt
+    id          String        @id @default(uuid())
+    Taaruf      Taaruf?       @relation(fields: [taarufId], references: [id])
+    taarufId    String
+    requestBy   User          @relation(fields: [requestById], references: [id])
+    requestById String
+    schedule    DateTime      @default(now())
+    status      AprovalStatus @default(Pending)
+    message     String        @db.Text
+    Response    Response?
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @default(now()) @updatedAt
 
     @@map("khitbah")
 }
 
 model Akad {
-    id        String        @id @default(uuid())
-    Taaruf    Taaruf?       @relation(fields: [taarufId], references: [id])
-    taarufId  String
-    schedule  DateTime      @default(now())
-    status    AprovalStatus @default(Pending)
-    message   String        @db.Text
-    reply     String        @db.Text
-    createdAt DateTime      @default(now())
-    updatedAt DateTime      @default(now()) @updatedAt
+    id          String        @id @default(uuid())
+    Taaruf      Taaruf?       @relation(fields: [taarufId], references: [id])
+    taarufId    String
+    requestBy   User          @relation(fields: [requestById], references: [id])
+    requestById String
+    schedule    DateTime      @default(now())
+    status      AprovalStatus @default(Pending)
+    message     String        @db.Text
+    Response    Response?
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @default(now()) @updatedAt
 
     @@map("akad")
+}
+
+model Response {
+    id                  String             @id @default(uuid())
+    responseBy          User               @relation(fields: [responseById], references: [id])
+    responseById        String
+    taaruf              Taaruf?            @relation(fields: [taarufId], references: [id])
+    taarufId            String?            @unique
+    taarufCancelation   TaarufCancelation? @relation(fields: [taarufCancelationId], references: [id])
+    taarufCancelationId String?            @unique
+    nadhar              Nadhar?            @relation(fields: [nadharId], references: [id])
+    nadharId            String?            @unique
+    khitbah             Khitbah?           @relation(fields: [khitbahId], references: [id])
+    khitbahId           String?            @unique
+    akad                Akad?              @relation(fields: [akadId], references: [id])
+    akadId              String?            @unique
+    message             String             @db.Text
+    createdAt           DateTime           @default(now())
+    updatedAt           DateTime           @default(now()) @updatedAt
+
+    @@map("response")
 }
 
 enum AprovalStatus {
@@ -666,4 +716,19 @@ model Experience {
 enum ExperienceType {
     Kerja
     Organisasi
+}
+
+model Inbox {
+    id           String   @id @default(uuid())
+    user         User     @relation(fields: [userId], references: [id])
+    userId       String
+    taaruf       Taaruf   @relation(fields: [taarufId], references: [id])
+    taarufId     String
+    read         Boolean  @default(true)
+    is_favourite Boolean  @default(false)
+    createdAt    DateTime @default(now()) // first date time created
+    datetime     DateTime @default(now()) @updatedAt // date time to notify user
+
+    @@unique([userId, taarufId])
+    @@map("inbox")
 }
