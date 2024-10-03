@@ -12,9 +12,11 @@ import { UpdatePhysicalCharDto } from './dto/update-physical_char.dto';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { BiodataService } from 'src/biodata/biodata.service';
-import { CreatePhysicalCharDto } from './dto/create-physical_char.dto';
 import { Prisma } from '@prisma/client';
+import { ApiTags } from '@nestjs/swagger';
+import { GetPhysicalCharsDoc, PatchPhysicalCharsDoc } from './physical_chars.doc';
 
+@ApiTags('Physical-Characteristics')
 @Controller('physical_chars')
 export class PhysicalCharsController {
     constructor(
@@ -22,6 +24,7 @@ export class PhysicalCharsController {
         private readonly biodataService: BiodataService,
     ) { }
 
+    @GetPhysicalCharsDoc()
     @Roles(Role.Member)
     @Get()
     async findOne(@Request() req: any) {
@@ -38,6 +41,7 @@ export class PhysicalCharsController {
         }
     }
 
+    @PatchPhysicalCharsDoc()
     @Roles(Role.Member)
     @Patch()
     async update(
