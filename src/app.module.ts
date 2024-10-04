@@ -39,6 +39,7 @@ import { NonPhysicalCriteriaModule } from './non_physical_criteria/non_physical_
 import { QuestionModule } from './question/question.module';
 import { AnswerModule } from './answer/answer.module';
 import { ExperiencesModule } from './experiences/experiences.module';
+import { InboxModule } from './inbox/inbox.module';
 
 @Module({
     imports: [
@@ -78,6 +79,7 @@ import { ExperiencesModule } from './experiences/experiences.module';
         QuestionModule,
         AnswerModule,
         ExperiencesModule,
+        InboxModule,
     ],
 
     controllers: [AppController],

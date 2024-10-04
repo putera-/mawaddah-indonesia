@@ -6,14 +6,16 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/user.service';
-import { Prisma } from '@prisma/client';
+import { ApprovalStatus, Prisma, TaarufProcess } from '@prisma/client';
 import { Taaruf } from './taaruf.interface';
+import { InboxService } from 'src/inbox/inbox.service';
 
 @Injectable()
 export class TaarufService {
     constructor(
         private PrismaService: PrismaService,
         private userService: UsersService,
+        private inboxService: InboxService,
     ) { }
     async create(
         userId: string,
@@ -21,6 +23,9 @@ export class TaarufService {
         message: string,
     ): Promise<void> {
         // check if candidate is not exist
+        const user = await this.PrismaService.user.findFirst({
+            where: { id: userId },
+        });
         const candidate = await this.PrismaService.user.findFirst({
             where: { id: candidateId },
         });
@@ -28,41 +33,40 @@ export class TaarufService {
 
         // check if connection already created
         const exist = await this.PrismaService.taaruf.findFirst({
-            // FIXME where status is true, jadi klopun sudah false, akan tetap bisa ajukan ulang
-            where: { userId, candidateId },
+            // find by pending or already approved
+            where: {
+                userId,
+                candidateId,
+                active: true,
+            },
         });
         if (exist)
             throw new ConflictException(
                 'Anda telah mengajukan taaaruf dengan kandidat ini',
             );
 
-        // data input
+        // create data taaruf
         const data: Prisma.TaarufCreateInput = {
             message,
             user: { connect: { id: userId } },
             candidate: { connect: { id: candidate.id } },
-            approval: {
-                create: {
-                    message,
-                    reply: '',
-                },
-            },
         };
 
-        // create data
-        await this.PrismaService.taaruf.create({
-            data,
-            include: {
-                approval: true,
-                nadhars: true,
-                khitbahs: true,
-                akads: true,
-            },
+        const taaruf = await this.PrismaService.taaruf.create({
+            data
         });
 
-        /** TODO
-        CREATE inbox
-        */
+        {
+            // CREATE inbox sender & receiver
+            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+                taaruf: { connect: { id: taaruf.id } },
+                title: `${user.firstname} telah mengajukan permintaan taaruf`,
+                datetime: new Date(),
+            }
+            await this.inboxService.create(userId, candidate.id, dataInbox);
+        }
+
+        return;
     }
 
     async findAllIncoming(userId: string, page = '1', limit = '10') {
@@ -116,58 +120,125 @@ export class TaarufService {
         return result;
     }
 
-    async approve(candidateId: string, id: string, message: string) {
-        const result = await this.PrismaService.taaruf.findFirst({
+    async approve(candidateId: string, id: string, message: string): Promise<Taaruf> {
+        const taaruf = await this.PrismaService.taaruf.findFirst({
             where: { id, candidateId },
         });
-        if (!result) throw new NotFoundException('Data tidak valid');
+        if (!taaruf) throw new NotFoundException('Data tidak valid');
 
-        return await this.PrismaService.taaruf.update({
+        const response: Prisma.ResponseCreateInput = {
+            taaruf: { connect: { id } },
+            message,
+            responseBy: { connect: { id: candidateId } }
+        }
+
+        // update taaruf
+        const update_taaruf = await this.PrismaService.taaruf.update({
             where: { id, candidateId },
             data: {
-                approval: {
-                    update: {
-                        status: 'Yes',
-                        message,
-                    },
-                },
-            },
+                status: ApprovalStatus.Yes,
+                latestProcess: TaarufProcess.Taaruf,
+                response: {
+                    create: response
+                }
+            }
         });
-        return result;
+
+        // create inbox
+        {
+            const user = await this.PrismaService.user.findFirst({
+                where: { id: candidateId },
+            });
+            // CREATE inbox sender & receiver
+            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+                taaruf: { connect: { id: taaruf.id } },
+                title: `${user.firstname} telah menerima permintaan taaruf`,
+                datetime: new Date(),
+            }
+            await this.inboxService.create(candidateId, taaruf.userId, dataInbox);
+        }
+
+
+        return update_taaruf;
     }
 
     async reject(candidateId: string, id: string, message: string) {
-        const result = await this.PrismaService.taaruf.findFirst({
+        const taaruf = await this.PrismaService.taaruf.findFirst({
             where: { id, candidateId },
         });
-        if (!result) throw new NotFoundException('Data tidak valid');
+        if (!taaruf) throw new NotFoundException('Data tidak valid');
 
-        return await this.PrismaService.taaruf.update({
+        const response: Prisma.ResponseCreateInput = {
+            taaruf: { connect: { id } },
+            message,
+            responseBy: { connect: { id: candidateId } }
+        }
+
+        const update_taaruf = await this.PrismaService.taaruf.update({
             where: { id, candidateId },
             data: {
-                approval: {
-                    update: {
-                        status: 'No',
-                        message,
-                    },
-                },
+                active: false,
+                status: ApprovalStatus.No,
+                latestProcess: TaarufProcess.Taaruf,
+                response: {
+                    create: response
+                }
             },
         });
 
-        // TODO update taaruf status = false
+        // create inbox
+        {
+            const user = await this.PrismaService.user.findFirst({
+                where: { id: candidateId },
+            });
+            // CREATE inbox sender & receiver
+            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+                taaruf: { connect: { id: taaruf.id } },
+                title: `${user.firstname} menolak permintaan taaruf`,
+                datetime: new Date(),
+            }
+            await this.inboxService.create(candidateId, taaruf.userId, dataInbox);
+        }
+
+
+        return update_taaruf;
     }
 
     async cancel(userId: string, id: string, message: string) {
-        const result = await this.PrismaService.taaruf.findFirst({
+        const taaruf = await this.PrismaService.taaruf.findFirst({
             where: { id, userId },
         });
-        if (!result) throw new NotFoundException('Data tidak valid');
-        return await this.PrismaService.taaruf.update({
+        if (!taaruf) throw new NotFoundException('Data tidak valid');
+
+        // update taaruf
+        await this.PrismaService.taaruf.update({
             where: { id, userId },
             data: {
-                status: false,
-                message,
+                active: false,
+                status: ApprovalStatus.Canceled,
+                cancelation: {
+                    create: {
+                        cancelBy: { connect: { id: userId } },
+                        message
+                    }
+                }
             },
         });
+
+        {
+            const user = await this.PrismaService.user.findFirst({
+                where: { id: userId },
+            });
+
+            // CREATE inbox sender & receiver
+            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+                taaruf: { connect: { id: taaruf.id } },
+                title: `${user.firstname} telah membatalkan taaruf`,
+                datetime: new Date(),
+            }
+            await this.inboxService.create(userId, taaruf.candidateId, dataInbox);
+        }
     }
+
+    // TODO response cancelation
 }

@@ -43,7 +43,7 @@ export class UsersService {
         private Prisma: PrismaService,
         private appService: AppService,
         // private activation: ActivationService,
-    ) {}
+    ) { }
 
     create(data: Prisma.UserCreateInput) {
         return this.Prisma.user.create({
@@ -88,12 +88,12 @@ export class UsersService {
                         },
                     },
                     Taaruf: {
-                        where: { status: true },
+                        where: { active: true },
                         orderBy: { createdAt: 'desc' },
                         take: 1,
                     },
                     Taaruf_candidate: {
-                        where: { status: true },
+                        where: { active: true },
                         orderBy: { createdAt: 'desc' },
                         take: 1,
                     },
