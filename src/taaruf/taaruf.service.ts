@@ -21,7 +21,7 @@ export class TaarufService {
         userId: string,
         candidateId: string,
         message: string,
-    ): Promise<void> {
+    ): Promise<Taaruf> {
         // check if candidate is not exist
         const user = await this.PrismaService.user.findFirst({
             where: { id: userId },
@@ -66,7 +66,7 @@ export class TaarufService {
             await this.inboxService.create(userId, candidate.id, dataInbox);
         }
 
-        return;
+        return taaruf;
     }
 
     async findAllIncoming(userId: string, page = '1', limit = '10') {

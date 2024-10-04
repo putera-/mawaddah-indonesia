@@ -35,7 +35,7 @@ async function main() {
     await member_non_physical_criteria_seed(prisma);
     await taaruf_goldSeed(prisma);
     await bookmarksSeed(prisma);
-    // await taarufSeed(prisma);
+    await taarufSeed(prisma);
     await familyMembersSeed(prisma);
     await member_life_goals_seed(prisma);
     await answerSeed(prisma);

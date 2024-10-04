@@ -7,6 +7,7 @@ import { CreateAkadDto } from './dto/create-akad.dto';
 import { UpdateAkadDto } from './dto/update-akad.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Akad } from './akad.interface';
+import { ApprovalStatus } from '@prisma/client';
 
 @Injectable()
 export class AkadService {
@@ -17,7 +18,7 @@ export class AkadService {
         return await this.prisma.taaruf.findMany({
             where: { userId },
             include: {
-                approval: true,
+                nadhars: true,
                 khitbahs: true,
                 akads: true,
             }
@@ -30,9 +31,13 @@ export class AkadService {
             where: {
                 id: taarufid,
                 userId: userId,
-                approval: { status: 'Yes' },
+                // approval: { status: 'Yes' },
             },
-            include: { approval: true, nadhars: true, khitbahs: true },
+            include: {
+                nadhars: true,
+                khitbahs: true,
+                akads: true
+            },
         });
 
         const taaruf = await this.prisma.taaruf.findFirst({
@@ -55,13 +60,14 @@ export class AkadService {
                 Taaruf: { connect: { id: target.id } },
                 schedule: data.schedule,
                 message: data.message || '',
-                reply: data.reply || '',
-                status: 'Pending',
+                requestBy: { connect: { id: userId } },
+                status: ApprovalStatus.Pending,
             },
         });
         return data;
     }
 
+    // TODO mungkin akan di hapus
     async update(id: string, data: UpdateAkadDto) {
         const akad = await this.prisma.akad.findFirst({
             where: { id },

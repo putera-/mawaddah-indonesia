@@ -24,12 +24,12 @@ export async function taarufSeed(prisma: PrismaClient) {
                 biodata: true,
                 Taaruf_candidate: {
                     where: {
-                        status: false,
+                        active: false,
                     },
                 },
                 Taaruf: {
                     where: {
-                        status: false,
+                        active: false,
                     },
                 },
             },
@@ -42,16 +42,34 @@ export async function taarufSeed(prisma: PrismaClient) {
                 message: 'Mari bertaaruf',
                 user: { connect: { id: user.id } },
                 candidate: { connect: { id: opposite.id } },
-                approval: {
-                    create: {
-                        message: '',
-                        reply: '',
-                    },
-                },
             };
-            const result = await prisma.taaruf.create({
+            const taaruf = await prisma.taaruf.create({
                 data,
             });
+
+            {
+                // CREATE inbox sender & receiver
+                const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+                    taaruf: { connect: { id: taaruf.id } },
+                    title: `${user.firstname} telah mengajukan permintaan taaruf`,
+                    datetime: new Date(),
+                }
+                const dataSenderInbox: Prisma.InboxCreateInput = {
+                    ...dataInbox,
+                    user: { connect: { id: user.id } },
+                    read: true, // mark as read
+                }
+                const dataReceiverInbox: Prisma.InboxCreateInput = {
+                    ...dataInbox,
+                    user: { connect: { id: opposite.id } },
+                    read: false, // mark as unread
+                }
+
+                await Promise.all([
+                    prisma.inbox.create({ data: dataSenderInbox }),
+                    prisma.inbox.create({ data: dataReceiverInbox })
+                ]);
+            }
             // console.log(result);
         }
     }
