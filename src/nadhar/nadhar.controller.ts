@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param, Request, Get } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Request, Get, Req, ValidationPipe, HttpCode, HttpStatus } from '@nestjs/common';
 import { NadharService } from './nadhar.service';
 import { CreateNadharDto } from './dto/create-nadhar.dto';
 import { UpdateNadharDto } from './dto/update-nadhar.dto';
@@ -7,6 +7,7 @@ import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { ApproveNadharDoc, CancelNadharDoc, CreateNadharDoc, GetAllNadharDoc, GetByIdNadharDoc, RejectNadharDoc, UpdateNadharDoc } from './nadhar.doc';
 import { ApiTags } from '@nestjs/swagger';
+import { TaarufMessageDto } from 'src/taaruf/dto/taaruf-message.dto';
 
 @ApiTags('Nadhar')
 @Controller('nadhar')
@@ -35,14 +36,13 @@ export class NadharController {
     }
 
     @CreateNadharDoc()
-    @Roles(Role.Member
-    )
+    @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
     @Post(':taarufid')
-    async create(@Request() req: any, @Param('taarufid') taarufId: string, @Body() data: CreateNadharDto): Promise<Nadhar> {
+    async create(@Request() req: any, @Param('taarufid') taarufId: string, @Body() data: CreateNadharDto) {
         const userId = req.user.id;
         try {
             return this.nadharService.create(data, userId, taarufId);
-
         } catch (error) {
             throw error;
         }
@@ -61,10 +61,15 @@ export class NadharController {
 
     @CancelNadharDoc()
     @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
     @Patch('cancel/:id')
-    cancel(@Param('id') id: string): Promise<Nadhar> {
+    cancel(
+        @Req() req: any,
+        @Param('id') id: string,
+        @Body(new ValidationPipe()) data: TaarufMessageDto,
+    ): Promise<Nadhar> {
         try {
-            return this.nadharService.cancel(id);
+            return this.nadharService.cancel(req.user.id, id, data.message);
         } catch (error) {
             throw error;
         }
@@ -72,10 +77,15 @@ export class NadharController {
 
     @ApproveNadharDoc()
     @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
     @Patch('approve/:id')
-    approve(@Param('id') id: string): Promise<Nadhar> {
+    approve(
+        @Req() req: any,
+        @Param('id') id: string,
+        @Body(new ValidationPipe()) data: TaarufMessageDto,
+    ) {
         try {
-            return this.nadharService.approve(id);
+            return this.nadharService.approve(req.user.id, id, data.message);
         } catch (error) {
             throw error;
         }
@@ -83,10 +93,15 @@ export class NadharController {
 
     @RejectNadharDoc()
     @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
     @Patch('reject/:id')
-    reject(@Param('id') id: string): Promise<Nadhar> {
+    reject(
+        @Req() req: any,
+        @Param('id') id: string,
+        @Body(new ValidationPipe()) data: TaarufMessageDto,
+    ) {
         try {
-            return this.nadharService.reject(id);
+            return this.nadharService.reject(req.user.id, id, data.message);
         } catch (error) {
             throw error;
         }

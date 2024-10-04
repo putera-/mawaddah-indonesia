@@ -487,12 +487,15 @@ enum TaarufProcess {
     NadharRequest
     NadharApproved
     NadharRejected
+    NadharCanceled
     KhitbahRequest
     KhitbahAppproved
     KhitbahRejected
+    KhitbahCanceled
     AkadRequest
     AkadApproved
     AkadRejected
+    AkadCanceled
     Completed
     Canceled
 }

@@ -13,7 +13,7 @@ export class InboxService {
         private userService: UsersService,
     ) { }
 
-    async create(senderId: string, receiverId: string, data: Prisma.InboxCreateWithoutUserInput): Promise<void> {
+    async create(senderId: string, receiverId: string, taarufId: string, data: Prisma.InboxCreateWithoutUserInput): Promise<void> {
 
         const dataSenderInbox: Prisma.InboxCreateInput = {
             ...data,
@@ -27,8 +27,26 @@ export class InboxService {
         }
 
         await Promise.all([
-            this.prisma.inbox.create({ data: dataSenderInbox }),
-            this.prisma.inbox.create({ data: dataReceiverInbox })
+            this.prisma.inbox.upsert({
+                where: {
+                    userId_taarufId: {
+                        userId: senderId,
+                        taarufId
+                    }
+                },
+                create: dataSenderInbox,
+                update: dataSenderInbox,
+            }),
+            this.prisma.inbox.upsert({
+                where: {
+                    userId_taarufId: {
+                        userId: receiverId,
+                        taarufId
+                    }
+                },
+                create: dataReceiverInbox,
+                update: dataReceiverInbox,
+            }),
         ]);
 
         return;

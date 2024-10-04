@@ -7,11 +7,15 @@ import { CreateAkadDto } from './dto/create-akad.dto';
 import { UpdateAkadDto } from './dto/update-akad.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Akad } from './akad.interface';
-import { ApprovalStatus } from '@prisma/client';
+import { ApprovalStatus, Prisma, TaarufProcess } from '@prisma/client';
+import { InboxService } from 'src/inbox/inbox.service';
 
 @Injectable()
 export class AkadService {
-    constructor(private prisma: PrismaService) { }
+    constructor(
+        private prisma: PrismaService,
+        private inboxService: InboxService,
+    ) { }
 
     // for maintainance only
     async getAll(userId: string) {
@@ -25,13 +29,17 @@ export class AkadService {
         });
     }
 
-    async create(data: CreateAkadDto, userId: string, taarufid: string) {
-        const target = await this.prisma.taaruf.findFirst({
-            //supaya hanya mendapatkan punya user dan yang status approved
+    async create(data: CreateAkadDto, userId: string, taarufId: string) {
+        const taaruf = await this.prisma.taaruf.findFirst({
+            // akad bisa diajukan oleh pengaju taaruf maupun candidate
+            // allow request akad walapupun sudah ditolak, selama taaruf belum di cancel
             where: {
-                id: taarufid,
-                userId: userId,
-                // approval: { status: 'Yes' },
+                id: taarufId,
+                active: true,
+                status: ApprovalStatus.Approved,
+                taaruf_process: {
+                    in: [TaarufProcess.KhitbahAppproved, TaarufProcess.AkadRejected, TaarufProcess.AkadCanceled]
+                }
             },
             include: {
                 nadhars: true,
@@ -40,31 +48,68 @@ export class AkadService {
             },
         });
 
-        const taaruf = await this.prisma.taaruf.findFirst({
-            where: { id: taarufid, khitbahs: { some: { status: ApprovalStatus.Approved } } },
-            include: { khitbahs: true },
-            orderBy: { createdAt: 'desc' },
-            take: 1,
-        });
 
         //cek apakan data taaruf ada apa tidak
         if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan');
 
-        const khitbahs = taaruf.khitbahs;
-        if (!khitbahs.length) throw new NotFoundException();
+        const nadhars = taaruf.nadhars;
+        if (!nadhars.length) throw new NotFoundException('Data Nadhar tidak ditemukan');
 
-        // create khitbah dengan status pending
+        const khitbahs = taaruf.khitbahs;
+        if (!khitbahs.length) throw new NotFoundException('Data Khitbah tidak ditemukan');
+
+        // check apakah akad sudah disetujui atau belum
+        const has_approved_akad = taaruf.akads.some(akad => akad.status == ApprovalStatus.Approved);
+        if (has_approved_akad) throw new BadRequestException('Akad anda sudah disetujui.');
+
+        // create akad dengan status pending
+        const message = data.message || '';
         await this.prisma.akad.create({
             data: {
                 ...data,
-                Taaruf: { connect: { id: target.id } },
+                Taaruf: { connect: { id: taarufId } },
                 schedule: data.schedule,
-                message: data.message || '',
+                message,
                 requestBy: { connect: { id: userId } },
                 status: ApprovalStatus.Pending,
             },
         });
-        return data;
+
+        // update taaruf to Akad Request
+        await this.prisma.taaruf.update({
+            where: { id: taarufId },
+            data: {
+                taaruf_process: TaarufProcess.AkadRequest
+            }
+        });
+
+        {
+            const user = await this.prisma.user.findFirst({
+                where: { id: userId },
+            });
+            // get receiverId, karena yang mengajukanm bisa candidate maupun
+            const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
+
+            // CREATE inbox sender & receiver
+            const title = `${user.firstname} telah mengajukan permintaan akad`;
+            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+                taaruf: { connect: { id: taarufId } },
+                title,
+                datetime: new Date(),
+                messages: {
+                    create: {
+                        sender: { connect: { id: userId } },
+                        receiver: { connect: { id: receiverId } },
+                        message,
+                        title,
+                        taaruf_process: TaarufProcess.AkadRequest
+                    }
+                }
+            }
+            await this.inboxService.create(userId, receiverId, taarufId, dataInbox);
+        }
+
+        return;
     }
 
     // TODO mungkin akan di hapus
@@ -87,63 +132,204 @@ export class AkadService {
         return result;
     }
 
-    async cancel(id: string) {
-        const akad = await this.prisma.akad.findFirst({
-            where: { id },
-        });
+    async cancel(userId: string, akadId: string, message: string) {
+        const akad = await this.findOne(akadId);
+        if (!akad) throw new NotFoundException();
 
-        //check if akad was approved, if (approved) => not allowed to update/change data
-        if (akad.status == ApprovalStatus.Approved)
-            throw new BadRequestException(
-                'Akad sudah disetujui, tidak bisa mengubah data',
-            );
+        const taarufId = akad.taarufId;
 
-        const result = await this.prisma.akad.update({
+        //check akad status
+        if (akad.status == ApprovalStatus.Approved) throw new BadRequestException('Akad telah disetujui, tidak bisa mengubah data');
+        if (akad.status == ApprovalStatus.Canceled) throw new BadRequestException('Akad telah dibatalkan, tidak bisa mengubah data');
+        if (akad.status == ApprovalStatus.Rejected) throw new BadRequestException('Akad telah ditolak, tidak bisa mengubah data');
+
+        const response: Prisma.ResponseCreateInput = {
+            akad: { connect: { id: akadId } },
+            message,
+            responseBy: { connect: { id: userId } }
+        }
+
+        await this.prisma.akad.update({
             where: { id: akad.id },
             data: {
                 status: ApprovalStatus.Rejected,
+                response: {
+                    create: response
+                }
             },
         });
-        return result;
+
+        // update status taaruf
+        const taaruf = await this.prisma.taaruf.update({
+            where: { id: taarufId },
+            data: {
+                taaruf_process: TaarufProcess.KhitbahAppproved // back to khitbah approved
+            }
+        });
+
+        // create inbox
+        {
+            const user = await this.prisma.user.findFirst({
+                where: { id: userId },
+            });
+
+            // get receiverId, karena yang mengajukanm bisa candidate maupun
+            const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
+
+            // CREATE inbox sender & receiver
+            const title = `${user.firstname} telah membatalkan permintaan akad`;
+            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+                taaruf: { connect: { id: taarufId } },
+                title,
+                datetime: new Date(),
+                messages: {
+                    create: {
+                        sender: { connect: { id: userId } },
+                        receiver: { connect: { id: receiverId } },
+                        message,
+                        title,
+                        taaruf_process: TaarufProcess.AkadCanceled
+                    }
+                }
+            }
+            await this.inboxService.create(userId, receiverId, taarufId, dataInbox);
+        }
+
+        return;
     }
 
-    async approve(id: string) {
-        const akad = await this.prisma.akad.findFirst({
-            where: { id },
-        })
+    async approve(userId: string, akadId: string, message: string) {
+        const akad = await this.findOne(akadId);
+        if (!akad) throw new NotFoundException();
 
-        //check if akad was approved, if (approved) => not allowed to update/change data
-        if (akad.status == ApprovalStatus.Rejected)
-            throw new BadRequestException(
-                'Akad sudah ditolak, tidak bisa mengubah data',
-            );
+        const taarufId = akad.taarufId;
 
-        const result = await this.prisma.akad.update({
+        //check akad status
+        if (akad.status == ApprovalStatus.Approved) throw new BadRequestException('Akad telah disetujui, tidak bisa mengubah data');
+        if (akad.status == ApprovalStatus.Canceled) throw new BadRequestException('Akad telah dibatalkan, tidak bisa mengubah data');
+        if (akad.status == ApprovalStatus.Rejected) throw new BadRequestException('Akad telah ditolak, tidak bisa mengubah data');
+
+        const response: Prisma.ResponseCreateInput = {
+            akad: { connect: { id: akadId } },
+            message,
+            responseBy: { connect: { id: userId } }
+        }
+
+        await this.prisma.akad.update({
             where: { id: akad.id },
             data: {
                 status: ApprovalStatus.Approved,
+                response: {
+                    create: response
+                }
             },
         });
-        return result;
+
+        // update status taaruf
+        const taaruf = await this.prisma.taaruf.update({
+            where: { id: taarufId },
+            data: {
+                taaruf_process: TaarufProcess.AkadApproved
+            }
+        });
+
+        // create inbox
+        {
+            const user = await this.prisma.user.findFirst({
+                where: { id: userId },
+            });
+
+            // get receiverId, karena yang mengajukanm bisa candidate maupun
+            const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
+
+
+            // CREATE inbox sender & receiver
+            const title = `${user.firstname} telah menerima permintaan akad`;
+            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+                taaruf: { connect: { id: taarufId } },
+                title,
+                datetime: new Date(),
+                messages: {
+                    create: {
+                        sender: { connect: { id: userId } },
+                        receiver: { connect: { id: receiverId } },
+                        message,
+                        title,
+                        taaruf_process: TaarufProcess.AkadApproved
+                    }
+                }
+            }
+            await this.inboxService.create(userId, receiverId, taarufId, dataInbox);
+        }
+
+        return;
     }
 
-    async reject(id: string) {
-        const akad = await this.prisma.akad.findFirst({
-            where: { id },
-        })
-        //check if akad was approved, if (approved) => not allowed to update/change data
-        if (akad.status == ApprovalStatus.Approved)
-            throw new BadRequestException(
-                'Akad sudah disetujui, tidak bisa mengubah data',
-            );
+    async reject(userId: string, akadId: string, message: string) {
+        const akad = await this.findOne(akadId);
 
-        const result = await this.prisma.akad.update({
+        if (!akad) throw new NotFoundException();
+        const taarufId = akad.taarufId;
+
+        //check akad status
+        if (akad.status == ApprovalStatus.Approved) throw new BadRequestException('Akad telah disetujui, tidak bisa mengubah data');
+        if (akad.status == ApprovalStatus.Canceled) throw new BadRequestException('Akad telah dibatalkan, tidak bisa mengubah data');
+        if (akad.status == ApprovalStatus.Rejected) throw new BadRequestException('Akad telah ditolak, tidak bisa mengubah data');
+
+        const response: Prisma.ResponseCreateInput = {
+            akad: { connect: { id: akadId } },
+            message,
+            responseBy: { connect: { id: userId } }
+        }
+
+        await this.prisma.akad.update({
             where: { id: akad.id },
             data: {
                 status: ApprovalStatus.Rejected,
+                response: {
+                    create: response
+                }
             },
         });
-        return result;
+
+        // update status taaruf
+        const taaruf = await this.prisma.taaruf.update({
+            where: { id: taarufId },
+            data: {
+                taaruf_process: TaarufProcess.AkadRejected
+            }
+        });
+
+        // create inbox
+        {
+            const user = await this.prisma.user.findFirst({
+                where: { id: userId },
+            });
+
+            // get receiverId, karena yang mengajukanm bisa candidate maupun
+            const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
+
+
+            // CREATE inbox sender & receiver
+            const title = `${user.firstname} telah menolak permintaan akad`;
+            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+                taaruf: { connect: { id: taarufId } },
+                title,
+                datetime: new Date(),
+                messages: {
+                    create: {
+                        sender: { connect: { id: userId } },
+                        receiver: { connect: { id: receiverId } },
+                        message,
+                        title,
+                        taaruf_process: TaarufProcess.AkadRejected
+                    }
+                }
+            }
+            await this.inboxService.create(userId, receiverId, taarufId, dataInbox);
+        }
+
+        return;
     }
 
     findOne(id: string): Promise<Akad> {

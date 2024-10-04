@@ -18,7 +18,7 @@ import { TaarufMessageDto } from './dto/taaruf-message.dto';
 
 @Controller('taaruf')
 export class TaarufController {
-    constructor(private readonly taarufService: TaarufService) {}
+    constructor(private readonly taarufService: TaarufService) { }
 
     @Roles(Role.Member)
     @HttpCode(HttpStatus.OK)
@@ -139,6 +139,21 @@ export class TaarufController {
     ) {
         try {
             return this.taarufService.cancel(req.user.id, id, data.message);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
+    @Patch('cancel_response/:id')
+    async cancel_response(
+        @Req() req: any,
+        @Param('id') id: string,
+        @Body(new ValidationPipe()) data: TaarufMessageDto,
+    ) {
+        try {
+            return this.taarufService.cancel_response(req.user.id, id, data.message);
         } catch (error) {
             throw error;
         }

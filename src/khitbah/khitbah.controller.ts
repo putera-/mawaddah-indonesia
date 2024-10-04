@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param, Request, Get } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Request, Get, Req, ValidationPipe, HttpCode, HttpStatus } from '@nestjs/common';
 import { KhitbahService } from './khitbah.service';
 import { CreateKhitbahDto } from './dto/create-khitbah.dto';
 import { UpdateKhitbahDto } from './dto/update-khitbah.dto';
@@ -6,6 +6,7 @@ import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { ApiTags } from '@nestjs/swagger';
 import { ApproveKhitbahDoc, CancelKhitbahDoc, CreateKhitbahDoc, GetAllKhitbahDoc, GetByIdKhitbahDoc, RejectKhitbahDoc, UpdateKhitbahDoc } from './khitbah.doc';
+import { TaarufMessageDto } from 'src/taaruf/dto/taaruf-message.dto';
 
 @ApiTags('Khitbah')
 @Controller('khitbah')
@@ -60,10 +61,15 @@ export class KhitbahController {
 
     @CancelKhitbahDoc()
     @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
     @Patch('cancel/:id')
-    cancel(@Param('id') id: string) {
+    cancel(
+        @Req() req: any,
+        @Param('id') id: string,
+        @Body(new ValidationPipe()) data: TaarufMessageDto,
+    ) {
         try {
-            return this.khitbahService.cancel(id);
+            return this.khitbahService.cancel(req.user.id, id, data.message);
 
         } catch (error) {
             console.log(error);
@@ -72,10 +78,15 @@ export class KhitbahController {
 
     @ApproveKhitbahDoc()
     @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
     @Patch('approve/:id')
-    approve(@Param('id') id: string) {
+    approve(
+        @Req() req: any,
+        @Param('id') id: string,
+        @Body(new ValidationPipe()) data: TaarufMessageDto,
+    ) {
         try {
-            return this.khitbahService.approve(id);
+            return this.khitbahService.approve(req.user.id, id, data.message);
 
         } catch (error) {
             console.log(error);
@@ -84,10 +95,15 @@ export class KhitbahController {
 
     @RejectKhitbahDoc()
     @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
     @Patch('reject/:id')
-    reject(@Param('id') id: string) {
+    reject(
+        @Req() req: any,
+        @Param('id') id: string,
+        @Body(new ValidationPipe()) data: TaarufMessageDto,
+    ) {
         try {
-            return this.khitbahService.reject(id);
+            return this.khitbahService.reject(req.user.id, id, data.message);
 
         } catch (error) {
             console.log(error);

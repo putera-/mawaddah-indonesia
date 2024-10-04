@@ -6,6 +6,10 @@ import {
     Patch,
     Param,
     Request,
+    Req,
+    ValidationPipe,
+    HttpCode,
+    HttpStatus,
 } from '@nestjs/common';
 import { AkadService } from './akad.service';
 import { CreateAkadDto } from './dto/create-akad.dto';
@@ -14,6 +18,7 @@ import { Role } from 'src/roles/role.enums';
 import { Roles } from 'src/roles/roles.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ApproveAkadDoc, CancelAkadDoc, CreateAkadDoc, GetAllAkadDoc, GetByIdAkadDoc, RejectAkadDoc, UpdateAkadDoc } from './akad.doc';
+import { TaarufMessageDto } from 'src/taaruf/dto/taaruf-message.dto';
 
 @ApiTags('Akad')
 @ApiBearerAuth()
@@ -65,20 +70,25 @@ export class AkadController {
 
         @Param('id') id: string,
         @Body() data: UpdateAkadDto,) {
-            try {
-                return this.akadService.update(id, data);
+        try {
+            return this.akadService.update(id, data);
 
-            } catch (error) {
-                console.log(error);
-            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     @CancelAkadDoc()
     @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
     @Patch('cancel/:id')
-    cancel(@Param('id') id: string) {
+    cancel(
+        @Req() req: any,
+        @Param('id') id: string,
+        @Body(new ValidationPipe()) data: TaarufMessageDto,
+    ) {
         try {
-            return this.akadService.cancel(id);
+            return this.akadService.cancel(req.user.id, id, data.message);
 
         } catch (error) {
             console.log(error);
@@ -87,10 +97,15 @@ export class AkadController {
 
     @ApproveAkadDoc()
     @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
     @Patch('approve/:id')
-    approve(@Param('id') id: string) {
+    approve(
+        @Req() req: any,
+        @Param('id') id: string,
+        @Body(new ValidationPipe()) data: TaarufMessageDto,
+    ) {
         try {
-            return this.akadService.approve(id);
+            return this.akadService.approve(req.user.id, id, data.message);
 
         } catch (error) {
             console.log(error);
@@ -100,10 +115,15 @@ export class AkadController {
 
     @RejectAkadDoc()
     @Roles(Role.Member)
+    @HttpCode(HttpStatus.OK)
     @Patch('reject/:id')
-    reject(@Param('id') id: string) {
+    reject(
+        @Req() req: any,
+        @Param('id') id: string,
+        @Body(new ValidationPipe()) data: TaarufMessageDto,
+    ) {
         try {
-            return this.akadService.reject(id);
+            return this.akadService.reject(req.user.id, id, data.message);
 
         } catch (error) {
             console.log(error);

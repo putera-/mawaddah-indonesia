@@ -38,7 +38,7 @@ CREATE TYPE "relationship" AS ENUM ('ayah', 'ibu', 'kakak_pria', 'kakak_wanita',
 CREATE TYPE "religion" AS ENUM ('islam', 'non_islam');
 
 -- CreateEnum
-CREATE TYPE "TaarufProcess" AS ENUM ('TaarufRequest', 'TaarufApproved', 'TaarufRejected', 'NadharRequest', 'NadharApproved', 'NadharRejected', 'KhitbahRequest', 'KhitbahAppproved', 'KhitbahRejected', 'AkadRequest', 'AkadApproved', 'AkadRejected', 'Completed', 'Canceled');
+CREATE TYPE "TaarufProcess" AS ENUM ('TaarufRequest', 'TaarufApproved', 'TaarufRejected', 'NadharRequest', 'NadharApproved', 'NadharRejected', 'NadharCanceled', 'KhitbahRequest', 'KhitbahAppproved', 'KhitbahRejected', 'KhitbahCanceled', 'AkadRequest', 'AkadApproved', 'AkadRejected', 'AkadCanceled', 'Completed', 'Canceled');
 
 -- CreateEnum
 CREATE TYPE "ApprovalStatus" AS ENUM ('Pending', 'Approved', 'Rejected', 'Canceled');
