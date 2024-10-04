@@ -6,7 +6,10 @@ import { Role } from 'src/roles/role.enums';
 import { BiodataService } from 'src/biodata/biodata.service';
 import { LifeGoalsService } from './life_goals.service';
 import { Prisma } from '@prisma/client';
+import { GetLifeGoalDoc, PatchLifeGoalDoc } from './life_goals,doc';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('life-goals')
 @Controller('life-goals')
 export class LifeGoalsController {
     constructor(
@@ -14,6 +17,7 @@ export class LifeGoalsController {
         private readonly biodataService: BiodataService,
     ) { }
 
+    @GetLifeGoalDoc()
     @Roles(Role.Member)
     @Get()
     async findOne(@Request() req: any) {
@@ -30,6 +34,7 @@ export class LifeGoalsController {
         }
     }
 
+    @PatchLifeGoalDoc()
     @Roles(Role.Member)
     @Patch()
     async update(
@@ -47,8 +52,7 @@ export class LifeGoalsController {
                 ...data,
                 biodata: { connect: { id: biodata.id } }
             }
-
-            return this.lifeGoalService.upsert(biodata.id, dataSave);
+            
         } catch (error) {
             throw error;
         }

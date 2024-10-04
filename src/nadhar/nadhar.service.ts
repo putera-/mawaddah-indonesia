@@ -9,17 +9,16 @@ import { ApprovalStatus } from '@prisma/client';
 export class NadharService {
     constructor(private prisma: PrismaService) { }
 
-    // for maintainance only
-    // async getAll(userId: string) {
-    //     return await this.prisma.taaruf.findMany({
-    //         where: { userId },
-    //         include: {
-    //             approval: true,
-    //             khitbahs: true,
-    //             nadhars: true
-    //         }
-    //     });
-    // }
+    async getAll(userId: string) {
+        return await this.prisma.taaruf.findMany({
+            where: { userId },
+            include: {
+                approval: true,
+                khitbahs: true,
+                nadhars: true
+            }
+        });
+    }
 
     async create(data: CreateNadharDto, userId: string, taarufid: string): Promise<Nadhar> {
         const taaruf = await this.prisma.taaruf.findFirst({

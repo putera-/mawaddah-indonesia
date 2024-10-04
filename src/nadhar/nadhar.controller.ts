@@ -5,23 +5,38 @@ import { UpdateNadharDto } from './dto/update-nadhar.dto';
 import { Nadhar } from './nadhar.interface';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
+import { ApproveNadharDoc, CancelNadharDoc, CreateNadharDoc, GetAllNadharDoc, GetByIdNadharDoc, RejectNadharDoc, UpdateNadharDoc } from './nadhar.doc';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Nadhar')
 @Controller('nadhar')
 export class NadharController {
     constructor(private readonly nadharService: NadharService) { }
 
-    // for maintainance only
-    // @Get()
-    // async getAll(@Request() req: any) {
-    //     const userId = req.user.id;
-    //     try {
-    //         return this.nadharService.getAll(userId);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+    @GetAllNadharDoc()
+    @Get()
+    async getAll(@Request() req: any) {
+        const userId = req.user.id;
+        try {
+            return this.nadharService.getAll(userId);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-    @Roles(Role.Member)
+    @GetByIdNadharDoc()
+    @Get(':id')
+    async findOne(@Param('id') id: string) {
+        try {
+            return this.nadharService.findOne(id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    @CreateNadharDoc()
+    @Roles(Role.Member
+    )
     @Post(':taarufid')
     async create(@Request() req: any, @Param('taarufid') taarufId: string, @Body() data: CreateNadharDto): Promise<Nadhar> {
         const userId = req.user.id;
@@ -33,6 +48,7 @@ export class NadharController {
         }
     }
 
+    @UpdateNadharDoc()
     @Roles(Role.Member)
     @Patch(':id')
     update(@Param('id') id: string, @Body() data: UpdateNadharDto): Promise<Nadhar> {
@@ -43,6 +59,7 @@ export class NadharController {
         }
     }
 
+    @CancelNadharDoc()
     @Roles(Role.Member)
     @Patch('cancel/:id')
     cancel(@Param('id') id: string): Promise<Nadhar> {
@@ -53,6 +70,7 @@ export class NadharController {
         }
     }
 
+    @ApproveNadharDoc()
     @Roles(Role.Member)
     @Patch('approve/:id')
     approve(@Param('id') id: string): Promise<Nadhar> {
@@ -63,6 +81,7 @@ export class NadharController {
         }
     }
 
+    @RejectNadharDoc()
     @Roles(Role.Member)
     @Patch('reject/:id')
     reject(@Param('id') id: string): Promise<Nadhar> {
