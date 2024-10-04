@@ -463,17 +463,17 @@ model Taaruf {
     candidate     User               @relation(name: "TaarufCandidates", fields: [candidateId], references: [id])
     candidateId   String // This field holds the foreign key
     active        Boolean            @default(true)
-    status        AprovalStatus      @default(Pending)
+    status        ApprovalStatus     @default(Pending)
     message       String             @db.Text
     latestProcess TaarufProcess      @default(TaarufRequest)
     nadhars       Nadhar[]
     khitbahs      Khitbah[]
     akads         Akad[]
-    createdAt     DateTime           @default(now())
-    updatedAt     DateTime           @default(now()) @updatedAt
     cancelation   TaarufCancelation?
     Inbox         Inbox[]
-    Response      Response?
+    response      Response?
+    createdAt     DateTime           @default(now())
+    updatedAt     DateTime           @default(now()) @updatedAt
 
     @@map("taaruf")
 }
@@ -498,7 +498,7 @@ model TaarufCancelation {
     cancelById String
     cancelBy   User      @relation(fields: [cancelById], references: [id])
     message    String    @db.Text
-    Response   Response?
+    response   Response?
     createdAt  DateTime  @default(now())
     updatedAt  DateTime  @default(now()) @updatedAt
 
@@ -506,49 +506,49 @@ model TaarufCancelation {
 }
 
 model Nadhar {
-    id          String        @id @default(uuid())
-    Taaruf      Taaruf?       @relation(fields: [taarufId], references: [id])
+    id          String         @id @default(uuid())
+    Taaruf      Taaruf?        @relation(fields: [taarufId], references: [id])
     taarufId    String
-    requestBy   User          @relation(fields: [requestById], references: [id])
+    requestBy   User           @relation(fields: [requestById], references: [id])
     requestById String
-    schedule    DateTime      @default(now())
-    status      AprovalStatus @default(Pending)
-    message     String        @db.Text
-    Response    Response?
-    createdAt   DateTime      @default(now())
-    updatedAt   DateTime      @default(now()) @updatedAt
+    schedule    DateTime       @default(now())
+    status      ApprovalStatus @default(Pending)
+    message     String         @db.Text
+    response    Response?
+    createdAt   DateTime       @default(now())
+    updatedAt   DateTime       @default(now()) @updatedAt
 
     @@map("nadhar")
 }
 
 model Khitbah {
-    id          String        @id @default(uuid())
-    Taaruf      Taaruf?       @relation(fields: [taarufId], references: [id])
+    id          String         @id @default(uuid())
+    Taaruf      Taaruf?        @relation(fields: [taarufId], references: [id])
     taarufId    String
-    requestBy   User          @relation(fields: [requestById], references: [id])
+    requestBy   User           @relation(fields: [requestById], references: [id])
     requestById String
-    schedule    DateTime      @default(now())
-    status      AprovalStatus @default(Pending)
-    message     String        @db.Text
-    Response    Response?
-    createdAt   DateTime      @default(now())
-    updatedAt   DateTime      @default(now()) @updatedAt
+    schedule    DateTime       @default(now())
+    status      ApprovalStatus @default(Pending)
+    message     String         @db.Text
+    response    Response?
+    createdAt   DateTime       @default(now())
+    updatedAt   DateTime       @default(now()) @updatedAt
 
     @@map("khitbah")
 }
 
 model Akad {
-    id          String        @id @default(uuid())
-    Taaruf      Taaruf?       @relation(fields: [taarufId], references: [id])
+    id          String         @id @default(uuid())
+    Taaruf      Taaruf?        @relation(fields: [taarufId], references: [id])
     taarufId    String
-    requestBy   User          @relation(fields: [requestById], references: [id])
+    requestBy   User           @relation(fields: [requestById], references: [id])
     requestById String
-    schedule    DateTime      @default(now())
-    status      AprovalStatus @default(Pending)
-    message     String        @db.Text
-    Response    Response?
-    createdAt   DateTime      @default(now())
-    updatedAt   DateTime      @default(now()) @updatedAt
+    schedule    DateTime       @default(now())
+    status      ApprovalStatus @default(Pending)
+    message     String         @db.Text
+    response    Response?
+    createdAt   DateTime       @default(now())
+    updatedAt   DateTime       @default(now()) @updatedAt
 
     @@map("akad")
 }
@@ -574,10 +574,11 @@ model Response {
     @@map("response")
 }
 
-enum AprovalStatus {
+enum ApprovalStatus {
     Pending
     Yes
     No
+    Canceled
 }
 
 model MarriagePreparation {
@@ -724,7 +725,8 @@ model Inbox {
     userId       String
     taaruf       Taaruf   @relation(fields: [taarufId], references: [id])
     taarufId     String
-    read         Boolean  @default(true)
+    title        String   @db.VarChar(255)
+    read         Boolean  @default(false)
     is_favourite Boolean  @default(false)
     createdAt    DateTime @default(now()) // first date time created
     datetime     DateTime @default(now()) @updatedAt // date time to notify user

@@ -38,7 +38,10 @@ CREATE TYPE "relationship" AS ENUM ('ayah', 'ibu', 'kakak_pria', 'kakak_wanita',
 CREATE TYPE "religion" AS ENUM ('islam', 'non_islam');
 
 -- CreateEnum
-CREATE TYPE "AprovalStatus" AS ENUM ('Pending', 'Yes', 'No');
+CREATE TYPE "TaarufProcess" AS ENUM ('TaarufRequest', 'Taaruf', 'NadharRequest', 'Nadhar', 'KhitbahRequest', 'Khitbah', 'AkadRequest', 'Akad', 'Completed', 'Canceled');
+
+-- CreateEnum
+CREATE TYPE "ApprovalStatus" AS ENUM ('Pending', 'Yes', 'No', 'Canceled');
 
 -- CreateEnum
 CREATE TYPE "ShalatFardu" AS ENUM ('rutin_di_masjid', 'kadang_di_masjid', 'bolong_bolong', 'pernah_sekali', 'belum_pernah');
@@ -366,8 +369,10 @@ CREATE TABLE "taaruf" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "candidateId" TEXT NOT NULL,
-    "status" BOOLEAN NOT NULL DEFAULT true,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "status" "ApprovalStatus" NOT NULL DEFAULT 'Pending',
     "message" TEXT NOT NULL,
+    "latestProcess" "TaarufProcess" NOT NULL DEFAULT 'TaarufRequest',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -375,25 +380,25 @@ CREATE TABLE "taaruf" (
 );
 
 -- CreateTable
-CREATE TABLE "taaruf_approval" (
+CREATE TABLE "taaruf_cancelation" (
     "id" TEXT NOT NULL,
     "taarufId" TEXT NOT NULL,
-    "status" "AprovalStatus" NOT NULL DEFAULT 'Pending',
+    "cancelById" TEXT NOT NULL,
     "message" TEXT NOT NULL,
-    "reply" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "taaruf_approval_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "taaruf_cancelation_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "nadhar" (
     "id" TEXT NOT NULL,
     "taarufId" TEXT NOT NULL,
+    "requestById" TEXT NOT NULL,
     "schedule" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "status" "AprovalStatus" NOT NULL DEFAULT 'Pending',
+    "status" "ApprovalStatus" NOT NULL DEFAULT 'Pending',
     "message" TEXT NOT NULL,
-    "reply" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -404,10 +409,10 @@ CREATE TABLE "nadhar" (
 CREATE TABLE "khitbah" (
     "id" TEXT NOT NULL,
     "taarufId" TEXT NOT NULL,
+    "requestById" TEXT NOT NULL,
     "schedule" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "status" "AprovalStatus" NOT NULL DEFAULT 'Pending',
+    "status" "ApprovalStatus" NOT NULL DEFAULT 'Pending',
     "message" TEXT NOT NULL,
-    "reply" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -418,14 +423,30 @@ CREATE TABLE "khitbah" (
 CREATE TABLE "akad" (
     "id" TEXT NOT NULL,
     "taarufId" TEXT NOT NULL,
+    "requestById" TEXT NOT NULL,
     "schedule" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "status" "AprovalStatus" NOT NULL DEFAULT 'Pending',
+    "status" "ApprovalStatus" NOT NULL DEFAULT 'Pending',
     "message" TEXT NOT NULL,
-    "reply" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "akad_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "response" (
+    "id" TEXT NOT NULL,
+    "responseById" TEXT NOT NULL,
+    "taarufId" TEXT,
+    "taarufCancelationId" TEXT,
+    "nadharId" TEXT,
+    "khitbahId" TEXT,
+    "akadId" TEXT,
+    "message" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "response_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -543,6 +564,20 @@ CREATE TABLE "experience" (
     CONSTRAINT "experience_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "inbox" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "taarufId" TEXT NOT NULL,
+    "title" VARCHAR(255) NOT NULL,
+    "read" BOOLEAN NOT NULL DEFAULT false,
+    "is_favourite" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "datetime" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "inbox_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
@@ -580,7 +615,22 @@ CREATE UNIQUE INDEX "payment_taaruf_goldId_key" ON "payment"("taaruf_goldId");
 CREATE UNIQUE INDEX "midtrans_callback_paymentId_key" ON "midtrans_callback"("paymentId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "taaruf_approval_taarufId_key" ON "taaruf_approval"("taarufId");
+CREATE UNIQUE INDEX "taaruf_cancelation_taarufId_key" ON "taaruf_cancelation"("taarufId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "response_taarufId_key" ON "response"("taarufId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "response_taarufCancelationId_key" ON "response"("taarufCancelationId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "response_nadharId_key" ON "response"("nadharId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "response_khitbahId_key" ON "response"("khitbahId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "response_akadId_key" ON "response"("akadId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "marriage_preparation_biodataId_key" ON "marriage_preparation"("biodataId");
@@ -596,6 +646,9 @@ CREATE UNIQUE INDEX "non_physical_criteria_biodataId_key" ON "non_physical_crite
 
 -- CreateIndex
 CREATE UNIQUE INDEX "answer_questionId_biodataId_key" ON "answer"("questionId", "biodataId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "inbox_userId_taarufId_key" ON "inbox"("userId", "taarufId");
 
 -- AddForeignKey
 ALTER TABLE "backup_detail" ADD CONSTRAINT "backup_detail_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -664,16 +717,46 @@ ALTER TABLE "taaruf" ADD CONSTRAINT "taaruf_userId_fkey" FOREIGN KEY ("userId") 
 ALTER TABLE "taaruf" ADD CONSTRAINT "taaruf_candidateId_fkey" FOREIGN KEY ("candidateId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "taaruf_approval" ADD CONSTRAINT "taaruf_approval_taarufId_fkey" FOREIGN KEY ("taarufId") REFERENCES "taaruf"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "taaruf_cancelation" ADD CONSTRAINT "taaruf_cancelation_taarufId_fkey" FOREIGN KEY ("taarufId") REFERENCES "taaruf"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "taaruf_cancelation" ADD CONSTRAINT "taaruf_cancelation_cancelById_fkey" FOREIGN KEY ("cancelById") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "nadhar" ADD CONSTRAINT "nadhar_taarufId_fkey" FOREIGN KEY ("taarufId") REFERENCES "taaruf"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "nadhar" ADD CONSTRAINT "nadhar_requestById_fkey" FOREIGN KEY ("requestById") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "khitbah" ADD CONSTRAINT "khitbah_taarufId_fkey" FOREIGN KEY ("taarufId") REFERENCES "taaruf"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "khitbah" ADD CONSTRAINT "khitbah_requestById_fkey" FOREIGN KEY ("requestById") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "akad" ADD CONSTRAINT "akad_taarufId_fkey" FOREIGN KEY ("taarufId") REFERENCES "taaruf"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "akad" ADD CONSTRAINT "akad_requestById_fkey" FOREIGN KEY ("requestById") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "response" ADD CONSTRAINT "response_responseById_fkey" FOREIGN KEY ("responseById") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "response" ADD CONSTRAINT "response_taarufId_fkey" FOREIGN KEY ("taarufId") REFERENCES "taaruf"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "response" ADD CONSTRAINT "response_taarufCancelationId_fkey" FOREIGN KEY ("taarufCancelationId") REFERENCES "taaruf_cancelation"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "response" ADD CONSTRAINT "response_nadharId_fkey" FOREIGN KEY ("nadharId") REFERENCES "nadhar"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "response" ADD CONSTRAINT "response_khitbahId_fkey" FOREIGN KEY ("khitbahId") REFERENCES "khitbah"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "response" ADD CONSTRAINT "response_akadId_fkey" FOREIGN KEY ("akadId") REFERENCES "akad"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "marriage_preparation" ADD CONSTRAINT "marriage_preparation_biodataId_fkey" FOREIGN KEY ("biodataId") REFERENCES "biodata"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -698,3 +781,9 @@ ALTER TABLE "answer" ADD CONSTRAINT "answer_questionId_fkey" FOREIGN KEY ("quest
 
 -- AddForeignKey
 ALTER TABLE "experience" ADD CONSTRAINT "experience_biodataId_fkey" FOREIGN KEY ("biodataId") REFERENCES "biodata"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "inbox" ADD CONSTRAINT "inbox_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "inbox" ADD CONSTRAINT "inbox_taarufId_fkey" FOREIGN KEY ("taarufId") REFERENCES "taaruf"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
