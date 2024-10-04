@@ -14,7 +14,10 @@ import { IbadahService } from './ibadah.service';
 import { UpdateIbadahDto } from './dto/update-ibadah.dto';
 import { Prisma } from '@prisma/client';
 import { Ibadah } from './ibadah.interface';
+import { ApiTags } from '@nestjs/swagger';
+import { GetIbadahDoc, PatchIbadahDoc } from './ibadah.doc';
 
+@ApiTags('Ibadah')
 @Controller('ibadah')
 export class IbadahController {
     constructor(
@@ -22,6 +25,7 @@ export class IbadahController {
         private readonly biodataService: BiodataService,
     ) {}
 
+    @GetIbadahDoc()
     @Roles(Role.Member)
     @Get()
     async findOne(@Request() req: any): Promise<Ibadah> {
@@ -40,7 +44,8 @@ export class IbadahController {
             throw error;
         }
     }
-
+    
+    @PatchIbadahDoc()
     @Roles(Role.Member)
     @Patch()
     async update(

@@ -6,7 +6,10 @@ import { BiodataService } from 'src/biodata/biodata.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { Prisma } from '@prisma/client';
+import { ApiTags } from '@nestjs/swagger';
+import { GetMarriagePreparationsDoc, PatchMarriagePreparationsDoc } from './marriage_preparation.doc';
 
+@ApiTags('Marriage Preparation')
 @Controller('marriage_preparation')
 export class MarriagePreparationController {
     constructor(
@@ -14,6 +17,7 @@ export class MarriagePreparationController {
         private readonly biodataService: BiodataService
     ) { }
 
+    @GetMarriagePreparationsDoc()
     @Roles(Role.Member)
     @Get()
     async findOne(@Request() req: any) {
@@ -31,6 +35,7 @@ export class MarriagePreparationController {
         }
     }
 
+    @PatchMarriagePreparationsDoc()
     @Roles(Role.Member)
     @Patch()
     async update(@Request() req: any, @Body(new ValidationPipe()) data: UpdateMarriagePreparationDto) {
