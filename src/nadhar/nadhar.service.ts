@@ -3,6 +3,7 @@ import { CreateNadharDto } from './dto/create-nadhar.dto';
 import { UpdateNadharDto } from './dto/update-nadhar.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Nadhar } from './nadhar.interface';
+import { ApprovalStatus } from '@prisma/client';
 
 @Injectable()
 export class NadharService {
@@ -23,10 +24,14 @@ export class NadharService {
     async create(data: CreateNadharDto, userId: string, taarufid: string): Promise<Nadhar> {
         const taaruf = await this.prisma.taaruf.findFirst({
             //supaya hanya mendapatkan punya user dan yang status approved
-            where: { id: taarufid, userId: userId, approval: { status: 'Yes' } },
+            where: {
+                id: taarufid, userId: userId,
+                // approval: { status: 'Yes' }
+            },
             include: {
-                approval: true,
                 nadhars: true,
+                khitbahs: true,
+                akads: true,
             }
         });
 
@@ -34,7 +39,7 @@ export class NadharService {
         if (!taaruf) throw new NotFoundException('Data taaruf tidak ditemukan');
 
         // check apakah nadhar sudah disetujui atau belum
-        const has_approved_nadhar = taaruf.nadhars.some(nadhar => nadhar.status == 'Yes');
+        const has_approved_nadhar = taaruf.nadhars.some(nadhar => nadhar.status == ApprovalStatus.Approved);
         if (has_approved_nadhar) throw new BadRequestException('Nadhar anda sudah disetujui.');
 
         //create nadhor dengan status pending
@@ -44,8 +49,8 @@ export class NadharService {
                 Taaruf: { connect: { id: taaruf.id } },
                 schedule: data.schedule,
                 message: data.message || '',
-                reply: data.reply || '',
-                status: 'Pending'
+                requestBy: { connect: { id: userId } },
+                status: ApprovalStatus.Pending
             },
         });
         return result;
@@ -57,7 +62,7 @@ export class NadharService {
         if (!nadhar) throw new NotFoundException();
 
         //check if nadhar was approved, if (approved) => not allowed to update/change data
-        if (nadhar.status == 'Yes') throw new BadRequestException('Nadhar sudah disetujui, tidak bisa mengubah data');
+        if (nadhar.status == ApprovalStatus.Approved) throw new BadRequestException('Nadhar sudah disetujui, tidak bisa mengubah data');
 
         const result = await this.prisma.nadhar.update({
             where: { id },
@@ -75,12 +80,12 @@ export class NadharService {
         if (!nadhar) throw new NotFoundException();
 
         //check if nadhar was approved, if (approved) => not allowed to update/change data
-        if (nadhar.status == 'Yes') throw new BadRequestException('Nadhar sudah disetujui, tidak bisa mengubah data');
+        if (nadhar.status == ApprovalStatus.Approved) throw new BadRequestException('Nadhar sudah disetujui, tidak bisa mengubah data');
 
         const result = await this.prisma.nadhar.update({
             where: { id },
             data: {
-                status: 'No'
+                status: ApprovalStatus.Rejected
             }
         })
         return result;
@@ -92,12 +97,12 @@ export class NadharService {
         if (!nadhar) throw new NotFoundException();
 
         //check if nadhar was approved, if (approved) => not allowed to update/change data
-        if (nadhar.status == 'Yes') throw new BadRequestException('Nadhar sudah disetujui, tidak bisa mengubah data');
+        if (nadhar.status == ApprovalStatus.Approved) throw new BadRequestException('Nadhar sudah disetujui, tidak bisa mengubah data');
 
         const result = await this.prisma.nadhar.update({
             where: { id },
             data: {
-                status: 'Yes'
+                status: ApprovalStatus.Approved
             }
         })
         return result;
@@ -108,12 +113,12 @@ export class NadharService {
         if (!nadhar) throw new NotFoundException();
 
         //check if nadhar was approved, if (approved) => not allowed to update/change data
-        if (nadhar.status == 'Yes') throw new BadRequestException('Nadhar sudah disetujui, tidak bisa mengubah data');
+        if (nadhar.status == ApprovalStatus.Approved) throw new BadRequestException('Nadhar sudah disetujui, tidak bisa mengubah data');
 
         const result = await this.prisma.nadhar.update({
             where: { id },
             data: {
-                status: 'No'
+                status: ApprovalStatus.Rejected
             }
         })
         return result;

@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient, TaarufProcess } from '@prisma/client';
 
 export async function taarufSeed(prisma: PrismaClient) {
     console.log('\nSeed Start: Taaruf');
@@ -38,8 +38,10 @@ export async function taarufSeed(prisma: PrismaClient) {
             opposite.Taaruf.length == 0 ||
             opposite.Taaruf_candidate.length == 0
         ) {
+            const title = `${user.firstname} telah mengajukan permintaan taaruf`;
+            const message = 'Mari bertaaruf';
             const data: Prisma.TaarufCreateInput = {
-                message: 'Mari bertaaruf',
+                message,
                 user: { connect: { id: user.id } },
                 candidate: { connect: { id: opposite.id } },
             };
@@ -51,8 +53,17 @@ export async function taarufSeed(prisma: PrismaClient) {
                 // CREATE inbox sender & receiver
                 const dataInbox: Prisma.InboxCreateWithoutUserInput = {
                     taaruf: { connect: { id: taaruf.id } },
-                    title: `${user.firstname} telah mengajukan permintaan taaruf`,
+                    title,
                     datetime: new Date(),
+                    messages: {
+                        create: {
+                            sender: { connect: { id: user.id } },
+                            receiver: { connect: { id: opposite.id } },
+                            message,
+                            title,
+                            taaruf_process: TaarufProcess.TaarufRequest
+                        }
+                    }
                 }
                 const dataSenderInbox: Prisma.InboxCreateInput = {
                     ...dataInbox,

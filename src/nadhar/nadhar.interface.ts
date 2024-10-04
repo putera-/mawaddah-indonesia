@@ -1,5 +1,5 @@
 import {
-    AprovalStatus
+    ApprovalStatus
 } from '@prisma/client'
 import { Response, Taaruf } from 'src/taaruf/taaruf.interface';
 import { User } from 'src/users/user.interface';
@@ -11,7 +11,7 @@ export interface Nadhar {
     requestBy?: User
     requestById: string
     schedule: Date;
-    status: AprovalStatus;
+    status: ApprovalStatus;
     message: string;
     response?: Response
     createdAt: Date;

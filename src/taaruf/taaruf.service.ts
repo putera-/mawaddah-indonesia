@@ -58,10 +58,20 @@ export class TaarufService {
 
         {
             // CREATE inbox sender & receiver
+            const title = `${user.firstname} telah mengajukan permintaan taaruf`;
             const dataInbox: Prisma.InboxCreateWithoutUserInput = {
                 taaruf: { connect: { id: taaruf.id } },
-                title: `${user.firstname} telah mengajukan permintaan taaruf`,
+                title,
                 datetime: new Date(),
+                messages: {
+                    create: {
+                        sender: { connect: { id: userId } },
+                        receiver: { connect: { id: candidate.id } },
+                        message,
+                        title,
+                        taaruf_process: TaarufProcess.TaarufRequest
+                    }
+                }
             }
             await this.inboxService.create(userId, candidate.id, dataInbox);
         }
@@ -136,8 +146,8 @@ export class TaarufService {
         const update_taaruf = await this.PrismaService.taaruf.update({
             where: { id, candidateId },
             data: {
-                status: ApprovalStatus.Yes,
-                latestProcess: TaarufProcess.Taaruf,
+                status: ApprovalStatus.Approved,
+                taaruf_process: TaarufProcess.TaarufApproved,
                 response: {
                     create: response
                 }
@@ -150,10 +160,20 @@ export class TaarufService {
                 where: { id: candidateId },
             });
             // CREATE inbox sender & receiver
+            const title = `${user.firstname} telah menerima permintaan taaruf`;
             const dataInbox: Prisma.InboxCreateWithoutUserInput = {
                 taaruf: { connect: { id: taaruf.id } },
-                title: `${user.firstname} telah menerima permintaan taaruf`,
+                title,
                 datetime: new Date(),
+                messages: {
+                    create: {
+                        sender: { connect: { id: candidateId } },
+                        receiver: { connect: { id: taaruf.userId } },
+                        message,
+                        title,
+                        taaruf_process: TaarufProcess.TaarufApproved
+                    }
+                }
             }
             await this.inboxService.create(candidateId, taaruf.userId, dataInbox);
         }
@@ -178,8 +198,8 @@ export class TaarufService {
             where: { id, candidateId },
             data: {
                 active: false,
-                status: ApprovalStatus.No,
-                latestProcess: TaarufProcess.Taaruf,
+                status: ApprovalStatus.Rejected,
+                taaruf_process: TaarufProcess.TaarufRejected,
                 response: {
                     create: response
                 }
@@ -192,10 +212,21 @@ export class TaarufService {
                 where: { id: candidateId },
             });
             // CREATE inbox sender & receiver
+            const title = `${user.firstname} menolak permintaan taaruf`;
             const dataInbox: Prisma.InboxCreateWithoutUserInput = {
                 taaruf: { connect: { id: taaruf.id } },
-                title: `${user.firstname} menolak permintaan taaruf`,
+                title,
                 datetime: new Date(),
+                messages: {
+                    create: {
+                        sender: { connect: { id: candidateId } },
+                        receiver: { connect: { id: taaruf.userId } },
+                        message,
+                        title,
+                        taaruf_process: TaarufProcess.TaarufRejected
+                    }
+                }
+
             }
             await this.inboxService.create(candidateId, taaruf.userId, dataInbox);
         }
@@ -231,10 +262,24 @@ export class TaarufService {
             });
 
             // CREATE inbox sender & receiver
+            const title = `${user.firstname} telah membatalkan taaruf`;
+
+            // get receiverId, karena yang mencancel bisa candidate maupun yang mengajukan taaruf
+            const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
+
             const dataInbox: Prisma.InboxCreateWithoutUserInput = {
                 taaruf: { connect: { id: taaruf.id } },
-                title: `${user.firstname} telah membatalkan taaruf`,
+                title,
                 datetime: new Date(),
+                messages: {
+                    create: {
+                        sender: { connect: { id: userId } },
+                        receiver: { connect: { id: receiverId } },
+                        message,
+                        title,
+                        taaruf_process: TaarufProcess.Canceled
+                    }
+                }
             }
             await this.inboxService.create(userId, taaruf.candidateId, dataInbox);
         }

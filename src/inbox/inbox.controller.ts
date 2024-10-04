@@ -1,34 +1,51 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Query } from '@nestjs/common';
 import { InboxService } from './inbox.service';
 import { CreateInboxDto } from './dto/create-inbox.dto';
 import { UpdateInboxDto } from './dto/update-inbox.dto';
 
 @Controller('inbox')
 export class InboxController {
-  constructor(private readonly inboxService: InboxService) {}
+    constructor(private readonly inboxService: InboxService) { }
 
-  @Post()
-  create(@Body() createInboxDto: CreateInboxDto) {
-    return this.inboxService.create(createInboxDto);
-  }
+    //   @Post()
+    //   create(@Body() createInboxDto: CreateInboxDto) {
+    //     return this.inboxService.create(createInboxDto);
+    //   }
 
-  @Get()
-  findAll() {
-    return this.inboxService.findAll();
-  }
+    @Get()
+    findAll(
+        @Req() req: any,
+        @Query('page') page: number,
+        @Query('limit') limit: number,
+    ) {
+        try {
+            limit = limit ? +limit : 10;
+            page = page ? +page : 1;
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.inboxService.findOne(+id);
-  }
+            return this.inboxService.findAll(req.user.id, page, limit);
+        } catch (error) {
+            throw error;
+        }
+    }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInboxDto: UpdateInboxDto) {
-    return this.inboxService.update(+id, updateInboxDto);
-  }
+    @Get(':id')
+    findOne(
+        @Param('id') id: string,
+    ) {
+        try {
+            return this.inboxService.findOne(id);
+        } catch (error) {
+            throw error;
+        }
+    }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.inboxService.remove(+id);
-  }
+    //   @Patch(':id')
+    //   update(@Param('id') id: string, @Body() updateInboxDto: UpdateInboxDto) {
+    //     return this.inboxService.update(+id, updateInboxDto);
+    //   }
+
+    //   @Delete(':id')
+    //   remove(@Param('id') id: string) {
+    //     return this.inboxService.remove(+id);
+    //   }
 }

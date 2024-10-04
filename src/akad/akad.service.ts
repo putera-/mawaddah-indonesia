@@ -41,7 +41,7 @@ export class AkadService {
         });
 
         const taaruf = await this.prisma.taaruf.findFirst({
-            where: { id: taarufid, khitbahs: { some: { status: 'Yes' } } },
+            where: { id: taarufid, khitbahs: { some: { status: ApprovalStatus.Approved } } },
             include: { khitbahs: true },
             orderBy: { createdAt: 'desc' },
             take: 1,
@@ -73,7 +73,7 @@ export class AkadService {
             where: { id },
         })
         //check if akad was approved, if (approved) => not allowed to update/change data
-        if (akad.status == 'Yes')
+        if (akad.status == ApprovalStatus.Approved)
             throw new BadRequestException(
                 'Akad sudah disetujui, tidak bisa mengubah data',
             );
@@ -93,7 +93,7 @@ export class AkadService {
         });
 
         //check if akad was approved, if (approved) => not allowed to update/change data
-        if (akad.status == 'Yes')
+        if (akad.status == ApprovalStatus.Approved)
             throw new BadRequestException(
                 'Akad sudah disetujui, tidak bisa mengubah data',
             );
@@ -101,7 +101,7 @@ export class AkadService {
         const result = await this.prisma.akad.update({
             where: { id: akad.id },
             data: {
-                status: 'No',
+                status: ApprovalStatus.Rejected,
             },
         });
         return result;
@@ -113,7 +113,7 @@ export class AkadService {
         })
 
         //check if akad was approved, if (approved) => not allowed to update/change data
-        if (akad.status == 'No')
+        if (akad.status == ApprovalStatus.Rejected)
             throw new BadRequestException(
                 'Akad sudah ditolak, tidak bisa mengubah data',
             );
@@ -121,7 +121,7 @@ export class AkadService {
         const result = await this.prisma.akad.update({
             where: { id: akad.id },
             data: {
-                status: 'Yes',
+                status: ApprovalStatus.Approved,
             },
         });
         return result;
@@ -132,7 +132,7 @@ export class AkadService {
             where: { id },
         })
         //check if akad was approved, if (approved) => not allowed to update/change data
-        if (akad.status == 'Yes')
+        if (akad.status == ApprovalStatus.Approved)
             throw new BadRequestException(
                 'Akad sudah disetujui, tidak bisa mengubah data',
             );
@@ -140,7 +140,7 @@ export class AkadService {
         const result = await this.prisma.akad.update({
             where: { id: akad.id },
             data: {
-                status: 'No',
+                status: ApprovalStatus.Rejected,
             },
         });
         return result;

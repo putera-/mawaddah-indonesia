@@ -48,6 +48,8 @@ model User {
     Khitbah            Khitbah[]
     Akad               Akad[]
     Response           Response[]
+    MessageSender      InboxMessage[]      @relation("MessageSender")
+    MessageReceiver    InboxMessage[]      @relation("MessageReceiver")
 
     @@map("user")
 }
@@ -457,36 +459,40 @@ model Bookmark {
 
 // TAARUF PROGGRESS
 model Taaruf {
-    id            String             @id @default(uuid())
-    user          User               @relation(name: "TaarufUser", fields: [userId], references: [id])
-    userId        String // This field holds the foreign key
-    candidate     User               @relation(name: "TaarufCandidates", fields: [candidateId], references: [id])
-    candidateId   String // This field holds the foreign key
-    active        Boolean            @default(true)
-    status        ApprovalStatus     @default(Pending)
-    message       String             @db.Text
-    latestProcess TaarufProcess      @default(TaarufRequest)
-    nadhars       Nadhar[]
-    khitbahs      Khitbah[]
-    akads         Akad[]
-    cancelation   TaarufCancelation?
-    Inbox         Inbox[]
-    response      Response?
-    createdAt     DateTime           @default(now())
-    updatedAt     DateTime           @default(now()) @updatedAt
+    id             String             @id @default(uuid())
+    user           User               @relation(name: "TaarufUser", fields: [userId], references: [id])
+    userId         String // This field holds the foreign key
+    candidate      User               @relation(name: "TaarufCandidates", fields: [candidateId], references: [id])
+    candidateId    String // This field holds the foreign key
+    active         Boolean            @default(true)
+    status         ApprovalStatus     @default(Pending)
+    message        String             @db.Text
+    taaruf_process TaarufProcess      @default(TaarufRequest)
+    nadhars        Nadhar[]
+    khitbahs       Khitbah[]
+    akads          Akad[]
+    cancelation    TaarufCancelation?
+    Inbox          Inbox[]
+    response       Response?
+    createdAt      DateTime           @default(now())
+    updatedAt      DateTime           @default(now()) @updatedAt
 
     @@map("taaruf")
 }
 
 enum TaarufProcess {
     TaarufRequest
-    Taaruf
+    TaarufApproved
+    TaarufRejected
     NadharRequest
-    Nadhar
+    NadharApproved
+    NadharRejected
     KhitbahRequest
-    Khitbah
+    KhitbahAppproved
+    KhitbahRejected
     AkadRequest
-    Akad
+    AkadApproved
+    AkadRejected
     Completed
     Canceled
 }
@@ -576,8 +582,8 @@ model Response {
 
 enum ApprovalStatus {
     Pending
-    Yes
-    No
+    Approved
+    Rejected
     Canceled
 }
 
@@ -720,17 +726,34 @@ enum ExperienceType {
 }
 
 model Inbox {
-    id           String   @id @default(uuid())
-    user         User     @relation(fields: [userId], references: [id])
+    id           String         @id @default(uuid())
+    user         User           @relation(fields: [userId], references: [id])
     userId       String
-    taaruf       Taaruf   @relation(fields: [taarufId], references: [id])
+    taaruf       Taaruf         @relation(fields: [taarufId], references: [id])
     taarufId     String
-    title        String   @db.VarChar(255)
-    read         Boolean  @default(false)
-    is_favourite Boolean  @default(false)
-    createdAt    DateTime @default(now()) // first date time created
-    datetime     DateTime @default(now()) @updatedAt // date time to notify user
+    title        String         @db.VarChar(255)
+    read         Boolean        @default(false)
+    is_favourite Boolean        @default(false)
+    messages     InboxMessage[]
+    createdAt    DateTime       @default(now()) // first date time created
+    datetime     DateTime       @default(now()) @updatedAt // date time to notify user
 
     @@unique([userId, taarufId])
     @@map("inbox")
+}
+
+model InboxMessage {
+    id             String        @id @default(uuid())
+    Inbox          Inbox?        @relation(fields: [inboxId], references: [id])
+    inboxId        String?
+    sender         User          @relation(name: "MessageSender", fields: [senderId], references: [id])
+    senderId       String
+    receiver       User          @relation(name: "MessageReceiver", fields: [receiverId], references: [id])
+    receiverId     String
+    taaruf_process TaarufProcess
+    title          String        @db.VarChar(255)
+    message        String        @db.Text
+    createdAt      DateTime      @default(now())
+
+    @@map("inbox_message")
 }

@@ -38,10 +38,10 @@ CREATE TYPE "relationship" AS ENUM ('ayah', 'ibu', 'kakak_pria', 'kakak_wanita',
 CREATE TYPE "religion" AS ENUM ('islam', 'non_islam');
 
 -- CreateEnum
-CREATE TYPE "TaarufProcess" AS ENUM ('TaarufRequest', 'Taaruf', 'NadharRequest', 'Nadhar', 'KhitbahRequest', 'Khitbah', 'AkadRequest', 'Akad', 'Completed', 'Canceled');
+CREATE TYPE "TaarufProcess" AS ENUM ('TaarufRequest', 'TaarufApproved', 'TaarufRejected', 'NadharRequest', 'NadharApproved', 'NadharRejected', 'KhitbahRequest', 'KhitbahAppproved', 'KhitbahRejected', 'AkadRequest', 'AkadApproved', 'AkadRejected', 'Completed', 'Canceled');
 
 -- CreateEnum
-CREATE TYPE "ApprovalStatus" AS ENUM ('Pending', 'Yes', 'No', 'Canceled');
+CREATE TYPE "ApprovalStatus" AS ENUM ('Pending', 'Approved', 'Rejected', 'Canceled');
 
 -- CreateEnum
 CREATE TYPE "ShalatFardu" AS ENUM ('rutin_di_masjid', 'kadang_di_masjid', 'bolong_bolong', 'pernah_sekali', 'belum_pernah');
@@ -372,7 +372,7 @@ CREATE TABLE "taaruf" (
     "active" BOOLEAN NOT NULL DEFAULT true,
     "status" "ApprovalStatus" NOT NULL DEFAULT 'Pending',
     "message" TEXT NOT NULL,
-    "latestProcess" "TaarufProcess" NOT NULL DEFAULT 'TaarufRequest',
+    "taaruf_process" "TaarufProcess" NOT NULL DEFAULT 'TaarufRequest',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -576,6 +576,20 @@ CREATE TABLE "inbox" (
     "datetime" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "inbox_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "inbox_message" (
+    "id" TEXT NOT NULL,
+    "inboxId" TEXT,
+    "senderId" TEXT NOT NULL,
+    "receiverId" TEXT NOT NULL,
+    "taaruf_process" "TaarufProcess" NOT NULL,
+    "title" VARCHAR(255) NOT NULL,
+    "message" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "inbox_message_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -787,3 +801,12 @@ ALTER TABLE "inbox" ADD CONSTRAINT "inbox_userId_fkey" FOREIGN KEY ("userId") RE
 
 -- AddForeignKey
 ALTER TABLE "inbox" ADD CONSTRAINT "inbox_taarufId_fkey" FOREIGN KEY ("taarufId") REFERENCES "taaruf"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "inbox_message" ADD CONSTRAINT "inbox_message_inboxId_fkey" FOREIGN KEY ("inboxId") REFERENCES "inbox"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "inbox_message" ADD CONSTRAINT "inbox_message_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "inbox_message" ADD CONSTRAINT "inbox_message_receiverId_fkey" FOREIGN KEY ("receiverId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

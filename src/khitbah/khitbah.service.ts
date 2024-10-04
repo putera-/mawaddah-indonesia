@@ -3,6 +3,7 @@ import { CreateKhitbahDto } from './dto/create-khitbah.dto';
 import { UpdateKhitbahDto } from './dto/update-khitbah.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Khitbah } from './khitbah.interface';
+import { ApprovalStatus } from '@prisma/client';
 
 @Injectable()
 export class KhitbahService {
@@ -12,9 +13,9 @@ export class KhitbahService {
         return await this.prisma.taaruf.findMany({
             where: { userId },
             include: {
-                approval: true,
+                nadhars: true,
                 khitbahs: true,
-                nadhars: true
+                akads: true,
             }
         });
     }
@@ -22,15 +23,19 @@ export class KhitbahService {
     async create(data: CreateKhitbahDto, userId: string, id: string) {
         const target = await this.prisma.taaruf.findFirst({
             //supaya hanya mendapatkan punya user dan yang status approved
-            where: { id: id, userId: userId, approval: { status: 'Yes' } },
+            where: {
+                id: id, userId: userId,
+                // approval: { status: 'Yes' }
+            },
             include: {
-                approval: true,
-                nadhars: true
+                nadhars: true,
+                khitbahs: true,
+                akads: true,
             }
         });
 
         const taaruf = await this.prisma.taaruf.findFirst({
-            where: { id: id, nadhars: { some: { status: 'Yes' } } },
+            where: { id: id, nadhars: { some: { status: ApprovalStatus.Approved } } },
             include: { nadhars: true },
             orderBy: { createdAt: 'desc' },
             take: 1,
@@ -49,8 +54,8 @@ export class KhitbahService {
                 Taaruf: { connect: { id: target.id } },
                 schedule: data.schedule,
                 message: data.message || '',
-                reply: data.reply || '',
-                status: 'Pending'
+                requestBy: { connect: { id: userId } },
+                status: ApprovalStatus.Pending
             },
         });
         return data;
@@ -60,7 +65,7 @@ export class KhitbahService {
         const khitbah = await this.findOne(id);
 
         //check if nadhar was approved, if (approved) => not allowed to update/change data
-        if (khitbah.status == 'Yes') throw new BadRequestException('Khitbah sudah disetujui, tidak bisa mengubah data');
+        if (khitbah.status == ApprovalStatus.Approved) throw new BadRequestException('Khitbah sudah disetujui, tidak bisa mengubah data');
 
         const result = await this.prisma.khitbah.update({
             where: { id: khitbah.id },
@@ -75,12 +80,12 @@ export class KhitbahService {
         const khitbah = await this.findOne(id);
 
         //check if khitbah was approved, if (approved) => not allowed to update/change data
-        if (khitbah.status == 'Yes') throw new BadRequestException('Khitbah sudah disetujui, tidak bisa mengubah data');
+        if (khitbah.status == ApprovalStatus.Approved) throw new BadRequestException('Khitbah sudah disetujui, tidak bisa mengubah data');
 
         const result = await this.prisma.khitbah.update({
             where: { id: khitbah.id },
             data: {
-                status: 'No'
+                status: ApprovalStatus.Rejected
             }
         })
         return result;
@@ -90,12 +95,12 @@ export class KhitbahService {
         const khitbah = await this.findOne(id);
 
         //check if khitbah was approved, if (approved) => not allowed to update/change data
-        if (khitbah.status == 'No') throw new BadRequestException('Khitbah sudah ditolak, tidak bisa mengubah data');
+        if (khitbah.status == ApprovalStatus.Rejected) throw new BadRequestException('Khitbah sudah ditolak, tidak bisa mengubah data');
 
         const result = await this.prisma.khitbah.update({
             where: { id: khitbah.id },
             data: {
-                status: 'Yes'
+                status: ApprovalStatus.Approved
             }
         })
         return result;
@@ -105,12 +110,12 @@ export class KhitbahService {
         const khitbah = await this.findOne(id);
 
         //check if khitbah was approved, if (approved) => not allowed to update/change data
-        if (khitbah.status == 'Yes') throw new BadRequestException('Khitbah sudah disetujui, tidak bisa mengubah data');
+        if (khitbah.status == ApprovalStatus.Approved) throw new BadRequestException('Khitbah sudah disetujui, tidak bisa mengubah data');
 
         const result = await this.prisma.khitbah.update({
             where: { id: khitbah.id },
             data: {
-                status: 'No'
+                status: ApprovalStatus.Rejected
             }
         })
         return result;

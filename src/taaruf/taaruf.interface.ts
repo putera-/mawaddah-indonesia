@@ -12,7 +12,7 @@ export interface Taaruf {
     candidate?: User;
     candidateId: string;
     status: ApprovalStatus;
-    latestProcess: TaarufProcess
+    taaruf_process: TaarufProcess
     message: string;
     approval?: TaarufApproval;
     nadhars?: Nadhar[];
