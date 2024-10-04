@@ -4,11 +4,13 @@ import { UpdateInboxDto } from './dto/update-inbox.dto';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { Inbox } from './inbox.interace';
+import { UsersService } from 'src/users/user.service';
 
 @Injectable()
 export class InboxService {
     constructor(
         private prisma: PrismaService,
+        private userService: UsersService,
     ) { }
 
     async create(senderId: string, receiverId: string, data: Prisma.InboxCreateWithoutUserInput): Promise<void> {
@@ -32,11 +34,17 @@ export class InboxService {
         return;
     }
 
-    async findAll(userId: string, page = 1, limit = 10): Promise<Pagination<Inbox[]>> {
+    async findAll(userId: string, page = 1, limit = 10) {
         const skip = (page - 1) * limit;
-        const [total, data] = await Promise.all([
+        const [total, total_read, total_unread, data] = await Promise.all([
             this.prisma.inbox.count({
                 where: { userId },
+            }),
+            this.prisma.inbox.count({
+                where: { userId, read: true },
+            }),
+            this.prisma.inbox.count({
+                where: { userId, read: false },
             }),
             this.prisma.inbox.findMany({
                 where: { userId },
@@ -50,6 +58,8 @@ export class InboxService {
 
         return {
             data: inboxes,
+            total_read,
+            total_unread,
             total,
             page: +page,
             maxPages: Math.ceil(total / limit),
@@ -57,9 +67,9 @@ export class InboxService {
         };
     }
 
-    findOne(id: string) {
+    async findOne(id: string) {
         // TODO hide foto candidate
-        return this.prisma.inbox.findFirst({
+        const inbox = await this.prisma.inbox.findFirst({
             where: { id },
             include: {
                 messages: true,
@@ -67,6 +77,10 @@ export class InboxService {
                 taaruf: true
             }
         });
+
+        this.userService.formatGray(inbox.user);
+
+        return inbox;
     }
 
     // update(id: number, updateInboxDto: UpdateInboxDto) {
