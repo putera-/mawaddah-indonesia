@@ -18,13 +18,22 @@ import { Role } from 'src/roles/role.enums';
 import { UpdatePhysicalCriteriaDto } from './dto/update-physical_criteria.dto';
 import { connect } from 'http2';
 import { Prisma } from '@prisma/client';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+    GetPhysicalCriteriaByIdDoc,
+    UpdatePhysicalCriteriaDoc,
+} from './physical_criteria.doc';
 
+@ApiTags('Physical Criteria')
+@ApiBearerAuth()
 @Controller('physical-criteria')
 export class PhysicalCriteriaController {
     constructor(
         private readonly physicalCriteriaService: PhysicalCriteriaService,
         private readonly biodataService: BiodataService,
-    ) { }
+    ) {}
+
+    @GetPhysicalCriteriaByIdDoc()
     @Roles(Role.Member)
     @Get()
     async findOne(@Request() req: any) {
@@ -33,7 +42,10 @@ export class PhysicalCriteriaController {
             const biodata = await this.biodataService.findMe(userId);
 
             // check apakah biodata!= null > jika masih null throw error
-            if (!biodata) throw new BadRequestException();
+            if (!biodata)
+                throw new BadRequestException(
+                    'Silakan isi biodata terlebih dahulu',
+                );
 
             return this.physicalCriteriaService.findOne(userId, biodata.id);
         } catch (error) {
@@ -41,6 +53,7 @@ export class PhysicalCriteriaController {
         }
     }
 
+    @UpdatePhysicalCriteriaDoc()
     @Roles(Role.Member)
     @Patch()
     async update(
@@ -52,12 +65,15 @@ export class PhysicalCriteriaController {
             const biodata = await this.biodataService.findMe(userId);
 
             // check apakah biodata!= null > jika masih null throw error
-            if (!biodata) throw new BadRequestException();
+            if (!biodata)
+                throw new BadRequestException(
+                    'Silakan isi biodata terlebih dahulu',
+                );
 
             const dataSave: Prisma.PhysicalCriteriaCreateInput = {
                 ...data,
-                biodata: { connect: { id: biodata.id } }
-            }
+                biodata: { connect: { id: biodata.id } },
+            };
 
             return this.physicalCriteriaService.upsert(biodata.id, dataSave);
         } catch (error) {
