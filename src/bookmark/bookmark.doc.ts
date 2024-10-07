@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 
 export function CreateBookmarkDoc() {
     return applyDecorators(
@@ -37,15 +37,27 @@ export function CreateBookmarkDoc() {
 export function GetAllBookmarkDoc() {
     return applyDecorators(
         ApiOperation({ summary: 'Get All Bookmark. Restricted for Member' }),
+        ApiQuery({
+            name: 'limit',
+            required: false,
+            type: Number,
+            description: 'Number of item per page',
+        }),
+        ApiQuery({
+            name: 'page',
+            required: false,
+            type: Number,
+            description: 'Page number',
+        }),
         ApiResponse({
             status: 200,
             description: 'Success',
             schema: {
                 example: {
-                    limit: 10,
-                    total: 2,
                     page: 1,
+                    limit: 10,
                     maxPages: 1,
+                    total: 2,
                     data: sampleBookmarks,
                 },
             },
