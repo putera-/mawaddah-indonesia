@@ -7,8 +7,9 @@ import { BiodataService } from 'src/biodata/biodata.service';
 import { LifeGoalsService } from './life_goals.service';
 import { Prisma } from '@prisma/client';
 import { GetLifeGoalDoc, PatchLifeGoalDoc } from './life_goals,doc';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @ApiTags('life-goals')
 @Controller('life-goals')
 export class LifeGoalsController {
@@ -52,7 +53,7 @@ export class LifeGoalsController {
                 ...data,
                 biodata: { connect: { id: biodata.id } }
             }
-            
+
         } catch (error) {
             throw error;
         }
