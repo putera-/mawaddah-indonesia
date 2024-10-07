@@ -25,7 +25,6 @@ import { Public } from 'src/auth/auth.metadata';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Gallery')
-@ApiBearerAuth()
 @Controller('galleries')
 export class GalleriesController {
     constructor(
@@ -34,6 +33,7 @@ export class GalleriesController {
         private readonly appService: AppService,
     ) {}
 
+    @ApiBearerAuth()
     @Roles(Role.Superadmin, Role.Admin)
     @Post()
     @UseInterceptors(FileInterceptor('photo'))
@@ -84,7 +84,7 @@ export class GalleriesController {
             throw error;
         }
     }
-    
+
     //public karena galleries ditampilkan di landing page
     @Public()
     @Get()
@@ -98,6 +98,7 @@ export class GalleriesController {
         return this.galleriesService.findOne(id);
     }
 
+    @ApiBearerAuth()
     @Roles(Role.Superadmin, Role.Admin)
     @Patch(':id')
     @UseInterceptors(FileInterceptor('photo'))
@@ -149,6 +150,7 @@ export class GalleriesController {
         }
     }
 
+    @ApiBearerAuth()
     @Roles(Role.Superadmin, Role.Admin)
     @Delete(':id')
     @HttpCode(204)
