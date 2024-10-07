@@ -145,7 +145,6 @@ export class TaarufService {
         if (taaruf.status == ApprovalStatus.Rejected) throw new BadRequestException('Taaruf telah ditolak, tidak bisa mengubah data');
 
         const response: Prisma.ResponseCreateInput = {
-            taaruf: { connect: { id } },
             message,
             responseBy: { connect: { id: candidateId } }
         }
@@ -196,7 +195,6 @@ export class TaarufService {
         if (!taaruf) throw new NotFoundException('Data tidak valid');
 
         const response: Prisma.ResponseCreateInput = {
-            taaruf: { connect: { id } },
             message,
             responseBy: { connect: { id: candidateId } }
         }

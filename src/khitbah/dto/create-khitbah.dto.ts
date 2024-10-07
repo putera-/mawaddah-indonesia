@@ -12,9 +12,4 @@ export class CreateKhitbahDto {
     @IsOptional()
     @IsString()
     message?: string
-
-    @ApiProperty()
-    @IsOptional()
-    @IsString()
-    reply?: string
 }

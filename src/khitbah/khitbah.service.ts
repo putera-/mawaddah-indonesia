@@ -132,7 +132,6 @@ export class KhitbahService {
         if (khitbah.status == ApprovalStatus.Rejected) throw new BadRequestException('Khitbah telah ditolak, tidak bisa mengubah data');
 
         const response: Prisma.ResponseCreateInput = {
-            khitbah: { connect: { id: khitbahId } },
             message,
             responseBy: { connect: { id: userId } }
         }
@@ -198,7 +197,7 @@ export class KhitbahService {
         if (khitbah.status == ApprovalStatus.Rejected) throw new BadRequestException('Khitbah telah ditolak, tidak bisa mengubah data');
 
         const response: Prisma.ResponseCreateInput = {
-            khitbah: { connect: { id: khitbahId } },
+            // : { connect: { id: khitbahId } },
             message,
             responseBy: { connect: { id: userId } }
         }
@@ -265,7 +264,6 @@ export class KhitbahService {
         if (khitbah.status == ApprovalStatus.Rejected) throw new BadRequestException('Khitbah telah ditolak, tidak bisa mengubah data');
 
         const response: Prisma.ResponseCreateInput = {
-            khitbah: { connect: { id: khitbahId } },
             message,
             responseBy: { connect: { id: userId } }
         }

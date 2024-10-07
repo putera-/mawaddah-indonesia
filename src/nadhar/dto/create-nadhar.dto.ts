@@ -12,10 +12,4 @@ export class CreateNadharDto {
     @IsOptional()
     @IsString()
     message?: string
-
-    @ApiProperty()
-    @IsOptional()
-    @IsString()
-    reply?: string
-
 }

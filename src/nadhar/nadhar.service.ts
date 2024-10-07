@@ -129,7 +129,6 @@ export class NadharService {
         if (nadhar.status == ApprovalStatus.Rejected) throw new BadRequestException('Nadhar telah ditolak, tidak bisa mengubah data');
 
         const response: Prisma.ResponseCreateInput = {
-            nadhar: { connect: { id: nadharId } },
             message,
             responseBy: { connect: { id: userId } }
         }
@@ -197,7 +196,6 @@ export class NadharService {
         if (nadhar.status == ApprovalStatus.Rejected) throw new BadRequestException('Nadhar telah ditolak, tidak bisa mengubah data');
 
         const response: Prisma.ResponseCreateInput = {
-            nadhar: { connect: { id: nadharId } },
             message,
             responseBy: { connect: { id: userId } }
         }
@@ -263,7 +261,6 @@ export class NadharService {
         if (nadhar.status == ApprovalStatus.Rejected) throw new BadRequestException('Nadhar telah ditolak, tidak bisa mengubah data');
 
         const response: Prisma.ResponseCreateInput = {
-            nadhar: { connect: { id: nadharId } },
             message,
             responseBy: { connect: { id: userId } }
         }

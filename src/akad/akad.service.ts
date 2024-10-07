@@ -144,7 +144,6 @@ export class AkadService {
         if (akad.status == ApprovalStatus.Rejected) throw new BadRequestException('Akad telah ditolak, tidak bisa mengubah data');
 
         const response: Prisma.ResponseCreateInput = {
-            akad: { connect: { id: akadId } },
             message,
             responseBy: { connect: { id: userId } }
         }
@@ -210,7 +209,6 @@ export class AkadService {
         if (akad.status == ApprovalStatus.Rejected) throw new BadRequestException('Akad telah ditolak, tidak bisa mengubah data');
 
         const response: Prisma.ResponseCreateInput = {
-            akad: { connect: { id: akadId } },
             message,
             responseBy: { connect: { id: userId } }
         }
@@ -277,7 +275,6 @@ export class AkadService {
         if (akad.status == ApprovalStatus.Rejected) throw new BadRequestException('Akad telah ditolak, tidak bisa mengubah data');
 
         const response: Prisma.ResponseCreateInput = {
-            akad: { connect: { id: akadId } },
             message,
             responseBy: { connect: { id: userId } }
         }
