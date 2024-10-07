@@ -13,9 +13,10 @@ import { ProvinceService } from './province.service';
 import { CreateProvinceDto } from './dto/create-province.dto';
 import { Role } from 'src/roles/role.enums';
 import { Roles } from 'src/roles/roles.decorator';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateProvinceDoc, DeleteProvinceById, GetProvinceAll, GetProvinceById, UpdateProvinceById } from './province.doc';
 
+@ApiBearerAuth()
 @ApiTags('Province')
 @Controller('province')
 export class ProvinceController {

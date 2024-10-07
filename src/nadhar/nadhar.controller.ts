@@ -6,9 +6,10 @@ import { Nadhar } from './nadhar.interface';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { ApproveNadharDoc, CancelNadharDoc, CreateNadharDoc, GetAllNadharDoc, GetByIdNadharDoc, RejectNadharDoc, UpdateNadharDoc } from './nadhar.doc';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { TaarufMessageDto } from 'src/taaruf/dto/taaruf-message.dto';
 
+@ApiBearerAuth()
 @ApiTags('Nadhar')
 @Controller('nadhar')
 export class NadharController {

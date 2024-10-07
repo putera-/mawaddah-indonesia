@@ -4,10 +4,11 @@ import { CreateKhitbahDto } from './dto/create-khitbah.dto';
 import { UpdateKhitbahDto } from './dto/update-khitbah.dto';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ApproveKhitbahDoc, CancelKhitbahDoc, CreateKhitbahDoc, GetAllKhitbahDoc, GetByIdKhitbahDoc, RejectKhitbahDoc, UpdateKhitbahDoc } from './khitbah.doc';
 import { TaarufMessageDto } from 'src/taaruf/dto/taaruf-message.dto';
 
+@ApiBearerAuth()
 @ApiTags('Khitbah')
 @Controller('khitbah')
 export class KhitbahController {

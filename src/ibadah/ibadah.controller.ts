@@ -14,9 +14,10 @@ import { IbadahService } from './ibadah.service';
 import { UpdateIbadahDto } from './dto/update-ibadah.dto';
 import { Prisma } from '@prisma/client';
 import { Ibadah } from './ibadah.interface';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GetIbadahDoc, PatchIbadahDoc } from './ibadah.doc';
 
+@ApiBearerAuth()
 @ApiTags('Ibadah')
 @Controller('ibadah')
 export class IbadahController {
@@ -44,7 +45,7 @@ export class IbadahController {
             throw error;
         }
     }
-    
+
     @PatchIbadahDoc()
     @Roles(Role.Member)
     @Patch()
