@@ -3,6 +3,7 @@ import { faker } from '@faker-js/faker';
 import { User } from 'src/users/user.interface';
 import { Nadhar } from 'src/nadhar/nadhar.interface';
 import { Khitbah } from 'src/khitbah/khitbah.interface';
+import { Akad } from 'src/akad/akad.interface';
 
 let _prisma: PrismaClient;
 
@@ -136,6 +137,8 @@ export async function taarufSeed(prisma: PrismaClient) {
                 await sendMessageAndInbox(taaruf.id, requester.id, responder.id, title, message);
             }
 
+            if (!requestNadhar) continue;
+
             // RESPONSE NADHAR
             const approveNadhar = faker.datatype.boolean();
             {
@@ -211,6 +214,8 @@ export async function taarufSeed(prisma: PrismaClient) {
                 await sendMessageAndInbox(taaruf.id, requester.id, responder.id, title, message);
             }
 
+            if (!requestKhitbah) continue;
+
             // RESPONSE KHITBAH
             const approveKhitbah = faker.datatype.boolean();
             {
@@ -245,12 +250,87 @@ export async function taarufSeed(prisma: PrismaClient) {
                 });
 
                 // CREATE inbox sender & receiver
-                const title = `${responder.firstname} telah ${approveNadhar ? 'menerima' : 'menolak'} permintaan khitbah`;
+                const title = `${responder.firstname} telah ${approveKhitbah ? 'menerima' : 'menolak'} permintaan khitbah`;
 
                 await sendMessageAndInbox(taaruf.id, responder.id, requester.id, title, messageResponseKhitbah);
             }
             // STOP if approval is rejected
             if (!approveKhitbah) continue;
+
+            // REQUEST AKAD
+            const requestAkad = faker.datatype.boolean();
+            console.log({ requestAkad });
+            schedule = faker.date.future();
+
+            randomRequester = faker.datatype.boolean();;
+            requester = randomRequester ? user : candidate;
+            responder = randomRequester ? candidate : user;
+            let akadData: Akad;
+
+            if (requestAkad) {
+                const title = `${requester.firstname} telah mengajukan permintaan akad`;
+                const message = 'Yuk Nikah';
+                akadData = await prisma.akad.create({
+                    data: {
+                        Taaruf: { connect: { id: taaruf.id } },
+                        schedule,
+                        message,
+                        requestBy: { connect: { id: requester.id } },
+                        status: ApprovalStatus.Pending
+                    },
+                });
+
+                // update taaruf to Akad Request
+                await prisma.taaruf.update({
+                    where: { id: taaruf.id },
+                    data: {
+                        taaruf_process: TaarufProcess.AkadRequest
+                    }
+                });
+                await sendMessageAndInbox(taaruf.id, requester.id, responder.id, title, message);
+            }
+
+            if (!requestAkad) continue;
+
+            // RESPONSE AKAD
+            const approveAkad = faker.datatype.boolean();
+            {
+                console.log('========================')
+                console.log({ approveAkad });
+
+                // const candidateTaaruf: User = candidate;
+                const approval = approveTaaruf ? ApprovalStatus.Approved : ApprovalStatus.Rejected;
+                const taarufProcess = approveTaaruf ? TaarufProcess.AkadApproved : TaarufProcess.AkadRejected;
+                const messageResponseAkad = approveTaaruf ?
+                    'Saya menyetujui permintaan akad, mari kita menikah' : 'Maaf saya menolak permintaan akad';
+
+                const response: Prisma.ResponseCreateInput = {
+                    message: messageResponseAkad,
+                    responseBy: { connect: { id: responder.id } }
+                }
+                // update akad status with response
+                await prisma.akad.update({
+                    where: { id: akadData.id },
+                    data: {
+                        status: approval,
+                        response: {
+                            create: response
+                        }
+                    }
+                });
+
+                await prisma.taaruf.update({
+                    where: { id: taaruf.id },
+                    data: {
+                        taaruf_process: taarufProcess,
+                    }
+                });
+
+                // CREATE inbox sender & receiver
+                const title = `${responder.firstname} telah ${approveAkad ? 'menerima' : 'menolak'} permintaan akad`;
+
+                await sendMessageAndInbox(taaruf.id, responder.id, requester.id, title, messageResponseAkad);
+            }
 
         }
     }
