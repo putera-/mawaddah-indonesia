@@ -62,12 +62,6 @@ export function CreateNadharDoc() {
         ApiResponse({
             status: 201,
             description: 'Nadhar berhasil dibuat.',
-            schema: {
-                example: {
-                    "message": "ayo lanjut ke Nadhar",
-                    "schedule": "2024-05-28T20:16:17.982Z"
-                },
-            },
         }),
         ApiResponse({
             status: 400,
