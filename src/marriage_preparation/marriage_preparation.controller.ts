@@ -6,9 +6,10 @@ import { BiodataService } from 'src/biodata/biodata.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { Prisma } from '@prisma/client';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GetMarriagePreparationsDoc, PatchMarriagePreparationsDoc } from './marriage_preparation.doc';
 
+@ApiBearerAuth()
 @ApiTags('Marriage Preparation')
 @Controller('marriage_preparation')
 export class MarriagePreparationController {

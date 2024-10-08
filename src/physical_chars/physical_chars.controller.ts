@@ -13,9 +13,10 @@ import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { BiodataService } from 'src/biodata/biodata.service';
 import { Prisma } from '@prisma/client';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GetPhysicalCharsDoc, PatchPhysicalCharsDoc } from './physical_chars.doc';
 
+@ApiBearerAuth()
 @ApiTags('Physical-Characteristics')
 @Controller('physical_chars')
 export class PhysicalCharsController {
