@@ -39,9 +39,9 @@ export class CandidateService {
     async findNew(
         gender: any,
         page: number = 1,
-        limit: number = 0,
+        limit: number = 20,
     ): Promise<Pagination<User[]>> {
-        // const skip = (page - 1) * limit;
+        const skip = (page - 1) * limit;
 
         const oppositeGender = this.getOppositeGender(gender);
         const newUsers = await this.Prisma.user.findMany({
@@ -50,9 +50,9 @@ export class CandidateService {
                     id: { not: undefined },
                     gender: oppositeGender,
                     // where the biodata is created less than 30 days
-                    createdAt: {
-                        gt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-                    },
+                    // createdAt: {
+                    //     gt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+                    // },
                 },
             },
             include: {
@@ -70,26 +70,18 @@ export class CandidateService {
                     createdAt: 'desc',
                 },
             },
-            // take: limit,
-            // skip,
+            take: limit,
+            skip,
         });
 
         return {
             data: newUsers,
             total: 0,
             page: page,
-            maxPages: 1,
-            limit: newUsers.length,
+            maxPages: 0,
+            limit: limit,
         };
     }
-
-    // async findAll(gender: string) {
-    //     const oppositeGender = this.getOppositeGender(gender);
-    //     return await this.Prisma.biodata.findMany({
-    //         select: { ...select },
-    //         where: { gender: oppositeGender },
-    //     });
-    // }
 
     async findOne(id: string) {
         const user = await this.Prisma.user.findFirst({
@@ -119,13 +111,18 @@ export class CandidateService {
         return oppositeGender;
     }
 
-    async getSimiliar2(
+    async getSimiliar(
         userId: string,
         userBiodata: Biodata,
+        page: number = 1,
+        limit: number = 10,
         minScore = 15,
         maxScore = 100,
     ): Promise<Pagination<User[]>> {
+        const skip = (page - 1) * limit;
         const oppositeGender = this.getOppositeGender(userBiodata.gender);
+
+        // GET ALL USERS WITH BIO DATA & OPPOSITE GENDER
         const candidates = await this.Prisma.user.findMany({
             where: {
                 id: { not: userId },
@@ -164,19 +161,22 @@ export class CandidateService {
             if (minScore <= 0) minScore = 1;
         }
 
-        const suggestions = similarityScore
+        let suggestions = similarityScore
             .filter((c) => c.score <= maxScore && c.score >= minScore)
             .map((u) => {
                 this.User.formatGray(u.can);
                 return u.can;
             });
 
+        // PAGINATE DATA
+        suggestions = suggestions.slice(skip, skip + limit);
+
         return {
             data: suggestions,
-            total: suggestions.length,
-            page: 1,
-            maxPages: 1,
-            limit: suggestions.length,
+            total: 0,
+            page: page,
+            maxPages: 0,
+            limit: limit,
         };
     }
 
@@ -201,109 +201,4 @@ export class CandidateService {
             score += 15;
         return score;
     }
-
-    async findSuggestion(
-        gender: any,
-        page: number = 1,
-        limit: number = 10,
-    ): Promise<Pagination<User[]>> {
-        const skip = (page - 1) * limit;
-
-        const oppositeGender = this.getOppositeGender(gender);
-        const suggestions = await this.Prisma.user.findMany({
-            where: {
-                biodata: {
-                    gender: oppositeGender,
-                },
-            },
-            select: {
-                ...select,
-                biodata: {
-                    include: includeBiodata,
-                },
-            },
-            orderBy: {
-                biodata: {
-                    createdAt: 'desc',
-                },
-            },
-            take: limit,
-            skip,
-        });
-        return {
-            data: suggestions,
-            total: 0,
-            page: page,
-            maxPages: Math.ceil(0 / limit),
-            limit: +limit,
-        };
-    }
-
-    async findLike(gender: any, page = '3', limit = '10') {
-        const oppositeGender = this.getOppositeGender(gender);
-        const numberSkip = +page - 1;
-        const skip = +limit * numberSkip;
-        const mayLike = await this.Prisma.user.findMany({
-            where: {
-                biodata: {
-                    gender: oppositeGender,
-                },
-            },
-            select: {
-                ...select,
-                biodata: {
-                    include: {
-                        physical_characters: true,
-                        non_physical_characters: true,
-                    },
-                },
-            },
-            orderBy: {
-                biodata: {
-                    createdAt: 'desc',
-                },
-            },
-            take: Number(limit),
-            skip,
-        });
-        return mayLike;
-        // return `This action returns a #${id} candidate`;
-    }
-
-    // getSimiliar(user: any, suggest: Record<string, any>[]) {
-    //     for (const data of suggest) {
-    //         const s: Record<string, any> = data;
-    //         s.similiarSkills = s.Skill.filter((cand) =>
-    //             user.Skill.some(
-    //                 (selectedSkill) => selectedSkill.title === cand.title,
-    //             ),
-    //         );
-    //         s.similiarHobbies = s.Hobby.filter((cand) =>
-    //             user.Hobby.some(
-    //                 (selectedHobbies) => selectedHobbies.title === cand.title,
-    //             ),
-    //         );
-    //         s.similiarMarriageGoals = s.Married_goal.filter((cand) =>
-    //             user.Married_goal.some(
-    //                 (selectedMarriage) => selectedMarriage.title === cand.title,
-    //             ),
-    //         );
-    //         s.similiarLifeGoals = s.Life_goal.filter((cand) =>
-    //             user.Life_goal.some(
-    //                 (selectedLife) => selectedLife.title === cand.title,
-    //             ),
-    //         );
-    //         delete s.password;
-    //         delete s.Skill;
-    //         delete s.Hobby;
-    //         delete s.Married_goal;
-    //         delete s.Life_goal;
-    //         s.similiarity =
-    //             s.similiarSkills.length +
-    //             s.similiarHobbies.length +
-    //             s.similiarMarriageGoals.length +
-    //             s.similiarLifeGoals.length;
-    //     }
-    //     return suggest;
-    // }
 }
