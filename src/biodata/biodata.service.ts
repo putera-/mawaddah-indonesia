@@ -29,6 +29,24 @@ export class BiodataService {
         });
     }
 
+    async findMeComplete(userId: string): Promise<Biodata> {
+        return await this.Prisma.biodata.findFirst({
+            where: { userId },
+            include: {
+                physical_characters: true,
+                non_physical_characters: true,
+                marriage_preparations: true,
+                family_members: true,
+                educations: true,
+                life_goals: true,
+                ibadah: true,
+                physical_criteria: true,
+                non_physical_criteria: true,
+                experiences: true
+            }
+        });
+    }
+
     update(id: string, data: Prisma.BiodataUpdateInput) {
         return this.Prisma.biodata.update({ where: { userId: id }, data });
     }

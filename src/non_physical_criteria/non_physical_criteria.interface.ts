@@ -1,6 +1,6 @@
 import { Biodata, MarriageStatus } from '@prisma/client';
 
-export interface Non_physical_criteria {
+export interface NonPhysicalCriteria {
     id: string;
     age: number;
     domicile: string;

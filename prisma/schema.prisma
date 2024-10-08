@@ -191,15 +191,6 @@ model Biodata {
     gender                  Gender
     marriage_status         MarriageStatus
     marriage_permission     MarriagePermission
-    physical_characters     PhysicalCharacter?
-    non_physical_characters NonPhysicalCharacter?
-    marriage_preparations   MarriagePreparation?
-    family_members          FamilyMember[]
-    education               Education[]
-    life_goals              LifeGoal?
-    ibadah                  Ibadah?
-    physical_criteria       PhysicalCriteria?
-    non_physical_criteria   NonPhysicalCriteria?
     dob                     DateTime              @db.Date
     birth_place             String                @db.VarChar(100)
     birth_order             Int                   @db.SmallInt
@@ -210,10 +201,19 @@ model Biodata {
     address_zip_code        Int                   @db.Integer
     ethnic                  String                @db.VarChar(100)
     poligami_opinion        String                @db.Text
-    Answer                  Answer[]
     createdAt               DateTime              @default(now())
     updatedAt               DateTime              @default(now()) @updatedAt
-    Experience              Experience[]
+    answer                  Answer[]
+    physical_characters     PhysicalCharacter?
+    non_physical_characters NonPhysicalCharacter?
+    marriage_preparations   MarriagePreparation?
+    family_members          FamilyMember[]
+    educations              Education[]
+    life_goals              LifeGoal?
+    ibadah                  Ibadah?
+    physical_criteria       PhysicalCriteria?
+    non_physical_criteria   NonPhysicalCriteria?
+    experiences             Experience[]
 
     @@map("biodata")
 }

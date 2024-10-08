@@ -8,6 +8,7 @@ import {
     Request,
     HttpStatus,
     HttpException,
+    ForbiddenException,
 } from '@nestjs/common';
 import { BiodataService } from './biodata.service';
 import { CreateBiodatumDto } from './dto/create-biodatum.dto';
@@ -22,7 +23,7 @@ import { CreateBiodataDoc, GetBiodataDoc, UpdateBiodataDoc } from './biodata.doc
 @ApiBearerAuth()
 @Controller('biodata')
 export class BiodataController {
-    constructor(private readonly biodataService: BiodataService) {}
+    constructor(private readonly biodataService: BiodataService) { }
 
     @Roles(Role.Member)
     @Post()
@@ -47,7 +48,7 @@ export class BiodataController {
     async findMe(@Request() req: any) {
         try {
             const me = req.user.id;
-            const biodata = await this.biodataService.findMe(me);
+            const biodata = await this.biodataService.findMeComplete(me);
 
             if (!biodata) {
                 // Biodata belum dibuat
