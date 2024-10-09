@@ -15,11 +15,16 @@ import { TaarufService } from './taaruf.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { TaarufMessageDto } from './dto/taaruf-message.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApproveTaarufbyIdDoc, CancelTaarufbyIdDoc, CancelTaarufResponse, CreateTaarufDoc, GetAllIncomingTaarufDoc, GetAllOutgoingTaarufDoc, GetIncomingTaarufbyIdDoc, GetOutgoingTaarufbyIdDoc, RejectTaarufbyIdDoc } from './taaruf.doc';
 
+@ApiBearerAuth()
+@ApiTags('Taaruf')
 @Controller('taaruf')
 export class TaarufController {
     constructor(private readonly taarufService: TaarufService) { }
 
+    @CreateTaarufDoc()
     @Roles(Role.Member)
     @HttpCode(HttpStatus.OK)
     @Post(':candidateId')
@@ -39,6 +44,7 @@ export class TaarufController {
         }
     }
 
+    @GetAllIncomingTaarufDoc()
     @Roles(Role.Member)
     @HttpCode(HttpStatus.OK)
     @Get('incoming')
@@ -58,6 +64,7 @@ export class TaarufController {
         }
     }
 
+    @GetAllOutgoingTaarufDoc()
     @Roles(Role.Member)
     @HttpCode(HttpStatus.OK)
     @Get('outgoing')
@@ -77,6 +84,7 @@ export class TaarufController {
         }
     }
 
+    @GetIncomingTaarufbyIdDoc()
     @Roles(Role.Member)
     @HttpCode(HttpStatus.OK)
     @Get('incoming/:id')
@@ -88,6 +96,7 @@ export class TaarufController {
         }
     }
 
+    @GetOutgoingTaarufbyIdDoc()
     @Roles(Role.Member)
     @HttpCode(HttpStatus.OK)
     @Get('outgoing/:id')
@@ -99,6 +108,7 @@ export class TaarufController {
         }
     }
 
+    @ApproveTaarufbyIdDoc()
     @Roles(Role.Member)
     @HttpCode(HttpStatus.OK)
     @Patch('approve/:id')
@@ -114,6 +124,7 @@ export class TaarufController {
         }
     }
 
+    @RejectTaarufbyIdDoc()
     @Roles(Role.Member)
     @HttpCode(HttpStatus.OK)
     @Patch('reject/:id')
@@ -129,6 +140,7 @@ export class TaarufController {
         }
     }
 
+    @CancelTaarufbyIdDoc()
     @Roles(Role.Member)
     @HttpCode(HttpStatus.OK)
     @Patch('cancel/:id')
@@ -144,6 +156,7 @@ export class TaarufController {
         }
     }
 
+    @CancelTaarufResponse()
     @Roles(Role.Member)
     @HttpCode(HttpStatus.OK)
     @Patch('cancel_response/:id')
