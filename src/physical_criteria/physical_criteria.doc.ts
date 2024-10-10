@@ -1,5 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { UpdatePhysicalCriteriaDto } from './dto/update-physical_criteria.dto';
 
 export function GetPhysicalCriteriaByIdDoc() {
     return applyDecorators(
@@ -31,6 +32,9 @@ export function UpdatePhysicalCriteriaDoc() {
         ApiOperation({
             summary: 'Update Physical Criteria By Id. Restricted for Member',
         }),
+        ApiBody({
+            type: UpdatePhysicalCriteriaDto,
+         }),
         ApiResponse({
             status: 200,
             description: 'Success',

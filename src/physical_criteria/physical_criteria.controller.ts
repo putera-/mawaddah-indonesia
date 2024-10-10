@@ -16,7 +16,6 @@ import { BiodataService } from 'src/biodata/biodata.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { UpdatePhysicalCriteriaDto } from './dto/update-physical_criteria.dto';
-import { connect } from 'http2';
 import { Prisma } from '@prisma/client';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import {
