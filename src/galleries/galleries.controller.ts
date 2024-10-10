@@ -32,7 +32,6 @@ import {
 } from './galleries.doc';
 
 @ApiTags('Gallery')
-@ApiBearerAuth()
 @Controller('galleries')
 export class GalleriesController {
     constructor(
@@ -42,6 +41,7 @@ export class GalleriesController {
     ) {}
 
     @CreateGalleryDoc()
+    @ApiBearerAuth()
     @Roles(Role.Superadmin, Role.Admin)
     @Post()
     @UseInterceptors(FileInterceptor('photo'))
@@ -109,6 +109,7 @@ export class GalleriesController {
     }
 
     @UpdateGalleryDoc()
+    @ApiBearerAuth()
     @Roles(Role.Superadmin, Role.Admin)
     @Patch(':id')
     @UseInterceptors(FileInterceptor('photo'))
@@ -161,6 +162,7 @@ export class GalleriesController {
     }
 
     @RemoveGalleryDoc()
+    @ApiBearerAuth()
     @Roles(Role.Superadmin, Role.Admin)
     @Delete(':id')
     @HttpCode(204)

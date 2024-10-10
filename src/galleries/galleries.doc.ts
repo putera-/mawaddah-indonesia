@@ -5,11 +5,16 @@ import {
     ApiOperation,
     ApiResponse,
 } from '@nestjs/swagger';
+import { CreateGalleryDto } from './dto/create-gallery.dto';
+import { UpdateGalleryDto } from './dto/update-gallery.dto';
 
 export function CreateGalleryDoc() {
     return applyDecorators(
         ApiOperation({
             summary: 'Create Gallery, Restricted for Superadmin & Admin',
+        }),
+        ApiBody({
+            type: CreateGalleryDto
         }),
         ApiConsumes('multipart/form-data'),
         ApiBody({
@@ -79,6 +84,9 @@ export function UpdateGalleryDoc() {
     return applyDecorators(
         ApiOperation({
             summary: 'Update Gallery By Id, Restricted for Superadmin & Admin',
+        }),
+        ApiBody({
+            type: UpdateGalleryDto
         }),
         ApiResponse({
             status: 200,
