@@ -23,9 +23,15 @@ import { Role } from 'src/roles/role.enums';
 import { Roles } from 'src/roles/roles.decorator';
 import { Public } from 'src/auth/auth.metadata';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+    CreateGalleryDoc,
+    GetAllGalleriesDoc,
+    GetGalleryByIdDoc,
+    RemoveGalleryDoc,
+    UpdateGalleryDoc,
+} from './galleries.doc';
 
 @ApiTags('Gallery')
-@ApiBearerAuth()
 @Controller('galleries')
 export class GalleriesController {
     constructor(
@@ -34,6 +40,8 @@ export class GalleriesController {
         private readonly appService: AppService,
     ) {}
 
+    @CreateGalleryDoc()
+    @ApiBearerAuth()
     @Roles(Role.Superadmin, Role.Admin)
     @Post()
     @UseInterceptors(FileInterceptor('photo'))
@@ -84,20 +92,24 @@ export class GalleriesController {
             throw error;
         }
     }
-    
+
     //public karena galleries ditampilkan di landing page
+    @GetAllGalleriesDoc()
     @Public()
     @Get()
     findAll() {
         return this.galleriesService.findAll();
     }
 
+    @GetGalleryByIdDoc()
     @Public()
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.galleriesService.findOne(id);
     }
 
+    @UpdateGalleryDoc()
+    @ApiBearerAuth()
     @Roles(Role.Superadmin, Role.Admin)
     @Patch(':id')
     @UseInterceptors(FileInterceptor('photo'))
@@ -149,6 +161,8 @@ export class GalleriesController {
         }
     }
 
+    @RemoveGalleryDoc()
+    @ApiBearerAuth()
     @Roles(Role.Superadmin, Role.Admin)
     @Delete(':id')
     @HttpCode(204)
