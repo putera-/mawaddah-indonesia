@@ -1,5 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { UpdateNonPhysicalCriteriaDto } from './dto/update-non_physical_criteria.dto';
 
 export function GetNonPhysicalCriteriaDoc() {
     return applyDecorators(
@@ -30,6 +31,9 @@ export function UpdateNonPhysicalCriteriaDoc() {
     return applyDecorators(
         ApiOperation({
             summary: 'Update Non-Physical Criteria, Restricted for Member',
+        }),
+        ApiBody({
+            type: UpdateNonPhysicalCriteriaDto,
         }),
         ApiResponse({
             status: 200,
