@@ -8,7 +8,7 @@ export class BookmarkService {
     constructor(
         private readonly userService: UsersService,
         private Prisma: PrismaService,
-    ) { }
+    ) {}
     async create(idUser: string, idCandidate: string) {
         const user = await this.userService.findOne(idUser, 'MEMBER');
         const candidate = await this.userService.findOne(idCandidate, 'MEMBER');
@@ -37,7 +37,11 @@ export class BookmarkService {
         }
     }
 
-    async findAll(id: string, page: number = 1, limit: number = 10): Promise<Pagination<Bookmark[]>> {
+    async findAll(
+        id: string,
+        page: number = 1,
+        limit: number = 10,
+    ): Promise<Pagination<Bookmark[]>> {
         const skip = (page - 1) * limit;
 
         const [total, data] = await Promise.all([
@@ -52,10 +56,10 @@ export class BookmarkService {
                 include: {
                     candidate: {
                         include: {
-                            biodata: true
-                        }
-                    }
-                }
+                            biodata: true,
+                        },
+                    },
+                },
             }),
         ]);
 
@@ -69,13 +73,16 @@ export class BookmarkService {
             limit: +limit,
             maxPages: Math.ceil(total / limit),
             total,
-            data
+            data,
         };
     }
     async findOne(id: string): Promise<Bookmark> {
         const bookmarks = await this.Prisma.bookmark.findFirst({
             where: { id },
         });
+        if (!bookmarks) {
+            throw new NotFoundException('Bookmark tidak ditemukan');
+        }
         return bookmarks;
     }
 
