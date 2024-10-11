@@ -69,10 +69,17 @@ export class InboxService {
                 orderBy: { datetime: 'asc' },
                 skip,
                 take: limit,
+                include: {
+                    user: true,
+                }
             }),
         ]);
 
-        const inboxes = data as Inbox[];
+        for (const inbox of data) {
+            this.userService.formatGray(inbox.user);
+        }
+
+        const inboxes = data;
 
         return {
             data: inboxes,
