@@ -16,12 +16,22 @@ import { UsersService } from 'src/users/user.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { Prisma, RoleStatus } from '@prisma/client';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+    CreateAdminUserDoc,
+    DeleteAdminUserByIdDoc,
+    GetAdminUserByIdDoc,
+    GetAllAdminUsersDoc,
+} from './user-admin.doc';
 
+@ApiTags('Admin User')
+@ApiBearerAuth()
 @Controller('user-admin')
 export class UserAdminController {
-    constructor(private readonly usersService: UsersService) { }
+    constructor(private readonly usersService: UsersService) {}
 
     // create admin by superuser
+    @CreateAdminUserDoc()
     @Roles(Role.Superadmin, Role.Admin)
     @Post()
     async create(@Body(new ValidationPipe()) data: CreateUserAdminDto) {
@@ -35,10 +45,10 @@ export class UserAdminController {
                 ...data,
                 password: {
                     create: {
-                        password: data.password
-                    }
-                }
-            }
+                        password: data.password,
+                    },
+                },
+            };
             return this.usersService.create(dataUser);
         } catch (error) {
             throw error;
@@ -46,9 +56,14 @@ export class UserAdminController {
     }
 
     // get all admin by super user
+    @GetAllAdminUsersDoc()
     @Roles(Role.Superadmin, Role.Admin)
     @Get()
-    findAll(@Request() req: any, @Query('limit') limit: number, @Query('page') page: number) {
+    findAll(
+        @Request() req: any,
+        @Query('limit') limit: number,
+        @Query('page') page: number,
+    ) {
         try {
             // const roles: RoleStatus[] = req.user.role;
             // // const'
@@ -61,6 +76,8 @@ export class UserAdminController {
             throw error;
         }
     }
+
+    @GetAdminUserByIdDoc()
     @Roles(Role.Superadmin, Role.Admin)
     @Get(':id')
     findOne(@Param('id') id: string) {
@@ -75,6 +92,7 @@ export class UserAdminController {
     //     return this.userAdminService.update(+id, updateUserAdminDto);
     // }
 
+    @DeleteAdminUserByIdDoc()
     @Roles(Role.Superadmin, Role.Admin)
     @Delete(':id')
     @HttpCode(204)

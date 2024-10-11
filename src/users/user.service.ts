@@ -43,7 +43,7 @@ export class UsersService {
         private Prisma: PrismaService,
         private appService: AppService,
         // private activation: ActivationService,
-    ) { }
+    ) {}
 
     create(data: Prisma.UserCreateInput) {
         return this.Prisma.user.create({
@@ -213,7 +213,9 @@ export class UsersService {
     }
 
     async remove(id: string, role: RoleStatus): Promise<void> {
-        await this.findOne(id, role);
+        const user = await this.findOne(id, role);
+        if (!user) throw new NotFoundException('User tidak ditemukan');
+
         await this.Prisma.user.update({
             where: { id },
             data: { active: false },
