@@ -4,7 +4,7 @@ import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 export function GetAllInboxDoc() {
     return applyDecorators(
         ApiOperation({
-            summary: 'Get All Inbox, Admin Only',
+            summary: 'Get All Inbox, Member Only',
         }),
         ApiResponse({
             status: 200,
@@ -37,7 +37,7 @@ export function GetAllInboxDoc() {
 export function GetInboxByIdDoc() {
     return applyDecorators(
         ApiOperation({
-            summary: 'Get Inbox By Id, Admin Only',
+            summary: 'Get Inbox By Id, Member Only',
         }),
         ApiResponse({
             status: 200,
