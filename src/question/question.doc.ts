@@ -29,7 +29,7 @@ export function CreateQuestionDoc() {
 }
 
 
-export function GetQuestionAll() {
+export function GetQuestionAllDoc() {
     return applyDecorators(
         ApiOperation({ summary: 'Get Question, Restricted for Admin and Superadmin' }),
         ApiQuery({
@@ -92,7 +92,7 @@ export function GetQuestionAll() {
     )
 }
 
-export function GetQuestionById() {
+export function GetQuestionByIdDoc() {
     return applyDecorators(
         ApiOperation({ summary: 'Get Question By Id, Restricted for Admin and Superadmin' }),
         ApiResponse({
@@ -134,7 +134,7 @@ export function GetQuestionById() {
     )
 }
 
-export function UpdateQuestionById() {
+export function UpdateQuestionByIdDoc() {
     return applyDecorators(
         ApiOperation({ summary: 'Update Question By Id, Restricted for Admin and Superadmin' }),
         ApiBody({
@@ -179,7 +179,7 @@ export function UpdateQuestionById() {
     )
 }
 
-export function DeleteQuestionById() {
+export function DeleteQuestionByIdDoc() {
     return applyDecorators(
         ApiOperation({ summary: 'Delete Question By Id, Restricted for Admin and Superadmin' }),
         ApiResponse({
