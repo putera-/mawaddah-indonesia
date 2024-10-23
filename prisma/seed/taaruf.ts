@@ -21,318 +21,344 @@ export async function taarufSeed(prisma: PrismaClient) {
         },
     });
 
+
     for (let i = 0; i < users.length; i++) {
+        let requestCount = 0;
         process.stdout.write('.');
 
         const user = users[i];
         const biodata = user.biodata;
-        const candidate = await prisma.user.findFirst({
-            where: {
-                biodata: { gender: { not: biodata.gender } },
-            },
-            include: {
-                biodata: true,
-                Taaruf_candidate: {
-                    where: {
-                        active: false,
-                    },
-                },
-                Taaruf: {
-                    where: {
-                        active: false,
-                    },
-                },
-            },
-        });
+        // const candidate = await prisma.user.findFirst({
+        //     where: {
+        //         biodata: { gender: { not: biodata.gender } },
+        //     },
+        //     include: {
+        //         biodata: true,
+        //         Taaruf_candidate: {
+        //             where: {
+        //                 active: false,
+        //             },
+        //         },
+        //         Taaruf: {
+        //             where: {
+        //                 active: false,
+        //             },
+        //         },
+        //     },
+        // });
 
-        const applyTaaruf = faker.datatype.boolean();
-        console.log({ applyTaaruf });
 
-        // opposie gender
-        if (applyTaaruf &&
-            (candidate.Taaruf.length == 0 ||
-                candidate.Taaruf_candidate.length == 0)
-        ) {
-            const title = `${user.firstname} telah mengajukan permintaan taaruf`;
-            const message = 'Mari bertaaruf';
-            const data: Prisma.TaarufCreateInput = {
-                message,
-                user: { connect: { id: user.id } },
-                candidate: { connect: { id: candidate.id } },
-            };
+        for (let j = 0; j < users.length; j++) {
+            const candidate = users[j];
+            if (candidate.id == user.id) continue;
 
-            // TAARUF
-            const taaruf = await prisma.taaruf.create({
-                data,
-            });
+            if (candidate.biodata.gender == biodata.gender) continue;
 
-            // CREATE inbox sender & receiver
-            await sendMessageAndInbox(taaruf.id, user.id, candidate.id, title, message);
 
-            // RESPONSE TAARUF
-            const approveTaaruf = faker.datatype.boolean();
-            {
-                console.log({ approveTaaruf });
+            const applyTaaruf = faker.datatype.boolean();
+            console.log({ applyTaaruf });
 
-                const candidateTaaruf: User = candidate;
-                const approvalTaaruf = approveTaaruf ? ApprovalStatus.Approved : ApprovalStatus.Rejected;
-                const taarufProcess = approveTaaruf ? TaarufProcess.TaarufApproved : TaarufProcess.TaarufRejected;
-                const messageResponseTaaruf = approveTaaruf ?
-                    'Saya menyetujui permintaan taaruf, mari kita bertemu' : 'Maaf saya menolak permintaan taaruf';
+            // opposie gender
+            // if (applyTaaruf &&
+            //     (candidate.Taaruf.length == 0 ||
+            //         candidate.Taaruf_candidate.length == 0)
+            // ) {
+            if (applyTaaruf) {
+                if (requestCount == 12) continue;
 
-                const response: Prisma.ResponseCreateInput = {
-                    message: messageResponseTaaruf,
-                    responseBy: { connect: { id: candidateTaaruf.id } }
-                }
-                await prisma.taaruf.update({
-                    where: { id: taaruf.id, candidateId: candidateTaaruf.id },
-                    data: {
-                        status: approvalTaaruf,
-                        taaruf_process: taarufProcess,
-                        response: {
-                            create: response
-                        }
-                    }
+                ++requestCount;
+
+                console.log({ requestCount })
+                const title = `${user.firstname} telah mengajukan permintaan taaruf`;
+                const message = 'Mari bertaaruf';
+                const data: Prisma.TaarufCreateInput = {
+                    message,
+                    user: { connect: { id: user.id } },
+                    candidate: { connect: { id: candidate.id } },
+                };
+
+                // TAARUF
+                const taaruf = await prisma.taaruf.create({
+                    data,
                 });
 
                 // CREATE inbox sender & receiver
-                const responseTaarufTitle = `${candidateTaaruf.firstname} telah ${approveTaaruf ? 'menerima' : 'menolak'} permintaan taaruf`;
+                console.log('send Message Request Taaruf');
+                await sendMessageAndInbox(taaruf.id, user.id, candidate.id, title, message);
 
-                await sendMessageAndInbox(taaruf.id, candidateTaaruf.id, taaruf.userId, responseTaarufTitle, messageResponseTaaruf);
-            }
+                // RESPONSE TAARUF
+                const approveTaaruf = faker.datatype.boolean();
+                {
+                    console.log({ approveTaaruf });
 
-            // STOP if approval is rejected
-            if (!approveTaaruf) continue;
+                    const candidateTaaruf: User = candidate;
+                    const approvalTaaruf = approveTaaruf ? ApprovalStatus.Approved : ApprovalStatus.Rejected;
+                    const taarufProcess = approveTaaruf ? TaarufProcess.TaarufApproved : TaarufProcess.TaarufRejected;
+                    const messageResponseTaaruf = approveTaaruf ?
+                        'Saya menyetujui permintaan taaruf, mari kita bertemu' : 'Maaf saya menolak permintaan taaruf';
 
-            // REQUEST NADHAR
-            const requestNadhar = faker.datatype.boolean();
-            console.log({ requestNadhar });
-            let schedule = faker.date.future();
-
-            let randomRequester = faker.datatype.boolean();;
-            let requester: User = randomRequester ? user : candidate;
-            let responder: User = randomRequester ? candidate : user;
-            let nadharData: Nadhar;
-
-            if (requestNadhar) {
-                const title = `${requester.firstname} telah mengajukan permintaan nadhar`;
-                const message = 'Mari bertemu untuk nadhar';
-                nadharData = await prisma.nadhar.create({
-                    data: {
-                        Taaruf: { connect: { id: taaruf.id } },
-                        schedule,
-                        message,
-                        requestBy: { connect: { id: requester.id } },
-                        status: ApprovalStatus.Pending
-                    },
-                });
-
-                // update taaruf to Nadhar Request
-                await prisma.taaruf.update({
-                    where: { id: taaruf.id },
-                    data: {
-                        taaruf_process: TaarufProcess.NadharRequest
+                    const response: Prisma.ResponseCreateInput = {
+                        message: messageResponseTaaruf,
+                        responseBy: { connect: { id: candidateTaaruf.id } }
                     }
-                });
-                await sendMessageAndInbox(taaruf.id, requester.id, responder.id, title, message);
-            }
+                    await prisma.taaruf.update({
+                        where: { id: taaruf.id, candidateId: candidateTaaruf.id },
+                        data: {
+                            status: approvalTaaruf,
+                            taaruf_process: taarufProcess,
+                            response: {
+                                create: response
+                            }
+                        }
+                    });
 
-            if (!requestNadhar) continue;
+                    // CREATE inbox sender & receiver
+                    const responseTaarufTitle = `${candidateTaaruf.firstname} telah ${approveTaaruf ? 'menerima' : 'menolak'} permintaan taaruf`;
 
-            // RESPONSE NADHAR
-            const approveNadhar = faker.datatype.boolean();
-            {
-                console.log({ approveNadhar });
-
-                // const candidateTaaruf: User = candidate;
-                const approval = approveTaaruf ? ApprovalStatus.Approved : ApprovalStatus.Rejected;
-                const taarufProcess = approveTaaruf ? TaarufProcess.NadharApproved : TaarufProcess.NadharRejected;
-                const messageResponseNadhar = approveTaaruf ?
-                    'Saya menyetujui permintaan nadhar, mari kita bertemu' : 'Maaf saya menolak permintaan nadhar';
-
-                const response: Prisma.ResponseCreateInput = {
-                    message: messageResponseNadhar,
-                    responseBy: { connect: { id: responder.id } }
+                    console.log('send Message Response Taaruf');
+                    await sendMessageAndInbox(taaruf.id, candidateTaaruf.id, taaruf.userId, responseTaarufTitle, messageResponseTaaruf);
                 }
 
-                // update nahdar status with response
-                await prisma.nadhar.update({
-                    where: { id: nadharData.id },
-                    data: {
-                        status: approval,
-                        response: {
-                            create: response
+                // STOP if approval is rejected
+                if (!approveTaaruf) continue;
+
+                // REQUEST NADHAR
+                const requestNadhar = faker.datatype.boolean();
+                console.log({ requestNadhar });
+                let schedule = faker.date.future();
+
+                let randomRequester = faker.datatype.boolean();;
+                let requester: User = randomRequester ? user : candidate;
+                let responder: User = randomRequester ? candidate : user;
+                let nadharData: Nadhar;
+
+                if (requestNadhar) {
+                    const title = `${requester.firstname} telah mengajukan permintaan nadhar`;
+                    const message = 'Mari bertemu untuk nadhar';
+                    nadharData = await prisma.nadhar.create({
+                        data: {
+                            Taaruf: { connect: { id: taaruf.id } },
+                            schedule,
+                            message,
+                            requestBy: { connect: { id: requester.id } },
+                            status: ApprovalStatus.Pending
+                        },
+                    });
+
+                    // update taaruf to Nadhar Request
+                    await prisma.taaruf.update({
+                        where: { id: taaruf.id },
+                        data: {
+                            taaruf_process: TaarufProcess.NadharRequest
                         }
-                    }
-                });
-
-                await prisma.taaruf.update({
-                    where: { id: taaruf.id },
-                    data: {
-                        taaruf_process: taarufProcess,
-                    }
-                });
-
-                // CREATE inbox sender & receiver
-                const responseNadharTitle = `${responder.firstname} telah ${approveNadhar ? 'menerima' : 'menolak'} permintaan nadhar`;
-
-                await sendMessageAndInbox(taaruf.id, responder.id, requester.id, responseNadharTitle, messageResponseNadhar);
-            }
-            // STOP if approval is rejected
-            if (!approveNadhar) continue;
-
-            // REQUEST KHITBAH
-            const requestKhitbah = faker.datatype.boolean();
-            console.log({ requestKhitbah });
-            schedule = faker.date.future();
-
-            randomRequester = faker.datatype.boolean();;
-            requester = randomRequester ? user : candidate;
-            responder = randomRequester ? candidate : user;
-            let khitbahData: Khitbah;
-
-            if (requestKhitbah) {
-                const title = `${requester.firstname} telah mengajukan permintaan khitbah`;
-                const message = 'Mari bertemu untuk khitbah';
-                khitbahData = await prisma.khitbah.create({
-                    data: {
-                        Taaruf: { connect: { id: taaruf.id } },
-                        schedule,
-                        message,
-                        requestBy: { connect: { id: requester.id } },
-                        status: ApprovalStatus.Pending
-                    },
-                });
-
-                // update taaruf to Khitbah Request
-                await prisma.taaruf.update({
-                    where: { id: taaruf.id },
-                    data: {
-                        taaruf_process: TaarufProcess.KhitbahRequest
-                    }
-                });
-                await sendMessageAndInbox(taaruf.id, requester.id, responder.id, title, message);
-            }
-
-            if (!requestKhitbah) continue;
-
-            // RESPONSE KHITBAH
-            const approveKhitbah = faker.datatype.boolean();
-            {
-                console.log({ approveKhitbah });
-
-                // const candidateTaaruf: User = candidate;
-                const approval = approveTaaruf ? ApprovalStatus.Approved : ApprovalStatus.Rejected;
-                const taarufProcess = approveTaaruf ? TaarufProcess.KhitbahAppproved : TaarufProcess.KhitbahRejected;
-                const messageResponseKhitbah = approveTaaruf ?
-                    'Saya menyetujui permintaan khitbah, mari kita tentukan akad' : 'Maaf saya menolak permintaan khitbah';
-
-                const response: Prisma.ResponseCreateInput = {
-                    message: messageResponseKhitbah,
-                    responseBy: { connect: { id: responder.id } }
+                    });
+                    console.log('send Message Request Nadhar ==##');
+                    await sendMessageAndInbox(taaruf.id, requester.id, responder.id, title, message);
                 }
-                // update khitbah status with response
-                await prisma.khitbah.update({
-                    where: { id: khitbahData.id },
-                    data: {
-                        status: approval,
-                        response: {
-                            create: response
+
+                if (!requestNadhar) continue;
+
+                // RESPONSE NADHAR
+                const approveNadhar = faker.datatype.boolean();
+                {
+                    console.log({ approveNadhar });
+
+                    // const candidateTaaruf: User = candidate;
+                    const approval = approveTaaruf ? ApprovalStatus.Approved : ApprovalStatus.Rejected;
+                    const taarufProcess = approveTaaruf ? TaarufProcess.NadharApproved : TaarufProcess.NadharRejected;
+                    const messageResponseNadhar = approveTaaruf ?
+                        'Saya menyetujui permintaan nadhar, mari kita bertemu' : 'Maaf saya menolak permintaan nadhar';
+
+                    const response: Prisma.ResponseCreateInput = {
+                        message: messageResponseNadhar,
+                        responseBy: { connect: { id: responder.id } }
+                    }
+
+                    // update nahdar status with response
+                    await prisma.nadhar.update({
+                        where: { id: nadharData.id },
+                        data: {
+                            status: approval,
+                            response: {
+                                create: response
+                            }
                         }
-                    }
-                });
+                    });
 
-                await prisma.taaruf.update({
-                    where: { id: taaruf.id },
-                    data: {
-                        taaruf_process: taarufProcess,
-                    }
-                });
+                    await prisma.taaruf.update({
+                        where: { id: taaruf.id },
+                        data: {
+                            taaruf_process: taarufProcess,
+                        }
+                    });
 
-                // CREATE inbox sender & receiver
-                const title = `${responder.firstname} telah ${approveKhitbah ? 'menerima' : 'menolak'} permintaan khitbah`;
+                    // CREATE inbox sender & receiver
+                    const responseNadharTitle = `${responder.firstname} telah ${approveNadhar ? 'menerima' : 'menolak'} permintaan nadhar`;
 
-                await sendMessageAndInbox(taaruf.id, responder.id, requester.id, title, messageResponseKhitbah);
-            }
-            // STOP if approval is rejected
-            if (!approveKhitbah) continue;
-
-            // REQUEST AKAD
-            const requestAkad = faker.datatype.boolean();
-            console.log({ requestAkad });
-            schedule = faker.date.future();
-
-            randomRequester = faker.datatype.boolean();;
-            requester = randomRequester ? user : candidate;
-            responder = randomRequester ? candidate : user;
-            let akadData: Akad;
-
-            if (requestAkad) {
-                const title = `${requester.firstname} telah mengajukan permintaan akad`;
-                const message = 'Yuk Nikah';
-                akadData = await prisma.akad.create({
-                    data: {
-                        Taaruf: { connect: { id: taaruf.id } },
-                        schedule,
-                        message,
-                        requestBy: { connect: { id: requester.id } },
-                        status: ApprovalStatus.Pending
-                    },
-                });
-
-                // update taaruf to Akad Request
-                await prisma.taaruf.update({
-                    where: { id: taaruf.id },
-                    data: {
-                        taaruf_process: TaarufProcess.AkadRequest
-                    }
-                });
-                await sendMessageAndInbox(taaruf.id, requester.id, responder.id, title, message);
-            }
-
-            if (!requestAkad) continue;
-
-            // RESPONSE AKAD
-            const approveAkad = faker.datatype.boolean();
-            {
-                console.log('========================')
-                console.log({ approveAkad });
-
-                // const candidateTaaruf: User = candidate;
-                const approval = approveTaaruf ? ApprovalStatus.Approved : ApprovalStatus.Rejected;
-                const taarufProcess = approveTaaruf ? TaarufProcess.AkadApproved : TaarufProcess.AkadRejected;
-                const messageResponseAkad = approveTaaruf ?
-                    'Saya menyetujui permintaan akad, mari kita menikah' : 'Maaf saya menolak permintaan akad';
-
-                const response: Prisma.ResponseCreateInput = {
-                    message: messageResponseAkad,
-                    responseBy: { connect: { id: responder.id } }
+                    console.log('send Message Response Nadhar ==##');
+                    await sendMessageAndInbox(taaruf.id, responder.id, requester.id, responseNadharTitle, messageResponseNadhar);
                 }
-                // update akad status with response
-                await prisma.akad.update({
-                    where: { id: akadData.id },
-                    data: {
-                        status: approval,
-                        response: {
-                            create: response
+                // STOP if approval is rejected
+                if (!approveNadhar) continue;
+
+                // REQUEST KHITBAH
+                const requestKhitbah = faker.datatype.boolean();
+                console.log({ requestKhitbah });
+                schedule = faker.date.future();
+
+                randomRequester = faker.datatype.boolean();;
+                requester = randomRequester ? user : candidate;
+                responder = randomRequester ? candidate : user;
+                let khitbahData: Khitbah;
+
+                if (requestKhitbah) {
+                    const title = `${requester.firstname} telah mengajukan permintaan khitbah`;
+                    const message = 'Mari bertemu untuk khitbah';
+                    khitbahData = await prisma.khitbah.create({
+                        data: {
+                            Taaruf: { connect: { id: taaruf.id } },
+                            schedule,
+                            message,
+                            requestBy: { connect: { id: requester.id } },
+                            status: ApprovalStatus.Pending
+                        },
+                    });
+
+                    // update taaruf to Khitbah Request
+                    await prisma.taaruf.update({
+                        where: { id: taaruf.id },
+                        data: {
+                            taaruf_process: TaarufProcess.KhitbahRequest
                         }
+                    });
+                    console.log('send Message Request Khitbah ==##==##');
+                    await sendMessageAndInbox(taaruf.id, requester.id, responder.id, title, message);
+                }
+
+                if (!requestKhitbah) continue;
+
+                // RESPONSE KHITBAH
+                const approveKhitbah = faker.datatype.boolean();
+                {
+                    console.log({ approveKhitbah });
+
+                    // const candidateTaaruf: User = candidate;
+                    const approval = approveTaaruf ? ApprovalStatus.Approved : ApprovalStatus.Rejected;
+                    const taarufProcess = approveTaaruf ? TaarufProcess.KhitbahAppproved : TaarufProcess.KhitbahRejected;
+                    const messageResponseKhitbah = approveTaaruf ?
+                        'Saya menyetujui permintaan khitbah, mari kita tentukan akad' : 'Maaf saya menolak permintaan khitbah';
+
+                    const response: Prisma.ResponseCreateInput = {
+                        message: messageResponseKhitbah,
+                        responseBy: { connect: { id: responder.id } }
                     }
-                });
+                    // update khitbah status with response
+                    await prisma.khitbah.update({
+                        where: { id: khitbahData.id },
+                        data: {
+                            status: approval,
+                            response: {
+                                create: response
+                            }
+                        }
+                    });
 
-                await prisma.taaruf.update({
-                    where: { id: taaruf.id },
-                    data: {
-                        taaruf_process: taarufProcess,
+                    await prisma.taaruf.update({
+                        where: { id: taaruf.id },
+                        data: {
+                            taaruf_process: taarufProcess,
+                        }
+                    });
+
+                    // CREATE inbox sender & receiver
+                    const title = `${responder.firstname} telah ${approveKhitbah ? 'menerima' : 'menolak'} permintaan khitbah`;
+
+                    console.log('send Message Response Khitbah ==##==##');
+                    await sendMessageAndInbox(taaruf.id, responder.id, requester.id, title, messageResponseKhitbah);
+                }
+                // STOP if approval is rejected
+                if (!approveKhitbah) continue;
+
+                // REQUEST AKAD
+                const requestAkad = faker.datatype.boolean();
+                console.log({ requestAkad });
+                schedule = faker.date.future();
+
+                randomRequester = faker.datatype.boolean();;
+                requester = randomRequester ? user : candidate;
+                responder = randomRequester ? candidate : user;
+                let akadData: Akad;
+
+                if (requestAkad) {
+                    const title = `${requester.firstname} telah mengajukan permintaan akad`;
+                    const message = 'Yuk Nikah';
+                    akadData = await prisma.akad.create({
+                        data: {
+                            Taaruf: { connect: { id: taaruf.id } },
+                            schedule,
+                            message,
+                            requestBy: { connect: { id: requester.id } },
+                            status: ApprovalStatus.Pending
+                        },
+                    });
+
+                    // update taaruf to Akad Request
+                    await prisma.taaruf.update({
+                        where: { id: taaruf.id },
+                        data: {
+                            taaruf_process: TaarufProcess.AkadRequest
+                        }
+                    });
+                    console.log('send Message Request Akad ==##==##==##');
+                    await sendMessageAndInbox(taaruf.id, requester.id, responder.id, title, message);
+                }
+
+                if (!requestAkad) continue;
+
+                // RESPONSE AKAD
+                const approveAkad = faker.datatype.boolean();
+                {
+                    console.log('========================')
+                    console.log({ approveAkad });
+
+                    // const candidateTaaruf: User = candidate;
+                    const approval = approveTaaruf ? ApprovalStatus.Approved : ApprovalStatus.Rejected;
+                    const taarufProcess = approveTaaruf ? TaarufProcess.AkadApproved : TaarufProcess.AkadRejected;
+                    const messageResponseAkad = approveTaaruf ?
+                        'Saya menyetujui permintaan akad, mari kita menikah' : 'Maaf saya menolak permintaan akad';
+
+                    const response: Prisma.ResponseCreateInput = {
+                        message: messageResponseAkad,
+                        responseBy: { connect: { id: responder.id } }
                     }
-                });
+                    // update akad status with response
+                    await prisma.akad.update({
+                        where: { id: akadData.id },
+                        data: {
+                            status: approval,
+                            response: {
+                                create: response
+                            }
+                        }
+                    });
 
-                // CREATE inbox sender & receiver
-                const title = `${responder.firstname} telah ${approveAkad ? 'menerima' : 'menolak'} permintaan akad`;
+                    await prisma.taaruf.update({
+                        where: { id: taaruf.id },
+                        data: {
+                            taaruf_process: taarufProcess,
+                        }
+                    });
 
-                await sendMessageAndInbox(taaruf.id, responder.id, requester.id, title, messageResponseAkad);
+                    // CREATE inbox sender & receiver
+                    const title = `${responder.firstname} telah ${approveAkad ? 'menerima' : 'menolak'} permintaan akad`;
+
+                    console.log('send Message Response Akad ==##==##==##');
+                    await sendMessageAndInbox(taaruf.id, responder.id, requester.id, title, messageResponseAkad);
+                }
+
             }
-
         }
+
     }
     console.log('\nSeed Finish: Taaruf');
 
@@ -341,7 +367,7 @@ export async function taarufSeed(prisma: PrismaClient) {
 }
 
 
-async function sendMessageAndInbox(taarufId: string, userId: string, candidateId: string, title: string, message: string) {
+async function sendMessageAndInbox(taarufId: string, senderId: string, receiverId: string, title: string, message: string) {
     // CREATE inbox sender & receiver
     const dataInbox = {
         taaruf: { connect: { id: taarufId } },
@@ -349,9 +375,9 @@ async function sendMessageAndInbox(taarufId: string, userId: string, candidateId
         datetime: new Date(),
         messages: {
             create: {
-                sender: { connect: { id: userId } },
-                receiver: { connect: { id: candidateId } },
-                message,
+                sender: { connect: { id: senderId } },
+                receiver: { connect: { id: receiverId } },
+                message: message + ' ' + faker.lorem.paragraphs(4),
                 title,
                 taaruf_process: TaarufProcess.TaarufRequest
             }
@@ -360,12 +386,12 @@ async function sendMessageAndInbox(taarufId: string, userId: string, candidateId
 
     const dataSenderInbox: Prisma.InboxCreateInput = {
         ...dataInbox,
-        user: { connect: { id: userId } },
+        user: { connect: { id: senderId } },
         read: true, // mark as read
     }
     const dataReceiverInbox: Prisma.InboxCreateInput = {
         ...dataInbox,
-        user: { connect: { id: candidateId } },
+        user: { connect: { id: receiverId } },
         read: false, // mark as unread
     }
 
@@ -373,7 +399,7 @@ async function sendMessageAndInbox(taarufId: string, userId: string, candidateId
         _prisma.inbox.upsert({
             where: {
                 userId_taarufId: {
-                    userId: userId,
+                    userId: senderId,
                     taarufId
                 }
             },
@@ -383,7 +409,7 @@ async function sendMessageAndInbox(taarufId: string, userId: string, candidateId
         _prisma.inbox.upsert({
             where: {
                 userId_taarufId: {
-                    userId: candidateId,
+                    userId: receiverId,
                     taarufId
                 }
             },
