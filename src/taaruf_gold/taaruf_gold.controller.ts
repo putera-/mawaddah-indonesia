@@ -11,8 +11,8 @@ import {
     Request,
 } from '@nestjs/common';
 import { TaarufGoldService } from './taaruf_gold.service';
-import { CreateTaarufGoldDto } from './dto/create-taaruf_gold.dto';
-import { UpdateTaarufGoldDto } from './dto/update-taaruf_gold.dto';
+// import { CreateTaarufGoldDto } from './dto/create-taaruf_gold.dto';
+// import { UpdateTaarufGoldDto } from './dto/update-taaruf_gold.dto';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { CreateTaarufGoldPaymentDto } from 'src/payment/dto/create-taaruf_gold-payment.dto';

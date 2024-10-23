@@ -1,14 +1,15 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { CreateTaarufGoldDto } from './dto/create-taaruf_gold.dto';
+import { CreateTaarufGoldPaymentDto } from 'src/payment/dto/create-taaruf_gold-payment.dto';
 
 export function CreateTaarufGoldDoc() {
     return applyDecorators(
         ApiOperation({ summary: 'Create Taaruf Gold. Restricted for Member' }),
         ApiBody({
-            type: CreateTaarufGoldDto, // kosong nih dtonya
+            type: CreateTaarufGoldPaymentDto,
         }),
-        // TODO tunggu selesai unauthorized
+        // TODO tunggu selesai unauthorized midtrans
     );
 }
 
