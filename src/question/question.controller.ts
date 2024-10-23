@@ -14,11 +14,16 @@ import { CreateQuestionDto } from './dto/create-question.dto';
 import { Role } from 'src/roles/role.enums';
 import { Roles } from 'src/roles/roles.decorator';
 import { Prisma } from '@prisma/client';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CreateQuestionDoc, DeleteQuestionByIdDoc, GetQuestionAllDoc, GetQuestionByIdDoc, UpdateQuestionByIdDoc} from './question.doc';
 
+@ApiTags('Question')
+@ApiBearerAuth()
 @Controller('question')
 export class QuestionController {
     constructor(private readonly questionService: QuestionService) { }
 
+    @CreateQuestionDoc()
     @Roles(Role.Admin, Role.Superadmin)
     @Post()
     create(@Req() req, @Body() data: CreateQuestionDto) {
@@ -32,6 +37,7 @@ export class QuestionController {
         }
     }
 
+    @GetQuestionAllDoc()
     @Roles(Role.Admin, Role.Superadmin)
     @Get()
     async findAll() {
@@ -42,6 +48,7 @@ export class QuestionController {
         }
     }
 
+    @GetQuestionByIdDoc()
     @Roles(Role.Admin, Role.Superadmin)
     @Get(':id')
     async findOne(@Param('id') id: string) {
@@ -52,6 +59,7 @@ export class QuestionController {
         }
     }
 
+    @UpdateQuestionByIdDoc()
     @Roles(Role.Admin, Role.Superadmin)
     @Patch(':id')
     async update(@Param('id') id: string, @Body() data: CreateQuestionDto) {
@@ -65,6 +73,7 @@ export class QuestionController {
         }
     }
 
+    @DeleteQuestionByIdDoc()
     @Roles(Role.Admin, Role.Superadmin)
     @Delete(':id')
     @HttpCode(204)
