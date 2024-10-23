@@ -5,6 +5,8 @@ import { UpdateInboxDto } from './dto/update-inbox.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { GetAllInboxDoc, GetInboxByIdDoc } from './inbox.doc';
 import { get } from 'http';
+import { Role } from 'src/roles/role.enums';
+import { Roles } from 'src/roles/roles.decorator';
 
 @ApiTags('Inbox')
 @Controller('inbox')
@@ -16,6 +18,7 @@ export class InboxController {
     //     return this.inboxService.create(createInboxDto);
     //   }
 
+    @Roles(Role.Member)
     @GetAllInboxDoc()
     @Get()
     findAll(
@@ -33,6 +36,7 @@ export class InboxController {
         }
     }
 
+    @Roles(Role.Member)
     @GetInboxByIdDoc()
     @Get(':id')
     findOne(
