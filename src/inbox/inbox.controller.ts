@@ -2,7 +2,11 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Query } from '@
 import { InboxService } from './inbox.service';
 import { CreateInboxDto } from './dto/create-inbox.dto';
 import { UpdateInboxDto } from './dto/update-inbox.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { GetAllInboxDoc, GetInboxByIdDoc } from './inbox.doc';
+import { get } from 'http';
 
+@ApiTags('Inbox')
 @Controller('inbox')
 export class InboxController {
     constructor(private readonly inboxService: InboxService) { }
@@ -12,6 +16,7 @@ export class InboxController {
     //     return this.inboxService.create(createInboxDto);
     //   }
 
+    @GetAllInboxDoc()
     @Get()
     findAll(
         @Req() req: any,
@@ -28,6 +33,7 @@ export class InboxController {
         }
     }
 
+    @GetInboxByIdDoc()
     @Get(':id')
     findOne(
         @Param('id') id: string,
