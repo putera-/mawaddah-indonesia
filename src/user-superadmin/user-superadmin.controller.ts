@@ -18,12 +18,22 @@ import { UsersService } from 'src/users/user.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { Prisma, RoleStatus } from '@prisma/client';
+import { ApiTags } from '@nestjs/swagger';
+import {
+    CreateFirstSuperAdminDoc,
+    CreateSuperAdminDoc,
+    DeleteSuperAdminDoc,
+    GetAllSuperAdminDoc,
+    GetSuperAdminByIdDoc,
+} from './user-superadmin.doc';
 
+@ApiTags('User Super Admin')
 @Controller('user-superadmin')
 export class UserSuperadminController {
-    constructor(private readonly usersService: UsersService) { }
+    constructor(private readonly usersService: UsersService) {}
 
     @Public()
+    @CreateFirstSuperAdminDoc()
     @Post('first')
     async createFirst(
         @Body(new ValidationPipe()) data: CreateUserSuperadminDto,
@@ -43,16 +53,18 @@ export class UserSuperadminController {
                 ...data,
                 password: {
                     create: {
-                        password : data.password
-                    }
-                }
-            }
+                        password: data.password,
+                    },
+                },
+            };
             return this.usersService.create(dataUser);
         } catch (error) {
             throw error;
         }
     }
+
     // create superuser by superuser
+    @CreateSuperAdminDoc()
     @Roles(Role.Superadmin)
     @Post()
     async create(@Body(new ValidationPipe()) data: CreateUserSuperadminDto) {
@@ -67,10 +79,10 @@ export class UserSuperadminController {
                 ...data,
                 password: {
                     create: {
-                        password : data.password
-                    }
-                }
-            }
+                        password: data.password,
+                    },
+                },
+            };
             return this.usersService.create(dataUser);
         } catch (error) {
             throw error;
@@ -78,9 +90,14 @@ export class UserSuperadminController {
     }
 
     // get superuser by super user
+    @GetAllSuperAdminDoc()
     @Roles(Role.Superadmin)
     @Get()
-    findAll(@Request() req: any, @Query('limit') limit: number, @Query('page') page: number) {
+    findAll(
+        @Request() req: any,
+        @Query('limit') limit: number,
+        @Query('page') page: number,
+    ) {
         try {
             const roles: RoleStatus[] = ['SUPERADMIN'];
             limit = limit ? +limit : 10;
@@ -92,6 +109,7 @@ export class UserSuperadminController {
         }
     }
 
+    @GetSuperAdminByIdDoc()
     @Roles(Role.Superadmin)
     @Get(':id')
     findOne(@Param('id') id: string) {
@@ -101,6 +119,7 @@ export class UserSuperadminController {
     // @Patch()
     // use global self user upate
 
+    @DeleteSuperAdminDoc()
     @Roles(Role.Superadmin)
     @Delete(':id')
     @HttpCode(204)
