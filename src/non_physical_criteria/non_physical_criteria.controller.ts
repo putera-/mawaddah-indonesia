@@ -13,14 +13,22 @@ import { BiodataService } from 'src/biodata/biodata.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { Prisma } from '@prisma/client';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+    GetNonPhysicalCriteriaDoc,
+    UpdateNonPhysicalCriteriaDoc,
+} from './non_physical_criteria.doc';
 
+@ApiTags('Non Physical Criteria')
+@ApiBearerAuth()
 @Controller('non-physical-criteria')
 export class NonPhysicalCriteriaController {
     constructor(
         private readonly nonPhysicalCriteriaService: NonPhysicalCriteriaService,
         private readonly biodataService: BiodataService,
-    ) { }
+    ) {}
 
+    @GetNonPhysicalCriteriaDoc()
     @Roles(Role.Member)
     @Get()
     async findOne(@Request() req: any) {
@@ -29,7 +37,10 @@ export class NonPhysicalCriteriaController {
             const biodata = await this.biodataService.findMe(userId);
 
             // check apakah biodata!= null > jika masih null throw error
-            if (!biodata) throw new BadRequestException();
+            if (!biodata)
+                throw new BadRequestException(
+                    'Silakan isi biodata terlebih dahulu.',
+                );
 
             return this.nonPhysicalCriteriaService.findOne(userId, biodata.id);
         } catch (error) {
@@ -37,6 +48,7 @@ export class NonPhysicalCriteriaController {
         }
     }
 
+    @UpdateNonPhysicalCriteriaDoc()
     @Roles(Role.Member)
     @Patch()
     async update(
@@ -52,8 +64,8 @@ export class NonPhysicalCriteriaController {
 
             const dataSave: Prisma.NonPhysicalCriteriaCreateInput = {
                 ...data,
-                biodata: { connect: { id: biodata.id } }
-            }
+                biodata: { connect: { id: biodata.id } },
+            };
 
             return this.nonPhysicalCriteriaService.upsert(biodata.id, dataSave);
         } catch (error) {
