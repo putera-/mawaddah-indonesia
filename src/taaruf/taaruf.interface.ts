@@ -1,8 +1,8 @@
 import { ApprovalStatus, TaarufProcess } from '@prisma/client';
 import { Akad } from 'src/akad/akad.interface';
+import { Inbox } from 'src/inbox/inbox.interace';
 import { Khitbah } from 'src/khitbah/khitbah.interface';
 import { Nadhar } from 'src/nadhar/nadhar.interface';
-import { TaarufApproval } from 'src/taaruf_approval/taaruf_approval.interface';
 import { User } from 'src/users/user.interface';
 
 export interface Taaruf {
@@ -11,14 +11,15 @@ export interface Taaruf {
     userId: string;
     candidate?: User;
     candidateId: string;
+    active: boolean;
     status: ApprovalStatus;
-    taaruf_process: TaarufProcess
     message: string;
-    approval?: TaarufApproval;
+    taaruf_process: TaarufProcess
     nadhars?: Nadhar[];
     khitbahs?: Khitbah[];
     akads?: Akad[];
     cancelation?: TaarufCancelation
+    Inbox?: Inbox[];
     response?: Response
     createdAt: Date;
     updatedAt: Date;
