@@ -10,130 +10,139 @@ import { AppService } from 'src/app.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { Public } from 'src/auth/auth.metadata';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { get } from 'http';
+import { CreateSliderDoc, DeleteSliderDoc, GetSliderByIdDoc, GetSliderDoc, UpdateSliderDoc } from './slider.doc';
 
+@ApiBearerAuth()
+@ApiTags('Slider')
 @Controller('slider')
 export class SliderController {
-  constructor(
-    private readonly sliderService: SliderService,
-    private readonly photoService: PhotosService,
-    private readonly appService: AppService,
+    constructor(
+        private readonly sliderService: SliderService,
+        private readonly photoService: PhotosService,
+        private readonly appService: AppService,
 
-  ) { }
+    ) { }
 
-  @Roles(Role.Superadmin, Role.Admin)
-  @Post()
-  @UseInterceptors(FileInterceptor('photo'))
-  async create(@Body(new ValidationPipe()) data: CreateSliderDto, @UploadedFile() file: Express.Multer.File) {
-    // for avatar
-    const ext = file ? file.originalname.split('.').pop() : '';
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    @CreateSliderDoc()
+    @Roles(Role.Superadmin, Role.Admin)
+    @Post()
+    @UseInterceptors(FileInterceptor('photo'))
+    async create(@Body(new ValidationPipe()) data: CreateSliderDto, @UploadedFile() file: Express.Multer.File) {
+        // for avatar
+        const ext = file ? file.originalname.split('.').pop() : '';
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
 
-    try {
-      if (file) {
-        const avatarBuffer = file.buffer;
+        try {
+            if (file) {
+                const avatarBuffer = file.buffer;
 
-        // resize images to 600, 900, 1200
-        const sizes = [{ key: 'lg', size: 1200 }];
-        await Promise.all(
-          sizes.map(async (s) => {
-            const { key, size } = s;
-            const filename = `${uniqueSuffix}_${key}.${ext}`;
-            const filepath = path.join('./public/photos/' + filename);
+                // resize images to 600, 900, 1200
+                const sizes = [{ key: 'lg', size: 1200 }];
+                await Promise.all(
+                    sizes.map(async (s) => {
+                        const { key, size } = s;
+                        const filename = `${uniqueSuffix}_${key}.${ext}`;
+                        const filepath = path.join('./public/photos/' + filename);
 
-            await this.photoService.resize(size, avatarBuffer, filepath);
-          })
-        );
-        data.photo = `/public/photos/${uniqueSuffix}_lg.${ext}`;
-      };
+                        await this.photoService.resize(size, avatarBuffer, filepath);
+                    })
+                );
+                data.photo = `/public/photos/${uniqueSuffix}_lg.${ext}`;
+            };
 
-      return this.sliderService.create(data as Prisma.SliderCreateInput);
-    } catch (error) {
-      //jika terjadi error, hapus photo yang tersimpan
-      if (file) {
-        //hapus photo jika ada file
-        this.appService.removeFile(`/public/photos/${uniqueSuffix}_lg.${ext}`);
-      }
+            return this.sliderService.create(data as Prisma.SliderCreateInput);
+        } catch (error) {
+            //jika terjadi error, hapus photo yang tersimpan
+            if (file) {
+                //hapus photo jika ada file
+                this.appService.removeFile(`/public/photos/${uniqueSuffix}_lg.${ext}`);
+            }
 
-      throw error;
+            throw error;
+        };
     };
-  };
 
-  @Public()
-  @Get()
-  findAll() {
-    try {
-      return this.sliderService.findAll();
+    @GetSliderDoc()
+    @Public()
+    @Get()
+    findAll() {
+        try {
+            return this.sliderService.findAll();
 
-    } catch (error) {
-      throw error;
+        } catch (error) {
+            throw error;
 
+        };
     };
-  };
 
-  @Roles(Role.Member ,Role.Superadmin, Role.Admin)
 
-  @Public()
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    try {
-      return this.sliderService.findOne(id);
+    @GetSliderByIdDoc()
+    @Public()
+    @Get(':id')
+    findOne(@Param('id') id: string) {
+        try {
+            return this.sliderService.findOne(id);
 
-    } catch (error) {
-      throw error;
+        } catch (error) {
+            throw error;
 
+        };
     };
-  };
 
-  @Roles(Role.Superadmin, Role.Admin)
-  @Patch(':id')
-  @UseInterceptors(FileInterceptor('photo'))
-  async update(@Param('id') id: string, @Body(new ValidationPipe()) data: UpdateSliderDto, @UploadedFile() file: Express.Multer.File) {
-    // for photo
-    const ext = file ? file.originalname.split('.').pop() : '';
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    @UpdateSliderDoc()
+    @Roles(Role.Superadmin, Role.Admin)
+    @Patch(':id')
+    @UseInterceptors(FileInterceptor('photo'))
+    async update(@Param('id') id: string, @Body(new ValidationPipe()) data: UpdateSliderDto, @UploadedFile() file: Express.Multer.File) {
+        // for photo
+        const ext = file ? file.originalname.split('.').pop() : '';
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
 
-    try {
-      if (file) {
-        const avatarBuffer = file.buffer;
+        try {
+            if (file) {
+                const avatarBuffer = file.buffer;
 
-        // resize images to 600, 900, 1200
-        const sizes = [{ key: 'lg', size: 1200 }];
-        await Promise.all(
-          sizes.map(async (s) => {
-            const { key, size } = s;
-            const filename = `${uniqueSuffix}_${key}.${ext}`;
-            const filepath = path.join('./public/photos/' + filename);
+                // resize images to 600, 900, 1200
+                const sizes = [{ key: 'lg', size: 1200 }];
+                await Promise.all(
+                    sizes.map(async (s) => {
+                        const { key, size } = s;
+                        const filename = `${uniqueSuffix}_${key}.${ext}`;
+                        const filepath = path.join('./public/photos/' + filename);
 
-            await this.photoService.resize(size, avatarBuffer, filepath);
-          })
-        );
+                        await this.photoService.resize(size, avatarBuffer, filepath);
+                    })
+                );
 
-        data.photo = `/public/photos/${uniqueSuffix}_lg.${ext}`;
-      };
+                data.photo = `/public/photos/${uniqueSuffix}_lg.${ext}`;
+            };
 
-      return this.sliderService.update(id, data);
+            return this.sliderService.update(id, data);
 
-    } catch (error) {
-      //jika terjadi error, hapus photo yang tersimpan
-      if (file) {
-        //hapus photo jika ada file
-        this.appService.removeFile(`/public/photos/${uniqueSuffix}_lg.${ext}`);
-      }
+        } catch (error) {
+            //jika terjadi error, hapus photo yang tersimpan
+            if (file) {
+                //hapus photo jika ada file
+                this.appService.removeFile(`/public/photos/${uniqueSuffix}_lg.${ext}`);
+            }
 
-      throw error;
+            throw error;
+        };
     };
-  };
 
-  @Delete(':id')
-  @HttpCode(204)
-  @Roles(Role.Superadmin, Role.Admin)
-  remove(@Param('id') id: string) {
-    try {
-      return this.sliderService.remove(id);
+    @DeleteSliderDoc()
+    @Delete(':id')
+    @HttpCode(204)
+    @Roles(Role.Superadmin, Role.Admin)
+    remove(@Param('id') id: string) {
+        try {
+            return this.sliderService.remove(id);
 
-    } catch (error) {
-      throw error;
+        } catch (error) {
+            throw error;
 
+        };
     };
-  };
 };
