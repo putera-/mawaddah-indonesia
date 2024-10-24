@@ -119,6 +119,7 @@ export class InboxService {
         }
 
         this.markAsRead(id);
+        inbox.read = true;
 
         return inbox;
     }
