@@ -80,7 +80,7 @@ export class NadharService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah mengajukan permintaan nadhar`;
-            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+            const dataInbox = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -164,7 +164,7 @@ export class NadharService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah membatalkan permintaan nadhar`;
-            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+            const dataInbox = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -231,7 +231,7 @@ export class NadharService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah menerima permintaan nadhar`;
-            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+            const dataInbox = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -295,7 +295,7 @@ export class NadharService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah menolak permintaan nadhar`;
-            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+            const dataInbox = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),

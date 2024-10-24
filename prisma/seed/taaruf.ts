@@ -387,11 +387,13 @@ async function sendMessageAndInbox(taarufId: string, senderId: string, receiverI
     const dataSenderInbox: Prisma.InboxCreateInput = {
         ...dataInbox,
         user: { connect: { id: senderId } },
+        responder: { connect: { id: receiverId } },
         read: true, // mark as read
     }
     const dataReceiverInbox: Prisma.InboxCreateInput = {
         ...dataInbox,
         user: { connect: { id: receiverId } },
+        responder: { connect: { id: senderId } },
         read: false, // mark as unread
     }
 

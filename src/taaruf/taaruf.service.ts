@@ -59,7 +59,7 @@ export class TaarufService {
         {
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah mengajukan permintaan taaruf`;
-            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+            const dataInbox = {
                 taaruf: { connect: { id: taaruf.id } },
                 title,
                 datetime: new Date(),
@@ -168,7 +168,7 @@ export class TaarufService {
             });
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah menerima permintaan taaruf`;
-            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+            const dataInbox = {
                 taaruf: { connect: { id: taaruf.id } },
                 title,
                 datetime: new Date(),
@@ -218,7 +218,7 @@ export class TaarufService {
             });
             // CREATE inbox sender & receiver
             const title = `${user.firstname} menolak permintaan taaruf`;
-            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+            const dataInbox = {
                 taaruf: { connect: { id: taaruf.id } },
                 title,
                 datetime: new Date(),
@@ -272,7 +272,7 @@ export class TaarufService {
             // get receiverId, karena yang mencancel bisa candidate maupun yang mengajukan taaruf
             const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
 
-            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+            const dataInbox = {
                 taaruf: { connect: { id: taaruf.id } },
                 title,
                 datetime: new Date(),
@@ -310,7 +310,7 @@ export class TaarufService {
         // get receiverId, karena yang mencancel bisa candidate maupun yang mengajukan taaruf
         const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
 
-        const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+        const dataInbox = {
             taaruf: { connect: { id: taaruf.id } },
             title,
             datetime: new Date(),

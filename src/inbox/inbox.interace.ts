@@ -5,6 +5,8 @@ export interface Inbox {
     id: string
     user?: User
     userId: string
+    responder?: User
+    responderId: string
     taaruf: Taaruf
     taarufId: string
     title: string

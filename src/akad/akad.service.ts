@@ -92,7 +92,7 @@ export class AkadService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah mengajukan permintaan akad`;
-            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+            const dataInbox = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -177,7 +177,7 @@ export class AkadService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah membatalkan permintaan akad`;
-            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+            const dataInbox = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -243,7 +243,7 @@ export class AkadService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah menerima permintaan akad`;
-            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+            const dataInbox = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -309,7 +309,7 @@ export class AkadService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah menolak permintaan akad`;
-            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+            const dataInbox = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),

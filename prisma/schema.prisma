@@ -43,10 +43,11 @@ model User {
     updatedAt          DateTime            @default(now()) @updatedAt
     backup_detail      BackupDetail?
     taaruf_cancelation TaarufCancelation[]
-    inbox              Inbox[]
     Nadhar             Nadhar[]
     Khitbah            Khitbah[]
     Akad               Akad[]
+    inbox              Inbox[]             @relation("user")
+    inbox_responder    Inbox[]             @relation("responder")
     Response           Response[]
     MessageSender      InboxMessage[]      @relation("MessageSender")
     MessageReceiver    InboxMessage[]      @relation("MessageReceiver")
@@ -730,8 +731,10 @@ enum ExperienceType {
 
 model Inbox {
     id           String         @id @default(uuid())
-    user         User           @relation(fields: [userId], references: [id])
+    user         User           @relation(name: "user", fields: [userId], references: [id])
     userId       String
+    responder    User           @relation(name: "responder", fields: [responderId], references: [id])
+    responderId  String
     taaruf       Taaruf         @relation(fields: [taarufId], references: [id])
     taarufId     String
     title        String         @db.VarChar(255)

@@ -568,6 +568,7 @@ CREATE TABLE "experience" (
 CREATE TABLE "inbox" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "responderId" TEXT NOT NULL,
     "taarufId" TEXT NOT NULL,
     "title" VARCHAR(255) NOT NULL,
     "read" BOOLEAN NOT NULL DEFAULT false,
@@ -798,6 +799,9 @@ ALTER TABLE "experience" ADD CONSTRAINT "experience_biodataId_fkey" FOREIGN KEY 
 
 -- AddForeignKey
 ALTER TABLE "inbox" ADD CONSTRAINT "inbox_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "inbox" ADD CONSTRAINT "inbox_responderId_fkey" FOREIGN KEY ("responderId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "inbox" ADD CONSTRAINT "inbox_taarufId_fkey" FOREIGN KEY ("taarufId") REFERENCES "taaruf"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateInboxDto } from './dto/create-inbox.dto';
 import { UpdateInboxDto } from './dto/update-inbox.dto';
-import { Prisma } from '@prisma/client';
+import { Prisma, TaarufProcess } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { Inbox } from './inbox.interace';
 import { UsersService } from 'src/users/user.service';
@@ -13,16 +13,18 @@ export class InboxService {
         private userService: UsersService,
     ) { }
 
-    async create(senderId: string, receiverId: string, taarufId: string, data: Prisma.InboxCreateWithoutUserInput): Promise<void> {
+    async create(senderId: string, receiverId: string, taarufId: string, data: any): Promise<void> {
 
         const dataSenderInbox: Prisma.InboxCreateInput = {
             ...data,
             user: { connect: { id: senderId } },
+            responder: { connect: { id: receiverId } },
             read: true, // mark as read
         }
         const dataReceiverInbox: Prisma.InboxCreateInput = {
             ...data,
             user: { connect: { id: receiverId } },
+            responder: { connect: { id: senderId } },
             read: false, // mark as unread
         }
 
@@ -70,13 +72,17 @@ export class InboxService {
                 skip,
                 take: limit,
                 include: {
-                    user: true,
+                    responder: true,
+                    taaruf: true
                 }
             }),
         ]);
 
         for (const inbox of data) {
-            this.userService.formatGray(inbox.user);
+
+            if (['TaarufRequest', 'TaarufRejected', 'NadharCanceled', 'KhitbahCanceled', 'AkadCanceled', 'Canceled'].includes(inbox.taaruf.taaruf_process)) {
+                this.userService.formatGray(inbox.responder);
+            }
         }
 
         const inboxes = data;
@@ -99,11 +105,16 @@ export class InboxService {
             include: {
                 messages: true,
                 user: true,
-                taaruf: true
+                taaruf: {
+                    include: {
+                        // user: true,
+                        candidate: true,
+                    }
+                }
             }
         });
 
-        this.userService.formatGray(inbox.user);
+        // this.userService.formatGray(inbox.user);
 
         return inbox;
     }

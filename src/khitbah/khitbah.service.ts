@@ -83,7 +83,7 @@ export class KhitbahService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah mengajukan permintaan khitbah`;
-            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+            const dataInbox = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -165,7 +165,7 @@ export class KhitbahService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah membatalkan permintaan khitbah`;
-            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+            const dataInbox = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -232,7 +232,7 @@ export class KhitbahService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah menerima permintaan khitbah`;
-            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+            const dataInbox = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -298,7 +298,7 @@ export class KhitbahService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah menolak permintaan khitbah`;
-            const dataInbox: Prisma.InboxCreateWithoutUserInput = {
+            const dataInbox = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
