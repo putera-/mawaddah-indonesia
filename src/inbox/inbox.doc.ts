@@ -11,10 +11,12 @@ export function GetAllInboxDoc() {
             description: 'Success',
             schema: {
                 example: {
-                    limit: 2,
-                    total: 100,
+                    total_read: 0,
+                    total_unread: 2,
+                    total: 2,
                     page: 1,
-                    maxPages: 12,
+                    maxPages: 1,
+                    limit: 10,
                     data: {
                         sampleInbox
                     }
