@@ -52,7 +52,7 @@ export class InboxController {
 
 
     @Roles(Role.Member)
-    @Patch(':id')
+    @Patch('mark_read/:id')
     markAsRead(
         @Param('id') id: string
     ) {
@@ -66,7 +66,7 @@ export class InboxController {
 
 
     @Roles(Role.Member)
-    @Patch(':id')
+    @Patch('mark_favourite/:id')
     markAsFavourite(
         @Param('id') id: string
     ) {
@@ -78,7 +78,7 @@ export class InboxController {
     }
 
     @Roles(Role.Member)
-    @Patch(':id')
+    @Patch('mark_unfavourite/:id')
     markUnFavourite(
         @Param('id') id: string
     ) {
