@@ -2,12 +2,13 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Query } from '@
 import { InboxService } from './inbox.service';
 import { CreateInboxDto } from './dto/create-inbox.dto';
 import { UpdateInboxDto } from './dto/update-inbox.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GetAllInboxDoc, GetInboxByIdDoc } from './inbox.doc';
 import { get } from 'http';
 import { Role } from 'src/roles/role.enums';
 import { Roles } from 'src/roles/roles.decorator';
 
+@ApiBearerAuth()
 @ApiTags('Inbox')
 @Controller('inbox')
 export class InboxController {
