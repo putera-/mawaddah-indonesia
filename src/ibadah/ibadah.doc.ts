@@ -1,6 +1,6 @@
-import { applyDecorators } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateIbadahDto } from './dto/create-ibadah.dto';
+import { applyDecorators } from '@nestjs/common';
 
 
 export function GetIbadahDoc() {
