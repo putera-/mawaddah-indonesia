@@ -104,8 +104,30 @@ export class InboxService {
         });
 
         this.userService.formatGray(inbox.user);
+        this.markAsRead(id);
 
         return inbox;
+    }
+
+    async markAsRead(id: string) {
+        return this.prisma.inbox.update({
+            where: { id },
+            data: { read: true },
+        });
+    }
+
+    async markAsFavourite(id: string) {
+        return this.prisma.inbox.update({
+            where: { id },
+            data: { is_favourite: true },
+        });
+    }
+
+    async markUnFavourite(id: string) {
+        return this.prisma.inbox.update({
+            where: { id },
+            data: { is_favourite: false },
+        });
     }
 
     // update(id: number, updateInboxDto: UpdateInboxDto) {

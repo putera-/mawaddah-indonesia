@@ -50,6 +50,45 @@ export class InboxController {
         }
     }
 
+
+    @Roles(Role.Member)
+    @Patch(':id')
+    markAsRead(
+        @Param('id') id: string
+    ) {
+        try {
+            return this.inboxService.markAsRead(id);
+
+        } catch (error) {
+            throw error
+        }
+    }
+
+
+    @Roles(Role.Member)
+    @Patch(':id')
+    markAsFavourite(
+        @Param('id') id: string
+    ) {
+        try {
+            return this.inboxService.markAsFavourite(id);
+        } catch (error) {
+            throw error
+        }
+    }
+
+    @Roles(Role.Member)
+    @Patch(':id')
+    markUnFavourite(
+        @Param('id') id: string
+    ) {
+        try {
+            return this.inboxService.markUnFavourite(id);
+        } catch (error) {
+            throw error
+        }
+    }
+
     //   @Patch(':id')
     //   update(@Param('id') id: string, @Body() updateInboxDto: UpdateInboxDto) {
     //     return this.inboxService.update(+id, updateInboxDto);
