@@ -79,7 +79,6 @@ export class InboxService {
         ]);
 
         for (const inbox of data) {
-
             if (['TaarufRequest', 'TaarufRejected', 'NadharCanceled', 'KhitbahCanceled', 'AkadCanceled', 'Canceled'].includes(inbox.taaruf.taaruf_process)) {
                 this.userService.formatGray(inbox.responder);
             }
@@ -104,15 +103,14 @@ export class InboxService {
             where: { id },
             include: {
                 messages: true,
-                user: true,
-                taaruf: {
-                    include: {
-                        // user: true,
-                        candidate: true,
-                    }
-                }
+                responder: true,
+                taaruf: true
             }
         });
+
+        if (['TaarufRequest', 'TaarufRejected', 'NadharCanceled', 'KhitbahCanceled', 'AkadCanceled', 'Canceled'].includes(inbox.taaruf.taaruf_process)) {
+            this.userService.formatGray(inbox.responder);
+        }
 
         // this.userService.formatGray(inbox.user);
 
