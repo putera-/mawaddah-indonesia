@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateInboxDto } from './dto/create-inbox.dto';
 import { UpdateInboxDto } from './dto/update-inbox.dto';
 import { Prisma, TaarufProcess } from '@prisma/client';
@@ -102,11 +102,17 @@ export class InboxService {
         const inbox = await this.prisma.inbox.findFirst({
             where: { id },
             include: {
-                messages: true,
+                messages: {
+                    orderBy: { createdAt: 'asc' },
+                },
                 responder: true,
                 taaruf: true
             }
         });
+
+        if (!inbox) {
+            throw new NotFoundException('Inbox not found');
+        }
 
         if (['TaarufRequest', 'TaarufRejected', 'NadharCanceled', 'KhitbahCanceled', 'AkadCanceled', 'Canceled'].includes(inbox.taaruf.taaruf_process)) {
             this.userService.formatGray(inbox.responder);

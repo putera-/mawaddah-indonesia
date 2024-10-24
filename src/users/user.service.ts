@@ -43,7 +43,7 @@ export class UsersService {
         private Prisma: PrismaService,
         private appService: AppService,
         // private activation: ActivationService,
-    ) {}
+    ) { }
 
     create(data: Prisma.UserCreateInput) {
         return this.Prisma.user.create({
@@ -56,8 +56,8 @@ export class UsersService {
         data.email = data.email.slice(0, 2) + '...';
         // data.firstname = data.firstname.slice(0, 2) + '...';
         data.lastname = data.lastname.slice(0, 2) + '...';
-        delete data.avatar;
-        delete data.avatar_md;
+        data.avatar = data.blurred_avatar;
+        data.avatar_md = data.blurred_avatar_md;
     }
 
     async findAll(

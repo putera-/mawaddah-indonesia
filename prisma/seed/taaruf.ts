@@ -84,7 +84,7 @@ export async function taarufSeed(prisma: PrismaClient) {
 
                 // CREATE inbox sender & receiver
                 console.log('send Message Request Taaruf');
-                await sendMessageAndInbox(taaruf.id, user.id, candidate.id, title, message);
+                await sendMessageAndInbox(taaruf.id, user.id, candidate.id, title, message, TaarufProcess.TaarufRequest);
 
                 // RESPONSE TAARUF
                 const approveTaaruf = faker.datatype.boolean();
@@ -116,7 +116,7 @@ export async function taarufSeed(prisma: PrismaClient) {
                     const responseTaarufTitle = `${candidateTaaruf.firstname} telah ${approveTaaruf ? 'menerima' : 'menolak'} permintaan taaruf`;
 
                     console.log('send Message Response Taaruf');
-                    await sendMessageAndInbox(taaruf.id, candidateTaaruf.id, taaruf.userId, responseTaarufTitle, messageResponseTaaruf);
+                    await sendMessageAndInbox(taaruf.id, candidateTaaruf.id, taaruf.userId, responseTaarufTitle, messageResponseTaaruf, taarufProcess);
                 }
 
                 // STOP if approval is rejected
@@ -153,7 +153,7 @@ export async function taarufSeed(prisma: PrismaClient) {
                         }
                     });
                     console.log('send Message Request Nadhar ==##');
-                    await sendMessageAndInbox(taaruf.id, requester.id, responder.id, title, message);
+                    await sendMessageAndInbox(taaruf.id, requester.id, responder.id, title, message, TaarufProcess.NadharRequest);
                 }
 
                 if (!requestNadhar) continue;
@@ -164,9 +164,9 @@ export async function taarufSeed(prisma: PrismaClient) {
                     console.log({ approveNadhar });
 
                     // const candidateTaaruf: User = candidate;
-                    const approval = approveTaaruf ? ApprovalStatus.Approved : ApprovalStatus.Rejected;
-                    const taarufProcess = approveTaaruf ? TaarufProcess.NadharApproved : TaarufProcess.NadharRejected;
-                    const messageResponseNadhar = approveTaaruf ?
+                    const approval = approveNadhar ? ApprovalStatus.Approved : ApprovalStatus.Rejected;
+                    const taarufProcess = approveNadhar ? TaarufProcess.NadharApproved : TaarufProcess.NadharRejected;
+                    const messageResponseNadhar = approveNadhar ?
                         'Saya menyetujui permintaan nadhar, mari kita bertemu' : 'Maaf saya menolak permintaan nadhar';
 
                     const response: Prisma.ResponseCreateInput = {
@@ -196,7 +196,7 @@ export async function taarufSeed(prisma: PrismaClient) {
                     const responseNadharTitle = `${responder.firstname} telah ${approveNadhar ? 'menerima' : 'menolak'} permintaan nadhar`;
 
                     console.log('send Message Response Nadhar ==##');
-                    await sendMessageAndInbox(taaruf.id, responder.id, requester.id, responseNadharTitle, messageResponseNadhar);
+                    await sendMessageAndInbox(taaruf.id, responder.id, requester.id, responseNadharTitle, messageResponseNadhar, taarufProcess);
                 }
                 // STOP if approval is rejected
                 if (!approveNadhar) continue;
@@ -232,7 +232,7 @@ export async function taarufSeed(prisma: PrismaClient) {
                         }
                     });
                     console.log('send Message Request Khitbah ==##==##');
-                    await sendMessageAndInbox(taaruf.id, requester.id, responder.id, title, message);
+                    await sendMessageAndInbox(taaruf.id, requester.id, responder.id, title, message, TaarufProcess.KhitbahRequest);
                 }
 
                 if (!requestKhitbah) continue;
@@ -243,9 +243,9 @@ export async function taarufSeed(prisma: PrismaClient) {
                     console.log({ approveKhitbah });
 
                     // const candidateTaaruf: User = candidate;
-                    const approval = approveTaaruf ? ApprovalStatus.Approved : ApprovalStatus.Rejected;
-                    const taarufProcess = approveTaaruf ? TaarufProcess.KhitbahAppproved : TaarufProcess.KhitbahRejected;
-                    const messageResponseKhitbah = approveTaaruf ?
+                    const approval = approveKhitbah ? ApprovalStatus.Approved : ApprovalStatus.Rejected;
+                    const taarufProcess = approveKhitbah ? TaarufProcess.KhitbahAppproved : TaarufProcess.KhitbahRejected;
+                    const messageResponseKhitbah = approveKhitbah ?
                         'Saya menyetujui permintaan khitbah, mari kita tentukan akad' : 'Maaf saya menolak permintaan khitbah';
 
                     const response: Prisma.ResponseCreateInput = {
@@ -274,7 +274,7 @@ export async function taarufSeed(prisma: PrismaClient) {
                     const title = `${responder.firstname} telah ${approveKhitbah ? 'menerima' : 'menolak'} permintaan khitbah`;
 
                     console.log('send Message Response Khitbah ==##==##');
-                    await sendMessageAndInbox(taaruf.id, responder.id, requester.id, title, messageResponseKhitbah);
+                    await sendMessageAndInbox(taaruf.id, responder.id, requester.id, title, messageResponseKhitbah, taarufProcess);
                 }
                 // STOP if approval is rejected
                 if (!approveKhitbah) continue;
@@ -310,7 +310,7 @@ export async function taarufSeed(prisma: PrismaClient) {
                         }
                     });
                     console.log('send Message Request Akad ==##==##==##');
-                    await sendMessageAndInbox(taaruf.id, requester.id, responder.id, title, message);
+                    await sendMessageAndInbox(taaruf.id, requester.id, responder.id, title, message, TaarufProcess.AkadRequest);
                 }
 
                 if (!requestAkad) continue;
@@ -322,9 +322,9 @@ export async function taarufSeed(prisma: PrismaClient) {
                     console.log({ approveAkad });
 
                     // const candidateTaaruf: User = candidate;
-                    const approval = approveTaaruf ? ApprovalStatus.Approved : ApprovalStatus.Rejected;
-                    const taarufProcess = approveTaaruf ? TaarufProcess.AkadApproved : TaarufProcess.AkadRejected;
-                    const messageResponseAkad = approveTaaruf ?
+                    const approval = approveAkad ? ApprovalStatus.Approved : ApprovalStatus.Rejected;
+                    const taarufProcess = approveAkad ? TaarufProcess.AkadApproved : TaarufProcess.AkadRejected;
+                    const messageResponseAkad = approveAkad ?
                         'Saya menyetujui permintaan akad, mari kita menikah' : 'Maaf saya menolak permintaan akad';
 
                     const response: Prisma.ResponseCreateInput = {
@@ -353,7 +353,7 @@ export async function taarufSeed(prisma: PrismaClient) {
                     const title = `${responder.firstname} telah ${approveAkad ? 'menerima' : 'menolak'} permintaan akad`;
 
                     console.log('send Message Response Akad ==##==##==##');
-                    await sendMessageAndInbox(taaruf.id, responder.id, requester.id, title, messageResponseAkad);
+                    await sendMessageAndInbox(taaruf.id, responder.id, requester.id, title, messageResponseAkad, taarufProcess);
                 }
 
             }
@@ -367,7 +367,7 @@ export async function taarufSeed(prisma: PrismaClient) {
 }
 
 
-async function sendMessageAndInbox(taarufId: string, senderId: string, receiverId: string, title: string, message: string) {
+async function sendMessageAndInbox(taarufId: string, senderId: string, receiverId: string, title: string, message: string, taaruf_process) {
     // CREATE inbox sender & receiver
     const dataInbox = {
         taaruf: { connect: { id: taarufId } },
@@ -379,7 +379,7 @@ async function sendMessageAndInbox(taarufId: string, senderId: string, receiverI
                 receiver: { connect: { id: receiverId } },
                 message: message + ' ' + faker.lorem.paragraphs(4),
                 title,
-                taaruf_process: TaarufProcess.TaarufRequest
+                taaruf_process
             }
         }
     }
@@ -419,4 +419,6 @@ async function sendMessageAndInbox(taarufId: string, senderId: string, receiverI
             update: dataReceiverInbox,
         }),
     ]);
+    await new Promise(resolve => setTimeout(resolve, 100));
+
 }
