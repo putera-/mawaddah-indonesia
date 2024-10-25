@@ -2,7 +2,7 @@
 CREATE TYPE "RoleStatus" AS ENUM ('MEMBER', 'ADMIN', 'SUPERADMIN');
 
 -- CreateEnum
-CREATE TYPE "TaarufStatus" AS ENUM ('OPEN', 'PENDING', 'BLOCKED');
+CREATE TYPE "TaarufStatus" AS ENUM ('OPEN', 'ACTIVE', 'BLOCKED');
 
 -- CreateEnum
 CREATE TYPE "ManhajStatus" AS ENUM ('SALAF', 'BARU_BELAJAR', 'NON_SALAF');

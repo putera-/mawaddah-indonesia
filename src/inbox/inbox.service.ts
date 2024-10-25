@@ -65,7 +65,7 @@ export class InboxService {
             }),
             this.prisma.inbox.findMany({
                 where: { userId },
-                orderBy: { datetime: 'asc' },
+                orderBy: { datetime: 'desc' },
                 skip,
                 take: limit,
                 include: {

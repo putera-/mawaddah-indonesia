@@ -104,7 +104,6 @@ enum RoleStatus {
 
 enum TaarufStatus {
     OPEN
-    PENDING
     ACTIVE
     BLOCKED
 }

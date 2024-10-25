@@ -1,4 +1,4 @@
-import { ApprovalStatus, Prisma, PrismaClient, TaarufProcess } from '@prisma/client';
+import { ApprovalStatus, Prisma, PrismaClient, Taaruf, TaarufProcess, TaarufStatus } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 import { User } from 'src/users/user.interface';
 import { Nadhar } from 'src/nadhar/nadhar.interface';
@@ -28,31 +28,36 @@ export async function taarufSeed(prisma: PrismaClient) {
 
         const user = users[i];
         const biodata = user.biodata;
-        // const candidate = await prisma.user.findFirst({
-        //     where: {
-        //         biodata: { gender: { not: biodata.gender } },
-        //     },
-        //     include: {
-        //         biodata: true,
-        //         Taaruf_candidate: {
-        //             where: {
-        //                 active: false,
-        //             },
-        //         },
-        //         Taaruf: {
-        //             where: {
-        //                 active: false,
-        //             },
-        //         },
-        //     },
-        // });
+
+        // recheck if requester already has taaruf
+        const requester2 = await prisma.user.findFirst({
+            where: { id: user.id }
+        });
+
+        // skip if already active
+        if (requester2.taaruf_status == TaarufStatus.ACTIVE) continue;
 
 
         for (let j = 0; j < users.length; j++) {
             const candidate = users[j];
             if (candidate.id == user.id) continue;
-
             if (candidate.biodata.gender == biodata.gender) continue;
+
+
+            // recheck if requester already has taaruf
+            const requester = await prisma.user.findFirst({
+                where: { id: user.id }
+            });
+
+            // stop loop candidate
+            if (requester.taaruf_status == TaarufStatus.ACTIVE) break;
+
+
+            const _candidate = await prisma.user.findFirst({
+                where: { id: candidate.id }
+            });
+            //  stop process candidate
+            if (_candidate.taaruf_status == TaarufStatus.ACTIVE) continue;
 
 
             const applyTaaruf = faker.datatype.boolean();
@@ -117,6 +122,16 @@ export async function taarufSeed(prisma: PrismaClient) {
 
                     console.log('send Message Response Taaruf');
                     await sendMessageAndInbox(taaruf.id, candidateTaaruf.id, taaruf.userId, responseTaarufTitle, messageResponseTaaruf, taarufProcess);
+
+                    // ACTIVATE TAARUF STATUS keduanya
+                    if (approveTaaruf) {
+                        await prisma.user.updateMany({
+                            where: { id: { in: [taaruf.userId, taaruf.candidateId] } },
+                            data: {
+                                taaruf_status: TaarufStatus.ACTIVE,
+                            }
+                        });
+                    }
                 }
 
                 // STOP if approval is rejected
@@ -315,6 +330,10 @@ export async function taarufSeed(prisma: PrismaClient) {
 
                 if (!requestAkad) continue;
 
+                const simulateCancel = faker.datatype.boolean();
+                if (simulateCancel) await doCancel(taaruf);
+                if (simulateCancel) continue;
+
                 // RESPONSE AKAD
                 const approveAkad = faker.datatype.boolean();
                 {
@@ -420,5 +439,21 @@ async function sendMessageAndInbox(taarufId: string, senderId: string, receiverI
         }),
     ]);
     await new Promise(resolve => setTimeout(resolve, 100));
+}
 
+async function doCancel(taaruf: Taaruf) {
+    await Promise.all([
+        _prisma.taaruf.update({
+            where: { id: taaruf.id },
+            data: {
+                taaruf_process: TaarufProcess.Canceled,
+            }
+        }),
+        _prisma.user.updateMany({
+            where: { id: { in: [taaruf.userId, taaruf.candidateId] } },
+            data: {
+                taaruf_status: TaarufStatus.OPEN,
+            }
+        })
+    ])
 }
