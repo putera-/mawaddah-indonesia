@@ -1,9 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateInboxDto } from './dto/create-inbox.dto';
-import { UpdateInboxDto } from './dto/update-inbox.dto';
 import { Prisma, TaarufProcess } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
-import { Inbox } from './inbox.interace';
 import { UsersService } from 'src/users/user.service';
 
 @Injectable()

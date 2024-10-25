@@ -1,10 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Query } from '@nestjs/common';
+import { Controller, Get, Patch, Param, Req, Query } from '@nestjs/common';
 import { InboxService } from './inbox.service';
-import { CreateInboxDto } from './dto/create-inbox.dto';
-import { UpdateInboxDto } from './dto/update-inbox.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GetAllInboxDoc, GetInboxByIdDoc } from './inbox.doc';
-import { get } from 'http';
 import { Role } from 'src/roles/role.enums';
 import { Roles } from 'src/roles/roles.decorator';
 
@@ -13,11 +10,6 @@ import { Roles } from 'src/roles/roles.decorator';
 @Controller('inbox')
 export class InboxController {
     constructor(private readonly inboxService: InboxService) { }
-
-    //   @Post()
-    //   create(@Body() createInboxDto: CreateInboxDto) {
-    //     return this.inboxService.create(createInboxDto);
-    //   }
 
     @Roles(Role.Member)
     @GetAllInboxDoc()

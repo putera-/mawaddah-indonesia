@@ -1,6 +1,6 @@
 import { ApprovalStatus, TaarufProcess } from '@prisma/client';
 import { Akad } from 'src/akad/akad.interface';
-import { Inbox } from 'src/inbox/inbox.interace';
+import { Inbox } from 'src/inbox/inbox.interface';
 import { Khitbah } from 'src/khitbah/khitbah.interface';
 import { Nadhar } from 'src/nadhar/nadhar.interface';
 import { User } from 'src/users/user.interface';
