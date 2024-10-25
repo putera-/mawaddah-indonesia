@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/user.service';
-import { ApprovalStatus, Prisma, TaarufProcess } from '@prisma/client';
+import { ApprovalStatus, Prisma, PrismaClient, TaarufProcess, TaarufStatus } from '@prisma/client';
 import { Taaruf } from './taaruf.interface';
 import { InboxService } from 'src/inbox/inbox.service';
 
@@ -325,5 +325,14 @@ export class TaarufService {
             }
         }
         await this.inboxService.create(userId, taaruf.candidateId, taaruf.id, dataInbox);
+    }
+
+    update_taaruf_status(userId: string, taaruf_status: TaarufStatus) {
+        return this.PrismaService.user.update({
+            where: { id: userId },
+            data: {
+                taaruf_status
+            }
+        })
     }
 }
