@@ -1,4 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateInboxDto } from './dto/create-inbox.dto';
+import { UpdateInboxDto } from './dto/update-inbox.dto';
 import { Prisma, TaarufProcess } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/user.service';
@@ -114,6 +116,15 @@ export class InboxService {
         if (['TaarufRequest', 'TaarufRejected', 'NadharCanceled', 'KhitbahCanceled', 'AkadCanceled', 'Canceled'].includes(inbox.taaruf.taaruf_process)) {
             this.userService.formatGray(inbox.responder);
         }
+
+        //hide candidate avatar
+        if (inbox.responder) {
+            inbox.responder.avatar = null;
+            inbox.responder.avatar_md = null;
+            inbox.responder.blurred_avatar = null;
+            inbox.responder.blurred_avatar_md = null;
+        }
+
 
         this.markAsRead(id);
         inbox.read = true;
