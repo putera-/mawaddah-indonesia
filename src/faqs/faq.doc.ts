@@ -1,19 +1,19 @@
 import { applyDecorators } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiQuery, ApiResponse } from "@nestjs/swagger";
-import { CreateEducationDto } from "./dto/create-education.dto";
+import { CreateFaqDto } from "./dto/create-faq.dto";
 
-
-export function CreateEducationDoc() {
+export function CreateFaqDoc() {
     return applyDecorators(
-        ApiOperation({ summary: 'Create Education, Restricted for Member' }),
+        ApiOperation({ summary: 'Create Faq, Restricted for Member' }),
         ApiBody({
-            type: CreateEducationDto
+            type: CreateFaqDto
         }),
         ApiResponse({
             status: 200,
             description: 'Success',
             schema: {
-                example: sample1
+                example: sample2
+
             }
         }),
         ApiResponse({
@@ -30,10 +30,9 @@ export function CreateEducationDoc() {
     );
 }
 
-
-export function GetEducationAll() {
+export function GetFaqAll() {
     return applyDecorators(
-        ApiOperation({ summary: 'Get Education, Restricted for Member' }),
+        ApiOperation({ summary: 'Get Faq, Restricted for Member' }),
         ApiQuery({
             name: 'page',
             required: false,
@@ -51,8 +50,8 @@ export function GetEducationAll() {
             description: 'Success',
             schema: {
                 example: {
-                    limit: 1,
-                    total: 1,
+                    limit: 3,
+                    total: 3,
                     page: 1,
                     maxPages: 1,
                     data: {
@@ -84,13 +83,13 @@ export function GetEducationAll() {
     )
 }
 
-export function GetEducationById() {
+export function GetFaqById() {
     return applyDecorators(
-        ApiOperation({ summary: 'Get Education By Id, Restricted for Member' }),
+        ApiOperation({ summary: 'Get Faq By Id, Restricted for Member' }),
         ApiResponse({
             status: 200,
             description: 'Success',
-            example: sample1
+            example: sample2
         }),
         ApiResponse({
             status: 401,
@@ -115,11 +114,11 @@ export function GetEducationById() {
     )
 }
 
-export function UpdateEducationById() {
+export function UpdateFaqById() {
     return applyDecorators(
-        ApiOperation({ summary: 'Update Education By Id, Restricted for Member' }),
+        ApiOperation({ summary: 'Update Faq By Id, Restricted for Member' }),
         ApiBody({
-            type: CreateEducationDto
+            type: CreateFaqDto
         }),
         ApiResponse({
             status: 200,
@@ -149,9 +148,9 @@ export function UpdateEducationById() {
     )
 }
 
-export function DeleteEducationById() {
+export function DeleteFaqById() {
     return applyDecorators(
-        ApiOperation({ summary: 'Delete Education By Id, Restricted for Member' }),
+        ApiOperation({ summary: 'Delete Faq By Id, Restricted for Member' }),
         ApiResponse({
             status: 204,
         }),
@@ -178,26 +177,44 @@ export function DeleteEducationById() {
     )
 }
 
-const sample1 = {
-	"id": "8f2acb5e-23a8-464b-951c-c68487a659b4",
-	"institution_name": "Fountain Magic Academy",
-	"major": null,
-	"degree": "Senior Highschool",
-	"city": "mondtstald",
-	"startYear": 2000,
-	"endYear": null,
-	"createdAt": "2024-09-24T01:59:26.762Z",
-	"updatedAt": "2024-09-24T02:00:37.602Z"
-}
+
+const sample1 = [
+    {
+        "id": "f80b32d6-9c35-4b4c-8db2-ff0eab1cef96",
+        "clientId": "94de0914-cf51-47a4-8234-812824d9848a",
+        "question": "sketch",
+        "answer": "scared elevation",
+        "deleted": false,
+        "createdAt": "2018-04-07T08:30:58.398Z",
+        "updatedAt": "2024-10-29T03:33:37.708Z"
+    },
+    {
+        "id": "0623d349-d687-4551-b007-63071f770d6b",
+        "clientId": "94de0914-cf51-47a4-8234-812824d9848a",
+        "question": "hmph flimsy",
+        "answer": "thread boohoo unbearably",
+        "deleted": false,
+        "createdAt": "2024-04-03T02:39:47.208Z",
+        "updatedAt": "2024-10-29T09:12:39.051Z"
+    },
+    {
+        "id": "7e163fcf-a181-45ad-9cdb-0c4aa256c805",
+        "clientId": "94de0914-cf51-47a4-8234-812824d9848a",
+        "question": "far fairly",
+        "answer": "depreciate milepost",
+        "deleted": false,
+        "createdAt": "2019-05-18T07:12:02.829Z",
+        "updatedAt": "2024-10-29T03:40:59.790Z"
+    },
+]
 
 const sample2 = {
-	"id": "8f2acb5e-23a8-464b-951c-c35453a659b4",
-	"institution_name": "Harlord Magic Academy",
-	"major": null,
-	"degree": "Senior Highschool",
-	"city": "Manchester",
-	"startYear": 2008,
-	"endYear": null,
-	"createdAt": "2024-09-24T01:59:26.762Z",
-	"updatedAt": "2024-09-24T02:00:37.602Z"
+    "id": "f80b32d6-9c35-4b4c-8db2-ff0eab1cef96",
+    "clientId": "94de0914-cf51-47a4-8234-812824d9848a",
+    "question": "sketch",
+    "answer": "scared elevation",
+    "deleted": false,
+    "createdAt": "2018-04-07T08:30:58.398Z",
+    "updatedAt": "2024-10-29T03:33:37.708Z"
 }
+

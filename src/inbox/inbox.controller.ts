@@ -1,7 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Query } from '@nestjs/common';
 import { InboxService } from './inbox.service';
-import { CreateInboxDto } from './dto/create-inbox.dto';
-import { UpdateInboxDto } from './dto/update-inbox.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GetAllInboxDoc, GetInboxByIdDoc, markAsFavouriteDoc, markAsUnavouriteDoc, markInboxAsReadDoc } from './inbox.doc';
 import { get } from 'http';
