@@ -5,11 +5,15 @@ import { UpdateFaqDto } from './dto/update-faq.dto';
 import { Prisma } from '@prisma/client';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
-import { Public } from 'src/auth/auth.metadata';
+import { CreateFaqDoc, DeleteFaqById, GetFaqAll, GetFaqById, UpdateFaqById } from './faq.doc';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('faqs')
 @Controller('faqs')
 export class FaqsController {
     constructor(private readonly faqsService: FaqsService) { }
+    @CreateFaqDoc()
     @Roles(Role.Superadmin, Role.Admin)
     @Post()
     create(@Body(new ValidationPipe()) data: CreateFaqDto) {
@@ -20,6 +24,7 @@ export class FaqsController {
         }
     };
 
+    @GetFaqAll()
     @Roles(Role.Member, Role.Superadmin, Role.Admin)
     @Get()
     findAll() {
@@ -30,6 +35,7 @@ export class FaqsController {
         }
     }
 
+    @GetFaqById()
     @Roles(Role.Member, Role.Superadmin, Role.Admin)
     @Get(':id')
     findOne(@Param('id') id: string) {
@@ -41,6 +47,7 @@ export class FaqsController {
     }
 
 
+    @UpdateFaqById()
     @Roles(Role.Superadmin, Role.Admin)
     @Patch(':id')
     update(@Param('id') id: string, @Body() updateFaqDto: UpdateFaqDto) {
@@ -51,6 +58,7 @@ export class FaqsController {
         }
     }
 
+    @DeleteFaqById()
     @Roles(Role.Superadmin, Role.Admin)
     @Delete(':id')
     @HttpCode(204)
