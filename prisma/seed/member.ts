@@ -602,7 +602,7 @@ export async function memberSeed(prisma: PrismaClient) {
         return authEntries;
     }
 
-    const jumlah_member = 200;
+    const jumlah_member = 400;
 
     // BOB
     {
