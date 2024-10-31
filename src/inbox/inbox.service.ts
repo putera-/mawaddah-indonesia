@@ -97,7 +97,6 @@ export class InboxService {
     }
 
     async findOne(id: string) {
-        // TODO hide foto candidate
         const inbox = await this.prisma.inbox.findFirst({
             where: { id },
             include: {
