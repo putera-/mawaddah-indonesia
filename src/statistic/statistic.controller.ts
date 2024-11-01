@@ -1,34 +1,47 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    Query,
+} from '@nestjs/common';
 import { StatisticService } from './statistic.service';
 import { CreateStatisticDto } from './dto/create-statistic.dto';
 import { UpdateStatisticDto } from './dto/update-statistic.dto';
+import { Public } from 'src/auth/auth.metadata';
+import { ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/roles/roles.decorator';
+import { Role } from 'src/roles/role.enums';
 
+@ApiTags('statistic')
 @Controller('statistic')
 export class StatisticController {
-  constructor(private readonly statisticService: StatisticService) {}
+    constructor(private readonly statisticService: StatisticService) {}
 
-  @Post()
-  create(@Body() createStatisticDto: CreateStatisticDto) {
-    return this.statisticService.create(createStatisticDto);
-  }
+    @Roles(Role.Superadmin, Role.Admin)
+    @Get('new-member')
+    findNewMember() {
+        return this.statisticService.findNewMember();
+    }
 
-  @Get()
-  findAll() {
-    return this.statisticService.findAll();
-  }
+    @Roles(Role.Superadmin, Role.Admin)
+    @Get()
+    findAllMember() {
+        return this.statisticService.findAllMember();
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.statisticService.findOne(+id);
-  }
+    @Roles(Role.Superadmin, Role.Admin)
+    @Get('active-member/:max_days')
+    findActiveMember(@Param('max_days') max_days: number) {
+        return this.statisticService.findActiveMember(max_days);
+    }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStatisticDto: UpdateStatisticDto) {
-    return this.statisticService.update(+id, updateStatisticDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.statisticService.remove(+id);
-  }
+    @Roles(Role.Superadmin, Role.Admin)
+    @Get('relationship/:process')
+    findByRelationship(@Param('process') process: string) {
+        return this.statisticService.findByRelationship(process);
+    }
 }

@@ -1,26 +1,92 @@
 import { Injectable } from '@nestjs/common';
-import { CreateStatisticDto } from './dto/create-statistic.dto';
-import { UpdateStatisticDto } from './dto/update-statistic.dto';
+import { ApprovalStatus } from '@prisma/client';
+import { PrismaService } from 'src/prisma.service';
+import { UsersService } from 'src/users/user.service';
 
 @Injectable()
 export class StatisticService {
-  create(createStatisticDto: CreateStatisticDto) {
-    return 'This action adds a new statistic';
-  }
+    constructor(
+        private prisma: PrismaService,
+        private userService: UsersService,
+    ) {}
 
-  findAll() {
-    return `This action returns all statistic`;
-  }
+    async findNewMember() {
+        const newMember = await this.prisma.user.count({
+            where: {
+                createdAt: {
+                    gte: new Date(
+                        new Date().setDate(new Date().getDate() - 30),
+                    ),
+                },
+            },
+        });
+        if (newMember === 0) {
+            return 'Tidak ada member baru dalam 30 hari terakhir.';
+        }
+        return newMember;
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} statistic`;
-  }
+    async findAllMember() {
+        const allMember = await this.prisma.user.count();
+        if (allMember === 0) {
+            return 'Tidak ada member yang mendaftar.';
+        }
+        return allMember;
+    }
 
-  update(id: number, updateStatisticDto: UpdateStatisticDto) {
-    return `This action updates a #${id} statistic`;
-  }
+    findActiveMember(max_days: number = 1) {
+        // TODO get from auth log
+        return `This action returns a statistic`;
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} statistic`;
-  }
+    // findByStatus(status) {}
+
+    async findByRelationship(process: string) {
+        let where: any = {};
+        switch (process) {
+            case 'taaruf':
+                where = {
+                    Taaruf: {
+                        some: {
+                            status: ApprovalStatus.Approved,
+                        },
+                    },
+                };
+                break;
+            case 'nadhar':
+                where = {
+                    Nadhar: {
+                        some: {
+                            status: ApprovalStatus.Approved,
+                        },
+                    },
+                };
+                break;
+            case 'khitbah':
+                where = {
+                    Khitbah: {
+                        some: {
+                            status: ApprovalStatus.Approved,
+                        },
+                    },
+                };
+                break;
+            case 'akad':
+                where = {
+                    Akad: {
+                        some: {
+                            status: ApprovalStatus.Approved,
+                        },
+                    },
+                };
+                break;
+            default:
+                return where;
+        }
+
+        const userByStatus = await this.prisma.user.count({
+            where,
+        });
+        return userByStatus;
+    }
 }
