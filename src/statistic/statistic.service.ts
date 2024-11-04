@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ApprovalStatus } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/user.service';
@@ -20,17 +20,17 @@ export class StatisticService {
                 },
             },
         });
-        if (newMember === 0) {
-            return 'Tidak ada member baru dalam 30 hari terakhir.';
-        }
+        // if (newMember === 0)
+        //     throw new NotFoundException(
+        //         'Tidak ada member baru yang mendaftar dalam 30 hari terakhir.',
+        //     );
         return newMember;
     }
 
     async findAllMember() {
         const allMember = await this.prisma.user.count();
-        if (allMember === 0) {
-            return 'Tidak ada member yang mendaftar.';
-        }
+        // if (allMember === 0)
+        //     throw new NotFoundException('Tidak ada member yang mendaftar.');
         return allMember;
     }
 
