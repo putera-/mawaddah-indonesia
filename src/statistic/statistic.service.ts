@@ -10,7 +10,7 @@ export class StatisticService {
         private userService: UsersService,
     ) {}
 
-    async findNewMember() {
+    async findNewMember(): Promise<number> {
         const newMember = await this.prisma.user.count({
             where: {
                 createdAt: {
@@ -27,21 +27,37 @@ export class StatisticService {
         return newMember;
     }
 
-    async findAllMember() {
+    async findAllMember(): Promise<number> {
         const allMember = await this.prisma.user.count();
         // if (allMember === 0)
         //     throw new NotFoundException('Tidak ada member yang mendaftar.');
         return allMember;
     }
 
-    findActiveMember(max_days: number = 1) {
+    async findActiveMember(max_days: number = 1): Promise<number> {
         // TODO get from auth log
-        return `This action returns a statistic`;
+        const now = new Date();
+        const thirtyDaysAgo = new Date(
+            now.setDate(now.getDate() - max_days * 24 * 60 * 60 * 1000),
+        );
+
+        return await this.prisma.user.count({
+            where: {
+                auth: {
+                    some: {
+                        expiredAt: {
+                            gt: now,
+                        },
+                        createdAt: {
+                            gte: thirtyDaysAgo,
+                        },
+                    },
+                },
+            },
+        });
     }
 
-    // findByStatus(status) {}
-
-    async findByRelationship(process: string) {
+    async findByRelationship(process: string): Promise<number> {
         let where: any = {};
         switch (process) {
             case 'taaruf':
