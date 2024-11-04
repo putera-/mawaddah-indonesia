@@ -101,7 +101,7 @@ export class InboxService {
             where: { id },
             include: {
                 messages: {
-                    orderBy: { createdAt: 'asc' },
+                    orderBy: { createdAt: 'desc' },
                 },
                 responder: true,
                 taaruf: true
