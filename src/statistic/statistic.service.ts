@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ApprovalStatus } from '@prisma/client';
+import dayjs from 'dayjs';
 import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/user.service';
 
@@ -20,36 +21,66 @@ export class StatisticService {
                 },
             },
         });
-        // if (newMember === 0)
-        //     throw new NotFoundException(
-        //         'Tidak ada member baru yang mendaftar dalam 30 hari terakhir.',
-        //     );
         return newMember;
+    }
+
+    async findByDate(range: number = 30) {
+        console.log(range);
+        // const result = (await this.prisma.$queryRaw`
+        //     SELECT
+        //         DATE("createdAt") as date,
+        //         COUNT(*) as count
+        //     FROM
+        //         "auth"
+        //     WHERE
+        //         "createdAt" >= NOW() - INTERVAL '30 days'
+        //     GROUP BY
+        //         DATE("createdAt")
+        //     ORDER BY
+        //         date DESC
+        //         ;`) as Record<string, any>[];
+
+        const result = (await this.prisma.$queryRaw`
+        WITH date_series AS (
+    SELECT
+      generate_series(
+        NOW()::date - INTERVAL '10 days',
+        NOW()::date,
+        '1 day'
+      )::date AS date
+  )
+  SELECT
+    ds.date,
+    COUNT(a.id) AS count
+  FROM
+    date_series ds
+  LEFT JOIN
+    "auth" a ON DATE(a."createdAt") = ds.date
+  GROUP BY
+    ds.date
+  ORDER BY
+    ds.date DESC;`) as Record<string, any>[];
+        return result.map((item) => ({
+            date: item.date.toISOString().split('T')[0],
+            count: Number(item.count), // Convert BigInt to regular number
+        }));
     }
 
     async findAllMember(): Promise<number> {
         const allMember = await this.prisma.user.count();
-        // if (allMember === 0)
-        //     throw new NotFoundException('Tidak ada member yang mendaftar.');
         return allMember;
     }
 
     async findActiveMember(max_days: number = 1): Promise<number> {
-        // TODO get from auth log
-        const now = new Date();
-        const thirtyDaysAgo = new Date(
-            now.setDate(now.getDate() - max_days * 24 * 60 * 60 * 1000),
-        );
+        // how to get day before
+        const gte = dayjs().subtract(max_days, 'day').toDate();
 
         return await this.prisma.user.count({
             where: {
                 auth: {
                     some: {
-                        expiredAt: {
-                            gt: now,
-                        },
                         createdAt: {
-                            gte: thirtyDaysAgo,
+                            gte,
                         },
                     },
                 },

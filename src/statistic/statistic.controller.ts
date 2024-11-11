@@ -35,6 +35,17 @@ export class StatisticController {
         return this.statisticService.findNewMember();
     }
 
+    @Get('by-date/:range')
+    findByDate2(@Param('range') range: number) {
+        console.log(range);
+        return this.statisticService.findByDate(range);
+    }
+
+    // @Get('by-date')
+    // findByDate() {
+    //     return this.statisticService.findByDate();
+    // }
+
     @getAllMemberDoc()
     @Roles(Role.Superadmin, Role.Admin)
     @Get()
