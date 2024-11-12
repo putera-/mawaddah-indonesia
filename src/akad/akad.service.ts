@@ -64,7 +64,7 @@ export class AkadService {
 
         // create akad dengan status pending
         const message = data.message || '';
-        await this.prisma.akad.create({
+        const akadData = await this.prisma.akad.create({
             data: {
                 ...data,
                 Taaruf: { connect: { id: taarufId } },
@@ -92,7 +92,7 @@ export class AkadService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah mengajukan permintaan akad`;
-            const dataInbox = {
+            const dataInbox: Partial<Prisma.InboxCreateInput> = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -102,7 +102,8 @@ export class AkadService {
                         receiver: { connect: { id: receiverId } },
                         message,
                         title,
-                        taaruf_process: TaarufProcess.AkadRequest
+                        taaruf_process: TaarufProcess.AkadRequest,
+                        taaruf_process_id: akadData.id
                     }
                 }
             }
@@ -177,7 +178,7 @@ export class AkadService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah membatalkan permintaan akad`;
-            const dataInbox = {
+            const dataInbox: Partial<Prisma.InboxCreateInput> = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -187,7 +188,8 @@ export class AkadService {
                         receiver: { connect: { id: receiverId } },
                         message,
                         title,
-                        taaruf_process: TaarufProcess.AkadCanceled
+                        taaruf_process: TaarufProcess.AkadCanceled,
+                        taaruf_process_id: akad.id
                     }
                 }
             }
@@ -243,7 +245,7 @@ export class AkadService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah menerima permintaan akad`;
-            const dataInbox = {
+            const dataInbox: Partial<Prisma.InboxCreateInput> = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -253,7 +255,8 @@ export class AkadService {
                         receiver: { connect: { id: receiverId } },
                         message,
                         title,
-                        taaruf_process: TaarufProcess.AkadApproved
+                        taaruf_process: TaarufProcess.AkadApproved,
+                        taaruf_process_id: akad.id
                     }
                 }
             }
@@ -309,7 +312,7 @@ export class AkadService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah menolak permintaan akad`;
-            const dataInbox = {
+            const dataInbox: Partial<Prisma.InboxCreateInput> = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -319,7 +322,8 @@ export class AkadService {
                         receiver: { connect: { id: receiverId } },
                         message,
                         title,
-                        taaruf_process: TaarufProcess.AkadRejected
+                        taaruf_process: TaarufProcess.AkadRejected,
+                        taaruf_process_id: akad.id
                     }
                 }
             }

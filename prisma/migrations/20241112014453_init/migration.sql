@@ -586,6 +586,7 @@ CREATE TABLE "inbox_message" (
     "senderId" TEXT NOT NULL,
     "receiverId" TEXT NOT NULL,
     "taaruf_process" "TaarufProcess" NOT NULL,
+    "taaruf_process_id" VARCHAR(255) NOT NULL,
     "title" VARCHAR(255) NOT NULL,
     "message" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

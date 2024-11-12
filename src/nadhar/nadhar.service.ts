@@ -52,7 +52,7 @@ export class NadharService {
 
         //create nadhor dengan status pending
         const message = data.message || '';
-        await this.prisma.nadhar.create({
+        const nadharData = await this.prisma.nadhar.create({
             data: {
                 ...data,
                 Taaruf: { connect: { id: taarufId } },
@@ -80,7 +80,7 @@ export class NadharService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah mengajukan permintaan nadhar`;
-            const dataInbox = {
+            const dataInbox: Partial<Prisma.InboxCreateInput> = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -90,7 +90,8 @@ export class NadharService {
                         receiver: { connect: { id: receiverId } },
                         message,
                         title,
-                        taaruf_process: TaarufProcess.NadharRequest
+                        taaruf_process: TaarufProcess.NadharRequest,
+                        taaruf_process_id: nadharData.id
                     }
                 }
             }
@@ -164,7 +165,7 @@ export class NadharService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah membatalkan permintaan nadhar`;
-            const dataInbox = {
+            const dataInbox: Partial<Prisma.InboxCreateInput> = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -174,7 +175,8 @@ export class NadharService {
                         receiver: { connect: { id: receiverId } },
                         message,
                         title,
-                        taaruf_process: TaarufProcess.NadharCanceled
+                        taaruf_process: TaarufProcess.NadharCanceled,
+                        taaruf_process_id: nadharId
                     }
                 }
             }
@@ -231,7 +233,7 @@ export class NadharService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah menerima permintaan nadhar`;
-            const dataInbox = {
+            const dataInbox: Partial<Prisma.InboxCreateInput> = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -241,7 +243,8 @@ export class NadharService {
                         receiver: { connect: { id: receiverId } },
                         message,
                         title,
-                        taaruf_process: TaarufProcess.NadharApproved
+                        taaruf_process: TaarufProcess.NadharApproved,
+                        taaruf_process_id: nadharId
                     }
                 }
             }
@@ -295,7 +298,7 @@ export class NadharService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah menolak permintaan nadhar`;
-            const dataInbox = {
+            const dataInbox: Partial<Prisma.InboxCreateInput> = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -305,7 +308,8 @@ export class NadharService {
                         receiver: { connect: { id: receiverId } },
                         message,
                         title,
-                        taaruf_process: TaarufProcess.NadharRejected
+                        taaruf_process: TaarufProcess.NadharRejected,
+                        taaruf_process_id: nadharId
                     }
                 }
             }

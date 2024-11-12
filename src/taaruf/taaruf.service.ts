@@ -59,7 +59,7 @@ export class TaarufService {
         {
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah mengajukan permintaan taaruf`;
-            const dataInbox = {
+            const dataInbox: Partial<Prisma.InboxCreateInput> = {
                 taaruf: { connect: { id: taaruf.id } },
                 title,
                 datetime: new Date(),
@@ -69,7 +69,8 @@ export class TaarufService {
                         receiver: { connect: { id: candidate.id } },
                         message,
                         title,
-                        taaruf_process: TaarufProcess.TaarufRequest
+                        taaruf_process: TaarufProcess.TaarufRequest,
+                        taaruf_process_id: taaruf.id
                     }
                 }
             }
@@ -130,10 +131,10 @@ export class TaarufService {
         return result;
     }
 
-    async approve(candidateId: string, id: string, message: string): Promise<Taaruf> {
+    async approve(candidateId: string, taarufId: string, message: string): Promise<Taaruf> {
         const taaruf = await this.PrismaService.taaruf.findFirst({
             where: {
-                id,
+                id: taarufId,
                 candidateId,
             },
         });
@@ -151,7 +152,7 @@ export class TaarufService {
 
         // update taaruf with response
         const update_taaruf = await this.PrismaService.taaruf.update({
-            where: { id, candidateId },
+            where: { id: taaruf.id, candidateId },
             data: {
                 status: ApprovalStatus.Approved,
                 taaruf_process: TaarufProcess.TaarufApproved,
@@ -168,7 +169,7 @@ export class TaarufService {
             });
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah menerima permintaan taaruf`;
-            const dataInbox = {
+            const dataInbox: Partial<Prisma.InboxCreateInput> = {
                 taaruf: { connect: { id: taaruf.id } },
                 title,
                 datetime: new Date(),
@@ -178,7 +179,8 @@ export class TaarufService {
                         receiver: { connect: { id: taaruf.userId } },
                         message,
                         title,
-                        taaruf_process: TaarufProcess.TaarufApproved
+                        taaruf_process: TaarufProcess.TaarufApproved,
+                        taaruf_process_id: taaruf.id
                     }
                 }
             }
@@ -188,9 +190,9 @@ export class TaarufService {
         return update_taaruf;
     }
 
-    async reject(candidateId: string, id: string, message: string) {
+    async reject(candidateId: string, taarufId: string, message: string) {
         const taaruf = await this.PrismaService.taaruf.findFirst({
-            where: { id, candidateId },
+            where: { id: taarufId, candidateId },
         });
         if (!taaruf) throw new NotFoundException('Data tidak valid');
 
@@ -200,7 +202,7 @@ export class TaarufService {
         }
 
         const update_taaruf = await this.PrismaService.taaruf.update({
-            where: { id, candidateId },
+            where: { id: taaruf.id, candidateId },
             data: {
                 active: false,
                 status: ApprovalStatus.Rejected,
@@ -218,7 +220,7 @@ export class TaarufService {
             });
             // CREATE inbox sender & receiver
             const title = `${user.firstname} menolak permintaan taaruf`;
-            const dataInbox = {
+            const dataInbox: Partial<Prisma.InboxCreateInput> = {
                 taaruf: { connect: { id: taaruf.id } },
                 title,
                 datetime: new Date(),
@@ -228,7 +230,8 @@ export class TaarufService {
                         receiver: { connect: { id: taaruf.userId } },
                         message,
                         title,
-                        taaruf_process: TaarufProcess.TaarufRejected
+                        taaruf_process: TaarufProcess.TaarufRejected,
+                        taaruf_process_id: taaruf.id
                     }
                 }
 
@@ -240,15 +243,15 @@ export class TaarufService {
         return update_taaruf;
     }
 
-    async cancel(userId: string, id: string, message: string) {
+    async cancel(userId: string, taarufId: string, message: string) {
         const taaruf = await this.PrismaService.taaruf.findFirst({
-            where: { id, userId },
+            where: { id: taarufId, userId },
         });
         if (!taaruf) throw new NotFoundException('Data tidak valid');
 
         // update taaruf
         await this.PrismaService.taaruf.update({
-            where: { id, userId },
+            where: { id: taaruf.id, userId },
             data: {
                 active: false,
                 status: ApprovalStatus.Canceled,
@@ -272,7 +275,7 @@ export class TaarufService {
             // get receiverId, karena yang mencancel bisa candidate maupun yang mengajukan taaruf
             const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
 
-            const dataInbox = {
+            const dataInbox: Partial<Prisma.InboxCreateInput> = {
                 taaruf: { connect: { id: taaruf.id } },
                 title,
                 datetime: new Date(),
@@ -282,7 +285,8 @@ export class TaarufService {
                         receiver: { connect: { id: receiverId } },
                         message,
                         title,
-                        taaruf_process: TaarufProcess.Canceled
+                        taaruf_process: TaarufProcess.Canceled,
+                        taaruf_process_id: taaruf.id
                     }
                 }
             }
@@ -290,10 +294,10 @@ export class TaarufService {
         }
     }
 
-    async cancel_response(userId: string, id: string, message: string) {
+    async cancel_response(userId: string, taarufId: string, message: string) {
         const taaruf = await this.PrismaService.taaruf.findFirst({
             where: {
-                id,
+                id: taarufId,
                 userId,
                 taaruf_process: TaarufProcess.Canceled
             },
@@ -310,7 +314,7 @@ export class TaarufService {
         // get receiverId, karena yang mencancel bisa candidate maupun yang mengajukan taaruf
         const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
 
-        const dataInbox = {
+        const dataInbox: Partial<Prisma.InboxCreateInput> = {
             taaruf: { connect: { id: taaruf.id } },
             title,
             datetime: new Date(),
@@ -320,7 +324,8 @@ export class TaarufService {
                     receiver: { connect: { id: receiverId } },
                     message,
                     title,
-                    taaruf_process: TaarufProcess.Canceled
+                    taaruf_process: TaarufProcess.Canceled,
+                    taaruf_process_id: taaruf.id
                 }
             }
         }

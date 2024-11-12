@@ -749,17 +749,18 @@ model Inbox {
 }
 
 model InboxMessage {
-    id             String        @id @default(uuid())
-    Inbox          Inbox?        @relation(fields: [inboxId], references: [id])
-    inboxId        String?
-    sender         User          @relation(name: "MessageSender", fields: [senderId], references: [id])
-    senderId       String
-    receiver       User          @relation(name: "MessageReceiver", fields: [receiverId], references: [id])
-    receiverId     String
-    taaruf_process TaarufProcess
-    title          String        @db.VarChar(255)
-    message        String        @db.Text
-    createdAt      DateTime      @default(now())
+    id                String        @id @default(uuid())
+    Inbox             Inbox?        @relation(fields: [inboxId], references: [id])
+    inboxId           String?
+    sender            User          @relation(name: "MessageSender", fields: [senderId], references: [id])
+    senderId          String
+    receiver          User          @relation(name: "MessageReceiver", fields: [receiverId], references: [id])
+    receiverId        String
+    taaruf_process    TaarufProcess
+    taaruf_process_id String        @db.VarChar(255)
+    title             String        @db.VarChar(255)
+    message           String        @db.Text
+    createdAt         DateTime      @default(now())
 
     @@map("inbox_message")
 }

@@ -55,7 +55,7 @@ export class KhitbahService {
 
         // create khitbah dengan status pending
         const message = data.message || '';
-        await this.prisma.khitbah.create({
+        const khitbahData = await this.prisma.khitbah.create({
             data: {
                 ...data,
                 Taaruf: { connect: { id: taarufId } },
@@ -83,7 +83,7 @@ export class KhitbahService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah mengajukan permintaan khitbah`;
-            const dataInbox = {
+            const dataInbox: Partial<Prisma.InboxCreateInput> = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -93,7 +93,8 @@ export class KhitbahService {
                         receiver: { connect: { id: receiverId } },
                         message,
                         title,
-                        taaruf_process: TaarufProcess.KhitbahRequest
+                        taaruf_process: TaarufProcess.KhitbahRequest,
+                        taaruf_process_id: khitbahData.id
                     }
                 }
             }
@@ -165,7 +166,7 @@ export class KhitbahService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah membatalkan permintaan khitbah`;
-            const dataInbox = {
+            const dataInbox: Partial<Prisma.InboxCreateInput> = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -175,7 +176,8 @@ export class KhitbahService {
                         receiver: { connect: { id: receiverId } },
                         message,
                         title,
-                        taaruf_process: TaarufProcess.KhitbahCanceled
+                        taaruf_process: TaarufProcess.KhitbahCanceled,
+                        taaruf_process_id: khitbah.id
                     }
                 }
             }
@@ -232,7 +234,7 @@ export class KhitbahService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah menerima permintaan khitbah`;
-            const dataInbox = {
+            const dataInbox: Partial<Prisma.InboxCreateInput> = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -242,7 +244,8 @@ export class KhitbahService {
                         receiver: { connect: { id: receiverId } },
                         message,
                         title,
-                        taaruf_process: TaarufProcess.KhitbahAppproved
+                        taaruf_process: TaarufProcess.KhitbahAppproved,
+                        taaruf_process_id: khitbah.id
                     }
                 }
             }
@@ -298,7 +301,7 @@ export class KhitbahService {
 
             // CREATE inbox sender & receiver
             const title = `${user.firstname} telah menolak permintaan khitbah`;
-            const dataInbox = {
+            const dataInbox: Partial<Prisma.InboxCreateInput> = {
                 taaruf: { connect: { id: taarufId } },
                 title,
                 datetime: new Date(),
@@ -308,7 +311,8 @@ export class KhitbahService {
                         receiver: { connect: { id: receiverId } },
                         message,
                         title,
-                        taaruf_process: TaarufProcess.KhitbahRejected
+                        taaruf_process: TaarufProcess.KhitbahRejected,
+                        taaruf_process_id: khitbah.id
                     }
                 }
             }
