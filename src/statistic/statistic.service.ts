@@ -26,40 +26,26 @@ export class StatisticService {
 
     async findByDate(range: number = 30) {
         console.log(range);
-        // const result = (await this.prisma.$queryRaw`
-        //     SELECT
-        //         DATE("createdAt") as date,
-        //         COUNT(*) as count
-        //     FROM
-        //         "auth"
-        //     WHERE
-        //         "createdAt" >= NOW() - INTERVAL '30 days'
-        //     GROUP BY
-        //         DATE("createdAt")
-        //     ORDER BY
-        //         date DESC
-        //         ;`) as Record<string, any>[];
-
         const result = (await this.prisma.$queryRaw`
         WITH date_series AS (
-    SELECT
-      generate_series(
-        NOW()::date - INTERVAL '10 days',
-        NOW()::date,
-        '1 day'
-      )::date AS date
-  )
-  SELECT
-    ds.date,
-    COUNT(a.id) AS count
-  FROM
-    date_series ds
-  LEFT JOIN
-    "auth" a ON DATE(a."createdAt") = ds.date
-  GROUP BY
-    ds.date
-  ORDER BY
-    ds.date DESC;`) as Record<string, any>[];
+            SELECT
+            generate_series(
+                NOW()::date - INTERVAL '1 day' * ${range - 1},
+                NOW()::date,
+                '1 day'
+            )::date AS date
+        )
+        SELECT
+            ds.date,
+            COUNT(a.id) AS count
+        FROM
+            date_series ds
+        LEFT JOIN
+            "auth" a ON DATE(a."createdAt") = ds.date
+        GROUP BY
+            ds.date
+        ORDER BY
+            ds.date DESC;`) as Record<string, any>[];
         return result.map((item) => ({
             date: item.date.toISOString().split('T')[0],
             count: Number(item.count), // Convert BigInt to regular number
@@ -128,7 +114,7 @@ export class StatisticService {
                 };
                 break;
             default:
-                return where;
+                'taaruf';
         }
 
         const userByStatus = await this.prisma.user.count({
