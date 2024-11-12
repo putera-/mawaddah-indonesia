@@ -54,6 +54,8 @@ export class LifeGoalsController {
                 biodata: { connect: { id: biodata.id } }
             }
 
+            return this.lifeGoalService.upsert(biodata.id, dataSave);
+
         } catch (error) {
             throw error;
         }
