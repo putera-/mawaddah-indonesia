@@ -112,18 +112,10 @@ export class InboxService {
             throw new NotFoundException('Inbox not found');
         }
 
+        // use blurred avatar based on  taaruf process
         if (['TaarufRequest', 'TaarufRejected', 'NadharCanceled', 'KhitbahCanceled', 'AkadCanceled', 'Canceled'].includes(inbox.taaruf.taaruf_process)) {
             this.userService.formatGray(inbox.responder);
         }
-
-        //hide candidate avatar
-        if (inbox.responder) {
-            inbox.responder.avatar = null;
-            inbox.responder.avatar_md = null;
-            inbox.responder.blurred_avatar = null;
-            inbox.responder.blurred_avatar_md = null;
-        }
-
 
         this.markAsRead(id);
         inbox.read = true;
