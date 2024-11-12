@@ -39,6 +39,7 @@ import { QuestionModule } from './question/question.module';
 import { AnswerModule } from './answer/answer.module';
 import { ExperiencesModule } from './experiences/experiences.module';
 import { InboxModule } from './inbox/inbox.module';
+import { StatisticModule } from './statistic/statistic.module';
 
 @Module({
     imports: [
@@ -78,6 +79,7 @@ import { InboxModule } from './inbox/inbox.module';
         AnswerModule,
         ExperiencesModule,
         InboxModule,
+        StatisticModule,
     ],
 
     controllers: [AppController],
