@@ -75,23 +75,18 @@ export class TaarufService {
         // await this.update_taaruf_status(userId, candidateId, TaarufStatus.OPEN);
         {
             // CREATE inbox sender & receiver
-            const title = `${user.firstname} telah mengajukan permintaan taaruf`;
-            const dataInbox: Partial<Prisma.InboxCreateInput> = {
-                taaruf: { connect: { id: taaruf.id } },
-                title,
-                datetime: new Date(),
-                messages: {
-                    create: {
-                        sender: { connect: { id: userId } },
-                        receiver: { connect: { id: candidate.id } },
-                        message,
-                        title,
-                        taaruf_process: TaarufProcess.TaarufRequest,
-                        taaruf_process_id: taaruf.id
-                    }
-                }
+            const titleSender = `Anda telah mengajukan permintaan taaruf`;
+            const titleReceiver = `${user.firstname} telah mengajukan permintaan taaruf`;
+
+            const messageInbox: Prisma.InboxMessageCreateInput = {
+                sender: { connect: { id: userId } },
+                receiver: { connect: { id: candidate.id } },
+                message,
+                title: "",
+                taaruf_process: TaarufProcess.TaarufRequest,
+                taaruf_process_id: taaruf.id
             }
-            await this.inboxService.create(userId, candidate.id, taaruf.id, dataInbox);
+            await this.inboxService.create(userId, candidate.id, taaruf.id, messageInbox, titleSender, titleReceiver);
         }
 
         return taaruf;
@@ -200,23 +195,18 @@ export class TaarufService {
                 where: { id: candidateId },
             });
             // CREATE inbox sender & receiver
-            const title = `${user.firstname} telah menerima permintaan taaruf`;
-            const dataInbox: Partial<Prisma.InboxCreateInput> = {
-                taaruf: { connect: { id: taaruf.id } },
-                title,
-                datetime: new Date(),
-                messages: {
-                    create: {
-                        sender: { connect: { id: candidateId } },
-                        receiver: { connect: { id: taaruf.userId } },
-                        message,
-                        title,
-                        taaruf_process: TaarufProcess.TaarufApproved,
-                        taaruf_process_id: taaruf.id
-                    }
-                }
+            const titleSender = `Anda telah menerima permintaan taaruf`;
+            const titleReceiver = `${user.firstname} telah menerima permintaan taaruf`;
+
+            const messageInbox: Prisma.InboxMessageCreateInput = {
+                sender: { connect: { id: candidateId } },
+                receiver: { connect: { id: taaruf.userId } },
+                message,
+                title: "",
+                taaruf_process: TaarufProcess.TaarufApproved,
+                taaruf_process_id: taaruf.id
             }
-            await this.inboxService.create(candidateId, taaruf.userId, taaruf.id, dataInbox);
+            await this.inboxService.create(candidateId, taaruf.userId, taaruf.id, messageInbox, titleSender, titleReceiver);
         }
 
         return update_taaruf;
@@ -251,24 +241,18 @@ export class TaarufService {
                 where: { id: candidateId },
             });
             // CREATE inbox sender & receiver
-            const title = `${user.firstname} menolak permintaan taaruf`;
-            const dataInbox: Partial<Prisma.InboxCreateInput> = {
-                taaruf: { connect: { id: taaruf.id } },
-                title,
-                datetime: new Date(),
-                messages: {
-                    create: {
-                        sender: { connect: { id: candidateId } },
-                        receiver: { connect: { id: taaruf.userId } },
-                        message,
-                        title,
-                        taaruf_process: TaarufProcess.TaarufRejected,
-                        taaruf_process_id: taaruf.id
-                    }
-                }
+            const titleSender = `Anda menolak permintaan taaruf`;
+            const titleReceiver = `${user.firstname} menolak permintaan taaruf`;
 
+            const messageInbox: Prisma.InboxMessageCreateInput = {
+                sender: { connect: { id: candidateId } },
+                receiver: { connect: { id: taaruf.userId } },
+                message,
+                title: "",
+                taaruf_process: TaarufProcess.TaarufRejected,
+                taaruf_process_id: taaruf.id
             }
-            await this.inboxService.create(candidateId, taaruf.userId, taaruf.id, dataInbox);
+            await this.inboxService.create(candidateId, taaruf.userId, taaruf.id, messageInbox, titleSender, titleReceiver);
         }
 
         return update_taaruf;
@@ -307,28 +291,22 @@ export class TaarufService {
             });
 
             // CREATE inbox sender & receiver
-            const title = `${user.firstname} telah membatalkan taaruf`;
+            const titleSender = `Anda telah membatalkan taaruf`;
+            const titleReceiver = `${user.firstname} telah membatalkan taaruf`;
 
             // get receiverId, karena yang mencancel bisa candidate maupun yang mengajukan taaruf
             const receiverId =
                 taaruf.userId != userId ? userId : taaruf.candidateId;
 
-            const dataInbox: Partial<Prisma.InboxCreateInput> = {
-                taaruf: { connect: { id: taaruf.id } },
-                title,
-                datetime: new Date(),
-                messages: {
-                    create: {
-                        sender: { connect: { id: userId } },
-                        receiver: { connect: { id: receiverId } },
-                        message,
-                        title,
-                        taaruf_process: TaarufProcess.Canceled,
-                        taaruf_process_id: taaruf.id
-                    }
-                }
+            const messageInbox: Prisma.InboxMessageCreateInput = {
+                sender: { connect: { id: userId } },
+                receiver: { connect: { id: receiverId } },
+                message,
+                title: "",
+                taaruf_process: TaarufProcess.Canceled,
+                taaruf_process_id: taaruf.id
             }
-            await this.inboxService.create(userId, taaruf.candidateId, taaruf.id, dataInbox);
+            await this.inboxService.create(userId, taaruf.candidateId, taaruf.id, messageInbox, titleSender, titleReceiver);
         }
     }
 
@@ -347,28 +325,22 @@ export class TaarufService {
         });
 
         // CREATE inbox sender & receiver
-        const title = `${user.firstname} meresponse pemmbatalkan taaruf`;
+        const titleSender = `Anda meresponse pemmbatalkan taaruf`;
+        const titleReceiver = `${user.firstname} meresponse pemmbatalkan taaruf`;
 
         // get receiverId, karena yang mencancel bisa candidate maupun yang mengajukan taaruf
         const receiverId =
             taaruf.userId != userId ? userId : taaruf.candidateId;
 
-        const dataInbox: Partial<Prisma.InboxCreateInput> = {
-            taaruf: { connect: { id: taaruf.id } },
-            title,
-            datetime: new Date(),
-            messages: {
-                create: {
-                    sender: { connect: { id: userId } },
-                    receiver: { connect: { id: receiverId } },
-                    message,
-                    title,
-                    taaruf_process: TaarufProcess.Canceled,
-                    taaruf_process_id: taaruf.id
-                }
-            }
+        const messageInbox: Prisma.InboxMessageCreateInput = {
+            sender: { connect: { id: userId } },
+            receiver: { connect: { id: receiverId } },
+            message,
+            title: "",
+            taaruf_process: TaarufProcess.Canceled,
+            taaruf_process_id: taaruf.id
         }
-        await this.inboxService.create(userId, taaruf.candidateId, taaruf.id, dataInbox);
+        await this.inboxService.create(userId, taaruf.candidateId, taaruf.id, messageInbox, titleSender, titleReceiver);
     }
 
     update_taaruf_status(

@@ -91,23 +91,18 @@ export class AkadService {
             const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
 
             // CREATE inbox sender & receiver
-            const title = `${user.firstname} telah mengajukan permintaan akad`;
-            const dataInbox: Partial<Prisma.InboxCreateInput> = {
-                taaruf: { connect: { id: taarufId } },
-                title,
-                datetime: new Date(),
-                messages: {
-                    create: {
-                        sender: { connect: { id: userId } },
-                        receiver: { connect: { id: receiverId } },
-                        message,
-                        title,
-                        taaruf_process: TaarufProcess.AkadRequest,
-                        taaruf_process_id: akadData.id
-                    }
-                }
+            const titleSender = `Anda telah mengajukan permintaan akad`;
+            const titleReceiver = `${user.firstname} telah mengajukan permintaan akad`;
+
+            const messageInbox: Prisma.InboxMessageCreateInput = {
+                sender: { connect: { id: userId } },
+                receiver: { connect: { id: receiverId } },
+                message,
+                title: "",
+                taaruf_process: TaarufProcess.AkadRequest,
+                taaruf_process_id: akadData.id
             }
-            await this.inboxService.create(userId, receiverId, taarufId, dataInbox);
+            await this.inboxService.create(userId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
 
         return;
@@ -177,23 +172,19 @@ export class AkadService {
             const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
 
             // CREATE inbox sender & receiver
-            const title = `${user.firstname} telah membatalkan permintaan akad`;
-            const dataInbox: Partial<Prisma.InboxCreateInput> = {
-                taaruf: { connect: { id: taarufId } },
-                title,
-                datetime: new Date(),
-                messages: {
-                    create: {
-                        sender: { connect: { id: userId } },
-                        receiver: { connect: { id: receiverId } },
-                        message,
-                        title,
-                        taaruf_process: TaarufProcess.AkadCanceled,
-                        taaruf_process_id: akad.id
-                    }
-                }
+            const titleSender = `Anda telah membatalkan permintaan akad`;
+            const titleReceiver = `${user.firstname} telah membatalkan permintaan akad`;
+
+            const messageInbox: Prisma.InboxMessageCreateInput = {
+                sender: { connect: { id: userId } },
+                receiver: { connect: { id: receiverId } },
+                message,
+                title: "",
+                taaruf_process: TaarufProcess.AkadCanceled,
+                taaruf_process_id: akad.id
             }
-            await this.inboxService.create(userId, receiverId, taarufId, dataInbox);
+
+            await this.inboxService.create(userId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
 
         return;
@@ -244,23 +235,19 @@ export class AkadService {
 
 
             // CREATE inbox sender & receiver
-            const title = `${user.firstname} telah menerima permintaan akad`;
-            const dataInbox: Partial<Prisma.InboxCreateInput> = {
-                taaruf: { connect: { id: taarufId } },
-                title,
-                datetime: new Date(),
-                messages: {
-                    create: {
-                        sender: { connect: { id: userId } },
-                        receiver: { connect: { id: receiverId } },
-                        message,
-                        title,
-                        taaruf_process: TaarufProcess.AkadApproved,
-                        taaruf_process_id: akad.id
-                    }
-                }
+            const titleSender = `Anda telah menerima permintaan akad`;
+            const titleReceiver = `${user.firstname} telah menerima permintaan akad`;
+
+            const messageInbox: Prisma.InboxMessageCreateInput = {
+                sender: { connect: { id: userId } },
+                receiver: { connect: { id: receiverId } },
+                message,
+                title: "",
+                taaruf_process: TaarufProcess.AkadApproved,
+                taaruf_process_id: akad.id
             }
-            await this.inboxService.create(userId, receiverId, taarufId, dataInbox);
+
+            await this.inboxService.create(userId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
 
         return;
@@ -311,23 +298,19 @@ export class AkadService {
 
 
             // CREATE inbox sender & receiver
-            const title = `${user.firstname} telah menolak permintaan akad`;
-            const dataInbox: Partial<Prisma.InboxCreateInput> = {
-                taaruf: { connect: { id: taarufId } },
-                title,
-                datetime: new Date(),
-                messages: {
-                    create: {
-                        sender: { connect: { id: userId } },
-                        receiver: { connect: { id: receiverId } },
-                        message,
-                        title,
-                        taaruf_process: TaarufProcess.AkadRejected,
-                        taaruf_process_id: akad.id
-                    }
-                }
+            const titleSender = `Anda telah menolak permintaan akad`;
+            const titleReceiver = `${user.firstname} telah menolak permintaan akad`;
+
+            const messageInbox: Prisma.InboxMessageCreateInput = {
+                sender: { connect: { id: userId } },
+                receiver: { connect: { id: receiverId } },
+                message,
+                title: "",
+                taaruf_process: TaarufProcess.AkadRejected,
+                taaruf_process_id: akad.id
             }
-            await this.inboxService.create(userId, receiverId, taarufId, dataInbox);
+
+            await this.inboxService.create(userId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
 
         return;

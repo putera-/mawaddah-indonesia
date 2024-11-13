@@ -82,23 +82,18 @@ export class KhitbahService {
             const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
 
             // CREATE inbox sender & receiver
-            const title = `${user.firstname} telah mengajukan permintaan khitbah`;
-            const dataInbox: Partial<Prisma.InboxCreateInput> = {
-                taaruf: { connect: { id: taarufId } },
-                title,
-                datetime: new Date(),
-                messages: {
-                    create: {
-                        sender: { connect: { id: userId } },
-                        receiver: { connect: { id: receiverId } },
-                        message,
-                        title,
-                        taaruf_process: TaarufProcess.KhitbahRequest,
-                        taaruf_process_id: khitbahData.id
-                    }
-                }
+            const titleSender = `Anda telah mengajukan permintaan khitbah`;
+            const titleReceiver = `${user.firstname} telah mengajukan permintaan khitbah`;
+
+            const messageInbox: Prisma.InboxMessageCreateInput = {
+                sender: { connect: { id: userId } },
+                receiver: { connect: { id: receiverId } },
+                message,
+                title: "",
+                taaruf_process: TaarufProcess.KhitbahRequest,
+                taaruf_process_id: khitbahData.id
             }
-            await this.inboxService.create(userId, receiverId, taarufId, dataInbox);
+            await this.inboxService.create(userId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
 
         return data;
@@ -165,23 +160,18 @@ export class KhitbahService {
             const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
 
             // CREATE inbox sender & receiver
-            const title = `${user.firstname} telah membatalkan permintaan khitbah`;
-            const dataInbox: Partial<Prisma.InboxCreateInput> = {
-                taaruf: { connect: { id: taarufId } },
-                title,
-                datetime: new Date(),
-                messages: {
-                    create: {
-                        sender: { connect: { id: userId } },
-                        receiver: { connect: { id: receiverId } },
-                        message,
-                        title,
-                        taaruf_process: TaarufProcess.KhitbahCanceled,
-                        taaruf_process_id: khitbah.id
-                    }
-                }
+            const titleSender = `Anda telah membatalkan permintaan khitbah`;
+            const titleReceiver = `${user.firstname} telah membatalkan permintaan khitbah`;
+
+            const messageInbox: Prisma.InboxMessageCreateInput = {
+                sender: { connect: { id: userId } },
+                receiver: { connect: { id: receiverId } },
+                message,
+                title: "",
+                taaruf_process: TaarufProcess.KhitbahCanceled,
+                taaruf_process_id: khitbah.id
             }
-            await this.inboxService.create(userId, receiverId, taarufId, dataInbox);
+            await this.inboxService.create(userId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
 
         return;
@@ -233,23 +223,18 @@ export class KhitbahService {
 
 
             // CREATE inbox sender & receiver
-            const title = `${user.firstname} telah menerima permintaan khitbah`;
-            const dataInbox: Partial<Prisma.InboxCreateInput> = {
-                taaruf: { connect: { id: taarufId } },
-                title,
-                datetime: new Date(),
-                messages: {
-                    create: {
-                        sender: { connect: { id: userId } },
-                        receiver: { connect: { id: receiverId } },
-                        message,
-                        title,
-                        taaruf_process: TaarufProcess.KhitbahAppproved,
-                        taaruf_process_id: khitbah.id
-                    }
-                }
+            const titleSender = `Anda telah menerima permintaan khitbah`;
+            const titleReceiver = `${user.firstname} telah menerima permintaan khitbah`;
+
+            const messageInbox: Prisma.InboxMessageCreateInput = {
+                sender: { connect: { id: userId } },
+                receiver: { connect: { id: receiverId } },
+                message,
+                title: "",
+                taaruf_process: TaarufProcess.KhitbahAppproved,
+                taaruf_process_id: khitbah.id
             }
-            await this.inboxService.create(userId, receiverId, taarufId, dataInbox);
+            await this.inboxService.create(userId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
 
         return;
@@ -300,23 +285,18 @@ export class KhitbahService {
 
 
             // CREATE inbox sender & receiver
-            const title = `${user.firstname} telah menolak permintaan khitbah`;
-            const dataInbox: Partial<Prisma.InboxCreateInput> = {
-                taaruf: { connect: { id: taarufId } },
-                title,
-                datetime: new Date(),
-                messages: {
-                    create: {
-                        sender: { connect: { id: userId } },
-                        receiver: { connect: { id: receiverId } },
-                        message,
-                        title,
-                        taaruf_process: TaarufProcess.KhitbahRejected,
-                        taaruf_process_id: khitbah.id
-                    }
-                }
+            const titleSender = `Anda telah menolak permintaan khitbah`;
+            const titleReceiver = `${user.firstname} telah menolak permintaan khitbah`;
+
+            const messageInbox: Prisma.InboxMessageCreateInput = {
+                sender: { connect: { id: userId } },
+                receiver: { connect: { id: receiverId } },
+                message,
+                title: "",
+                taaruf_process: TaarufProcess.KhitbahRejected,
+                taaruf_process_id: khitbah.id
             }
-            await this.inboxService.create(userId, receiverId, taarufId, dataInbox);
+            await this.inboxService.create(userId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
 
         return;

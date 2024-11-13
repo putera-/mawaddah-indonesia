@@ -12,19 +12,35 @@ export class InboxService {
         private userService: UsersService,
     ) { }
 
-    async create(senderId: string, receiverId: string, taarufId: string, data: any): Promise<void> {
+    async create(senderId: string, receiverId: string, taarufId: string, message: any, titleSender: string, titleReceiver: string): Promise<void> {
 
         const dataSenderInbox: Prisma.InboxCreateInput = {
-            ...data,
+            taaruf: { connect: { id: taarufId } },
+            title: titleSender,
             user: { connect: { id: senderId } },
             responder: { connect: { id: receiverId } },
             read: true, // mark as read
+            datetime: new Date(),
+            messages: {
+                create: {
+                    ...message,
+                    title: titleSender
+                }
+            }
         }
         const dataReceiverInbox: Prisma.InboxCreateInput = {
-            ...data,
+            taaruf: { connect: { id: taarufId } },
+            title: titleReceiver,
             user: { connect: { id: receiverId } },
             responder: { connect: { id: senderId } },
             read: false, // mark as unread
+            datetime: new Date(),
+            messages: {
+                create: {
+                    ...message,
+                    title: titleReceiver
+                }
+            }
         }
 
         await Promise.all([
