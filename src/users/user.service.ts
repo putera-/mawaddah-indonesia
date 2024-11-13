@@ -70,13 +70,13 @@ export class UsersService {
         const [total, data] = await Promise.all([
             this.Prisma.user.count({
                 where: {
-                    active: true,
+                    // active: true,
                     role: { in: roles },
                 },
             }),
             this.Prisma.user.findMany({
                 where: {
-                    active: true,
+                    // active: true,
                     role: { in: roles },
                 },
                 include: {
@@ -103,7 +103,7 @@ export class UsersService {
                         take: 1,
                     },
                 },
-                orderBy: { createdAt: 'desc' },
+                orderBy: { firstname: 'asc' },
                 skip,
                 take: limit,
             }),
