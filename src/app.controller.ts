@@ -20,16 +20,16 @@ import {
 @ApiTags('App')
 @Controller()
 export class AppController {
-    constructor(private readonly appService: AppService) {}
+    constructor(private readonly appService: AppService) { }
 
     @Public()
     @Get()
     @Redirect('/api', 301)
-    redirectToApiSwagger() {}
+    redirectToApiSwagger() { }
 
     @Public()
     @getPhotoDoc()
-    @Get('photo/:file')
+    @Get('photo/:file_name')
     async getPhoto(@Param('file_name') file: string, @Res() res) {
         try {
             await fs.access(`./public/photos/${file}`);
@@ -41,7 +41,7 @@ export class AppController {
 
     @Public()
     @getGalleryDoc()
-    @Get('gallery/:file')
+    @Get('gallery/:file_name')
     async getGallery(@Param('file_name') file: string, @Res() res) {
         try {
             await fs.access(`./public/galleries/${file}`);
@@ -53,7 +53,7 @@ export class AppController {
 
     @Public()
     @getAvatarDoc()
-    @Get('avatar/:file')
+    @Get('avatar/:file_name')
     async getAvatar(@Param('file_name') file: string, @Res() res) {
         try {
             await fs.access(`./public/avatar/${file}`);
@@ -65,8 +65,9 @@ export class AppController {
 
     @Public()
     @getDummyPhotoDoc()
-    @Get('dummy/:file')
+    @Get('dummy/:file_name')
     async getDummyPhoto(@Param('file_name') file: string, @Res() res) {
+        console.log({ file });
         try {
             await fs.access(`./public/dummy/${file}`);
             res.sendFile(file, { root: './public/dummy' });
