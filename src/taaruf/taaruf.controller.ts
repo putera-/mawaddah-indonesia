@@ -16,13 +16,23 @@ import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { TaarufMessageDto } from './dto/taaruf-message.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { ApproveTaarufbyIdDoc, CancelTaarufbyIdDoc, CancelTaarufResponse, CreateTaarufDoc, GetAllIncomingTaarufDoc, GetAllOutgoingTaarufDoc, GetIncomingTaarufbyIdDoc, GetOutgoingTaarufbyIdDoc, RejectTaarufbyIdDoc } from './taaruf.doc';
+import {
+    ApproveTaarufbyIdDoc,
+    CancelTaarufbyIdDoc,
+    CancelTaarufResponse,
+    CreateTaarufDoc,
+    GetAllIncomingTaarufDoc,
+    GetAllOutgoingTaarufDoc,
+    GetIncomingTaarufbyIdDoc,
+    GetOutgoingTaarufbyIdDoc,
+    RejectTaarufbyIdDoc,
+} from './taaruf.doc';
 
 @ApiBearerAuth()
 @ApiTags('Taaruf')
 @Controller('taaruf')
 export class TaarufController {
-    constructor(private readonly taarufService: TaarufService) { }
+    constructor(private readonly taarufService: TaarufService) {}
 
     @CreateTaarufDoc()
     @Roles(Role.Member)
@@ -118,7 +128,8 @@ export class TaarufController {
         @Body(new ValidationPipe()) data: TaarufMessageDto,
     ) {
         try {
-            return this.taarufService.approve(req.user.id, id, data.message);
+            const candidateId = req.user.id;
+            return this.taarufService.approve(candidateId, id, data.message);
         } catch (error) {
             throw error;
         }
@@ -166,7 +177,11 @@ export class TaarufController {
         @Body(new ValidationPipe()) data: TaarufMessageDto,
     ) {
         try {
-            return this.taarufService.cancel_response(req.user.id, id, data.message);
+            return this.taarufService.cancel_response(
+                req.user.id,
+                id,
+                data.message,
+            );
         } catch (error) {
             throw error;
         }
