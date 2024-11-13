@@ -32,20 +32,29 @@ export class StatisticController {
     @getAllMemberDoc()
     @Roles(Role.Superadmin, Role.Admin)
     @Get('all')
-    countAllMemberStats(
+    async countAllMemberStats(
         @Query('range') range?: number,
         @Query('max_days') max_days?: number,
     ) {
-        const newMembers = this.statisticService.findNewMember();
-        const membersByDate = this.statisticService.findByDate(range || 30); // default range if not provided
-        const allMembers = this.statisticService.findAllMember();
-        const activeMembers = this.statisticService.findActiveMember(
-            max_days || 7,
-        ); // default max_days if not provided
-        const byTaaruf = this.statisticService.findByRelationship('taaruf');
-        const byNadhar = this.statisticService.findByRelationship('nadhar');
-        const byKhitbah = this.statisticService.findByRelationship('khitbah');
-        const byAkad = this.statisticService.findByRelationship('akad');
+        const [
+            newMembers,
+            membersByDate,
+            allMembers,
+            activeMembers,
+            byTaaruf,
+            byNadhar,
+            byKhitbah,
+            byAkad,
+        ] = await Promise.all([
+            this.statisticService.findNewMember(),
+            this.statisticService.findByDate(range || 30),
+            this.statisticService.findAllMember(),
+            this.statisticService.findActiveMember(max_days || 7),
+            this.statisticService.findByRelationship('taaruf'),
+            this.statisticService.findByRelationship('nadhar'),
+            this.statisticService.findByRelationship('khitbah'),
+            this.statisticService.findByRelationship('akad'),
+        ]);
 
         return {
             newMembers,

@@ -25,7 +25,6 @@ export class StatisticService {
     }
 
     async findByDate(range: number = 30) {
-        console.log(range);
         const result = (await this.prisma.$queryRaw`
         WITH date_series AS (
             SELECT
