@@ -99,9 +99,9 @@ export class AuthController {
     @Public()
     @HttpCode(HttpStatus.OK)
     @Patch('activate')
-    async activateUser(@Query('token') id: string): Promise<void> {
+    async activateUser(@Query('token') tokenId: string): Promise<void> {
         try {
-            await this.userService.activateUser(id);
+            await this.userService.activateUser(tokenId);
         } catch (error) {
             throw error;
         }

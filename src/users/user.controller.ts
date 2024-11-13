@@ -73,7 +73,7 @@ export class UsersController {
     @HttpCode(204)
     async activateUser(@Param('id') id: string): Promise<void> {
         try {
-            await this.userService.activateUser(id);
+            await this.userService.activateUserByUserId(id);
         } catch (error) {
             throw error;
         }
