@@ -89,20 +89,21 @@ export class AkadService {
             });
             // get receiverId, karena yang mengajukanm bisa candidate maupun
             const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
+            const senderId = taaruf.userId == userId ? userId : taaruf.candidateId;
 
             // CREATE inbox sender & receiver
             const titleSender = `Anda telah mengajukan permintaan akad`;
             const titleReceiver = `${user.firstname} telah mengajukan permintaan akad`;
 
             const messageInbox: Prisma.InboxMessageCreateInput = {
-                sender: { connect: { id: userId } },
+                sender: { connect: { id: senderId } },
                 receiver: { connect: { id: receiverId } },
                 message,
                 title: "",
                 taaruf_process: TaarufProcess.AkadRequest,
                 taaruf_process_id: akadData.id
             }
-            await this.inboxService.create(userId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
+            await this.inboxService.create(senderId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
 
         return;
@@ -170,13 +171,14 @@ export class AkadService {
 
             // get receiverId, karena yang mengajukanm bisa candidate maupun
             const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
+            const senderId = taaruf.userId == userId ? userId : taaruf.candidateId;
 
             // CREATE inbox sender & receiver
             const titleSender = `Anda telah membatalkan permintaan akad`;
             const titleReceiver = `${user.firstname} telah membatalkan permintaan akad`;
 
             const messageInbox: Prisma.InboxMessageCreateInput = {
-                sender: { connect: { id: userId } },
+                sender: { connect: { id: senderId } },
                 receiver: { connect: { id: receiverId } },
                 message,
                 title: "",
@@ -184,7 +186,7 @@ export class AkadService {
                 taaruf_process_id: akad.id
             }
 
-            await this.inboxService.create(userId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
+            await this.inboxService.create(senderId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
 
         return;
@@ -232,14 +234,14 @@ export class AkadService {
 
             // get receiverId, karena yang mengajukanm bisa candidate maupun
             const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
-
+            const senderId = taaruf.userId == userId ? userId : taaruf.candidateId;
 
             // CREATE inbox sender & receiver
             const titleSender = `Anda telah menerima permintaan akad`;
             const titleReceiver = `${user.firstname} telah menerima permintaan akad`;
 
             const messageInbox: Prisma.InboxMessageCreateInput = {
-                sender: { connect: { id: userId } },
+                sender: { connect: { id: senderId } },
                 receiver: { connect: { id: receiverId } },
                 message,
                 title: "",
@@ -247,7 +249,7 @@ export class AkadService {
                 taaruf_process_id: akad.id
             }
 
-            await this.inboxService.create(userId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
+            await this.inboxService.create(senderId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
 
         return;
@@ -295,14 +297,14 @@ export class AkadService {
 
             // get receiverId, karena yang mengajukanm bisa candidate maupun
             const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
-
+            const senderId = taaruf.userId == userId ? userId : taaruf.candidateId;
 
             // CREATE inbox sender & receiver
             const titleSender = `Anda telah menolak permintaan akad`;
             const titleReceiver = `${user.firstname} telah menolak permintaan akad`;
 
             const messageInbox: Prisma.InboxMessageCreateInput = {
-                sender: { connect: { id: userId } },
+                sender: { connect: { id: senderId } },
                 receiver: { connect: { id: receiverId } },
                 message,
                 title: "",
@@ -310,7 +312,7 @@ export class AkadService {
                 taaruf_process_id: akad.id
             }
 
-            await this.inboxService.create(userId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
+            await this.inboxService.create(senderId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
 
         return;

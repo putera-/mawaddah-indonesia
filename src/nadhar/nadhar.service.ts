@@ -77,20 +77,21 @@ export class NadharService {
             });
             // get receiverId, karena yang mengajukanm bisa candidate maupun
             const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
+            const senderId = taaruf.userId == userId ? userId : taaruf.candidateId;
 
             // CREATE inbox sender & receiver
             const titleSender = `Anda telah mengajukan permintaan nadhar`;
             const titleReceiver = `${user.firstname} telah mengajukan permintaan nadhar`;
 
             const messageInbox: Prisma.InboxMessageCreateInput = {
-                sender: { connect: { id: userId } },
+                sender: { connect: { id: senderId } },
                 receiver: { connect: { id: receiverId } },
                 message,
                 title: "",
                 taaruf_process: TaarufProcess.NadharRequest,
                 taaruf_process_id: nadharData.id
             }
-            await this.inboxService.create(userId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
+            await this.inboxService.create(senderId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
 
         return;
@@ -156,6 +157,7 @@ export class NadharService {
 
             // get receiverId, karena yang mengajukanm bisa candidate maupun
             const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
+            const senderId = taaruf.userId == userId ? userId : taaruf.candidateId;
 
 
             // CREATE inbox sender & receiver
@@ -163,14 +165,14 @@ export class NadharService {
             const titleReceiver = `${user.firstname} telah membatalkan permintaan nadhar`;
 
             const messageInbox: Prisma.InboxMessageCreateInput = {
-                sender: { connect: { id: userId } },
+                sender: { connect: { id: senderId } },
                 receiver: { connect: { id: receiverId } },
                 message,
                 title: "",
                 taaruf_process: TaarufProcess.NadharCanceled,
                 taaruf_process_id: nadharId
             }
-            await this.inboxService.create(userId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
+            await this.inboxService.create(senderId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
 
         return;
@@ -218,6 +220,7 @@ export class NadharService {
             });
 
             // get receiverId, karena yang mengajukanm bisa candidate maupun
+            const senderId = taaruf.userId == userId ? userId : taaruf.candidateId;
             const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
 
             // CREATE inbox sender & receiver
@@ -225,7 +228,7 @@ export class NadharService {
             const titleReceiver = `${user.firstname} telah menerima permintaan nadhar`;
 
             const messageInbox: Prisma.InboxMessageCreateInput = {
-                sender: { connect: { id: userId } },
+                sender: { connect: { id: senderId } },
                 receiver: { connect: { id: receiverId } },
                 message,
                 title: "",
@@ -233,7 +236,7 @@ export class NadharService {
                 taaruf_process_id: nadharId
             }
 
-            await this.inboxService.create(userId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
+            await this.inboxService.create(senderId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
 
         return;
@@ -279,6 +282,7 @@ export class NadharService {
 
             // get receiverId, karena yang mengajukanm bisa candidate maupun
             const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
+            const senderId = taaruf.userId == userId ? userId : taaruf.candidateId;
 
 
             // CREATE inbox sender & receiver
@@ -286,14 +290,14 @@ export class NadharService {
             const titleReceiver = `${user.firstname} telah menolak permintaan nadhar`;
 
             const messageInbox: Prisma.InboxMessageCreateInput = {
-                sender: { connect: { id: userId } },
+                sender: { connect: { id: senderId } },
                 receiver: { connect: { id: receiverId } },
                 message,
                 title: "",
                 taaruf_process: TaarufProcess.NadharRejected,
                 taaruf_process_id: nadharId
             }
-            await this.inboxService.create(userId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
+            await this.inboxService.create(senderId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
 
         return;
