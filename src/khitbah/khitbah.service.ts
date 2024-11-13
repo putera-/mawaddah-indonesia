@@ -79,8 +79,8 @@ export class KhitbahService {
                 where: { id: userId },
             });
             // get receiverId, karena yang mengajukanm bisa candidate maupun
-            const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
-            const senderId = taaruf.userId == userId ? userId : taaruf.candidateId;
+            const senderId = userId;
+            const receiverId = taaruf.userId == senderId ? taaruf.candidateId : taaruf.userId;
 
             // CREATE inbox sender & receiver
             const titleSender = `Anda telah mengajukan permintaan khitbah`;
@@ -158,8 +158,8 @@ export class KhitbahService {
             });
 
             // get receiverId, karena yang mengajukanm bisa candidate maupun
-            const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
-            const senderId = taaruf.userId == userId ? userId : taaruf.candidateId;
+            const senderId = userId;
+            const receiverId = taaruf.userId == senderId ? taaruf.candidateId : taaruf.userId;
 
             // CREATE inbox sender & receiver
             const titleSender = `Anda telah membatalkan permintaan khitbah`;
@@ -221,8 +221,8 @@ export class KhitbahService {
             });
 
             // get receiverId, karena yang mengajukanm bisa candidate maupun
-            const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
-            const senderId = taaruf.userId == userId ? userId : taaruf.candidateId;
+            const senderId = userId;
+            const receiverId = taaruf.userId == senderId ? taaruf.candidateId : taaruf.userId;
 
             // CREATE inbox sender & receiver
             const titleSender = `Anda telah menerima permintaan khitbah`;
@@ -283,8 +283,8 @@ export class KhitbahService {
             });
 
             // get receiverId, karena yang mengajukanm bisa candidate maupun
-            const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
-            const senderId = taaruf.userId == userId ? userId : taaruf.candidateId;
+            const senderId = userId;
+            const receiverId = taaruf.userId == senderId ? taaruf.candidateId : taaruf.userId;
 
             // CREATE inbox sender & receiver
             const titleSender = `Anda telah menolak permintaan khitbah`;

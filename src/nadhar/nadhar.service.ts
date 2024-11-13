@@ -76,8 +76,8 @@ export class NadharService {
                 where: { id: userId },
             });
             // get receiverId, karena yang mengajukanm bisa candidate maupun
-            const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
-            const senderId = taaruf.userId == userId ? userId : taaruf.candidateId;
+            const senderId = userId;
+            const receiverId = taaruf.userId == senderId ? taaruf.candidateId : taaruf.userId;
 
             // CREATE inbox sender & receiver
             const titleSender = `Anda telah mengajukan permintaan nadhar`;
@@ -156,8 +156,8 @@ export class NadharService {
             });
 
             // get receiverId, karena yang mengajukanm bisa candidate maupun
-            const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
-            const senderId = taaruf.userId == userId ? userId : taaruf.candidateId;
+            const senderId = userId;
+            const receiverId = taaruf.userId == senderId ? taaruf.candidateId : taaruf.userId;
 
 
             // CREATE inbox sender & receiver
@@ -220,8 +220,8 @@ export class NadharService {
             });
 
             // get receiverId, karena yang mengajukanm bisa candidate maupun
-            const senderId = taaruf.userId == userId ? userId : taaruf.candidateId;
-            const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
+            const senderId = userId;
+            const receiverId = taaruf.userId == senderId ? taaruf.candidateId : taaruf.userId;
 
             // CREATE inbox sender & receiver
             const titleSender = `Anda telah menerima permintaan nadhar`;
@@ -281,9 +281,8 @@ export class NadharService {
             });
 
             // get receiverId, karena yang mengajukanm bisa candidate maupun
-            const receiverId = taaruf.userId != userId ? userId : taaruf.candidateId;
-            const senderId = taaruf.userId == userId ? userId : taaruf.candidateId;
-
+            const senderId = userId;
+            const receiverId = taaruf.userId == senderId ? taaruf.candidateId : taaruf.userId;
 
             // CREATE inbox sender & receiver
             const titleSender = `Anda telah menolak permintaan nadhar`;
