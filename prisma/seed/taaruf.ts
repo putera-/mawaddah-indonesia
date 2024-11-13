@@ -4,8 +4,11 @@ import { User } from 'src/users/user.interface';
 import { Nadhar } from 'src/nadhar/nadhar.interface';
 import { Khitbah } from 'src/khitbah/khitbah.interface';
 import { Akad } from 'src/akad/akad.interface';
+import dayjs from 'dayjs';
 
 let _prisma: PrismaClient;
+
+let createdAtinMessage = undefined;
 
 export async function taarufSeed(prisma: PrismaClient) {
     _prisma = prisma;
@@ -39,6 +42,7 @@ export async function taarufSeed(prisma: PrismaClient) {
 
 
         for (let j = 0; j < users.length; j++) {
+            createdAtinMessage = undefined;
             let _continue = false;
             const candidate = users[j];
             if (candidate.id == user.id) continue;
@@ -408,6 +412,27 @@ export async function taarufSeed(prisma: PrismaClient) {
 
 
 async function sendMessageAndInbox(taarufId: string, senderId: string, receiverId: string, titleSender: string, titleReceiver: string, message: string, taaruf_process: TaarufProcess, taaruf_process_id: string) {
+
+    // function to get last message date
+    async function getLastMessageDate(taarufId: string): Promise<Date> {
+        const lastMessage = await _prisma.inboxMessage.findFirst({
+            where: { taaruf_process_id: taarufId },
+            orderBy: { createdAt: 'desc' }
+        });
+        return lastMessage?.createdAt ?? new Date(0);
+    }
+
+    let now = new Date();
+    createdAtinMessage ?? now;
+
+    let createdAtInMessage = await getLastMessageDate(taarufId);
+
+    if (createdAtInMessage) {
+        createdAtInMessage = dayjs(createdAtInMessage).add(1, 'day').add(3, 'hour').toDate();
+    } else {
+        createdAtInMessage = new Date();
+    }
+
     const dataSenderInbox: Prisma.InboxCreateInput = {
         taaruf: { connect: { id: taarufId } },
         title: titleSender,
