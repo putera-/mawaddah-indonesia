@@ -17,7 +17,13 @@ import { PhotosService } from 'src/photos/photos.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enums';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { DeactivateUserDoc, DeleteUserDoc, GetAllUserDoc, GetUserDoc } from './user.doc';
+import {
+    ActivateUserDoc,
+    DeactivateUserDoc,
+    DeleteUserDoc,
+    GetAllUserDoc,
+    GetUserDoc,
+} from './user.doc';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -26,13 +32,17 @@ export class UsersController {
     constructor(
         private readonly userService: UsersService,
         private photoService: PhotosService,
-    ) { }
+    ) {}
 
     // ONLY GET LIST OF MEMBER
     @GetAllUserDoc()
     @Roles(Role.Superadmin, Role.Admin)
     @Get()
-    async findAll(@Request() req: any, @Query('limit') limit: number, @Query('page') page: number) {
+    async findAll(
+        @Request() req: any,
+        @Query('limit') limit: number,
+        @Query('page') page: number,
+    ) {
         try {
             const roles: RoleStatus[] = ['MEMBER'];
             limit = limit ? +limit : 10;
@@ -57,6 +67,17 @@ export class UsersController {
         }
     }
 
+    @ActivateUserDoc()
+    @Roles(Role.Admin, Role.Superadmin)
+    @Patch('activate/:id')
+    @HttpCode(204)
+    async activateUser(@Param('id') id: string): Promise<void> {
+        try {
+            await this.userService.activateUser(id);
+        } catch (error) {
+            throw error;
+        }
+    }
 
     @DeactivateUserDoc()
     @Roles(Role.Admin, Role.Superadmin)
