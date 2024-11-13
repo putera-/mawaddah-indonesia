@@ -18,6 +18,7 @@ import { Role } from 'src/roles/role.enums';
 import {
     getActiveMemberDoc,
     getAllMemberDoc,
+    getAllMemberStatDoc,
     getByDateDoc,
     getByRelationshipDoc,
     getNewMemberDoc,
@@ -29,7 +30,7 @@ import {
 export class StatisticController {
     constructor(private readonly statisticService: StatisticService) {}
 
-    @getAllMemberDoc()
+    @getAllMemberStatDoc()
     @Roles(Role.Superadmin, Role.Admin)
     @Get('all')
     async countAllMemberStats(
@@ -38,7 +39,7 @@ export class StatisticController {
     ) {
         const [
             newMembers,
-            membersByDate,
+            activeMembersByDate,
             allMembers,
             activeMembers,
             byTaaruf,
@@ -58,7 +59,7 @@ export class StatisticController {
 
         return {
             newMembers,
-            membersByDate,
+            activeMembersByDate,
             allMembers,
             activeMembers,
             byTaaruf,

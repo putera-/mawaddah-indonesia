@@ -26,7 +26,7 @@ export function getAllMemberStatDoc() {
             schema: {
                 example: {
                     newMembers: 67,
-                    membersByDate: [
+                    activeMembersByDate: [
                         {
                             date: '2024-11-12',
                             count: 52,
