@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 
 let _prisma: PrismaClient;
 
-let createdAtinMessage = undefined;
+let createdAtMessage = undefined;
 
 export async function taarufSeed(prisma: PrismaClient) {
     _prisma = prisma;
@@ -42,7 +42,7 @@ export async function taarufSeed(prisma: PrismaClient) {
 
 
         for (let j = 0; j < users.length; j++) {
-            createdAtinMessage = undefined;
+            createdAtMessage = undefined;
             let _continue = false;
             const candidate = users[j];
             if (candidate.id == user.id) continue;
@@ -413,24 +413,14 @@ export async function taarufSeed(prisma: PrismaClient) {
 
 async function sendMessageAndInbox(taarufId: string, senderId: string, receiverId: string, titleSender: string, titleReceiver: string, message: string, taaruf_process: TaarufProcess, taaruf_process_id: string) {
 
-    // function to get last message date
-    async function getLastMessageDate(taarufId: string): Promise<Date> {
-        const lastMessage = await _prisma.inboxMessage.findFirst({
-            where: { taaruf_process_id: taarufId },
-            orderBy: { createdAt: 'desc' }
-        });
-        return lastMessage?.createdAt ?? new Date(0);
-    }
-
-    let now = new Date();
-    createdAtinMessage ?? now;
-
-    let createdAtInMessage = await getLastMessageDate(taarufId);
-
-    if (createdAtInMessage) {
-        createdAtInMessage = dayjs(createdAtInMessage).add(1, 'day').add(3, 'hour').toDate();
+    if (createdAtMessage == undefined) {
+        createdAtMessage = faker.date.past();
     } else {
-        createdAtInMessage = new Date();
+        createdAtMessage = dayjs(createdAtMessage)
+            .add(faker.number.int({ min: 1, max: 3 }), 'day')
+            .add(faker.number.int({ min: 1, max: 24 }), 'hour')
+            .add(faker.number.int({ min: 1, max: 60 }), 'minute')
+            .toDate();
     }
 
     const dataSenderInbox: Prisma.InboxCreateInput = {
@@ -444,7 +434,8 @@ async function sendMessageAndInbox(taarufId: string, senderId: string, receiverI
                 message: message + ' ' + faker.lorem.paragraphs(4),
                 title: titleSender,
                 taaruf_process,
-                taaruf_process_id
+                taaruf_process_id,
+                createdAt: createdAtMessage
             }
         },
         user: { connect: { id: senderId } },
@@ -463,7 +454,8 @@ async function sendMessageAndInbox(taarufId: string, senderId: string, receiverI
                 message: message + ' ' + faker.lorem.paragraphs(4),
                 title: titleReceiver,
                 taaruf_process,
-                taaruf_process_id
+                taaruf_process_id,
+                createdAt: createdAtMessage
             }
         },
         user: { connect: { id: receiverId } },
