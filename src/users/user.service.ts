@@ -43,7 +43,7 @@ export class UsersService {
         private Prisma: PrismaService,
         private appService: AppService,
         // private activation: ActivationService,
-    ) { }
+    ) {}
 
     create(data: Prisma.UserCreateInput) {
         return this.Prisma.user.create({
@@ -221,6 +221,7 @@ export class UsersService {
             data: { active: false },
         });
     }
+
     async findByEmail(email: string): Promise<User> {
         email = email.trim().toLowerCase();
         const user = await this.Prisma.user.findUnique({
@@ -228,6 +229,7 @@ export class UsersService {
         });
         return user;
     }
+
     async checkPassword(data: any) {
         if (data.password != data.confirm_password)
             throw new BadRequestException('Konfirmasi password tidak sesuai');
@@ -235,6 +237,7 @@ export class UsersService {
         delete data.confirm_password;
         data.password = await bcrypt.hash(data.password, 10);
     }
+
     async validateNewUser(data: any) {
         // check is password
         await this.checkPassword(data);
@@ -246,8 +249,27 @@ export class UsersService {
         const checkUser = await this.findByEmail(data.email);
         if (checkUser) throw new ConflictException('Email sudah terdaftar');
     }
-    async activateUser(id: string): Promise<User> {
+
+    async activateUserByUserId(userId: string): Promise<User> {
         // find data by id
+        const id = userId;
+        const find = await this.Prisma.user.findFirst({
+            where: { id, active: false },
+        });
+        if (!find) {
+            throw new NotFoundException('User tidak ditemukan');
+        }
+        // update data
+        const updated = await this.Prisma.user.update({
+            where: { id },
+            data: { active: true },
+        });
+        return updated;
+    }
+
+    async activateUser(tokenId: string): Promise<User> {
+        // find data by id
+        const id = tokenId;
         const find = await this.Prisma.activation.findFirst({
             where: { id, used: false },
         });
@@ -275,6 +297,7 @@ export class UsersService {
             select: hiddenSelect,
         });
     }
+
     async deactivateUser(id: string): Promise<User> {
         return this.Prisma.user.update({
             where: { id },
