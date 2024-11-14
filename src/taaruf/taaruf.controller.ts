@@ -32,12 +32,12 @@ import {
 @ApiTags('Taaruf')
 @Controller('taaruf')
 export class TaarufController {
-    constructor(private readonly taarufService: TaarufService) {}
+    constructor(private readonly taarufService: TaarufService) { }
 
     @CreateTaarufDoc()
     @Roles(Role.Member)
     @HttpCode(HttpStatus.OK)
-    @Post(':candidateId')
+    @Post('request/:candidateId')
     async create(
         @Param('candidateId') candidateId: string,
         @Req() req: any,
