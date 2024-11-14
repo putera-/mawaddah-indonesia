@@ -260,13 +260,17 @@ export class TaarufService {
 
     async cancel(userId: string, taarufId: string, message: string) {
         const taaruf = await this.PrismaService.taaruf.findFirst({
-            where: { id: taarufId, userId },
+            where: {
+                id: taarufId,
+            },
         });
-        if (!taaruf) throw new NotFoundException('Data tidak valid');
+        if (!taaruf) throw new NotFoundException('Taaruf tidak ditemukan');
 
         // update taaruf
         await this.PrismaService.taaruf.update({
-            where: { id: taaruf.id, userId },
+            where: {
+                id: taaruf.id
+            },
             data: {
                 active: false,
                 status: ApprovalStatus.Canceled,
@@ -290,13 +294,13 @@ export class TaarufService {
                 where: { id: userId },
             });
 
+            // get receiverId, karena yang mencancel bisa candidate maupun yang mengajukan taaruf
+            const senderId = userId;
+            const receiverId = taaruf.userId == senderId ? taaruf.candidateId : taaruf.userId;
+
             // CREATE inbox sender & receiver
             const titleSender = `Anda telah membatalkan taaruf`;
             const titleReceiver = `${user.firstname} telah membatalkan taaruf`;
-
-            // get receiverId, karena yang mencancel bisa candidate maupun yang mengajukan taaruf
-            const receiverId =
-                taaruf.userId != userId ? userId : taaruf.candidateId;
 
             const messageInbox: Prisma.InboxMessageCreateInput = {
                 sender: { connect: { id: userId } },
@@ -306,7 +310,7 @@ export class TaarufService {
                 taaruf_process: TaarufProcess.Canceled,
                 taaruf_process_id: taaruf.id
             }
-            await this.inboxService.create(userId, taaruf.candidateId, taaruf.id, messageInbox, titleSender, titleReceiver);
+            await this.inboxService.create(userId, receiverId, taaruf.id, messageInbox, titleSender, titleReceiver);
         }
     }
 
@@ -340,7 +344,7 @@ export class TaarufService {
             taaruf_process: TaarufProcess.Canceled,
             taaruf_process_id: taaruf.id
         }
-        await this.inboxService.create(userId, taaruf.candidateId, taaruf.id, messageInbox, titleSender, titleReceiver);
+        await this.inboxService.create(userId, receiverId, taaruf.id, messageInbox, titleSender, titleReceiver);
     }
 
     update_taaruf_status(
