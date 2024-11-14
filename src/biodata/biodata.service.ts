@@ -36,13 +36,25 @@ export class BiodataService {
                 physical_characters: true,
                 non_physical_characters: true,
                 marriage_preparations: true,
-                family_members: true,
-                educations: true,
+                family_members: {
+                    where: {
+                        deleted: false
+                    }
+                },
+                educations: {
+                    where: {
+                        deleted: false
+                    }
+                },
                 life_goals: true,
                 ibadah: true,
                 physical_criteria: true,
                 non_physical_criteria: true,
-                experiences: true
+                experiences: {
+                    where: {
+                        deleted: false
+                    }
+                }
             }
         });
     }
