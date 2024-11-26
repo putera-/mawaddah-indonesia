@@ -771,6 +771,7 @@ model LandingPage {
     process_step ProcessStep[]
     about        About?
     social_media SocialMedia[]
+    blog         Blog[]
 
     @@map("landing_page")
 }
@@ -778,6 +779,7 @@ model LandingPage {
 model MainSlide {
     id            String       @id @default(uuid())
     text          String       @db.Text
+    image         String?      @db.Text
     createdAt     DateTime     @default(now())
     updatedAt     DateTime     @default(now()) @updatedAt
     LandingPage   LandingPage? @relation(fields: [landingPageId], references: [id])
@@ -790,6 +792,7 @@ model ProcessStep {
     id            String       @id @default(uuid())
     title         String       @db.Text
     description   String       @db.Text
+    svg           String?      @db.Text
     createdAt     DateTime     @default(now())
     updatedAt     DateTime     @default(now()) @updatedAt
     LandingPage   LandingPage? @relation(fields: [landingPageId], references: [id])
@@ -818,4 +821,17 @@ model SocialMedia {
     landingPageId String?
 
     @@map("social_media")
+}
+
+model Blog {
+    id            String       @id @default(uuid())
+    title         String       @db.Text
+    content       String       @db.Text
+    image         String       @db.Text
+    createdAt     DateTime     @default(now())
+    updatedAt     DateTime     @default(now()) @updatedAt
+    LandingPage   LandingPage? @relation(fields: [landingPageId], references: [id])
+    landingPageId String?
+
+    @@map("blog")
 }
