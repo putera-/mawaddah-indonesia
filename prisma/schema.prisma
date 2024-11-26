@@ -764,3 +764,58 @@ model InboxMessage {
 
     @@map("inbox_message")
 }
+
+model LandingPage {
+    id           String        @id @default(uuid())
+    main_slide   MainSlide[]
+    process_step ProcessStep[]
+    about        About?
+    social_media SocialMedia[]
+
+    @@map("landing_page")
+}
+
+model MainSlide {
+    id            String       @id @default(uuid())
+    text          String       @db.Text
+    createdAt     DateTime     @default(now())
+    updatedAt     DateTime     @default(now()) @updatedAt
+    LandingPage   LandingPage? @relation(fields: [landingPageId], references: [id])
+    landingPageId String?
+
+    @@map("main_slide")
+}
+
+model ProcessStep {
+    id            String       @id @default(uuid())
+    title         String       @db.Text
+    description   String       @db.Text
+    createdAt     DateTime     @default(now())
+    updatedAt     DateTime     @default(now()) @updatedAt
+    LandingPage   LandingPage? @relation(fields: [landingPageId], references: [id])
+    landingPageId String?
+
+    @@map("process_step")
+}
+
+model About {
+    title         String      @db.Text
+    description   String      @db.Text
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @default(now()) @updatedAt
+    LandingPage   LandingPage @relation(fields: [landingPageId], references: [id])
+    landingPageId String      @unique
+}
+
+model SocialMedia {
+    id            String       @id @default(uuid())
+    icon          String?      @db.Text
+    url           String       @db.Text
+    text          String       @db.Text
+    createdAt     DateTime     @default(now())
+    updatedAt     DateTime     @default(now()) @updatedAt
+    LandingPage   LandingPage? @relation(fields: [landingPageId], references: [id])
+    landingPageId String?
+
+    @@map("social_media")
+}
