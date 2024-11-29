@@ -772,6 +772,8 @@ model LandingPage {
     about        About?
     social_media SocialMedia[]
     blog         Blog[]
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @default(now()) @updatedAt
 
     @@map("landing_page")
 }

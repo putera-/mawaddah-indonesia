@@ -8,6 +8,7 @@ import { CreateMainSlideDto } from './dto/create-main_slide.dto';
 import { CreateProcessStepDto } from './dto/create-process_step.dto';
 import { CreateSocialMediaDto } from './dto/create-social_media.dto';
 import { Prisma } from '@prisma/client';
+import { CreateBlogDto } from './dto/create-blog.dto';
 
 @Injectable()
 export class LandingPageService {
@@ -46,10 +47,10 @@ export class LandingPageService {
         });
     }
 
-    async updateMainSlide(id: string, data: UpdateMainSlideDto) {
+    async updateMainSlide(slideId: string, data: UpdateMainSlideDto) {
         if (!data) throw new BadRequestException('Data tidak boleh kosong');
         return await this.prisma.mainSlide.update({
-            where: { id },
+            where: { id: slideId },
             data,
         });
     }
@@ -61,10 +62,10 @@ export class LandingPageService {
         });
     }
 
-    async updateProcessStep(id: string, data: UpdateProcessStepDto) {
+    async updateProcessStep(processStepId: string, data: UpdateProcessStepDto) {
         if (!data) throw new BadRequestException('Data tidak boleh kosong');
         return await this.prisma.processStep.update({
-            where: { id },
+            where: { id: processStepId },
             data,
         });
     }
@@ -85,18 +86,25 @@ export class LandingPageService {
         });
     }
 
-    async updateSocialMedia(id: string, data: UpdateSocialMediaDto) {
+    async updateSocialMedia(socialMediaId: string, data: UpdateSocialMediaDto) {
         if (!data) throw new BadRequestException('Data tidak boleh kosong');
         return await this.prisma.socialMedia.update({
-            where: { id },
+            where: { id: socialMediaId },
             data,
         });
     }
 
-    async updateBlog(id: string, data: UpdateBlogDto) {
+    async createBlog(data: CreateBlogDto) {
+        if (!data) throw new BadRequestException('Data tidak boleh kosong');
+        return await this.prisma.blog.create({
+            data,
+        });
+    }
+
+    async updateBlog(blogId: string, data: UpdateBlogDto) {
         if (!data) throw new BadRequestException('Data tidak boleh kosong');
         return await this.prisma.blog.update({
-            where: { id },
+            where: { id: blogId },
             data,
         });
     }
