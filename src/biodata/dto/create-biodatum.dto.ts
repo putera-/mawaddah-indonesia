@@ -46,8 +46,8 @@ export class CreateBiodatumDto {
     marriage_permission: MarriagePermission;
 
     @ApiProperty()
-    @IsISO8601()
-    dob: Date;
+    @IsString()
+    dob: String;
 
     @ApiProperty()
     @IsString()

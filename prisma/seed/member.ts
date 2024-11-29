@@ -16,6 +16,7 @@ import {
     skin_color,
 } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import dayjs from 'dayjs';
 
 export async function memberSeed(prisma: PrismaClient) {
     console.log('\nSeed Start: Member');
@@ -715,7 +716,7 @@ export async function memberSeed(prisma: PrismaClient) {
                             ],
                         phone: '+628123456789',
                         company: 'Al Bashiroh Corp',
-                        dob: getRandomDate(),
+                        dob: dayjs(getRandomDate()).format('YYYY-MM-DD'),
                         createdAt: getRandomDate(startYear, endYear),
                         birth_place: provinces[randomProvinceIndex2].name,
                         birth_order: 1,
@@ -902,7 +903,7 @@ export async function memberSeed(prisma: PrismaClient) {
                             ],
                         phone: '+628987654321',
                         company: 'Al Bashiroh Corp',
-                        dob: getRandomDate(),
+                        dob: dayjs(getRandomDate()).format('YYYY-MM-DD'),
                         createdAt: getRandomDate(startYear, endYear),
                         birth_place: provinces[randomProvinceIndex2].name,
                         birth_order: 1,

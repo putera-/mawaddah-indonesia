@@ -41,13 +41,11 @@ export class TaarufController {
     async create(
         @Param('candidateId') candidateId: string,
         @Req() req: any,
-        @Body(new ValidationPipe()) data: TaarufMessageDto,
     ) {
         try {
             return await this.taarufService.create(
                 req.user.id,
                 candidateId,
-                data.message,
             );
         } catch (error) {
             throw error;
@@ -142,10 +140,9 @@ export class TaarufController {
     async reject(
         @Req() req: any,
         @Param('id') id: string,
-        @Body(new ValidationPipe()) data: TaarufMessageDto,
     ) {
         try {
-            return this.taarufService.reject(req.user.id, id, data.message);
+            return this.taarufService.reject(req.user.id, id);
         } catch (error) {
             throw error;
         }

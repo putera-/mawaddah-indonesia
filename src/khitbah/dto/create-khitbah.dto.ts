@@ -4,9 +4,8 @@ import { IsDate, IsOptional, IsString } from "class-validator"
 
 export class CreateKhitbahDto {
     @ApiProperty()
-    @IsDate()
-    @Type(() => Date)
-    schedule: Date;
+    @IsString()
+    schedule: string;
 
     @ApiProperty()
     @IsOptional()

@@ -8,7 +8,7 @@ export interface Khitbah {
     taarufId: string;
     requestBy?: User
     requestById: string
-    schedule: Date;
+    schedule: string;
     status: ApprovalStatus;
     message: string;
     response?: Response

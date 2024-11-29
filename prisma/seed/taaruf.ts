@@ -149,8 +149,7 @@ export async function taarufSeed(prisma: PrismaClient) {
 
                 // REQUEST NADHAR
                 const requestNadhar = faker.datatype.boolean();
-                console.log({ requestNadhar });
-                let schedule = faker.date.future();
+                let schedule: string = dayjs(faker.date.future()).format('YYYY-MM-DD');
 
                 let randomRequester = faker.datatype.boolean();;
                 let requester: User = randomRequester ? user : candidate;
@@ -234,7 +233,7 @@ export async function taarufSeed(prisma: PrismaClient) {
                 // REQUEST KHITBAH
                 const requestKhitbah = faker.datatype.boolean();
                 console.log({ requestKhitbah });
-                schedule = faker.date.future();
+                schedule = dayjs(faker.date.future()).format('YYYY-MM-DD');
 
                 randomRequester = faker.datatype.boolean();;
                 requester = randomRequester ? user : candidate;
@@ -317,7 +316,7 @@ export async function taarufSeed(prisma: PrismaClient) {
                 // REQUEST AKAD
                 const requestAkad = faker.datatype.boolean();
                 console.log({ requestAkad });
-                schedule = faker.date.future();
+                schedule = dayjs(faker.date.future()).format('YYYY-MM-DD');
 
                 randomRequester = faker.datatype.boolean();;
                 requester = randomRequester ? user : candidate;

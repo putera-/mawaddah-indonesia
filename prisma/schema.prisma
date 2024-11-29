@@ -192,7 +192,7 @@ model Biodata {
     gender                  Gender
     marriage_status         MarriageStatus
     marriage_permission     MarriagePermission
-    dob                     DateTime              @db.Date
+    dob                     String                @db.VarChar(12)
     birth_place             String                @db.VarChar(100)
     birth_order             Int                   @db.SmallInt
     address                 String                @db.VarChar(100)
@@ -521,7 +521,7 @@ model Nadhar {
     taarufId    String
     requestBy   User           @relation(fields: [requestById], references: [id])
     requestById String
-    schedule    DateTime       @default(now())
+    schedule    String         @db.VarChar(12)
     status      ApprovalStatus @default(Pending)
     message     String         @db.Text
     response    Response?
@@ -537,7 +537,7 @@ model Khitbah {
     taarufId    String
     requestBy   User           @relation(fields: [requestById], references: [id])
     requestById String
-    schedule    DateTime       @default(now())
+    schedule    String         @db.VarChar(12)
     status      ApprovalStatus @default(Pending)
     message     String         @db.Text
     response    Response?
@@ -553,7 +553,7 @@ model Akad {
     taarufId    String
     requestBy   User           @relation(fields: [requestById], references: [id])
     requestById String
-    schedule    DateTime       @default(now())
+    schedule    String         @db.VarChar(12)
     status      ApprovalStatus @default(Pending)
     message     String         @db.Text
     response    Response?

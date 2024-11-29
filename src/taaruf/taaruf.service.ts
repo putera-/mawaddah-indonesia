@@ -26,7 +26,6 @@ export class TaarufService {
     async create(
         userId: string,
         candidateId: string,
-        message: string,
     ): Promise<Taaruf> {
         // check if candidate is not exist
         const user = await this.PrismaService.user.findFirst({
@@ -60,6 +59,8 @@ export class TaarufService {
             throw new ConflictException(
                 'Anda telah mengajukan taaaruf dengan kandidat ini',
             );
+
+        const message = `Assalamualaikum Warahmatullahi Wabarakatuh. ${user.firstname} telah mengajukan taaruf. Silahkan meninjau biodata ${user.firstname}. Semoga Allah SWT memberikan petunjuk yang terbaik bagi antum berdua. Aamiin.`;
 
         // create data taaruf
         const data: Prisma.TaarufCreateInput = {
@@ -212,11 +213,17 @@ export class TaarufService {
         return update_taaruf;
     }
 
-    async reject(candidateId: string, taarufId: string, message: string) {
+    async reject(candidateId: string, taarufId: string) {
         const taaruf = await this.PrismaService.taaruf.findFirst({
             where: { id: taarufId, candidateId },
         });
         if (!taaruf) throw new NotFoundException('Data tidak valid');
+
+        const candidate = await this.PrismaService.user.findFirst({
+            where: { id: candidateId },
+        });
+
+        const message = `${candidate.firstname} telah menolak permintaan taaruf. Semoga Allah SWT memberikan petunjuk yang terbaik bagi antum berdua. Aamiin.`;
 
         const response: Prisma.ResponseCreateInput = {
             message,
@@ -237,12 +244,9 @@ export class TaarufService {
 
         // create inbox
         {
-            const user = await this.PrismaService.user.findFirst({
-                where: { id: candidateId },
-            });
             // CREATE inbox sender & receiver
             const titleSender = `Anda menolak permintaan taaruf`;
-            const titleReceiver = `${user.firstname} menolak permintaan taaruf`;
+            const titleReceiver = `${candidate.firstname} menolak permintaan taaruf`;
 
             const messageInbox: Prisma.InboxMessageCreateInput = {
                 sender: { connect: { id: candidateId } },

@@ -4,9 +4,8 @@ import { IsDate, IsOptional, IsString } from "class-validator"
 
 export class CreateNadharDto {
     @ApiProperty()
-    @IsDate()
-    @Type(() => Date)
-    schedule: Date;
+    @IsString()
+    schedule: string;
 
     @ApiProperty()
     @IsOptional()
