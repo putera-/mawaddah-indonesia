@@ -13,8 +13,6 @@ export class InboxService {
     ) { }
 
     async create(senderId: string, receiverId: string, taarufId: string, message: any, titleSender: string, titleReceiver: string): Promise<void> {
-        console.log({ senderId })
-        console.log({ receiverId })
         const dataSenderInbox: Prisma.InboxCreateInput = {
             taaruf: { connect: { id: taarufId } },
             title: titleSender,

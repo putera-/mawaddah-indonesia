@@ -92,7 +92,8 @@ export class KhitbahService {
                 message,
                 title: "",
                 taaruf_process: TaarufProcess.KhitbahRequest,
-                taaruf_process_id: khitbahData.id
+                taaruf_process_id: khitbahData.id,
+                taaruf_process_status: ApprovalStatus.Pending
             }
             await this.inboxService.create(senderId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
@@ -134,7 +135,7 @@ export class KhitbahService {
         }
 
         await this.prisma.khitbah.update({
-            where: { id: khitbah.id },
+            where: { id: khitbahId },
             data: {
                 status: ApprovalStatus.Rejected,
                 response: {
@@ -148,6 +149,14 @@ export class KhitbahService {
             where: { id: taarufId },
             data: {
                 taaruf_process: TaarufProcess.NadharApproved // back to nadhar approved
+            }
+        });
+
+        // update previous messsage
+        await this.prisma.inboxMessage.updateMany({
+            where: { taaruf_process_id: khitbahId },
+            data: {
+                taaruf_process_status: ApprovalStatus.Canceled,
             }
         });
 
@@ -171,7 +180,8 @@ export class KhitbahService {
                 message,
                 title: "",
                 taaruf_process: TaarufProcess.KhitbahCanceled,
-                taaruf_process_id: khitbah.id
+                taaruf_process_id: khitbah.id,
+                taaruf_process_status: ApprovalStatus.Canceled
             }
             await this.inboxService.create(senderId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
@@ -206,11 +216,19 @@ export class KhitbahService {
             }
         });
 
+        // update previous messsage
+        await this.prisma.inboxMessage.updateMany({
+            where: { taaruf_process_id: khitbahId },
+            data: {
+                taaruf_process_status: ApprovalStatus.Approved,
+            }
+        });
+
         // update status taaruf
         const taaruf = await this.prisma.taaruf.update({
             where: { id: taarufId },
             data: {
-                taaruf_process: TaarufProcess.KhitbahAppproved
+                taaruf_process: TaarufProcess.KhitbahApproved
             }
         });
 
@@ -233,8 +251,9 @@ export class KhitbahService {
                 receiver: { connect: { id: receiverId } },
                 message,
                 title: "",
-                taaruf_process: TaarufProcess.KhitbahAppproved,
-                taaruf_process_id: khitbah.id
+                taaruf_process: TaarufProcess.KhitbahApproved,
+                taaruf_process_id: khitbah.id,
+                taaruf_process_status: ApprovalStatus.Approved
             }
             await this.inboxService.create(senderId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
@@ -276,6 +295,14 @@ export class KhitbahService {
             }
         });
 
+        // update previous messsage
+        await this.prisma.inboxMessage.updateMany({
+            where: { taaruf_process_id: khitbahId },
+            data: {
+                taaruf_process_status: ApprovalStatus.Rejected,
+            }
+        });
+
         // create inbox
         {
             const user = await this.prisma.user.findFirst({
@@ -296,7 +323,8 @@ export class KhitbahService {
                 message,
                 title: "",
                 taaruf_process: TaarufProcess.KhitbahRejected,
-                taaruf_process_id: khitbah.id
+                taaruf_process_id: khitbah.id,
+                taaruf_process_status: ApprovalStatus.Rejected
             }
             await this.inboxService.create(senderId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }

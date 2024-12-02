@@ -85,7 +85,8 @@ export class TaarufService {
                 message,
                 title: "",
                 taaruf_process: TaarufProcess.TaarufRequest,
-                taaruf_process_id: taaruf.id
+                taaruf_process_id: taaruf.id,
+                taaruf_process_status: ApprovalStatus.Pending,
             }
             await this.inboxService.create(userId, candidate.id, taaruf.id, messageInbox, titleSender, titleReceiver);
         }
@@ -144,12 +145,15 @@ export class TaarufService {
         return result;
     }
 
-    async approve(candidateId: string, taarufId: string, message: string): Promise<Taaruf> {
+    async approve(candidateId: string, taarufId: string): Promise<Taaruf> {
         const taaruf = await this.PrismaService.taaruf.findFirst({
             where: {
                 id: taarufId,
                 candidateId,
             },
+            include: {
+                candidate: true,
+            }
         });
         if (!taaruf) throw new NotFoundException('Data tidak valid');
 
@@ -167,6 +171,8 @@ export class TaarufService {
                 'Taaruf telah ditolak, tidak bisa mengubah data',
             );
 
+        const message = `Assalamualaikum Warahmatullahi Wabarakatuh. ${taaruf.candidate.firstname} telah menerima pengajuan taaruf. Silahkan saling meninjau biodata. Anda bisa mengajukan nadhar jika merasa ada kecocokan. Semoga Allah SWT memberikan petunjuk yang terbaik bagi antum berdua. Aamiin.`;
+
         const response: Prisma.ResponseCreateInput = {
             message,
             responseBy: { connect: { id: candidateId } },
@@ -182,6 +188,14 @@ export class TaarufService {
                     create: response,
                 },
             },
+        });
+
+        // update previous messsage
+        await this.PrismaService.inboxMessage.updateMany({
+            where: { taaruf_process_id: taaruf.id },
+            data: {
+                taaruf_process_status: ApprovalStatus.Approved,
+            }
         });
 
         await this.update_taaruf_status(
@@ -205,7 +219,8 @@ export class TaarufService {
                 message,
                 title: "",
                 taaruf_process: TaarufProcess.TaarufApproved,
-                taaruf_process_id: taaruf.id
+                taaruf_process_id: taaruf.id,
+                taaruf_process_status: ApprovalStatus.Approved,
             }
             await this.inboxService.create(candidateId, taaruf.userId, taaruf.id, messageInbox, titleSender, titleReceiver);
         }
@@ -242,6 +257,14 @@ export class TaarufService {
             },
         });
 
+        // update previous messsage
+        await this.PrismaService.inboxMessage.updateMany({
+            where: { taaruf_process_id: taaruf.id },
+            data: {
+                taaruf_process_status: ApprovalStatus.Approved,
+            }
+        });
+
         // create inbox
         {
             // CREATE inbox sender & receiver
@@ -254,7 +277,8 @@ export class TaarufService {
                 message,
                 title: "",
                 taaruf_process: TaarufProcess.TaarufRejected,
-                taaruf_process_id: taaruf.id
+                taaruf_process_id: taaruf.id,
+                taaruf_process_status: ApprovalStatus.Rejected
             }
             await this.inboxService.create(candidateId, taaruf.userId, taaruf.id, messageInbox, titleSender, titleReceiver);
         }
@@ -312,7 +336,8 @@ export class TaarufService {
                 message,
                 title: "",
                 taaruf_process: TaarufProcess.Canceled,
-                taaruf_process_id: taaruf.id
+                taaruf_process_id: taaruf.id,
+                taaruf_process_status: ApprovalStatus.Canceled
             }
             await this.inboxService.create(userId, receiverId, taaruf.id, messageInbox, titleSender, titleReceiver);
         }
@@ -346,7 +371,8 @@ export class TaarufService {
             message,
             title: "",
             taaruf_process: TaarufProcess.Canceled,
-            taaruf_process_id: taaruf.id
+            taaruf_process_id: taaruf.id,
+            taaruf_process_status: ApprovalStatus.Canceled
         }
         await this.inboxService.create(userId, receiverId, taaruf.id, messageInbox, titleSender, titleReceiver);
     }

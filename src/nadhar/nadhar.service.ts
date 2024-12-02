@@ -89,7 +89,8 @@ export class NadharService {
                 message,
                 title: "",
                 taaruf_process: TaarufProcess.NadharRequest,
-                taaruf_process_id: nadharData.id
+                taaruf_process_id: nadharData.id,
+                taaruf_process_status: ApprovalStatus.Pending
             }
             await this.inboxService.create(senderId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
@@ -141,6 +142,14 @@ export class NadharService {
             }
         });
 
+        // update previous messsage
+        await this.prisma.inboxMessage.updateMany({
+            where: { taaruf_process_id: nadharId },
+            data: {
+                taaruf_process_status: ApprovalStatus.Canceled,
+            }
+        });
+
         // update status taaruf
         const taaruf = await this.prisma.taaruf.update({
             where: { id: taarufId },
@@ -170,7 +179,8 @@ export class NadharService {
                 message,
                 title: "",
                 taaruf_process: TaarufProcess.NadharCanceled,
-                taaruf_process_id: nadharId
+                taaruf_process_id: nadharId,
+                taaruf_process_status: ApprovalStatus.Canceled
             }
             await this.inboxService.create(senderId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }
@@ -213,6 +223,14 @@ export class NadharService {
             }
         });
 
+        // update previous messsage
+        await this.prisma.inboxMessage.updateMany({
+            where: { taaruf_process_id: nadharId },
+            data: {
+                taaruf_process_status: ApprovalStatus.Approved,
+            }
+        });
+
         // create inbox
         {
             const user = await this.prisma.user.findFirst({
@@ -233,7 +251,8 @@ export class NadharService {
                 message,
                 title: "",
                 taaruf_process: TaarufProcess.NadharApproved,
-                taaruf_process_id: nadharId
+                taaruf_process_id: nadharId,
+                taaruf_process_status: ApprovalStatus.Approved
             }
 
             await this.inboxService.create(senderId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
@@ -266,6 +285,14 @@ export class NadharService {
             }
         });
 
+        // update previous messsage
+        await this.prisma.inboxMessage.updateMany({
+            where: { taaruf_process_id: nadharId },
+            data: {
+                taaruf_process_status: ApprovalStatus.Rejected,
+            }
+        });
+
         // update status taaruf
         const taaruf = await this.prisma.taaruf.update({
             where: { id: taarufId },
@@ -294,7 +321,8 @@ export class NadharService {
                 message,
                 title: "",
                 taaruf_process: TaarufProcess.NadharRejected,
-                taaruf_process_id: nadharId
+                taaruf_process_id: nadharId,
+                taaruf_process_status: ApprovalStatus.Rejected
             }
             await this.inboxService.create(senderId, receiverId, taarufId, messageInbox, titleSender, titleReceiver);
         }

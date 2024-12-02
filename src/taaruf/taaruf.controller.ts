@@ -123,11 +123,10 @@ export class TaarufController {
     async approve(
         @Req() req: any,
         @Param('id') id: string,
-        @Body(new ValidationPipe()) data: TaarufMessageDto,
     ) {
         try {
             const candidateId = req.user.id;
-            return this.taarufService.approve(candidateId, id, data.message);
+            return this.taarufService.approve(candidateId, id);
         } catch (error) {
             throw error;
         }

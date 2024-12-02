@@ -38,7 +38,7 @@ CREATE TYPE "relationship" AS ENUM ('ayah', 'ibu', 'kakak_pria', 'kakak_wanita',
 CREATE TYPE "religion" AS ENUM ('islam', 'non_islam');
 
 -- CreateEnum
-CREATE TYPE "TaarufProcess" AS ENUM ('TaarufRequest', 'TaarufApproved', 'TaarufRejected', 'NadharRequest', 'NadharApproved', 'NadharRejected', 'NadharCanceled', 'KhitbahRequest', 'KhitbahAppproved', 'KhitbahRejected', 'KhitbahCanceled', 'AkadRequest', 'AkadApproved', 'AkadRejected', 'AkadCanceled', 'Completed', 'Canceled');
+CREATE TYPE "TaarufProcess" AS ENUM ('TaarufRequest', 'TaarufApproved', 'TaarufRejected', 'NadharRequest', 'NadharApproved', 'NadharRejected', 'NadharCanceled', 'KhitbahRequest', 'KhitbahApproved', 'KhitbahRejected', 'KhitbahCanceled', 'AkadRequest', 'AkadApproved', 'AkadRejected', 'AkadCanceled', 'Completed', 'Canceled');
 
 -- CreateEnum
 CREATE TYPE "ApprovalStatus" AS ENUM ('Pending', 'Approved', 'Rejected', 'Canceled');
@@ -587,6 +587,7 @@ CREATE TABLE "inbox_message" (
     "receiverId" TEXT NOT NULL,
     "taaruf_process" "TaarufProcess" NOT NULL,
     "taaruf_process_id" VARCHAR(255) NOT NULL,
+    "taaruf_process_status" "ApprovalStatus" NOT NULL,
     "title" VARCHAR(255) NOT NULL,
     "message" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
