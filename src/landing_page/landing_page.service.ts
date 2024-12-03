@@ -21,6 +21,7 @@ export class LandingPageService {
                 process_step: true,
                 about: true,
                 social_media: true,
+                blog: true,
             },
         });
 

@@ -31,7 +31,10 @@ import {
     UpdateProcessStepDoc,
     UpdateSocialMediaDoc,
 } from './landing_page.doc';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Landing Page')
 @Controller('landing-page')
 export class LandingPageController {
     constructor(private readonly landingPageService: LandingPageService) {}
