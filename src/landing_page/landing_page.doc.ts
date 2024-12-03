@@ -19,7 +19,7 @@ export function GetLandingPageDoc() {
 export function CreateMainSlideDoc() {
     return applyDecorators(
         ApiOperation({
-            summary: 'Get Landing Page, Restricted for Admin & SuperAdmin',
+            summary: 'Create Main Slide, Restricted for Admin & SuperAdmin',
         }),
         ApiResponse({
             status: 200,
@@ -33,7 +33,7 @@ export function CreateMainSlideDoc() {
 export function UpdateMainSlideDoc() {
     return applyDecorators(
         ApiOperation({
-            summary: 'Get Landing Page, Restricted for Admin & SuperAdmin',
+            summary: 'Update Main Slide, Restricted for Admin & SuperAdmin',
         }),
         ApiResponse({
             status: 200,
@@ -47,7 +47,7 @@ export function UpdateMainSlideDoc() {
 export function CreateProcessStepDoc() {
     return applyDecorators(
         ApiOperation({
-            summary: 'Get Landing Page, Restricted for Admin & SuperAdmin',
+            summary: 'Create Process Step, Restricted for Admin & SuperAdmin',
         }),
         ApiResponse({
             status: 200,
@@ -61,7 +61,7 @@ export function CreateProcessStepDoc() {
 export function UpdateProcessStepDoc() {
     return applyDecorators(
         ApiOperation({
-            summary: 'Get Landing Page, Restricted for Admin & SuperAdmin',
+            summary: 'Update Process Step, Restricted for Admin & SuperAdmin',
         }),
         ApiResponse({
             status: 200,
@@ -73,10 +73,10 @@ export function UpdateProcessStepDoc() {
     );
 }
 
-export function UpdateAboutDoc(){
+export function UpdateAboutDoc() {
     return applyDecorators(
         ApiOperation({
-            summary: 'Get Landing Page, Restricted for Admin & SuperAdmin',
+            summary: 'Update About, Restricted for Admin & SuperAdmin',
         }),
         ApiResponse({
             status: 200,
@@ -91,7 +91,7 @@ export function UpdateAboutDoc(){
 export function CreateSocialMediaDoc() {
     return applyDecorators(
         ApiOperation({
-            summary: 'Get Landing Page, Restricted for Admin & SuperAdmin',
+            summary: 'Create Social Media, Restricted for Admin & SuperAdmin',
         }),
         ApiResponse({
             status: 200,
@@ -105,7 +105,7 @@ export function CreateSocialMediaDoc() {
 export function UpdateSocialMediaDoc() {
     return applyDecorators(
         ApiOperation({
-            summary: 'Get Landing Page, Restricted for Admin & SuperAdmin',
+            summary: 'Update Social Media, Restricted for Admin & SuperAdmin',
         }),
         ApiResponse({
             status: 200,
@@ -119,7 +119,7 @@ export function UpdateSocialMediaDoc() {
 export function CreateBlogDoc() {
     return applyDecorators(
         ApiOperation({
-            summary: 'Get Landing Page, Restricted for Admin & SuperAdmin',
+            summary: 'Create Blog, Restricted for Admin & SuperAdmin',
         }),
         ApiResponse({
             status: 200,
@@ -133,7 +133,7 @@ export function CreateBlogDoc() {
 export function UpdateBlogDoc() {
     return applyDecorators(
         ApiOperation({
-            summary: 'Get Landing Page, Restricted for Admin & SuperAdmin',
+            summary: 'Update Blog, Restricted for Admin & SuperAdmin',
         }),
         ApiResponse({
             status: 200,

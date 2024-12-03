@@ -29,6 +29,7 @@ async function main() {
     await gallerySeed(prisma, clientid);
     await sliderSeed(prisma, clientid);
     await faqSeed(prisma, clientid);
+    await LandingPageSeed(prisma);
     await provinceSeed(prisma);
     await memberSeed(prisma);
     await member_physical_character_seed(prisma);
@@ -41,7 +42,6 @@ async function main() {
     await member_life_goals_seed(prisma);
     await answerSeed(prisma);
     await experience(prisma);
-    await LandingPageSeed(prisma);
 }
 
 main()
