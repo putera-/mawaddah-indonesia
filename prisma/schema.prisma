@@ -805,12 +805,13 @@ model ProcessStep {
 }
 
 model About {
-    title         String      @db.Text
-    description   String      @db.Text
-    createdAt     DateTime    @default(now())
-    updatedAt     DateTime    @default(now()) @updatedAt
-    LandingPage   LandingPage @relation(fields: [landingPageId], references: [id])
-    landingPageId String      @unique
+    title              String      @db.Text
+    description        String      @db.Text
+    footer_description String      @db.Text
+    createdAt          DateTime    @default(now())
+    updatedAt          DateTime    @default(now()) @updatedAt
+    LandingPage        LandingPage @relation(fields: [landingPageId], references: [id])
+    landingPageId      String      @unique
 }
 
 model SocialMedia {

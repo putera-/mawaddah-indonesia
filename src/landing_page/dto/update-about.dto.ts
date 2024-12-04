@@ -7,4 +7,7 @@ export class UpdateAboutDto {
 
     @IsString()
     description: string;
+
+    @IsString()
+    footer_description: string;
 }

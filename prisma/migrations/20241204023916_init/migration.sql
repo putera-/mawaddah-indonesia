@@ -633,6 +633,7 @@ CREATE TABLE "process_step" (
 CREATE TABLE "About" (
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
+    "footer_description" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "landingPageId" TEXT NOT NULL

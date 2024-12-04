@@ -32,15 +32,16 @@ import {
     UpdateSocialMediaDoc,
 } from './landing_page.doc';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Public } from 'src/auth/auth.metadata';
 
 @ApiBearerAuth()
 @ApiTags('Landing Page')
 @Controller('landing-page')
 export class LandingPageController {
-    constructor(private readonly landingPageService: LandingPageService) {}
+    constructor(private readonly landingPageService: LandingPageService) { }
 
     @GetLandingPageDoc()
-    @Roles(Role.Superadmin, Role.Admin)
+    @Public()
     @Get()
     async getLandingPage() {
         console.log('masuk nih');

@@ -12,7 +12,7 @@ import { CreateBlogDto } from './dto/create-blog.dto';
 
 @Injectable()
 export class LandingPageService {
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService) { }
 
     async getAll() {
         const result = await this.prisma.landingPage.findFirstOrThrow({
@@ -21,7 +21,9 @@ export class LandingPageService {
                 process_step: true,
                 about: true,
                 social_media: true,
-                blog: true,
+                blog: {
+                    take: 2
+                },
             },
         });
 
@@ -29,6 +31,7 @@ export class LandingPageService {
             const dataAbout: Prisma.AboutCreateInput = {
                 title: '-',
                 description: '-',
+                footer_description: '-',
                 LandingPage: {
                     connect: {
                         id: result.id,
