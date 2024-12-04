@@ -17,6 +17,7 @@ import { member_life_goals_seed } from './seed/member_life_goals';
 import { questionSeeder } from './seed/question';
 import { answerSeed } from './seed/answer';
 import { experience } from './seed/experience';
+import { LandingPageSeed } from './seed/landing_page';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -28,6 +29,7 @@ async function main() {
     await gallerySeed(prisma, clientid);
     await sliderSeed(prisma, clientid);
     await faqSeed(prisma, clientid);
+    await LandingPageSeed(prisma);
     await provinceSeed(prisma);
     await memberSeed(prisma);
     await member_physical_character_seed(prisma);
