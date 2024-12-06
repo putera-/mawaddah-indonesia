@@ -6,6 +6,7 @@ import {
     Patch,
     Param,
     Delete,
+    HttpCode,
 } from '@nestjs/common';
 import { LandingPageService } from './landing_page.service';
 import { Roles } from 'src/roles/roles.decorator';
@@ -49,8 +50,8 @@ export class LandingPageController {
 
     @CreateMainSlideDoc()
     @Roles(Role.Superadmin, Role.Admin)
-    @Post()
-    async createMainSlide(data: CreateMainSlideDto) {
+    @Post('main-slide')
+    async createMainSlide(@Body() data: CreateMainSlideDto) {
         try {
             return await this.landingPageService.createMainSlide(data);
         } catch (error) {
@@ -60,7 +61,7 @@ export class LandingPageController {
 
     @UpdateMainSlideDoc()
     @Roles(Role.Superadmin, Role.Admin)
-    @Patch(':id')
+    @Patch('main-slide/:id')
     async updateMainSlide(
         @Param('id') slideId: string,
         @Body() data: UpdateMainSlideDto,
@@ -74,8 +75,8 @@ export class LandingPageController {
 
     @CreateProcessStepDoc()
     @Roles(Role.Superadmin, Role.Admin)
-    @Post()
-    async createProcessStep(data: CreateProcessStepDto) {
+    @Post('process-step')
+    async createProcessStep(@Body() data: CreateProcessStepDto) {
         try {
             return await this.landingPageService.createProcessStep(data);
         } catch (error) {
@@ -85,7 +86,7 @@ export class LandingPageController {
 
     @UpdateProcessStepDoc()
     @Roles(Role.Superadmin, Role.Admin)
-    @Patch(':id')
+    @Patch('process-step/:id')
     async updateProcessStep(
         @Param('id') processStepId: string,
         @Body() data: UpdateProcessStepDto,
@@ -100,9 +101,20 @@ export class LandingPageController {
         }
     }
 
+    @Roles(Role.Superadmin, Role.Admin)
+    @HttpCode(204)
+    @Delete('process-step/:id')
+    removeProcessStep(@Param('id') id: string) {
+        try {
+            return this.landingPageService.removeProcessStep(id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     @UpdateAboutDoc()
     @Roles(Role.Superadmin, Role.Admin)
-    @Patch(':id')
+    @Patch('about/:id')
     async updateAbout(
         @Param('id') landingPageId: string,
         @Body() data: Prisma.AboutCreateInput,
@@ -116,8 +128,8 @@ export class LandingPageController {
 
     @CreateSocialMediaDoc()
     @Roles(Role.Superadmin, Role.Admin)
-    @Post()
-    async createSocialMedia(data: CreateSocialMediaDto) {
+    @Post('social-media')
+    async createSocialMedia(@Body() data: CreateSocialMediaDto) {
         try {
             return await this.landingPageService.createSocialMedia(data);
         } catch (error) {
@@ -127,7 +139,7 @@ export class LandingPageController {
 
     @UpdateSocialMediaDoc()
     @Roles(Role.Superadmin, Role.Admin)
-    @Patch(':id')
+    @Patch('social-media/:id')
     async updateSocialMedia(
         @Param('id') socialMediaId: string,
         @Body() data: UpdateSocialMediaDto,
@@ -137,6 +149,17 @@ export class LandingPageController {
                 socialMediaId,
                 data,
             );
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    @Roles(Role.Superadmin, Role.Admin)
+    @HttpCode(204)
+    @Delete('social-media/:id')
+    removeSocialMedia(@Param('id') id: string) {
+        try {
+            return this.landingPageService.removeSocialMedia(id);
         } catch (error) {
             throw error;
         }

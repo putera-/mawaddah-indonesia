@@ -75,10 +75,27 @@ export class LandingPageService {
     }
 
     async updateProcessStep(processStepId: string, data: UpdateProcessStepDto) {
+        const dt = await this.prisma.processStep.findUnique({
+            where: { id: processStepId }
+        });
+        if (!dt) throw new BadRequestException('Data tidak ditemukan');
+
         if (!data) throw new BadRequestException('Data tidak boleh kosong');
         return await this.prisma.processStep.update({
             where: { id: processStepId },
             data,
+        });
+    }
+
+    async removeProcessStep(id: string) {
+        const dt = await this.prisma.processStep.findUnique({
+            where: { id }
+        });
+
+        if (!dt) throw new BadRequestException('Data tidak ditemukan');
+
+        return await this.prisma.processStep.delete({
+            where: { id }
         });
     }
 
@@ -99,10 +116,26 @@ export class LandingPageService {
     }
 
     async updateSocialMedia(socialMediaId: string, data: UpdateSocialMediaDto) {
+        const dt = await this.prisma.socialMedia.findUnique({
+            where: { id: socialMediaId }
+        });
+        if (!dt) throw new BadRequestException('Data tidak ditemukan');
         if (!data) throw new BadRequestException('Data tidak boleh kosong');
         return await this.prisma.socialMedia.update({
             where: { id: socialMediaId },
             data,
+        });
+    }
+
+    async removeSocialMedia(id: string) {
+        const dt = await this.prisma.socialMedia.findUnique({
+            where: { id }
+        });
+
+        if (!dt) throw new BadRequestException('Data tidak ditemukan');
+
+        return await this.prisma.socialMedia.delete({
+            where: { id }
         });
     }
 }
