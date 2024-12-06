@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { PrismaService } from 'src/prisma.service';
-import { Blog } from '@prisma/client';
+import { Blog, Prisma } from '@prisma/client';
 
 @Injectable()
 export class BlogsService {
     constructor(private prisma: PrismaService) { }
 
-    create(data: CreateBlogDto): Promise<Blog> {
+    create(data: Prisma.BlogCreateInput): Promise<Blog> {
         return this.prisma.blog.create({ data });
     }
 
@@ -39,7 +39,7 @@ export class BlogsService {
         return this.prisma.blog.findUnique({ where: { id, deleted: false } });
     }
 
-    async update(id: string, data: UpdateBlogDto): Promise<Blog> {
+    async update(id: string, data: Prisma.BlogUpdateInput): Promise<Blog> {
         const blog = await this.findOne(id);
         if (!blog) throw new Error('Blog not found');
 

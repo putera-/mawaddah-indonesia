@@ -831,6 +831,7 @@ model Blog {
     title     String   @db.Text
     content   String   @db.Text
     image     String   @db.Text
+    image_md  String   @db.Text
     active    Boolean  @default(true)
     deleted   Boolean  @default(false)
     createdAt DateTime @default(now())

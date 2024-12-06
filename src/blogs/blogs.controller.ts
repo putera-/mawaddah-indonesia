@@ -1,21 +1,75 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, Query, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { Role } from 'src/roles/role.enums';
 import { Roles } from 'src/roles/roles.decorator';
 import { Public } from 'src/auth/auth.metadata';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { PhotosService } from 'src/photos/photos.service';
+import path from 'path';
+import { Prisma } from '@prisma/client';
 
 @Controller('blogs')
 export class BlogsController {
-    constructor(private readonly blogsService: BlogsService) { }
+    constructor(
+        private readonly blogsService: BlogsService,
+        private photoService: PhotosService,
+    ) { }
 
     @Roles(Role.Superadmin, Role.Admin)
     @Post()
-    create(@Body() createBlogDto: CreateBlogDto) {
+    @UseInterceptors(FileInterceptor('image'))
+    async create(@Body() createBlogDto: CreateBlogDto, @UploadedFile() file: Express.Multer.File) {
+        // for image
+        const ext = file ? file.originalname.split('.').pop() : '';
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+
         try {
-            return this.blogsService.create(createBlogDto);
+            const data: Prisma.BlogCreateInput = {
+                ...createBlogDto,
+                image: '',
+                image_md: '',
+            };
+            if (file) {
+                const avatarBuffer = file.buffer;
+
+                // resize images to 600, 900, 1200
+                const sizes = [
+                    { key: 'md', size: 900 },
+                    { key: 'lg', size: 1200 },
+                ];
+                await Promise.all(
+                    sizes.map(async (s) => {
+                        const { key, size } = s;
+                        const filename = `${uniqueSuffix}_${key}.${ext}`;
+                        const filepath = path.join(
+                            './public/blogs/' + filename,
+                        );
+
+                        await this.photoService.resize(
+                            size,
+                            avatarBuffer,
+                            filepath,
+                        );
+                    }),
+                );
+
+                data.image = `/blogs/${uniqueSuffix}_lg.${ext}`;
+                data.image_md = `/blogs/${uniqueSuffix}_md.${ext}`;
+            }
+            return this.blogsService.create(data);
         } catch (error) {
+            // remove image
+            if (file) {
+                this.photoService.removeFile(
+                    `/public/blogs/${uniqueSuffix}_lg.${ext}`,
+                );
+                this.photoService.removeFile(
+                    `/public/blogs/${uniqueSuffix}_md.${ext}`,
+                );
+            }
+
             throw error;
         }
     }
@@ -42,10 +96,58 @@ export class BlogsController {
 
     @Roles(Role.Superadmin, Role.Admin)
     @Patch(':id')
-    update(@Param('id') id: string, @Body() updateBlogDto: UpdateBlogDto) {
+    @UseInterceptors(FileInterceptor('image'))
+    async update(@Param('id') id: string, @Body() updateBlogDto: UpdateBlogDto, @UploadedFile() file: Express.Multer.File) {
+        // for image
+        const ext = file ? file.originalname.split('.').pop() : '';
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+
         try {
-            return this.blogsService.update(id, updateBlogDto);
+            const data: Prisma.BlogUpdateInput = {
+                ...updateBlogDto,
+            };
+
+
+            if (file) {
+                const avatarBuffer = file.buffer;
+
+                // resize images to 600, 900, 1200
+                const sizes = [
+                    { key: 'md', size: 900 },
+                    { key: 'lg', size: 1200 },
+                ];
+                await Promise.all(
+                    sizes.map(async (s) => {
+                        const { key, size } = s;
+                        const filename = `${uniqueSuffix}_${key}.${ext}`;
+                        const filepath = path.join(
+                            './public/blogs/' + filename,
+                        );
+
+                        await this.photoService.resize(
+                            size,
+                            avatarBuffer,
+                            filepath,
+                        );
+                    }),
+                );
+
+                data.image = `/blogs/${uniqueSuffix}_lg.${ext}`;
+                data.image_md = `/blogs/${uniqueSuffix}_md.${ext}`;
+            }
+
+            return this.blogsService.update(id, data);
         } catch (error) {
+            // remove image
+            if (file) {
+                this.photoService.removeFile(
+                    `/public/blogs/${uniqueSuffix}_lg.${ext}`,
+                );
+                this.photoService.removeFile(
+                    `/public/blogs/${uniqueSuffix}_md.${ext}`,
+                );
+            }
+
             throw error;
         }
     }

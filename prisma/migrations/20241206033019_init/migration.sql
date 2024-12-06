@@ -658,6 +658,7 @@ CREATE TABLE "blog" (
     "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
     "image" TEXT NOT NULL,
+    "image_md" TEXT NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT true,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

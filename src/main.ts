@@ -27,6 +27,7 @@ async function bootstrap() {
     await appService.createPath('./public')
     await appService.createPath('./public/photos')
     await appService.createPath('./public/avatar')
+    await appService.createPath('./public/blogs')
 
     // CORS
     app.enableCors({

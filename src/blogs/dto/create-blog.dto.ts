@@ -6,7 +6,4 @@ export class CreateBlogDto {
 
     @IsString()
     content: string;
-
-    @IsString()
-    image: string;
 }

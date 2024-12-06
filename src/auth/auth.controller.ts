@@ -60,7 +60,7 @@ export class AuthController {
         private userService: UsersService,
         private photoService: PhotosService,
         private biodataService: BiodataService,
-    ) {}
+    ) { }
 
     @RegisterDoc()
     @Public()
@@ -307,6 +307,12 @@ export class AuthController {
                 );
                 this.photoService.removeFile(
                     `/public/avatar/${uniqueSuffix}_md.${ext}`,
+                );
+                this.photoService.removeFile(
+                    `/public/avatar/${blurUniqueSuffix}_lg.${ext}`,
+                );
+                this.photoService.removeFile(
+                    `/public/avatar/${blurUniqueSuffix}_md.${ext}`,
                 );
             }
             throw error;
