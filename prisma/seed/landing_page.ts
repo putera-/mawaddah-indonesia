@@ -69,6 +69,15 @@ export async function LandingPageSeed(prisma: PrismaClient) {
         });
     }
 
-
+    await prisma.landingPage.create({
+        data: {
+            main_slide: { createMany: { data: main_slides } },
+            process_step: { createMany: { data: process_steps } },
+            about: { create: about },
+            social_media: { createMany: { data: social_media } },
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
+    });
     console.log('\nSeed Finish: Landing Page');
 }
