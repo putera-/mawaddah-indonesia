@@ -18,12 +18,14 @@ import { questionSeeder } from './seed/question';
 import { answerSeed } from './seed/answer';
 import { experience } from './seed/experience';
 import { LandingPageSeed } from './seed/landing_page';
+import { blogs_seed } from './seed/blogs';
 const prisma = new PrismaClient();
 
 async function main() {
     const clientid: string = '94de0914-cf51-47a4-8234-812824d9848a';
     const userId: string = '0766a4ea-ac7a-49b1-acca-49f3a4c24648';
     await clientSeed(prisma, clientid);
+    await blogs_seed(prisma)
     await userSeed(prisma);
     await questionSeeder(prisma);
     await gallerySeed(prisma, clientid);

@@ -41,6 +41,7 @@ import { ExperiencesModule } from './experiences/experiences.module';
 import { InboxModule } from './inbox/inbox.module';
 import { StatisticModule } from './statistic/statistic.module';
 import { LandingPageModule } from './landing_page/landing_page.module';
+import { BlogsModule } from './blogs/blogs.module';
 
 @Module({
     imports: [
@@ -82,6 +83,7 @@ import { LandingPageModule } from './landing_page/landing_page.module';
         InboxModule,
         StatisticModule,
         LandingPageModule,
+        BlogsModule,
     ],
 
     controllers: [AppController],

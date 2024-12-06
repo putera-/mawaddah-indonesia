@@ -772,7 +772,6 @@ model LandingPage {
     process_step ProcessStep[]
     about        About?
     social_media SocialMedia[]
-    blog         Blog[]
     createdAt    DateTime      @default(now())
     updatedAt    DateTime      @default(now()) @updatedAt
 
@@ -828,14 +827,14 @@ model SocialMedia {
 }
 
 model Blog {
-    id            String       @id @default(uuid())
-    title         String       @db.Text
-    content       String       @db.Text
-    image         String       @db.Text
-    createdAt     DateTime     @default(now())
-    updatedAt     DateTime     @default(now()) @updatedAt
-    LandingPage   LandingPage? @relation(fields: [landingPageId], references: [id])
-    landingPageId String?
+    id        String   @id @default(uuid())
+    title     String   @db.Text
+    content   String   @db.Text
+    image     String   @db.Text
+    active    Boolean  @default(true)
+    deleted   Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 
     @@map("blog")
 }

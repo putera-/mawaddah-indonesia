@@ -658,9 +658,10 @@ CREATE TABLE "blog" (
     "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
     "image" TEXT NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "landingPageId" TEXT,
 
     CONSTRAINT "blog_pkey" PRIMARY KEY ("id")
 );
@@ -901,6 +902,3 @@ ALTER TABLE "About" ADD CONSTRAINT "About_landingPageId_fkey" FOREIGN KEY ("land
 
 -- AddForeignKey
 ALTER TABLE "social_media" ADD CONSTRAINT "social_media_landingPageId_fkey" FOREIGN KEY ("landingPageId") REFERENCES "landing_page"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "blog" ADD CONSTRAINT "blog_landingPageId_fkey" FOREIGN KEY ("landingPageId") REFERENCES "landing_page"("id") ON DELETE SET NULL ON UPDATE CASCADE;

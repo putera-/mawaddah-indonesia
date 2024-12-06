@@ -32,9 +32,7 @@ export class ExperiencesController {
                 }
             }
 
-            console.log(experience)
             return this.experienceService.create(experience);
-
         } catch (error) {
             throw error;
         }

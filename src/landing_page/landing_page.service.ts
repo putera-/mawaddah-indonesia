@@ -3,45 +3,53 @@ import { PrismaService } from 'src/prisma.service';
 import { UpdateMainSlideDto } from './dto/update-main_slide.dto';
 import { UpdateProcessStepDto } from './dto/update-process_step.dto';
 import { UpdateSocialMediaDto } from './dto/update-social_media.dto';
-import { UpdateBlogDto } from './dto/update-blog.dto';
 import { CreateMainSlideDto } from './dto/create-main_slide.dto';
 import { CreateProcessStepDto } from './dto/create-process_step.dto';
 import { CreateSocialMediaDto } from './dto/create-social_media.dto';
 import { Prisma } from '@prisma/client';
-import { CreateBlogDto } from './dto/create-blog.dto';
 
 @Injectable()
 export class LandingPageService {
     constructor(private prisma: PrismaService) { }
 
     async getAll() {
-        const result = await this.prisma.landingPage.findFirstOrThrow({
+        let result: any = await this.prisma.landingPage.findFirst({
             include: {
                 main_slide: true,
                 process_step: true,
                 about: true,
                 social_media: true,
-                blog: {
-                    take: 2
-                },
             },
         });
 
-        if (!result.about) {
-            const dataAbout: Prisma.AboutCreateInput = {
-                title: '-',
-                description: '-',
-                footer_description: '-',
-                LandingPage: {
-                    connect: {
-                        id: result.id,
-                    },
+        if (!result) {
+            result = await this.prisma.landingPage.create({
+                data: {
+                    about: {
+                        create: {
+                            title: '-',
+                            description: '-',
+                            footer_description: '-',
+                        }
+                    }
                 },
-            };
-            result.about = await this.updateAbout(result.id, dataAbout);
+                include: {
+                    main_slide: true,
+                    process_step: true,
+                    about: true,
+                    social_media: true,
+                }
+            })
         }
 
-        return result;
+        const blogs = await this.prisma.blog.findMany({
+            take: 2,
+        });
+
+        return {
+            ...result,
+            blogs
+        };
     }
 
     async createMainSlide(data: CreateMainSlideDto) {
@@ -94,21 +102,6 @@ export class LandingPageService {
         if (!data) throw new BadRequestException('Data tidak boleh kosong');
         return await this.prisma.socialMedia.update({
             where: { id: socialMediaId },
-            data,
-        });
-    }
-
-    async createBlog(data: CreateBlogDto) {
-        if (!data) throw new BadRequestException('Data tidak boleh kosong');
-        return await this.prisma.blog.create({
-            data,
-        });
-    }
-
-    async updateBlog(blogId: string, data: UpdateBlogDto) {
-        if (!data) throw new BadRequestException('Data tidak boleh kosong');
-        return await this.prisma.blog.update({
-            where: { id: blogId },
             data,
         });
     }

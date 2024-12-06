@@ -69,27 +69,6 @@ export async function LandingPageSeed(prisma: PrismaClient) {
         });
     }
 
-    const blog: Prisma.BlogCreateWithoutLandingPageInput[] = [];
-    for (let i = 0; i < 20; i++) {
-        blog.push({
-            title: faker.lorem.sentence(),
-            content: faker.lorem.sentence(),
-            image: faker.image.urlPicsumPhotos(),
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        });
-    }
 
-    await prisma.landingPage.create({
-        data: {
-            main_slide: { createMany: { data: main_slides } },
-            process_step: { createMany: { data: process_steps } },
-            about: { create: about },
-            social_media: { createMany: { data: social_media } },
-            blog: { createMany: { data: blog } },
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        },
-    });
     console.log('\nSeed Finish: Landing Page');
 }

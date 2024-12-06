@@ -17,16 +17,12 @@ import { UpdateProcessStepDto } from './dto/update-process_step.dto';
 import { Prisma } from '@prisma/client';
 import { CreateSocialMediaDto } from './dto/create-social_media.dto';
 import { UpdateSocialMediaDto } from './dto/update-social_media.dto';
-import { CreateBlogDto } from './dto/create-blog.dto';
-import { UpdateBlogDto } from './dto/update-blog.dto';
 import {
-    CreateBlogDoc,
     CreateMainSlideDoc,
     CreateProcessStepDoc,
     CreateSocialMediaDoc,
     GetLandingPageDoc,
     UpdateAboutDoc,
-    UpdateBlogDoc,
     UpdateMainSlideDoc,
     UpdateProcessStepDoc,
     UpdateSocialMediaDoc,
@@ -44,15 +40,22 @@ export class LandingPageController {
     @Public()
     @Get()
     async getLandingPage() {
-        console.log('masuk nih');
-        return await this.landingPageService.getAll();
+        try {
+            return await this.landingPageService.getAll();
+        } catch (error) {
+            throw error;
+        }
     }
 
     @CreateMainSlideDoc()
     @Roles(Role.Superadmin, Role.Admin)
     @Post()
     async createMainSlide(data: CreateMainSlideDto) {
-        return await this.landingPageService.createMainSlide(data);
+        try {
+            return await this.landingPageService.createMainSlide(data);
+        } catch (error) {
+            throw error;
+        }
     }
 
     @UpdateMainSlideDoc()
@@ -62,14 +65,22 @@ export class LandingPageController {
         @Param('id') slideId: string,
         @Body() data: UpdateMainSlideDto,
     ) {
-        return await this.landingPageService.updateMainSlide(slideId, data);
+        try {
+            return await this.landingPageService.updateMainSlide(slideId, data);
+        } catch (error) {
+            throw error;
+        }
     }
 
     @CreateProcessStepDoc()
     @Roles(Role.Superadmin, Role.Admin)
     @Post()
     async createProcessStep(data: CreateProcessStepDto) {
-        return await this.landingPageService.createProcessStep(data);
+        try {
+            return await this.landingPageService.createProcessStep(data);
+        } catch (error) {
+            throw error;
+        }
     }
 
     @UpdateProcessStepDoc()
@@ -79,10 +90,14 @@ export class LandingPageController {
         @Param('id') processStepId: string,
         @Body() data: UpdateProcessStepDto,
     ) {
-        return await this.landingPageService.updateProcessStep(
-            processStepId,
-            data,
-        );
+        try {
+            return await this.landingPageService.updateProcessStep(
+                processStepId,
+                data,
+            );
+        } catch (error) {
+            throw error;
+        }
     }
 
     @UpdateAboutDoc()
@@ -92,14 +107,22 @@ export class LandingPageController {
         @Param('id') landingPageId: string,
         @Body() data: Prisma.AboutCreateInput,
     ) {
-        return await this.landingPageService.updateAbout(landingPageId, data);
+        try {
+            return await this.landingPageService.updateAbout(landingPageId, data);
+        } catch (error) {
+            throw error;
+        }
     }
 
     @CreateSocialMediaDoc()
     @Roles(Role.Superadmin, Role.Admin)
     @Post()
     async createSocialMedia(data: CreateSocialMediaDto) {
-        return await this.landingPageService.createSocialMedia(data);
+        try {
+            return await this.landingPageService.createSocialMedia(data);
+        } catch (error) {
+            throw error;
+        }
     }
 
     @UpdateSocialMediaDoc()
@@ -109,23 +132,13 @@ export class LandingPageController {
         @Param('id') socialMediaId: string,
         @Body() data: UpdateSocialMediaDto,
     ) {
-        return await this.landingPageService.updateSocialMedia(
-            socialMediaId,
-            data,
-        );
-    }
-
-    @CreateBlogDoc()
-    @Roles(Role.Superadmin, Role.Admin)
-    @Post()
-    async createBlog(data: CreateBlogDto) {
-        return await this.landingPageService.createBlog(data);
-    }
-
-    @UpdateBlogDoc()
-    @Roles(Role.Superadmin, Role.Admin)
-    @Patch(':id')
-    async updateBlog(@Param('id') blogId: string, @Body() data: UpdateBlogDto) {
-        return await this.landingPageService.updateBlog(blogId, data);
+        try {
+            return await this.landingPageService.updateSocialMedia(
+                socialMediaId,
+                data,
+            );
+        } catch (error) {
+            throw error;
+        }
     }
 }
