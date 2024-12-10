@@ -116,11 +116,11 @@ export class LandingPageController {
     @Roles(Role.Superadmin, Role.Admin)
     @Patch('about/:id')
     async updateAbout(
-        @Param('id') landingPageId: string,
+        @Param('id') aboutId: string,
         @Body() data: Prisma.AboutCreateInput,
     ) {
         try {
-            return await this.landingPageService.updateAbout(landingPageId, data);
+            return await this.landingPageService.updateAbout(aboutId, data);
         } catch (error) {
             throw error;
         }

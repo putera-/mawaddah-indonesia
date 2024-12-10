@@ -596,22 +596,12 @@ CREATE TABLE "inbox_message" (
 );
 
 -- CreateTable
-CREATE TABLE "landing_page" (
-    "id" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "landing_page_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "main_slide" (
     "id" TEXT NOT NULL,
     "text" TEXT NOT NULL,
     "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "landingPageId" TEXT,
 
     CONSTRAINT "main_slide_pkey" PRIMARY KEY ("id")
 );
@@ -624,19 +614,20 @@ CREATE TABLE "process_step" (
     "svg" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "landingPageId" TEXT,
 
     CONSTRAINT "process_step_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "About" (
+CREATE TABLE "about" (
+    "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "footer_description" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "landingPageId" TEXT NOT NULL
+
+    CONSTRAINT "about_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -647,7 +638,6 @@ CREATE TABLE "social_media" (
     "text" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "landingPageId" TEXT,
 
     CONSTRAINT "social_media_pkey" PRIMARY KEY ("id")
 );
@@ -738,9 +728,6 @@ CREATE UNIQUE INDEX "answer_questionId_biodataId_key" ON "answer"("questionId", 
 
 -- CreateIndex
 CREATE UNIQUE INDEX "inbox_userId_taarufId_key" ON "inbox"("userId", "taarufId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "About_landingPageId_key" ON "About"("landingPageId");
 
 -- AddForeignKey
 ALTER TABLE "backup_detail" ADD CONSTRAINT "backup_detail_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -891,15 +878,3 @@ ALTER TABLE "inbox_message" ADD CONSTRAINT "inbox_message_senderId_fkey" FOREIGN
 
 -- AddForeignKey
 ALTER TABLE "inbox_message" ADD CONSTRAINT "inbox_message_receiverId_fkey" FOREIGN KEY ("receiverId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "main_slide" ADD CONSTRAINT "main_slide_landingPageId_fkey" FOREIGN KEY ("landingPageId") REFERENCES "landing_page"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "process_step" ADD CONSTRAINT "process_step_landingPageId_fkey" FOREIGN KEY ("landingPageId") REFERENCES "landing_page"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "About" ADD CONSTRAINT "About_landingPageId_fkey" FOREIGN KEY ("landingPageId") REFERENCES "landing_page"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "social_media" ADD CONSTRAINT "social_media_landingPageId_fkey" FOREIGN KEY ("landingPageId") REFERENCES "landing_page"("id") ON DELETE SET NULL ON UPDATE CASCADE;
