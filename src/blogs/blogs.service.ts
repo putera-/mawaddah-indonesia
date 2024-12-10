@@ -3,10 +3,14 @@ import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Blog, Prisma } from '@prisma/client';
+import { AppService } from 'src/app.service';
 
 @Injectable()
 export class BlogsService {
-    constructor(private prisma: PrismaService) { }
+    constructor(
+        private prisma: PrismaService,
+        private appService: AppService,
+    ) { }
 
     create(data: Prisma.BlogCreateInput): Promise<Blog> {
         return this.prisma.blog.create({ data });
@@ -40,13 +44,22 @@ export class BlogsService {
     }
 
     async update(id: string, data: Prisma.BlogUpdateInput): Promise<Blog> {
-        const blog = await this.findOne(id);
-        if (!blog) throw new Error('Blog not found');
+        const currentData = await this.findOne(id);
+        if (!currentData) throw new Error('Blog not found');
 
-        return this.prisma.blog.update({
+        const updateData = await this.prisma.blog.update({
             where: { id },
             data,
         });
+
+        if (currentData.image != updateData.image) {
+            if (!currentData.image.includes('/dummy')) {
+                this.appService.removeFile('/public' + currentData.image);
+                this.appService.removeFile('/public' + currentData.image_md);
+            }
+        }
+
+        return updateData;
     }
 
     async remove(id: string): Promise<void> {

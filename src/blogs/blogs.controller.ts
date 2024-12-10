@@ -136,8 +136,6 @@ export class BlogsController {
                 data.image_md = `/blogs/${uniqueSuffix}_md.${ext}`;
             }
 
-            // TODO remove foto lama
-
             return this.blogsService.update(id, data);
         } catch (error) {
             // remove image

@@ -156,7 +156,7 @@ export class LandingPageController {
                         const { key, size } = s;
                         const filename = `${uniqueSuffix}_${key}.${ext}`;
                         const filepath = path.join(
-                            './public/file/' + filename,
+                            './public/slides/' + filename,
                         );
 
                         await this.photoService.resize(
@@ -167,20 +167,19 @@ export class LandingPageController {
                     }),
                 );
 
-                data.image = `/file/${uniqueSuffix}_lg.${ext}`;
-                data.image_md = `/file/${uniqueSuffix}_md.${ext}`;
+                data.image = `/slides/${uniqueSuffix}_lg.${ext}`;
+                data.image_md = `/slides/${uniqueSuffix}_md.${ext}`;
             }
-            // TODO remove foto lama
 
             return await this.landingPageService.updateMainSlide(slideId, data);
         } catch (error) {
             // remove image
             if (file) {
                 this.photoService.removeFile(
-                    `/public/blogs/${uniqueSuffix}_lg.${ext}`,
+                    `/public/slides/${uniqueSuffix}_lg.${ext}`,
                 );
                 this.photoService.removeFile(
-                    `/public/blogs/${uniqueSuffix}_md.${ext}`,
+                    `/public/slides/${uniqueSuffix}_md.${ext}`,
                 );
             }
 

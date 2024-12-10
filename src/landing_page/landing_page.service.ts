@@ -7,10 +7,14 @@ import { CreateMainSlideDto } from './dto/create-main_slide.dto';
 import { CreateProcessStepDto } from './dto/create-process_step.dto';
 import { CreateSocialMediaDto } from './dto/create-social_media.dto';
 import { Prisma } from '@prisma/client';
+import { AppService } from 'src/app.service';
 
 @Injectable()
 export class LandingPageService {
-    constructor(private prisma: PrismaService) { }
+    constructor(
+        private prisma: PrismaService,
+        private appService: AppService,
+    ) { }
 
     async getAll() {
         const main_slide = await this.prisma.mainSlide.findMany({});
@@ -39,10 +43,27 @@ export class LandingPageService {
 
     async updateMainSlide(slideId: string, data: Prisma.MainSlideUpdateInput) {
         if (!data) throw new BadRequestException('Data tidak boleh kosong');
-        return await this.prisma.mainSlide.update({
+
+        const currentData = await this.prisma.mainSlide.findUnique({
+            where: { id: slideId },
+        });
+
+        if (!currentData) throw new BadRequestException('Data tidak ditemukan');
+
+
+        const updateData = await this.prisma.mainSlide.update({
             where: { id: slideId },
             data,
         });
+
+        if (currentData.image != updateData.image) {
+            if (!currentData.image.includes('/dummy')) {
+                this.appService.removeFile('/public' + currentData.image);
+                this.appService.removeFile('/public' + currentData.image_md);
+            }
+        }
+
+        return updateData;
     }
 
     async getProcessStep() {
