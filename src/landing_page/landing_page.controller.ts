@@ -34,7 +34,7 @@ import { Public } from 'src/auth/auth.metadata';
 @ApiTags('Landing Page')
 @Controller('landing-page')
 export class LandingPageController {
-    constructor(private readonly landingPageService: LandingPageService) { }
+    constructor(private readonly landingPageService: LandingPageService) {}
 
     @GetLandingPageDoc()
     @Public()
@@ -49,7 +49,7 @@ export class LandingPageController {
 
     @CreateMainSlideDoc()
     @Roles(Role.Superadmin, Role.Admin)
-    @Post()
+    @Post('main-slide')
     async createMainSlide(data: CreateMainSlideDto) {
         try {
             return await this.landingPageService.createMainSlide(data);
@@ -60,7 +60,7 @@ export class LandingPageController {
 
     @UpdateMainSlideDoc()
     @Roles(Role.Superadmin, Role.Admin)
-    @Patch(':id')
+    @Patch('main-slide/:id')
     async updateMainSlide(
         @Param('id') slideId: string,
         @Body() data: UpdateMainSlideDto,
@@ -74,7 +74,7 @@ export class LandingPageController {
 
     @CreateProcessStepDoc()
     @Roles(Role.Superadmin, Role.Admin)
-    @Post()
+    @Post('process-step')
     async createProcessStep(data: CreateProcessStepDto) {
         try {
             return await this.landingPageService.createProcessStep(data);
@@ -85,7 +85,7 @@ export class LandingPageController {
 
     @UpdateProcessStepDoc()
     @Roles(Role.Superadmin, Role.Admin)
-    @Patch(':id')
+    @Patch('process-step/:id')
     async updateProcessStep(
         @Param('id') processStepId: string,
         @Body() data: UpdateProcessStepDto,
@@ -102,13 +102,13 @@ export class LandingPageController {
 
     @UpdateAboutDoc()
     @Roles(Role.Superadmin, Role.Admin)
-    @Patch(':id')
+    @Patch('about/:id')
     async updateAbout(
-        @Param('id') landingPageId: string,
+        @Param('id') aboutId: string,
         @Body() data: Prisma.AboutCreateInput,
     ) {
         try {
-            return await this.landingPageService.updateAbout(landingPageId, data);
+            return await this.landingPageService.updateAbout(aboutId, data);
         } catch (error) {
             throw error;
         }
@@ -116,7 +116,7 @@ export class LandingPageController {
 
     @CreateSocialMediaDoc()
     @Roles(Role.Superadmin, Role.Admin)
-    @Post()
+    @Post('social-media')
     async createSocialMedia(data: CreateSocialMediaDto) {
         try {
             return await this.landingPageService.createSocialMedia(data);
@@ -127,7 +127,7 @@ export class LandingPageController {
 
     @UpdateSocialMediaDoc()
     @Roles(Role.Superadmin, Role.Admin)
-    @Patch(':id')
+    @Patch('social-media/:id')
     async updateSocialMedia(
         @Param('id') socialMediaId: string,
         @Body() data: UpdateSocialMediaDto,

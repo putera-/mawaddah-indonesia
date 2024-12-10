@@ -10,45 +10,19 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class LandingPageService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaService) {}
 
     async getAll() {
-        let result: any = await this.prisma.landingPage.findFirst({
-            include: {
-                main_slide: true,
-                process_step: true,
-                about: true,
-                social_media: true,
-            },
-        });
-
-        if (!result) {
-            result = await this.prisma.landingPage.create({
-                data: {
-                    about: {
-                        create: {
-                            title: '-',
-                            description: '-',
-                            footer_description: '-',
-                        }
-                    }
-                },
-                include: {
-                    main_slide: true,
-                    process_step: true,
-                    about: true,
-                    social_media: true,
-                }
-            })
-        }
-
-        const blogs = await this.prisma.blog.findMany({
-            take: 2,
-        });
+        const main_slide = await this.prisma.mainSlide.findMany({});
+        const process_step = await this.prisma.processStep.findMany({});
+        const about = await this.prisma.about.findFirst({});
+        const social_media = await this.prisma.socialMedia.findMany({});
 
         return {
-            ...result,
-            blogs
+            main_slide,
+            process_step,
+            about,
+            social_media,
         };
     }
 
@@ -82,10 +56,12 @@ export class LandingPageService {
         });
     }
 
-    async updateAbout(landingPageId: string, data: Prisma.AboutCreateInput) {
+    async updateAbout(aboutId: string, data: Prisma.AboutCreateInput) {
         if (!data) throw new BadRequestException('Data tidak boleh kosong');
         return await this.prisma.about.upsert({
-            where: { landingPageId },
+            where: {
+                id: aboutId,
+            },
             update: data,
             create: data,
         });

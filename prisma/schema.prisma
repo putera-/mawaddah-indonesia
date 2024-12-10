@@ -766,62 +766,45 @@ model InboxMessage {
     @@map("inbox_message")
 }
 
-model LandingPage {
-    id           String        @id @default(uuid())
-    main_slide   MainSlide[]
-    process_step ProcessStep[]
-    about        About?
-    social_media SocialMedia[]
-    createdAt    DateTime      @default(now())
-    updatedAt    DateTime      @default(now()) @updatedAt
-
-    @@map("landing_page")
-}
-
 model MainSlide {
-    id            String       @id @default(uuid())
-    text          String       @db.Text
-    image         String?      @db.Text
-    createdAt     DateTime     @default(now())
-    updatedAt     DateTime     @default(now()) @updatedAt
-    LandingPage   LandingPage? @relation(fields: [landingPageId], references: [id])
-    landingPageId String?
+    id        String   @id @default(uuid())
+    text      String   @db.Text
+    image     String?  @db.Text
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 
     @@map("main_slide")
 }
 
 model ProcessStep {
-    id            String       @id @default(uuid())
-    title         String       @db.Text
-    description   String       @db.Text
-    svg           String?      @db.Text
-    createdAt     DateTime     @default(now())
-    updatedAt     DateTime     @default(now()) @updatedAt
-    LandingPage   LandingPage? @relation(fields: [landingPageId], references: [id])
-    landingPageId String?
+    id          String   @id @default(uuid())
+    title       String   @db.Text
+    description String   @db.Text
+    svg         String?  @db.Text
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @default(now()) @updatedAt
 
     @@map("process_step")
 }
 
 model About {
-    title              String      @db.Text
-    description        String      @db.Text
-    footer_description String      @db.Text
-    createdAt          DateTime    @default(now())
-    updatedAt          DateTime    @default(now()) @updatedAt
-    LandingPage        LandingPage @relation(fields: [landingPageId], references: [id])
-    landingPageId      String      @unique
+    id                 String   @id @default(uuid())
+    title              String   @db.Text
+    description        String   @db.Text
+    footer_description String   @db.Text
+    createdAt          DateTime @default(now())
+    updatedAt          DateTime @default(now()) @updatedAt
+
+    @@map("about")
 }
 
 model SocialMedia {
-    id            String       @id @default(uuid())
-    icon          String?      @db.Text
-    url           String       @db.Text
-    text          String       @db.Text
-    createdAt     DateTime     @default(now())
-    updatedAt     DateTime     @default(now()) @updatedAt
-    LandingPage   LandingPage? @relation(fields: [landingPageId], references: [id])
-    landingPageId String?
+    id        String   @id @default(uuid())
+    icon      String?  @db.Text
+    url       String   @db.Text
+    text      String   @db.Text
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now()) @updatedAt
 
     @@map("social_media")
 }
