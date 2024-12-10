@@ -7,7 +7,8 @@ export async function LandingPageSeed(prisma: PrismaClient) {
     for (let i = 0; i < 3; i++) {
         main_slides.push({
             text: faker.lorem.sentence(),
-            image: faker.image.urlPicsumPhotos(),
+            image: '/dummy/slide.png',
+            image_md: '/dummy/slide.png',
             createdAt: new Date(),
             updatedAt: new Date(),
         });

@@ -26,14 +26,18 @@ export class LandingPageService {
         };
     }
 
-    async createMainSlide(data: CreateMainSlideDto) {
+    async getMainSlide() {
+        return await this.prisma.mainSlide.findMany();
+    }
+
+    async createMainSlide(data: Prisma.MainSlideCreateInput) {
         if (!data) throw new BadRequestException('Data tidak boleh kosong');
         return await this.prisma.mainSlide.create({
             data,
         });
     }
 
-    async updateMainSlide(slideId: string, data: UpdateMainSlideDto) {
+    async updateMainSlide(slideId: string, data: Prisma.MainSlideUpdateInput) {
         if (!data) throw new BadRequestException('Data tidak boleh kosong');
         return await this.prisma.mainSlide.update({
             where: { id: slideId },
@@ -41,6 +45,10 @@ export class LandingPageService {
         });
     }
 
+    async getProcessStep() {
+        return await this.prisma.processStep.findMany()
+
+    }
     async createProcessStep(data: CreateProcessStepDto) {
         if (!data) throw new BadRequestException('Data tidak boleh kosong');
         return await this.prisma.processStep.create({

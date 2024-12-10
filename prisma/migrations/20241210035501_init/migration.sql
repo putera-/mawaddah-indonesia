@@ -599,7 +599,8 @@ CREATE TABLE "inbox_message" (
 CREATE TABLE "main_slide" (
     "id" TEXT NOT NULL,
     "text" TEXT NOT NULL,
-    "image" TEXT,
+    "image" TEXT NOT NULL,
+    "image_md" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

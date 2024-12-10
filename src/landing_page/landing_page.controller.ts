@@ -7,6 +7,8 @@ import {
     Param,
     Delete,
     HttpCode,
+    UploadedFile,
+    UseInterceptors,
 } from '@nestjs/common';
 import { LandingPageService } from './landing_page.service';
 import { Roles } from 'src/roles/roles.decorator';
@@ -30,12 +32,18 @@ import {
 } from './landing_page.doc';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/auth/auth.metadata';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { PhotosService } from 'src/photos/photos.service';
+import path from 'path';
 
 @ApiBearerAuth()
 @ApiTags('Landing Page')
 @Controller('landing-page')
 export class LandingPageController {
-    constructor(private readonly landingPageService: LandingPageService) { }
+    constructor(
+        private readonly landingPageService: LandingPageService,
+        private photoService: PhotosService,
+    ) { }
 
     @GetLandingPageDoc()
     @Public()
@@ -48,13 +56,70 @@ export class LandingPageController {
         }
     }
 
+    @Public()
+    @Get('main-slide')
+    async getMainSlide() {
+        try {
+            return await this.landingPageService.getMainSlide();
+        } catch (error) {
+            throw error;
+        }
+    }
+
     @CreateMainSlideDoc()
     @Roles(Role.Superadmin, Role.Admin)
     @Post('main-slide')
-    async createMainSlide(@Body() data: CreateMainSlideDto) {
+    @UseInterceptors(FileInterceptor('image'))
+    async createMainSlide(@Body() createMainSlideDto: CreateMainSlideDto, @UploadedFile() file: Express.Multer.File) {
+        // for image
+        const ext = file ? file.originalname.split('.').pop() : '';
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+
         try {
+
+            const data: Prisma.MainSlideCreateInput = {
+                ...createMainSlideDto,
+                image: '',
+                image_md: '',
+            };
+            if (file) {
+                const fileBuffer = file.buffer;
+
+                // resize images to 600, 900, 1200
+                const sizes = [
+                    { key: 'md', size: 900 },
+                    { key: 'lg', size: 1200 },
+                ];
+                await Promise.all(
+                    sizes.map(async (s) => {
+                        const { key, size } = s;
+                        const filename = `${uniqueSuffix}_${key}.${ext}`;
+                        const filepath = path.join(
+                            './public/slides/' + filename,
+                        );
+
+                        await this.photoService.resize(
+                            size,
+                            fileBuffer,
+                            filepath,
+                        );
+                    }),
+                );
+
+                data.image = `/slides/${uniqueSuffix}_lg.${ext}`;
+                data.image_md = `/slides/${uniqueSuffix}_md.${ext}`;
+            }
             return await this.landingPageService.createMainSlide(data);
         } catch (error) {
+            // remove image
+            if (file) {
+                this.photoService.removeFile(
+                    `/public/slides/${uniqueSuffix}_lg.${ext}`,
+                );
+                this.photoService.removeFile(
+                    `/public/slides/${uniqueSuffix}_md.${ext}`,
+                );
+            }
             throw error;
         }
     }
@@ -62,12 +127,72 @@ export class LandingPageController {
     @UpdateMainSlideDoc()
     @Roles(Role.Superadmin, Role.Admin)
     @Patch('main-slide/:id')
+    @UseInterceptors(FileInterceptor('image'))
     async updateMainSlide(
         @Param('id') slideId: string,
-        @Body() data: UpdateMainSlideDto,
+        @Body() updateMainSlideDto: UpdateMainSlideDto,
+        @UploadedFile() file: Express.Multer.File
     ) {
+        // for image
+        const ext = file ? file.originalname.split('.').pop() : '';
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         try {
+
+            const data: Prisma.MainSlideUpdateInput = {
+                ...updateMainSlideDto,
+            };
+
+
+            if (file) {
+                const fileBuffer = file.buffer;
+
+                // resize images to 600, 900, 1200
+                const sizes = [
+                    { key: 'md', size: 900 },
+                    { key: 'lg', size: 1200 },
+                ];
+                await Promise.all(
+                    sizes.map(async (s) => {
+                        const { key, size } = s;
+                        const filename = `${uniqueSuffix}_${key}.${ext}`;
+                        const filepath = path.join(
+                            './public/file/' + filename,
+                        );
+
+                        await this.photoService.resize(
+                            size,
+                            fileBuffer,
+                            filepath,
+                        );
+                    }),
+                );
+
+                data.image = `/file/${uniqueSuffix}_lg.${ext}`;
+                data.image_md = `/file/${uniqueSuffix}_md.${ext}`;
+            }
+            // TODO remove foto lama
+
             return await this.landingPageService.updateMainSlide(slideId, data);
+        } catch (error) {
+            // remove image
+            if (file) {
+                this.photoService.removeFile(
+                    `/public/blogs/${uniqueSuffix}_lg.${ext}`,
+                );
+                this.photoService.removeFile(
+                    `/public/blogs/${uniqueSuffix}_md.${ext}`,
+                );
+            }
+
+            throw error;
+        }
+    }
+
+    @Public()
+    @Get('process-step')
+    async getProcessStep() {
+        try {
+            return await this.landingPageService.getProcessStep();
         } catch (error) {
             throw error;
         }

@@ -32,7 +32,7 @@ export class BlogsController {
                 image_md: '',
             };
             if (file) {
-                const avatarBuffer = file.buffer;
+                const fileBuffer = file.buffer;
 
                 // resize images to 600, 900, 1200
                 const sizes = [
@@ -49,7 +49,7 @@ export class BlogsController {
 
                         await this.photoService.resize(
                             size,
-                            avatarBuffer,
+                            fileBuffer,
                             filepath,
                         );
                     }),
@@ -109,7 +109,7 @@ export class BlogsController {
 
 
             if (file) {
-                const avatarBuffer = file.buffer;
+                const fileBuffer = file.buffer;
 
                 // resize images to 600, 900, 1200
                 const sizes = [
@@ -126,7 +126,7 @@ export class BlogsController {
 
                         await this.photoService.resize(
                             size,
-                            avatarBuffer,
+                            fileBuffer,
                             filepath,
                         );
                     }),
@@ -135,6 +135,8 @@ export class BlogsController {
                 data.image = `/blogs/${uniqueSuffix}_lg.${ext}`;
                 data.image_md = `/blogs/${uniqueSuffix}_md.${ext}`;
             }
+
+            // TODO remove foto lama
 
             return this.blogsService.update(id, data);
         } catch (error) {
