@@ -42,9 +42,19 @@ import { InboxModule } from './inbox/inbox.module';
 import { StatisticModule } from './statistic/statistic.module';
 import { LandingPageModule } from './landing_page/landing_page.module';
 import { BlogsModule } from './blogs/blogs.module';
+import { GUsersModule } from './g-users/g-users.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { join } from 'path';
 
 @Module({
     imports: [
+        GraphQLModule.forRoot<ApolloDriverConfig>({
+            driver: ApolloDriver,
+            autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+            sortSchema: true,
+            playground: true,
+        }),
         ConfigModule.forRoot(),
         UsersModule,
         ClientModule,
@@ -63,7 +73,6 @@ import { BlogsModule } from './blogs/blogs.module';
         BookmarkModule,
         CandidateModule,
         ResetPasswordModule,
-        ConfigModule,
         ActivationModule,
         TaarufGoldModule,
         PaymentModule,
@@ -84,6 +93,7 @@ import { BlogsModule } from './blogs/blogs.module';
         StatisticModule,
         LandingPageModule,
         BlogsModule,
+        GUsersModule,
     ],
 
     controllers: [AppController],

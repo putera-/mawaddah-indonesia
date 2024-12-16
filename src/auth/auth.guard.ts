@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
         private jwtService: JwtService,
         private reflector: Reflector,
         private authService: AuthService,
-    ) {}
+    ) { }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const isPublic = this.reflector.getAllAndOverride<boolean>(
@@ -28,6 +28,9 @@ export class AuthGuard implements CanActivate {
         if (isPublic) return true;
 
         const request = context.switchToHttp().getRequest();
+
+        if (!request) return true;
+
         const token = this.extractTokenFromHeader(request);
         if (!token) throw new UnauthorizedException();
 

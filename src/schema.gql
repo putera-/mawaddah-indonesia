@@ -1,0 +1,51 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateGUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type GUser {
+  """User active status"""
+  active: Boolean!
+
+  """User avatar URL"""
+  avatar: String
+
+  """User email"""
+  email: String!
+
+  """User first name"""
+  firstname: String!
+
+  """User ID"""
+  id: String!
+
+  """User last name"""
+  lastname: String!
+
+  """Legacy ID"""
+  old_id: Int
+
+  """User verification status"""
+  verified: Boolean!
+}
+
+type Mutation {
+  createGUser(createGUserInput: CreateGUserInput!): GUser!
+  removeGUser(id: Int!): GUser!
+  updateGUser(updateGUserInput: UpdateGUserInput!): GUser!
+}
+
+type Query {
+  gUser(id: String!): GUser!
+  gUsers: [GUser!]!
+}
+
+input UpdateGUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
