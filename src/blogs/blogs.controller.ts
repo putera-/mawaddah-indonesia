@@ -55,8 +55,8 @@ export class BlogsController {
                     }),
                 );
 
-                data.image = `/blogs/${uniqueSuffix}_lg.${ext}`;
-                data.image_md = `/blogs/${uniqueSuffix}_md.${ext}`;
+                data.image = `/blog_image/${uniqueSuffix}_lg.${ext}`;
+                data.image_md = `/blog_image/${uniqueSuffix}_md.${ext}`;
             }
             return this.blogsService.create(data);
         } catch (error) {
@@ -132,8 +132,8 @@ export class BlogsController {
                     }),
                 );
 
-                data.image = `/blogs/${uniqueSuffix}_lg.${ext}`;
-                data.image_md = `/blogs/${uniqueSuffix}_md.${ext}`;
+                data.image = `/blog_image/${uniqueSuffix}_lg.${ext}`;
+                data.image_md = `/blog_image/${uniqueSuffix}_md.${ext}`;
             }
 
             return this.blogsService.update(id, data);

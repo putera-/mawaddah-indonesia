@@ -64,6 +64,28 @@ export class AppController {
     }
 
     @Public()
+    @Get('blog_image/:file_name')
+    async getBlogImage(@Param('file_name') file: string, @Res() res) {
+        try {
+            await fs.access(`./public/blogs/${file}`);
+            res.sendFile(file, { root: './public/blogs' });
+        } catch (error) {
+            throw new NotFoundException('File not found');
+        }
+    }
+
+    @Public()
+    @Get('slides/:file_name')
+    async getSlideImage(@Param('file_name') file: string, @Res() res) {
+        try {
+            await fs.access(`./public/slides/${file}`);
+            res.sendFile(file, { root: './public/slides' });
+        } catch (error) {
+            throw new NotFoundException('File not found');
+        }
+    }
+
+    @Public()
     @getDummyPhotoDoc()
     @Get('dummy/:file_name')
     async getDummyPhoto(@Param('file_name') file: string, @Res() res) {
