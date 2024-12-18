@@ -43,7 +43,7 @@ export class UsersService {
         private Prisma: PrismaService,
         private appService: AppService,
         // private activation: ActivationService,
-    ) {}
+    ) { }
 
     create(data: Prisma.UserCreateInput) {
         return this.Prisma.user.create({
@@ -274,6 +274,7 @@ export class UsersService {
             where: { id, used: false },
         });
         // if data is not found
+        console.log({ find })
         if (!find)
             throw new BadRequestException(
                 'Aktivasi tidak valid, atau sudah expired',
@@ -281,19 +282,23 @@ export class UsersService {
         // set data to used
         const userId = find.userId;
         await this.Prisma.activation.updateMany({
-            where: { id: userId },
+            where: { id },
             data: { used: true },
         });
         // find user
         const user = await this.Prisma.user.findFirst({
-            where: { id: userId, active: false },
+            where: { id: userId },
         });
         // if not found
         if (!user) throw new NotFoundException(`User tidak ditemukan`);
+        if (!user.active) throw new NotFoundException(`User sudah di aktivasi`);
         // set user to active
         return this.Prisma.user.update({
             where: { id: userId },
-            data: { active: true },
+            data: {
+                active: true,
+                verified: true
+            },
             select: hiddenSelect,
         });
     }
