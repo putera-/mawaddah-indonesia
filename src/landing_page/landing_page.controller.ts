@@ -187,6 +187,17 @@ export class LandingPageController {
         }
     }
 
+    @Roles(Role.Superadmin, Role.Admin)
+    @HttpCode(204)
+    @Delete('main-slide/:id')
+    removeMainSlide(@Param('id') id: string) {
+        try {
+            return this.landingPageService.removeMainSlide(id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     @Public()
     @Get('process-step')
     async getProcessStep() {

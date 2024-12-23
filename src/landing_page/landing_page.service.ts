@@ -66,6 +66,25 @@ export class LandingPageService {
         return updateData;
     }
 
+    async removeMainSlide(id: string) {
+        const currentData = await this.prisma.mainSlide.findUnique({
+            where: { id }
+        });
+
+        if (!currentData) throw new BadRequestException('Data tidak ditemukan');
+
+        // delete data
+        await this.prisma.mainSlide.delete({
+            where: { id }
+        });
+
+        // delete images
+        if (!currentData.image.includes('/dummy')) {
+            this.appService.removeFile('/public' + currentData.image);
+            this.appService.removeFile('/public' + currentData.image_md);
+        }
+    }
+
     async getProcessStep() {
         return await this.prisma.processStep.findMany()
     }
