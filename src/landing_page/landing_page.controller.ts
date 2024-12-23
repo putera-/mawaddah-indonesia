@@ -250,6 +250,16 @@ export class LandingPageController {
         }
     }
 
+    @Public()
+    @Get('social-media')
+    async getSocialMedia() {
+        try {
+            return await this.landingPageService.getSocialMedia();
+        } catch (error) {
+            throw error;
+        }
+    }
+
     @CreateSocialMediaDoc()
     @Roles(Role.Superadmin, Role.Admin)
     @Post('social-media')

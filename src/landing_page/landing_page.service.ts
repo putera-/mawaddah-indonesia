@@ -68,8 +68,8 @@ export class LandingPageService {
 
     async getProcessStep() {
         return await this.prisma.processStep.findMany()
-
     }
+
     async createProcessStep(data: CreateProcessStepDto) {
         if (!data) throw new BadRequestException('Data tidak boleh kosong');
         return await this.prisma.processStep.create({
@@ -111,6 +111,10 @@ export class LandingPageService {
             update: data,
             create: data,
         });
+    }
+
+    async getSocialMedia() {
+        return await this.prisma.socialMedia.findMany()
     }
 
     async createSocialMedia(data: CreateSocialMediaDto) {
