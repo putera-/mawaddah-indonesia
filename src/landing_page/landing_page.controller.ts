@@ -9,6 +9,7 @@ import {
     HttpCode,
     UploadedFile,
     UseInterceptors,
+    ValidationPipe,
 } from '@nestjs/common';
 import { LandingPageService } from './landing_page.service';
 import { Roles } from 'src/roles/roles.decorator';
@@ -35,6 +36,7 @@ import { Public } from 'src/auth/auth.metadata';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PhotosService } from 'src/photos/photos.service';
 import path from 'path';
+import { UpdateAboutDto } from './dto/update-about.dto';
 
 @ApiBearerAuth()
 @ApiTags('Landing Page')
@@ -225,6 +227,7 @@ export class LandingPageController {
     async updateProcessStep(
         @Param('id') processStepId: string,
         @Body() data: UpdateProcessStepDto,
+        // TODO ValidationPipe
     ) {
         try {
             return await this.landingPageService.updateProcessStep(
@@ -247,15 +250,25 @@ export class LandingPageController {
         }
     }
 
+    // GET ABOUT
+    @Get('about')
+    async getAbout() {
+        try {
+            return await this.landingPageService.getAbout();
+        } catch (error) {
+            throw error;
+        }
+    }
+
     @UpdateAboutDoc()
     @Roles(Role.Superadmin, Role.Admin)
-    @Patch('about/:id')
+    @Patch('about')
     async updateAbout(
         @Param('id') aboutId: string,
-        @Body() data: Prisma.AboutCreateInput,
+        @Body(new ValidationPipe()) data: UpdateAboutDto
     ) {
         try {
-            return await this.landingPageService.updateAbout(aboutId, data);
+            return await this.landingPageService.updateAbout(data);
         } catch (error) {
             throw error;
         }

@@ -10,6 +10,8 @@ import { PhotosService } from 'src/photos/photos.service';
 import path from 'path';
 import { Prisma } from '@prisma/client';
 
+// TODO ValidationPipe
+
 @Controller('blogs')
 export class BlogsController {
     constructor(

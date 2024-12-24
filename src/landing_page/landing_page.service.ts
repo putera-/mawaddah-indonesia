@@ -121,15 +121,26 @@ export class LandingPageService {
         });
     }
 
-    async updateAbout(aboutId: string, data: Prisma.AboutCreateInput) {
+    async getAbout() {
+        return await this.prisma.about.findFirst()
+    }
+
+    async updateAbout(data: Prisma.AboutCreateInput) {
         if (!data) throw new BadRequestException('Data tidak boleh kosong');
-        return await this.prisma.about.upsert({
-            where: {
-                id: aboutId,
-            },
-            update: data,
-            create: data,
-        });
+        const currentData = await this.prisma.about.findFirst();
+
+        if (!currentData) {
+            return this.prisma.about.create({
+                data
+            });
+        } else {
+            return this.prisma.about.update({
+                where: {
+                    id: currentData.id,
+                },
+                data,
+            });
+        }
     }
 
     async getSocialMedia() {
