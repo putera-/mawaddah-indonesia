@@ -91,13 +91,13 @@ export class BookmarkService {
             where: {
                 userId: idUser,
                 candidateId: idCandidate,
+                bookmarked: true,
             },
         });
         return bookmark ? true : false;
     }
 
     async update(candidateId: string, userId: string) {
-
         const bookmark = await this.Prisma.bookmark.findFirst({
             where: { candidateId, userId },
         });
