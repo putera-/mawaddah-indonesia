@@ -85,9 +85,9 @@ export class BookmarkController {
     @Roles(Role.Member)
     @Patch(':id')
     @HttpCode(204)
-    remove(@Param('id') id: string) {
+    remove(@Param('id') candidateId: string, @Request() req: any) {
         try {
-            return this.bookmarkService.remove(id);
+            return this.bookmarkService.update(candidateId, req.user.id);
         } catch (error) {
             throw error;
         }

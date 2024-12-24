@@ -96,9 +96,18 @@ export class BookmarkService {
         return bookmark ? true : false;
     }
 
-    async remove(id: string) {
+    async update(candidateId: string, userId: string) {
+
+        const bookmark = await this.Prisma.bookmark.findFirst({
+            where: { candidateId, userId },
+        });
+
+        if (!bookmark) {
+            throw new NotFoundException('Bookmark tidak ditemukan');
+        }
+
         return await this.Prisma.bookmark.update({
-            where: { id },
+            where: { id: bookmark.id },
             data: {
                 bookmarked: false,
             },
