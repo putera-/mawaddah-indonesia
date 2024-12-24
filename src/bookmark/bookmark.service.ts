@@ -8,7 +8,7 @@ export class BookmarkService {
     constructor(
         private readonly userService: UsersService,
         private Prisma: PrismaService,
-    ) {}
+    ) { }
     async create(idUser: string, idCandidate: string) {
         const user = await this.userService.findOne(idUser, 'MEMBER');
         const candidate = await this.userService.findOne(idCandidate, 'MEMBER');
@@ -20,13 +20,7 @@ export class BookmarkService {
         });
 
         if (exist) {
-            const id = exist.id;
-            return await this.Prisma.bookmark.update({
-                where: {
-                    id,
-                },
-                data: { bookmarked: true },
-            });
+            return exist;
         } else {
             return await this.Prisma.bookmark.create({
                 data: {
@@ -91,13 +85,12 @@ export class BookmarkService {
             where: {
                 userId: idUser,
                 candidateId: idCandidate,
-                bookmarked: true,
             },
         });
         return bookmark ? true : false;
     }
 
-    async update(candidateId: string, userId: string) {
+    async remove(candidateId: string, userId: string) {
         const bookmark = await this.Prisma.bookmark.findFirst({
             where: { candidateId, userId },
         });
@@ -106,11 +99,8 @@ export class BookmarkService {
             throw new NotFoundException('Bookmark tidak ditemukan');
         }
 
-        return await this.Prisma.bookmark.update({
-            where: { id: bookmark.id },
-            data: {
-                bookmarked: false,
-            },
+        return await this.Prisma.bookmark.delete({
+            where: { id: bookmark.id }
         });
     }
 }

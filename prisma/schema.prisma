@@ -451,7 +451,6 @@ model Bookmark {
     userId      String // This field holds the foreign key
     candidate   User     @relation(name: "UserCandidates", fields: [candidateId], references: [id])
     candidateId String // This field holds the foreign key`
-    bookmarked  Boolean  @default(true)
     createdAt   DateTime @default(now())
     updatedAt   DateTime @default(now()) @updatedAt
 

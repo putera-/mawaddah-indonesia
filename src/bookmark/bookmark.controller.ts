@@ -5,8 +5,8 @@ import {
     Param,
     Request,
     HttpCode,
-    Patch,
     Query,
+    Delete,
 } from '@nestjs/common';
 import { BookmarkService } from './bookmark.service';
 import { Roles } from 'src/roles/roles.decorator';
@@ -24,7 +24,7 @@ import {
 @ApiBearerAuth()
 @Controller('bookmark')
 export class BookmarkController {
-    constructor(private readonly bookmarkService: BookmarkService) {}
+    constructor(private readonly bookmarkService: BookmarkService) { }
 
     @CreateBookmarkDoc()
     @Roles(Role.Member)
@@ -69,13 +69,15 @@ export class BookmarkController {
     @CheckBookmarkDoc()
     @Roles(Role.Member)
     @Get('check/:id')
-    isBookmarked(
+    async isBookmarked(
         @Request() req: any,
         @Param('id') idCandidate: string,
-    ): Promise<boolean> {
+    ) {
         try {
             const idUser = req.user.id;
-            return this.bookmarkService.isBookmarked(idUser, idCandidate);
+            const check = await this.bookmarkService.isBookmarked(idUser, idCandidate);
+
+            return { check };
         } catch (error) {
             throw error;
         }
@@ -83,11 +85,11 @@ export class BookmarkController {
 
     @RemoveBookmarkDoc()
     @Roles(Role.Member)
-    @Patch(':id')
+    @Delete(':id')
     @HttpCode(204)
     remove(@Param('id') candidateId: string, @Request() req: any) {
         try {
-            return this.bookmarkService.update(candidateId, req.user.id);
+            return this.bookmarkService.remove(candidateId, req.user.id);
         } catch (error) {
             throw error;
         }

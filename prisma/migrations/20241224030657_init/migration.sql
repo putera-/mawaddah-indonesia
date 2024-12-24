@@ -357,7 +357,6 @@ CREATE TABLE "bookmark" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "candidateId" TEXT NOT NULL,
-    "bookmarked" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
